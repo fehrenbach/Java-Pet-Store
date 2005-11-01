@@ -8,7 +8,7 @@
   <import file="./setup/setup.xml" />
   <import file="../../setup/common-ant.xml" />
 
-  <property name="module.name" value="Petstore" />
+  <property name="module.name" value="petstore" />
 
   <property name="dist.dir" value="dist" />
   <property name="app.module" value="${dist.dir}/petstore.war" />
@@ -22,7 +22,7 @@
 
   <target name="build" description="Compile petstore files." >
     <mkdir dir="${build.classes.dir}" />
-    <javac srcdir="src" destdir="${build.classes.dir}">
+    <javac srcdir="src/java" destdir="${build.classes.dir}">
       <include name="**/*.java" />
 	  <classpath refid="classpath"/>
 	</javac>
@@ -52,9 +52,6 @@
     <delete dir="${dist.dir}"/>
     <delete dir="${build.dir}"/>
   </target>
-
-  <property name="conpool.name"  value="PetstorePool"/>
-  <property name="jdbc.resource.name"   value="jdbc/CatalogDB"/>
 
 </project>
 
