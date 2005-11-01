@@ -1,0 +1,259 @@
+
+<html>
+<head>
+<title>Petstore</title>
+
+<style type="text/css">
+.banner {
+ height:95;
+ font-size:95;
+ font-weight: bold;
+ font-family: Arial
+}
+
+.category {
+ height:55;
+ font-size:22px;
+ font-weight: bold;
+ font-family: Arial
+}
+
+.category:hover {
+  background: #7A8AFF;
+  color: #FFFAFA;
+}
+</style>
+
+<script  src="dojo.js" ></script>
+
+<script type="text/javascript">
+
+var isIE;
+
+function init() {
+    if (navigator.userAgent.indexOf("IE") != -1) isIE = true;
+}
+
+
+function loadCategories() {
+    init();
+    var bindArgs = {
+       url:  "catalog?command=categories",
+       mimetype: "text/xml",
+       load: function(type, data) {
+               loadCategoriesCallback(data);
+             }
+     };
+    dojo.io.bind(bindArgs);
+}
+
+function loadCategoriesCallback(responseXML) {
+	var categories = responseXML.getElementsByTagName("id");
+    var id = responseXML.getElementsByTagName("id")[0].childNodes[0].nodeValue;
+    for (var loop = 0; loop < categories.length; loop++) {
+      var itemId = responseXML.getElementsByTagName("id")[loop];
+      var itemValue = responseXML.getElementsByTagName("name")[loop];
+      var itemSrc = responseXML.getElementsByTagName("image-url")[loop];
+      addCategory(itemId.childNodes[0].nodeValue, itemValue.childNodes[0].nodeValue, itemSrc.childNodes[0].nodeValue);
+    }
+}
+
+function purchaseItem(id) {
+ alert("purchasing  " + id);
+}
+
+function loadItemCallback(responseXML) {
+      var id = responseXML.getElementsByTagName("id")[0].childNodes[0].nodeValue;
+      var image = responseXML.getElementsByTagName("image-url")[0].childNodes[0].nodeValue;
+      var name = responseXML.getElementsByTagName("name")[0].childNodes[0].nodeValue;
+      var description = responseXML.getElementsByTagName("description")[0].childNodes[0].nodeValue;
+      var price = responseXML.getElementsByTagName("price")[0].childNodes[0].nodeValue;
+      showItem(id,image,name,description,price);
+}
+
+
+function loadCategory(catid) {
+
+    var bindArgs = {
+       url:  "catalog?command=category&catid=" + catid,
+       mimetype: "text/xml",
+       load: function(type, data) {
+               loadCategoryCallback(data);
+             }
+     };
+    dojo.io.bind(bindArgs);
+}
+
+function loadCategoryCallback(responseXML) {
+    clearNodes("bodyTable");
+	var categories = responseXML.getElementsByTagName("id");
+    for (var loop = 0; loop < categories.length; loop++) {
+      var id = responseXML.getElementsByTagName("id")[loop].childNodes[0].nodeValue;
+      var image = responseXML.getElementsByTagName("image-url")[loop].childNodes[0].nodeValue;
+      var name = responseXML.getElementsByTagName("name")[loop].childNodes[0].nodeValue;
+      var description = responseXML.getElementsByTagName("description")[loop].childNodes[0].nodeValue;
+      var price = responseXML.getElementsByTagName("price")[loop].childNodes[0].nodeValue;
+      addCategoryItem(id,image,name,description,price);
+    }
+    if (categories.length == 0) {
+        var cell;
+        var bodyTable = document.getElementById("bodyTable");
+        
+        var row;
+        if (isIE) {
+          bodyTable.innerHTML = "<tr><td>No items</td></tr>";
+        } else {
+            row = document.createElement("tr");
+            row.setAttribute("bgcolor", "white");
+            cell = document.createElement("td");
+            cell.setAttribute("bgcolor", "white");
+            cell.setAttribute("nowrap", "true");
+            cell.setAttribute("valign", "top");
+            cell.appendChild(document.createTextNode( "No items available in this category."));
+            row.appendChild(cell);
+            bodyTable.appendChild(row);
+        }
+    }
+}
+
+function addCategory(id, name, src) {
+    var cell;
+    var row;
+    var sidebar = document.getElementById("sidebar");
+
+    if (isIE) {
+    } else {
+        row = document.createElement("tr");
+        cell = document.createElement("td");
+        cell.setAttribute("nowrap", "true");
+        cell.setAttribute("valign", "top");
+        var img = document.createElement("img");
+        img.src = ("images\\" + src);
+        var link = document.createElement("a");
+        link.className ="category";
+        link.appendChild(document.createTextNode(name));
+        var url = "loadCategory('" + id + "')";
+        link.setAttribute("onClick", url);
+        cell.appendChild(img);
+        cell.appendChild(link);
+        row.appendChild(cell);
+        sidebar.appendChild(row);
+    }
+}
+
+function addCategoryItem(id,image,name,description,price) {
+    var cell;
+    var bodyTable = document.getElementById("bodyTable");
+    var row;
+    if (isIE) {
+    } else {
+        row = document.createElement("tr");
+        row.setAttribute("bgcolor", "white");
+        cell = document.createElement("td");
+        cell.setAttribute("bgcolor", "white");
+        cell.setAttribute("nowrap", "true");
+        cell.setAttribute("valign", "top");
+        var img = document.createElement("img");
+        img.src = ("images\\" + image);
+        cell.appendChild(img);
+        cell.appendChild(document.createTextNode( name + " - " + description + " " + "Price $" + price + "  "));
+        var plink = document.createElement("a");
+        plink.className ="category";
+        plink.appendChild(document.createTextNode("Purchase"));
+        plink.setAttribute("onClick", "purchaseItem('" + id + "')");
+        cell.appendChild(plink);
+        
+        row.appendChild(cell);
+        bodyTable.appendChild(row);
+    }
+}
+
+function clearNodes(id) {
+    var target = document.getElementById(id);
+    if (target) {
+      for (loop = target.childNodes.length -1; loop >=0 ; loop--) {
+        target.removeChild(target.childNodes[loop]);
+      }
+    }
+}
+
+function showItem(id, image, name, description, price) {
+    var body = document.getElementById("body");
+    var img = document.createElement("img");
+    img.src = ("images\\" + image);
+    body.appendChild(img);
+    body.appendChild(document.createTextNode(name));
+    body.appendChild(document.createTextNode(description));
+    body.appendChild(document.createTextNode("Price $" + price));  
+}
+
+</script>
+
+</head>
+<body onload="loadCategories()">
+
+
+
+<div class="banner">Petstore</div>
+
+<table>
+ <tr>
+  <td valign="top" width="300"><table id="sidebar"vbgoclor="red" border="0" cellpadding="0"></table></td>
+  <td valign="top" width="100%" bgcolor="blue">
+   <table valign="top" id="bodyTable" border="0">
+     <tr>
+      <td>
+        <map name="petmap">
+        <area href="category.screen?category_id=BIRDS" 
+            alt="Birds" 
+            coords="72,2,280,250">
+        <area href="category.screen?category_id=FISH" 
+            alt="Fish" 
+            coords="2,180,72,250">
+        <area href="category.screen?category_id=DOGS" 
+            alt="Dogs" 
+            coords="60,250,130,320">
+       <area href="category.screen?category_id=REPTILES" 
+            alt="Reptiles" 
+            coords="140,270,210,340">
+        <area href="category.screen?category_id=CATS" 
+            alt="Cats" 
+            coords="225,240,295,310">
+        <area href="category.screen?category_id=BIRDS" 
+            alt="Birds" 
+            coords="280,180,350,250">
+        </map>
+
+        <img src="images/splash.gif" 
+            alt="Pet Selection Map"
+            usemap="#petmap" 
+            width="350" 
+            height="355" 
+        border="0">
+     </td>
+    </tr>
+   </table>
+ </td>
+ </tr>
+</table>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

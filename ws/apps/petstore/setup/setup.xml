@@ -1,0 +1,200 @@
+<project name="tutorial-common" basedir=".">
+
+    <property file="${user.home}/build.properties" />
+	<property file="derby.properties" />
+
+  <path id="classpath">
+    <fileset dir="${javaee.home}/lib">
+      <include name="javaee.jar"/>
+    </fileset>
+  </path>
+  
+  <target name="javaee-home-test" >
+	<!-- Test if javaee.home is set properly by looking for javaee.jar -->
+    <available file="${javaee.home}/lib/javaee.jar" type="file" property="javaee.jar.present" />
+    <fail unless="javaee.jar.present">            
+        javaee.home is currently set to: ${javaee.home}
+    </fail>
+  </target>
+  
+  <target name="clean" >
+    <delete dir="${build}" />
+    <delete dir="${dist}" />    
+    <delete dir="${assemble}" />
+  </target>
+
+  <path id="db.classpath">
+    <fileset dir="${db.root}/lib">
+      <include name="*.jar"/>
+    </fileset>
+  </path>
+  
+  <!-- Database configuration tasks -->
+  <target name="setup" depends="create-resource-local, create-db" />
+  <target name="unsetup" depends="delete-pool-local" />
+  
+  <target name="create-db"
+  				depends="delete-db"
+     			description="Create database tables and populate database." >
+
+		<sql driver="${db.driver}"
+         url="${db.url}"
+         userid="${db.user}"
+         password="${db.password}"
+         classpathref="db.classpath"
+         delimiter="${db.delimiter}"
+         autocommit="true"
+         onerror="abort" >
+    	<transaction src="${db.create.src}"/>
+    </sql>
+  </target>
+  
+  <target name="delete-db" description="Deletes the database tables." >
+  <echo>driver=${db.driver}</echo>
+  <echo>url=${db.url}</echo>
+  <echo>user=${db.user}</echo>
+  <echo>password=${db.password}</echo>
+  <sql driver="${db.driver}"
+         url="${db.url}"
+         userid="${db.user}"
+         password="${db.password}"
+         classpathref="db.classpath"
+         delimiter="${db.delimiter}"
+         autocommit="true"
+         onerror="continue" >       
+    	<transaction src="${db.delete.src}"/>
+    </sql>
+  </target>
+  
+  <target name="start-db" depends="tools" description="Starts the Derby databse server." >
+    <exec executable="${asadmin}" failonerror="${failonerror}" dir="${javaee.home}">
+        <arg line=" start-database"/>
+    </exec>
+  </target>
+  
+  <target name="stop-db" depends="tools" description="Stops the Derby database server." >
+    <exec executable="${asadmin}" failonerror="${failonerror}">
+        <arg line=" stop-database"/>
+    </exec> 
+  </target>
+  
+  <target name="create-pool-local" depends="tools">
+    <echo message="Registering jdbc-connection-pool PetstorePool."/>
+    <echo>ds=${db.datasource}</echo>
+    <antcall target="create-jdbc-connection-pool">
+      <param name="pool.name"     value="PetstorePool" />
+      <param name="db.serverName"   value="${j2ee.server.name}" />
+      <param name="ds.class"      value="${db.datasource}" />
+    </antcall>
+ </target>
+
+ <target name="create-resource-local" depends="tools,create-pool-local">
+    <echo message="Registering jdbc resource jdbc/PetstoreDB."/>
+    <antcall target="create-jdbc-resource">
+      <param name="pool.name"            value="PetstorePool" />
+      <param name="jdbc.resource.name"   value="com.sun.javaee.blueprints.petstore.controller.CatalogServlet/PetstoreDB" />
+    </antcall>
+ </target>
+
+  <target name="delete-resource-local" depends="tools" >
+    <echo message="Deleting jdbc resource jdbc/PetstoreDB"/>
+    <antcall target="delete-jdbc-resource">
+      <param name="jdbc.resource.name" value="com.sun.javaee.blueprints.petstore.controller.CatalogServlet/PetstoreDB" />
+    </antcall> 
+ </target>
+
+ <target name="delete-pool-local" depends="tools, delete-resource-local">
+    <echo message="Deleting jdbc-connection-pool PetstorePool."/>
+    <antcall target="delete-jdbc-connection-pool">
+      <param name="jdbc.pool.name" value="PetstorePool" />
+    </antcall>
+ </target>
+
+ <target name="create-jdbc-connection-pool" depends="tools">
+    <exec executable="${asadmin}">
+        <arg line=" create-jdbc-connection-pool"/>
+        <arg line=" --user ${javaee.server.username}" />
+        <arg line=" --passwordfile ${javaee.server.passwordfile}" />
+        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --port ${javaee.adminserver.port}" />
+        <arg line=" --datasourceclassname ${db.datasource}" />
+        <arg line=" --restype javax.sql.XADataSource " />
+        <arg line=" --property portNumber=${db.port}:serverName=${javaee.server.name}:User=${db.user}:Password=${db.password}:databaseName=${db.sid}" />
+        <arg line=" ${pool.name} " />
+    </exec> 
+ </target>
+ 
+  <target name="create-jdbc-resource"  depends="tools">
+     <exec executable="${asadmin}">
+        <arg line="create-jdbc-resource"/>
+        <arg line=" --user ${javaee.server.username}" />
+        <arg line=" --passwordfile ${javaee.server.passwordfile}" />
+        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --port ${javaee.adminserver.port}" />
+        <arg line=" --connectionpoolid ${pool.name}" />
+        <arg line=" --enabled=true" />
+        <arg line=" ${jdbc.resource.name}" />
+    </exec>     
+  </target>
+
+  <target name="delete-jdbc-resource">
+     <exec executable="${asadmin}">
+        <arg line="delete-jdbc-resource"/>
+        <arg line=" --user ${javaee.server.username}" />
+        <arg line=" --passwordfile ${javaee.server.passwordfile}" />
+        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --port ${javaee.adminserver.port}" />
+        <arg line="${jdbc.resource.name}" />
+    </exec>
+  </target>
+
+  <target name="delete-jdbc-connection-pool">
+     <exec executable="${asadmin}">
+        <arg line="delete-jdbc-connection-pool"/>
+        <arg line=" --user ${javaee.server.username}" />
+        <arg line=" --passwordfile ${javaee.server.passwordfile}" />
+        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --port ${javaee.adminserver.port}" />
+        <arg line="${jdbc.pool.name}" />
+    </exec>
+  </target>
+
+
+  <target name="deploy-war">
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="deploy ${war.file}" />
+    </antcall>
+  </target>
+
+  <target name="undeploy-war">
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="undeploy ${example}" />
+    </antcall>
+  </target>
+
+  <property environment="env" />
+
+  <target name="tools">
+     <condition property="javaee-script-suffix" value=".bat">
+        <os family="windows"/>
+     </condition>
+     <condition property="javaee-script-suffix" value="">
+        <not>
+           <os family="windows"/>
+        </not>
+     </condition>
+     <condition property="path.separator" value=";">
+        <os family="windows"/>
+     </condition>
+     <condition property="path.separator" value=":">
+        <not>
+           <os family="windows"/>
+        </not>
+     </condition>
+    <!-- setup properties for various Java EE tools -->
+    <property name="asadmin" value="${javaee.home}/bin/asadmin${javaee-script-suffix}"/>
+  </target>
+
+</project>

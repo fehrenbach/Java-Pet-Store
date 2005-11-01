@@ -1,0 +1,64 @@
+
+
+<project name="petstore" default="war" basedir=".">
+
+  <property file="${user.home}/build.properties" />
+  <property file="./setup/derby.properties" />
+  
+  <import file="./setup/setup.xml" />
+  <import file="../../setup/common-ant.xml" />
+
+  <property name="module.name" value="Petstore" />
+
+  <property name="dist.dir" value="dist" />
+  <property name="app.module" value="${dist.dir}/petstore.war" />
+    
+  <property name="build.dir" value="build" />
+  <property name="src.web" value="web" />
+  <property name="build.classes.dir" value="${build.dir}/classes" />
+  <property name="war.build.dir" value="${build.dir}/war" />
+  <property name="dojo.script" value="lib/dojo/dojo.js" />
+
+
+  <target name="build" description="Compile petstore files." >
+    <mkdir dir="${build.classes.dir}" />
+    <javac srcdir="src" destdir="${build.classes.dir}">
+      <include name="**/*.java" />
+	  <classpath refid="classpath"/>
+	</javac>
+  </target>
+  
+  <target name="war" depends="build" description="Packages the War file">
+    <mkdir dir="${war.build.dir}"/>
+    <!-- Copy in the compiled Classes -->
+    <copy todir="${war.build.dir}/WEB-INF/classes">
+     <fileset dir="${build.classes.dir}"/>
+    </copy>  
+    <!-- Copy in the content -->
+    <copy todir="${war.build.dir}">
+     <fileset dir="${src.web}"/>
+    </copy>
+    <copy file="${dojo.script}" todir="${war.build.dir}" />
+    <copy todir="${war.build.dir}">
+     <fileset dir="${war.build.dir}"/>
+    </copy> 
+    <mkdir dir="${dist.dir}"/>
+    <delete file="${app.module}"/>
+    <jar jarfile="${app.module}" basedir="${war.build.dir}" />
+    <delete dir="${war.build.dir}"/>
+  </target>
+  
+  <target name="clean" depends="build" description="Cleans up">
+    <delete dir="${dist.dir}"/>
+    <delete dir="${build.dir}"/>
+  </target>
+
+  <property name="conpool.name"  value="PetstorePool"/>
+  <property name="jdbc.resource.name"   value="jdbc/CatalogDB"/>
+
+</project>
+
+
+
+
+

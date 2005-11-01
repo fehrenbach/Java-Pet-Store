@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Copyright 2004 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
+ http://developer.sun.com/berkeley_license.html
+ $Id: app-server-ant.xml,v 1.1 2005-11-01 05:59:39 gmurray71 Exp $ -->
+
+<project name="app-server-ant" default="compile">
+  <property name="javaee.server.name" value="localhost"/>
+  <property name="javaee.server.port" value="8080"/>
+  <property name="javaee.adminserver.port" value="4848"/>
+  <property name="appserver.instance" value="server"/>
+
+  
+  <!-- include properties overrides specific to this build file -->
+  <property file="setup/setup.properties"/>
+ 
+  <!-- This file contains common ant commands that are specific to Java EE
+     SDK. To port this application to a different app-server, you will 
+     need to write an equivalent file. 
+     You must include common-ant.xml before including this file -->
+
+  <target name="tools" depends="check">
+     <condition property="javaee-script-suffix" value=".bat">
+        <os family="windows"/>
+     </condition>
+     <condition property="javaee-script-suffix" value="">
+        <not>
+           <os family="windows"/>
+        </not>
+     </condition>
+     <condition property="path.separator" value=";">
+        <os family="windows"/>
+     </condition>
+     <condition property="path.separator" value=":">
+        <not>
+           <os family="windows"/>
+        </not>
+     </condition>
+    <!-- setup properties for various Java EE tools -->
+    <property name="asadmin" value="${javaee.home}/bin/asadmin${javaee-script-suffix}"/>
+  </target>
+
+  <!-- Construct Java EE classpath -->
+  <path id="javaee.classpath">
+    <pathelement location="${javaee.home}/lib/javaee.jar"/>
+    <pathelement location="${javaee.home}/lib/jsf-api.jar"/>
+    <pathelement location="${javaee.home}/lib/jsf-impl.jar"/>
+    <pathelement location="${javaee.home}/lib/appserv-jstl.jar"/>
+    <pathelement location="${javaee.home}/lib/commons-logging.jar"/>
+    <pathelement location="${javaee.home}/bin"/>
+  </path>
+
+  <target name="keygen_common" depends="tools">
+    <echo message="Generating key for user ${app.user} in server."/>
+    <exec executable="${asadmin}">
+        <arg line=" create-file-user"/>
+        <arg line=" --user ${javaee.server.username}" />
+        <arg line=" --passwordfile ${javaee.server.passwordfile}" />
+        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --port ${javaee.adminserver.port}" />
+        <arg line=" --groups ${app.groups}"/>
+        <arg line=" ${app.user}"/>
+   </exec>
+  </target>
+
+  <target name="keydel_common" depends="tools">
+    <echo message="Deleting key for user ${app.user} in server."/>
+    <exec executable="${asadmin}">
+        <arg line=" delete-file-user"/>
+        <arg line=" --user ${javaee.server.username}" />
+        <arg line=" --passwordfile ${javaee.server.passwordfile}" />
+        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --port ${javaee.adminserver.port}" />
+        <arg line=" ${app.user}"/>
+   </exec>
+  </target>
+
+ <target name="create-jdbc-connection-poolpb" depends="tools">
+    <exec executable="${asadmin}">
+        <arg line=" create-jdbc-connection-pool"/>
+        <arg line=" --user ${javaee.server.username}" />
+        <arg line=" --passwordfile ${javaee.server.passwordfile}" />
+        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --port ${javaee.adminserver.port}" />
+        <arg line=" --datasourceclassname ${ds.class}" />
+        <arg line=" --restype javax.sql.XADataSource " />
+        <arg line=" --property user=${db.user}:password=${db.password}:databaseName=${db.url}" />
+        <arg line=" ${pool.name} " />
+    </exec> 
+ </target>
+ 
+  <target name="create-jdbc-resource"  depends="tools">
+     <exec executable="${asadmin}">
+        <arg line="create-jdbc-resource"/>
+        <arg line=" --user ${javaee.server.username}" />
+        <arg line=" --passwordfile ${javaee.server.passwordfile}" />
+        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --port ${javaee.adminserver.port}" />
+        <arg line=" --connectionpoolid ${pool.name}" />
+        <arg line=" --enabled=true" />
+        <arg line=" ${jdbc.resource.name}" />
+    </exec>     
+  </target>
+
+  <target name="create-persistence-resource" depends="tools">
+     <exec executable="${asadmin}">
+        <arg line="create-persistence-resource"/>
+        <arg line=" --user ${javaee.server.username}" />
+        <arg line=" --passwordfile ${javaee.server.passwordfile}" />
+        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --port ${javaee.adminserver.port}" />
+        <arg line=" --factoryclass com.sun.jdo.spi.persistence.support.sqlstore.impl.PersistenceManagerFactoryImpl" />
+        <arg line=" --jdbcjndiname ${jdbc.resource.name}" />
+        <arg line=" ${pm.resource.name}" />
+    </exec>
+ </target>
+
+  <target name="create-jms-resource"  depends="tools">
+     <exec executable="${asadmin}">
+        <arg line="create-jms-resource"/>
+        <arg line=" --user ${javaee.server.username}" />
+        <arg line=" --passwordfile ${javaee.server.passwordfile}" />
+        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --port ${javaee.adminserver.port}" />
+        <arg line=" --restype ${jms.restype}" />
+        <arg line=" --enabled=true" />
+        <arg line=" --property ${jms.resource.property}" />
+        <arg line=" ${jms.resource.name}" />
+    </exec>
+  </target>
+
+  <target name="create-jms-connection"  depends="tools">
+     <exec executable="${asadmin}">
+        <arg line="create-jms-resource"/>
+        <arg line=" --user ${javaee.server.username}" />
+        <arg line=" --passwordfile ${javaee.server.passwordfile}" />
+        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --port ${javaee.adminserver.port}" />
+        <arg line=" --restype ${jms.restype}" />
+        <arg line=" --enabled=true" />
+        <arg line=" ${jms.resource.name}" />
+    </exec>
+  </target>
+
+  <target name="create-javamail-resource"  depends="tools">
+     <exec executable="${asadmin}">
+        <arg line="create-javamail-resource"/>
+        <arg line=" --user ${javaee.server.username}" />
+        <arg line=" --passwordfile ${javaee.server.passwordfile}" />
+        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --port ${javaee.adminserver.port}" />
+        <arg line=" --mailhost ${mail.host}" />
+        <arg line=" --mailuser ${mail.username}" />
+        <arg line=" --fromaddress ${mail.fromaddress}" />
+        <arg line=" ${javamail.resource.name}" />
+    </exec>
+  </target>
+
+  <target name="delete-javamail-resource"  depends="tools">
+     <exec executable="${asadmin}">
+        <arg line="delete-javamail-resource"/>
+        <arg line=" --user ${javaee.server.username}" />
+        <arg line=" --passwordfile ${javaee.server.passwordfile}" />
+        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --port ${javaee.adminserver.port}" />
+        <arg line=" ${javamail.resource.name}" />
+    </exec>
+  </target>
+
+  <target name="listJmsDestinations">
+     <exec executable="${asadmin}">
+        <arg line="-listJmsDestination "/>
+        <arg line=" --user ${javaee.server.username}" />
+        <arg line=" --passwordfile ${javaee.server.passwordfile}" />
+        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --port ${javaee.adminserver.port}" />
+    </exec>
+  </target>
+
+  <target name="delete-persistence-resource">
+     <exec executable="${asadmin}">
+        <arg line="delete-persistence-resource"/>
+        <arg line=" --user ${javaee.server.username}" />
+        <arg line=" --passwordfile ${javaee.server.passwordfile}" />
+        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --port ${javaee.adminserver.port}" />
+       <arg line=" ${pm.resource.name}" />
+    </exec>
+  </target>
+
+  <target name="delete-jdbc-resource">
+     <exec executable="${asadmin}">
+        <arg line="delete-jdbc-resource"/>
+       <arg line=" --user ${javaee.server.username}" />
+        <arg line=" --passwordfile ${javaee.server.passwordfile}" />
+        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --port ${javaee.adminserver.port}" />
+        <arg line="${jdbc.resource.name}" />
+    </exec>
+  </target>
+
+  <target name="delete-jdbc-connection-pool">
+     <exec executable="${asadmin}">
+        <arg line="delete-jdbc-connection-pool"/>
+        <arg line=" --user ${javaee.server.username}" />
+        <arg line=" --passwordfile ${javaee.server.passwordfile}" />
+        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --port ${javaee.adminserver.port}" />
+        <arg line="${pool.name}" />
+    </exec>
+  </target>
+
+  <target name="delete-jms-resource">
+     <exec executable="${asadmin}">
+        <arg line="delete-jms-resource"/>
+        <arg line=" --user ${javaee.server.username}" />
+        <arg line=" --passwordfile ${javaee.server.passwordfile}" />
+        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --port ${javaee.adminserver.port}" />
+        <arg line=" ${jms.resource.name}" />
+    </exec>
+  </target>
+
+  <target name="reconfig" depends="tools">
+     <echo message="Reconfiguring server ${appserver.instance}"/>
+     <exec executable="${asadmin}">
+        <arg line=" reconfig"/>
+        <arg line=" --user ${javaee.server.username}" />
+        <arg line=" --passwordfile ${javaee.server.passwordfile}" />
+        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --port ${javaee.adminserver.port}" />
+        <arg line=" ${appserver.instance}"/>
+    </exec>      
+  </target>
+  
+  <target name="undeploy" depends="tools">
+    <echo message="Undeploying ${module.name}." />
+    <exec executable="${asadmin}">
+        <arg line="undeploy"/>
+        <arg line=" --user ${javaee.server.username}" />
+        <arg line=" --passwordfile ${javaee.server.passwordfile}" />
+        <arg line=" ${module.name} " />
+    </exec> 
+  </target>
+
+
+  <!-- The deployment process is stop the build if there is an error
+       in the deployment process. To change this behavior define the
+       property failonerror to be false. -->
+  <target name="deploy" depends="tools">
+    <fail unless="app.module" message="app.module must be set before invoking this target. Otherwise there is no application to deploy."/>
+    <fail unless="module.name" message="app.name must be set before invoking this target. Otherwise there is no application to deploy."/>
+    <condition property="app.url" value="http://${javaee.server.name}:${javaee.server.port}/${module.name}">
+      <not>
+        <isset property="app.endpointuri"/>
+      </not>
+    </condition>
+    <property name="failonerror" value="true"/>
+    <exec executable="${asadmin}" failonerror="${failonerror}">
+        <arg line=" deploy "/>
+        <arg line=" --user ${javaee.server.username}" />
+        <arg line=" --passwordfile ${javaee.server.passwordfile}" />
+        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --port ${javaee.adminserver.port}" />
+        <arg line=" --name ${module.name}"/>
+        <arg line=" --force=true "/>
+        <arg line=" --upload=true "/>
+        <arg line=" --dbvendorname derby"/>
+        <arg line="${app.module}" />
+    </exec>
+    <antcall target="deploy-url-message"/>
+  </target>
+  
+  <target name="deploy-url-message" if="app.url">
+   <echo message="Application Deployed at: ${app.url}"/>
+  </target>
+
+  
+  <target name="package-war" if="is.war.module">
+     
+    <mkdir dir="${war.build.dir}"/>
+
+    <!-- Copy in the compiled Classes -->
+    <copy todir="${war.build.dir}/WEB-INF/classes">
+     <fileset dir="${build.classes.dir}"/>
+    </copy>
+
+    <!-- Copy in the xsds-->
+    <copy todir="${war.build.dir}/WEB-INF/classes" failonerror="false">
+        <fileset dir="${src.dir}">
+           <include name="**/*.xsd"/>
+        </fileset>
+    </copy>
+    
+    <!-- Copy in the content -->
+    <mkdir dir="${web.build.dir}"/>
+    <copy todir="${web.build.dir}">
+     <fileset dir="${src.web}"/>
+    </copy>
+    <copy todir="${war.build.dir}">
+     <fileset dir="${web.build.dir}"/>
+    </copy>
+   
+    <delete file="${app.module}"/>
+    <jar jarfile="${app.module}" basedir="${war.build.dir}" />
+    <delete dir="${war.build.dir}"/>
+
+  </target>
+  
+   <target name="package-ear">
+    <mkdir dir="${ear.build.dir}"/>
+    <mkdir dir="${ear.build.dir}/META-INF"/>
+    <copy file="${src.conf}/sun-application.xml" todir="${ear.build.dir}/META-INF/" failonerror="false" />
+    <copy file="${src.conf}/application.xml" todir="${ear.build.dir}/META-INF/" />
+    <copy file="${app.module}" todir="${ear.build.dir}" failonerror="false" />
+    <copy file="${ejb.module}" todir="${ear.build.dir}" failonerror="false" />
+    <copy file="${ejb.module2}" todir="${ear.build.dir}" failonerror="false" />
+    <delete file="${app.module}"/>
+    <jar jarfile="${app.module}" basedir="${ear.build.dir}" />
+    <delete dir="${ear.build.dir}"/>
+  </target>
+  
+  <target name="check" description="Check setup for all modules">
+    <fail unless="javaee.home">
+      Property javaee.home not specified.  Please
+      copy 'build.properties.sample' to 'YOUR_HOME_DIRECTORY/build.properties'
+      and specify the javaee.home property.
+    </fail>
+    
+    <fail unless="javaee.server.passwordfile">
+      Property javaee.server.passwordfile not specified. Please
+      copy 'build.properties.sample' to 'YOUR_HOME_DIRECTORY/build.properties'
+      and specify the javaee.server.passwordfile property. You will also
+      need to ensure that the passwordfile is present and contains
+      AS_ADMIN_PASSWORD. 
+    </fail>    
+  </target>
+  
+</project>
