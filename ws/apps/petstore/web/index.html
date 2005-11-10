@@ -1,6 +1,7 @@
 
 <html>
 <head>
+ <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
 <title>Petstore</title>
 
 <style type="text/css">
@@ -13,6 +14,7 @@
 
 .category {
  height:55;
+ cursor:pointer;
  font-size:22px;
  font-weight: bold;
  font-family: Arial
@@ -22,18 +24,628 @@
   background: #7A8AFF;
   color: #FFFAFA;
 }
+
+.popupItem {
+  background: #FFFAFA;
+  color: #000000;
+  text-decoration: none;
+  font-size: 1.2em;
+}
+
+.item {
+  color: black;
+  text-decoration: none;
+  font-size: 1.0em;
+}
+
+.itemName {
+  color: black;
+  text-decoration: none;
+  font-size: 1.4em;
+}
+
+.cartCheckout {
+  color: white;
+  cursor:pointer;
+  text-decoration: underline;
+  font-size: .8em;
+}
+
+.purchaseItem {
+  color: blue;
+  cursor:pointer;
+  text-decoration: underline;
+  font-size: 1.0em;
+}
+
+.valueListNavigate {
+  color: blue;
+  cursor:pointer;
+  text-decoration: underline;
+  font-size: 1.2em;
+}
+
+
+.cartValueListNavigate {
+  color: blue;
+  cursor:pointer;
+  text-decoration: underline;
+  font-size: .8em;
+}
+
+
+.cartItem {
+  color: black;
+  text-decoration: none;
+  font-size: 1.2em;
+}
+
+.cartItem {
+　background: white;
+  color: black;
+  text-decoration: none;
+  font-size: 1.0em;
+}
+
+.removeItem {
+  color: blue;
+  text-decoration: underline;
+  font-size: 1.0em;
+}
+
+.cartTotal {
+  color: white;
+  text-decoration: none;
+  font-size: 1.0em;
+}
+
+.progressItem {
+  color: black;
+  text-decoration: none;
+  font-size: 1.4em;
+}
+
+.cartHeader {
+  color: white;
+  text-decoration: none;
+  font-size: 1.4em;
+}
+
+.menuItem {
+  background: gray;
+  color: white;
+  text-decoration: none;
+  font-size: 1.4em;
+}
+
+.menuLink {
+  background: gray;
+  cursor:pointer;
+  color: white;
+  text-decoration: underline;
+  font-size: 1.2em;
+}
+
+.popupItem:hover {
+  background: #7A8AFF;
+  color: #FFFAFA;
+}
+
+.popupRow {
+  border: 1;
+  bodercolor: black;
+  background: #FFFAFA;
+}
 </style>
 
 <script  src="dojo.js" ></script>
+<script  src="model.js" ></script>
+<script  src="ajax-commons.js" ></script>
 
 <script type="text/javascript">
 
 var isIE;
+var gcats = new Map();
+var cart;
+var chunkSize = 3;
 
-function init() {
-    if (navigator.userAgent.indexOf("IE") != -1) isIE = true;
+var completeTable;
+var completeField;
+var autorow;
+
+
+var req;
+var isIE;
+var uderId;
+var msgIndex = 0;
+var chatTable;
+var chatIFrame;
+var timeout = 3000;
+var scroller;
+var scollerY = 0;
+
+
+var req;
+var messageHash = -1;
+var targetId = -1;
+var centerCell;
+var size=40;
+var increment = 100/size;
+
+function pollTaskmaster() {
+    var url = "checkout?messageHash=" + escape(messageHash) + "&targetId=" + targetId;
+    var ai = new AJAXInteraction(url,processPollRequest);
+    ai.doGet();
 }
 
+
+function checkout() {
+    var url = "checkout?action=startTask";
+    var ai = new AJAXInteraction(url,processInitialRequest);
+    ai.doGet();
+}
+
+function processPollRequest(responseXML) {
+    var item = responseXML.getElementsByTagName("message")[0];
+    var message = item.firstChild.nodeValue;
+    showProgress(message);
+    messageHash = message;             
+    if (messageHash < 100) {
+        setTimeout("pollTaskmaster()", 2000);
+    } else {
+        setTimeout("complete()", 2500);
+    }
+}
+
+function complete() {
+    var idiv = window.document.getElementById("task_id");
+    idiv.innerHTML = "";
+    var idiv = window.document.getElementById("progress");
+    idiv.innerHTML = "<div class=\"progressItem\">チェックアウトが完了。注文番号は" + targetId + "。</div><br><input type=\"button\" onclick=\"hideProgressBar()\" value=\"続く\">";
+    cart.empty();
+    showCartItems(0,0);
+}
+
+// callback function for intial request to schedule a task
+function processInitialRequest(responseXML) {
+    showProgressBar();
+    var item = responseXML.getElementsByTagName("message")[0];
+    var message = item.firstChild.nodeValue;
+    // the initial requests gets the targetId
+    targetId = message;
+    messageHash = 0;
+    createProgressBar();
+    showProgress(0);
+    var idiv = window.document.getElementById("task_id");
+    idiv.innerHTML = "<div class=\"progressItem\">処理中です。発注番号は" + targetId + "。</div>";
+    // do the initial poll in 2 seconds
+    setTimeout("pollTaskmaster()", 2000);
+}
+
+// create the progress bar
+function createProgressBar() {
+    var centerCellName;
+    var tableText = "";
+    for (x = 0; x < size; x++) {
+      tableText += "<td id=\"progress_" + x + "\" width=\"10\" height=\"10\" bgcolor=\"blue\"/>";
+      if (x == (size/2)) {
+          centerCellName = "progress_" + x;
+      }
+    }
+    var idiv = window.document.getElementById("progress");
+    idiv.innerHTML = "<table with=\"100\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\"><tr>" + tableText + "</tr></table>";
+    centerCell = window.document.getElementById(centerCellName);
+}
+
+// show the current percentage
+function showProgress(percentage) {
+    var percentageText = "";
+    if (percentage < 10) {
+        percentageText = "&nbsp;" + percentage;
+    } else {
+        percentageText = percentage;
+    }
+    centerCell.innerHTML = "<font color=\"white\">" + percentageText + "%</font>";
+    var tableText = "";
+    for (x = 0; x < size; x++) {
+      var cell = window.document.getElementById("progress_" + x);
+      if ((cell) && percentage/x < increment) {
+        cell.style.backgroundColor = "blue";
+      } else {
+        cell.style.backgroundColor = "red";
+      }      
+    }
+}
+
+function showCart() {
+ var cartPop = $("cart-popup");
+ if (!cart) {
+    cart = new Cart();
+    var dragme = new Dragable(cartPop);
+    cartPop.style.top="140px";
+    cartPop.style.left="500px";
+ }
+ cartPop.style.visibility='visible';
+}
+
+
+function showProgressBar() {
+    var progress = $("progress-popup");
+    progress.style.top="150px";
+    progress.style.left="200px";
+    var dragme = new Dragable(progress);
+    progress.style.visibility='visible';
+}
+
+function hideProgressBar() {
+    var progress = $("progress-popup");
+    progress.style.visibility='hidden';
+}
+
+
+function hideCart() {
+ var cartPop = $("cart-popup");
+ cartPop.style.visibility='hidden';
+}
+
+
+function showSupport() {
+ var chat = $("chit-chat");
+ if (!$("chatFrame")) {
+   var dragme = new Dragable(chat);
+   chat.style.top="140px";
+ }
+ chat.style.visibility='visible';
+}
+
+
+function hideSupport() {
+ var chat = $("chit-chat");
+ chat.style.visibility='hidden';
+}
+
+function initRequest(url) {
+    if (window.XMLHttpRequest) {
+        req = new XMLHttpRequest();
+    } else if (window.ActiveXObject) {
+        isIE = true;
+        req = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+}
+
+function validateUserId() {
+    var url = "chat?action=valid-register";
+    initRequest(url);
+    req.onreadystatechange = processRequest;
+    req.open("POST", url, true);
+    req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    var target = document.getElementById("userid");
+    req.send("userid=" + escape(target.value));
+}
+
+function register() {
+    var url = "chat?action=register";
+    initRequest(url);
+    req.onreadystatechange = processRegistration;
+    req.open("POST", url, true);
+    req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    var target = document.getElementById("userid");
+    req.send("userid=" + escape(target.value) + "&icon=default");
+}
+
+function sendMessage() {
+    var url = "chat?action=add-message";
+    initRequest(url);
+    req.onreadystatechange = processMessagePost;
+    req.open("POST", url, true);
+    req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    var messageText = document.getElementById("messageText");
+    req.send("message=" + encodeURI(messageText.value) + "&userid=" + userId);
+    // clear the message field
+    var messageText = document.getElementById("messageText");
+    if (messageText) messageText.value = "";
+    // do an immediate fetch
+    getMessages();
+}
+
+function getMessages() {
+    var url = "chat?action=get-messages&index=" + msgIndex + "&userid=" + userId;
+    initRequest(url);
+    req.onreadystatechange = processMessages;
+    req.open("GET", url, true);
+    req.send(null);
+    setTimeout("getMessages()", timeout);
+}
+
+function processMessagePost() {
+    if (req.readyState == 4) {
+        if (req.status == 200) {
+           var errorMsg = "<message>invalid</message>";
+           var msg = req.responseText;
+           if (msg == errorMsg){
+               var mdiv = document.getElementById("statusMessage");
+               mdiv.innerHTML = "<font color=\"red\">Error Posting Message</font>";
+               submitBtn.disabled = true;
+            } else {
+               mdiv = document.getElementById("statusMessage");
+               mdiv.innerHTML = "<font color=\"green\">Meessage Sent</font>";
+            }  
+         }
+    }
+}
+
+function processRegistration() {
+    if (req.readyState == 4) {
+        if (req.status == 200) {
+           var errorMsg = "<message>invalid</message>";
+           var msg = req.responseText;
+           if (msg == errorMsg){
+               var mdiv = document.getElementById("statusMessage");
+               mdiv.innerHTML = "<font color=\"red\">Invalid User Id</font>";
+               submitBtn.disabled = true;
+            } else {
+               mdiv = document.getElementById("statusMessage");
+               mdiv.innerHTML = "<font color=\"green\">Valid User Id</font>";
+               var submitBtn = document.getElementById("login_btn");
+               submitBtn.disabled = true;
+               var target = document.getElementById("userid");
+               userId = target.value;
+               postRegister();
+               getMessages();
+            }  
+         }
+    }
+}
+
+function processRequest() {
+    if (req.readyState == 4) {
+        if (req.status == 200) {
+           var errorMsg = "<message>invalid</message>";
+           var msg = req.responseText;
+           if (msg == errorMsg){
+               var mdiv = document.getElementById("statusMessage");
+               mdiv.innerHTML = "<font color=\"red\">Invalid Handle</font>";
+               var submitBtn = document.getElementById("login_btn");
+               submitBtn.disabled = true;
+            } else {
+               mdiv = document.getElementById("statusMessage");
+               mdiv.innerHTML = "<font color=\"green\">Valid Handle</font>";
+               var submitBtn = document.getElementById("login_btn");
+               submitBtn.disabled = false;
+            }  
+         }
+    }
+}
+
+function processMessages() {
+    if (req.readyState == 4) {
+        if (req.status == 200) {
+           parseMessages();
+         }
+    }
+}
+
+function parseMessages() {
+    var messageList = document.getElementById("messageList");
+	var messages = req.responseXML.getElementsByTagName("messages")[0];
+     for (loop = 0; loop < messages.childNodes.length; loop++) {
+	    var message = messages.childNodes[loop];
+        var messagesText = message.getElementsByTagName("text")[0];
+        var messageSender = message.getElementsByTagName("sender")[0];
+        var message = messageSender.childNodes[0].nodeValue + " - " + messagesText.childNodes[0].nodeValue;
+        appendMessage(messageSender.childNodes[0].nodeValue,messagesText.childNodes[0].nodeValue);
+    }
+    msgIndex = msgIndex + messages.childNodes.length;
+}
+
+function appendMessage(sender,message) {
+    var doc;
+    if (isIE) {
+       doc = chatIFrame.contentWindow.document;
+    } else {
+       doc =  document;
+    }
+    var senderCell;
+    var messageCell;
+    if (isIE) {
+        row = chatTable.insertRow(chatTable.rows.length);
+        senderCell = row.insertCell(0);
+        messageCell = row.insertCell(1);
+    } else {
+        row = doc.createElement("tr");
+        senderCell = doc.createElement("td");
+        messageCell = doc.createElement("td");
+        row.appendChild(senderCell);
+        row.appendChild(messageCell);
+        chatTable.appendChild(row);
+    }
+    senderCell.setAttribute("width", "100");
+    senderCell.setAttribute("align", "left");
+    var senderFontElement = doc.createElement("font");
+    senderFontElement.setAttribute("size", "+1");
+    senderFontElement.setAttribute("color", "green");
+    senderFontElement.appendChild(doc.createTextNode(sender));
+    senderCell.appendChild(senderFontElement);
+    messageCell.setAttribute("width", "150");
+    var messageFontElement = doc.createElement("font");
+    messageFontElement.setAttribute("size", "+2");
+    messageFontElement.setAttribute("size", "+2");
+    messageFontElement.appendChild(doc.createTextNode(message));
+    messageCell.appendChild(messageFontElement);
+    setTimeout("scrollChatIFrame()",0);
+}
+
+function scrollChatIFrame(target) {
+    if (chatIFrame.contentWindow) {
+        chatIFrame.contentWindow.scrollBy(0,50);
+    } else {
+        chatIFrame.self.scrollBy(0,50);
+    }
+}
+
+function postRegister() {
+   var south = document.getElementById("south");
+   south.innerHTML = "<input type=\"text\" size=\"30\" id=\"messageText\" name=\"message\">" +
+                   "<input onclick=\"sendMessage()\" id=\"message_btn\" type=\"Button\" value=\"Send\" name=\"Send\">";
+
+   var north = document.getElementById("north");
+   north.innerHTML = "";
+   //reset chat form action
+   var chatForm = document.getElementById("chatForm");
+   chatForm.setAttribute("onsubmit", "sendMessage();return false;");
+   var status = document.getElementById("statusMessage");
+   status.innerHTML = "";
+   // insert iframe for chat panel
+   var center = $("center");
+   var tempIFrame = document.createElement("iframe");
+   tempIFrame.setAttribute("id", "chatIFrame");
+   tempIFrame.setAttribute("scrolling", "yes");
+   tempIFrame.setAttribute("style", "width:350px; height:150px; border: 0px"); 
+
+   chatIFrame = center.appendChild(tempIFrame);   
+   var doc;
+   if (isIE) {
+     doc = chatIFrame.contentWindow.document;
+   } else {
+       doc =  document;
+   }
+   chatTable = doc.createElement("table");
+   chatTable.setAttribute("id", "chatTable");
+   chatTable.setAttribute("width", "340");
+
+   if (isIE) {
+       var row = chatTable.insertRow(0);
+       var cell = row.insertCell(0);
+       cell.appendChild(doc.createTextNode(userId + "has joined"));
+   } else {
+       var chatRow = doc.createElement("tr");
+       var chatCell = doc.createElement("td");
+       chatCell.appendChild(doc.createTextNode(userId + " has joined"));
+       chatRow.appendChild(chatCell);
+       chatTable.appendChild(chatRow);
+   }
+   // do a delayed insertion because some browers skip ahead
+   setTimeout("insertChatTable()",0);
+}
+
+function insertChatTable() {
+   var tscroller = document.createElement("div");
+   tscroller.setAttribute("id", "scroller");
+   tscroller.setAttribute("style", "position: absolute;width: 300");
+   if (isIE) {
+     scroller = chatIFrame.contentWindow.document.appendChild(tscroller);
+     scroller.appendChild(chatTable);
+     //chatIFrame.contentWindow.document.appendChild(chatTable);
+   } else {
+       if (chatIFrame.document) {
+          scroller = chatIFrame.document.appendChild(tscroller);
+          scroller.appendChild(chatTable);
+          //chatIFrame.document.appendChild(chatTable);
+       } else {
+          //chatIFrame.contentWindow.document.body.appendChild(chatTable);
+          scroller = chatIFrame.contentWindow.document.body.appendChild(tscroller);
+          scroller.appendChild(chatTable);
+       }
+   }  
+}
+
+function disableSubmitBtn() {
+    var submitBtn = document.getElementById("login_btn");
+    submitBtn.disabled = true;
+}
+
+// chat ends
+
+
+function init() {
+    var chat = $("chit-chat");
+    chat.visible = true;
+    disableSubmitBtn();
+    if (navigator.userAgent.indexOf("ie") != -1) isIE = true;
+    completeField = document.getElementById("complete-field");
+    var menu = document.getElementById("auto-row");
+    autorow = document.getElementById("menu-popup");
+    //autorow.style.top = completeField.offsetBottom + "px";
+    autorow.style.top = (getElementY(completeField) + 30) + "px";
+    //autorow.style.left = completeField.offsetLeft + 5 + "px";
+    autorow.style.left = findX(completeField) + 5 +  "px";
+    completeTable = document.getElementById("completeTable");
+    completeTable.setAttribute("bordercolor", "white");
+}
+
+function doSearch() {
+    if (completeField.value == "") {
+       // message
+    } else {
+        var url = "autocomplete?action=complete&id=" + encodeURI(completeField.value);
+        var ajax = new AJAXInteraction(url,processSearch);
+        ajax.doGet();
+    }
+    completeTable.style.visibility='hidden';
+    clearTable();
+}
+
+function doCompletion() {
+    if (completeField.value == "") {
+        clearTable();
+        completeTable.style.visibility='hidden';
+    } else {
+        clearTable();
+        var url = "autocomplete?action=complete&id=" + encodeURI(completeField.value);
+        var ajax = new AJAXInteraction(url,postProcess);
+        ajax.doGet();
+    }
+}
+
+function postProcess(responseXML) {
+    var items = responseXML.getElementsByTagName("id");
+    if (items.length > 0) {
+        completeTable.setAttribute("bordercolor", "black");
+        completeTable.setAttribute("border", "1");
+    } else {
+        clearTable();
+    }
+    //completeTable.style.visibility='visible';
+    for (loop = 0; loop < items.length; loop++) {
+        var id = responseXML.getElementsByTagName("id")[loop].childNodes[0].nodeValue;
+        var image = responseXML.getElementsByTagName("image-url")[loop].childNodes[0].nodeValue;
+        var name = responseXML.getElementsByTagName("name")[loop].childNodes[0].nodeValue;
+        var description = responseXML.getElementsByTagName("description")[loop].childNodes[0].nodeValue;
+        var price = responseXML.getElementsByTagName("price")[loop].childNodes[0].nodeValue;
+        appendAutoComplete(id, name);
+    }
+}
+
+function clearTable() {
+       clearNodes("completeTable");
+}
+
+function appendAutoComplete(productId, name) {
+    completeTable.style.visibility='visible';
+    //completeTable.style.visibility='visible'
+    var firstNameCell;
+    var lastNameCell;
+    var row;
+    var nameCell;
+    if (isIE) {
+        row = completeTable.insertRow(completeTable.rows.length);
+        nameCell = row.insertCell(0);
+    } else {
+        row = document.createElement("tr");
+        nameCell = document.createElement("td");
+        row.appendChild(nameCell);
+        completeTable.appendChild(row);
+    }
+    row.className = "popupRow";
+    nameCell.setAttribute("bgcolor", "#FFFAFA");
+
+    
+    var linkElement = document.createElement("a");
+    linkElement.className = "popupItem";
+    linkElement.setAttribute("onclick", "showSearchItem('" + productId + "')");
+    linkElement.appendChild(document.createTextNode(name));
+    nameCell.appendChild(linkElement);
+}
 
 function loadCategories() {
     init();
@@ -58,8 +670,73 @@ function loadCategoriesCallback(responseXML) {
     }
 }
 
-function purchaseItem(id) {
- alert("purchasing  " + id);
+function purchaseItem(catid,id) {
+    showCart();
+    var tcat = gcats.get(catid);
+    var i = tcat.getItemById(id);
+    cart.addItem(i.id, i.image,i.name,i.description, i.price);
+    showCartItems(0,chunkSize);
+}
+
+function removeCartItem(id) {
+    showCart();
+    cart.removeItem(id);
+    showCartItems(0,chunkSize);
+}
+
+
+function showSearchItem(id) {
+      var c = gcats.get("search");
+      if (c != null) {
+        var i = c.getItemById(id);
+        if (i != null) {
+            if (completeTable) completeTable.style.visibility='hidden';
+            clearTable();
+            addCategoryItem("search", i.id,i.image,i.name,i.description,i.price);
+            return;
+        }
+      }
+    var bindArgs = {
+            url:  "catalog?command=item&id=" + id,
+            mimetype: "text/xml",
+            load: function(type, data) {
+            loadItemCallback(data);
+        }
+     };
+    dojo.io.bind(bindArgs);
+    if (completeTable) completeTable.style.visibility='hidden';
+    clearTable();
+}
+
+function loadCategory(catid) {
+    if (gcats.get(catid) == null) {
+        var bindArgs = {
+            url:  "catalog?command=category&catid=" + catid,
+            mimetype: "text/xml",
+            load: function(type, data) {
+               loadCategoryCallback(catid,data);
+             }
+        };
+        dojo.io.bind(bindArgs);
+    } else {
+        showCategoryItems(catid,0,chunkSize);
+    }
+}
+
+function processSearch(responseXML) {
+	var categories = responseXML.getElementsByTagName("id");
+    var c = new Category("search");
+    
+    for (var loop = 0; loop < categories.length; loop++) {
+      var id = responseXML.getElementsByTagName("id")[loop].childNodes[0].nodeValue;
+      var image = responseXML.getElementsByTagName("image-url")[loop].childNodes[0].nodeValue;
+      var name = responseXML.getElementsByTagName("name")[loop].childNodes[0].nodeValue;
+      var description = responseXML.getElementsByTagName("description")[loop].childNodes[0].nodeValue;
+      var price = responseXML.getElementsByTagName("price")[loop].childNodes[0].nodeValue;
+      c.addItem(id,image,name,description,price);
+    }
+    gcats.put("search", c);
+    showCategoryItems("search",0,chunkSize);
 }
 
 function loadItemCallback(responseXML) {
@@ -68,53 +745,194 @@ function loadItemCallback(responseXML) {
       var name = responseXML.getElementsByTagName("name")[0].childNodes[0].nodeValue;
       var description = responseXML.getElementsByTagName("description")[0].childNodes[0].nodeValue;
       var price = responseXML.getElementsByTagName("price")[0].childNodes[0].nodeValue;
-      showItem(id,image,name,description,price);
+      clearNodes("bodyTable");
+      var c = gcats.get("search");
+      if (c == null) {
+        c= new Category("search");
+        gcats.put("search", c);
+      }
+      c.addItem(id,image,name,description,price);
+      addCategoryItem("search", id,image,name,description,price);
+      //addCategoryItem(id,image,name,description,price);
 }
 
-
-function loadCategory(catid) {
-
-    var bindArgs = {
-       url:  "catalog?command=category&catid=" + catid,
-       mimetype: "text/xml",
-       load: function(type, data) {
-               loadCategoryCallback(data);
-             }
-     };
-    dojo.io.bind(bindArgs);
-}
-
-function loadCategoryCallback(responseXML) {
-    clearNodes("bodyTable");
+function loadCategoryCallback(catid, responseXML) {
 	var categories = responseXML.getElementsByTagName("id");
+    var c = new Category(catid);
     for (var loop = 0; loop < categories.length; loop++) {
       var id = responseXML.getElementsByTagName("id")[loop].childNodes[0].nodeValue;
       var image = responseXML.getElementsByTagName("image-url")[loop].childNodes[0].nodeValue;
       var name = responseXML.getElementsByTagName("name")[loop].childNodes[0].nodeValue;
       var description = responseXML.getElementsByTagName("description")[loop].childNodes[0].nodeValue;
       var price = responseXML.getElementsByTagName("price")[loop].childNodes[0].nodeValue;
-      addCategoryItem(id,image,name,description,price);
+      c.addItem(id,image,name,description,price);
     }
-    if (categories.length == 0) {
-        var cell;
-        var bodyTable = document.getElementById("bodyTable");
-        
-        var row;
+    gcats.put(catid, c);
+    showCategoryItems(catid,0,chunkSize);
+}
+
+
+function showCartItems(index, count) {
+    var bodyTable = $("cartBody");
+
+    if (cart.length == 0) {
+        clearNodes("cartBody");
+
         if (isIE) {
           bodyTable.innerHTML = "<tr><td>No items</td></tr>";
         } else {
+            var cell;
+            var row;
+            clearNodes("cartBody");
+            row = document.createElement("tr");
+            row.setAttribute("bgcolor", "white");
+            cell = document.createElement("td");
+            cell.setAttribute("bgcolor", "white");
+            cell.setAttribute("nowrap", "true");
+            cell.setAttribute("align", "center");
+            var empty = document.createTextNode( "空です。");
+            empty.className = "cartItem";
+            cell.appendChild(empty);
+            row.appendChild(cell);
+            bodyTable.appendChild(row);
+        }
+    } else {
+        clearNodes("cartBody");
+        var  loopLength = Number(index) + Number(count);
+        for (l = index; l  < loopLength; l++) {
+           var i = cart.getItem(l);
+           if (i) addCartItem(i.id,i.image,i.name,i.description,i.price);
+        }
+        var cell;
+        var row;
+        // put the next and previous links
+        row = document.createElement("tr");
+        row.setAttribute("bgcolor", "white");
+
+        if (Number(index) >= chunkSize) {
+            cell = document.createElement("td");
+            cell.setAttribute("bgcolor", "white");
+            cell.setAttribute("nowrap", "true");
+            cell.setAttribute("valign", "top");
+            cell.setAttribute("align", "left");
+            var link = document.createElement("a");
+            link.appendChild(document.createTextNode("前へ"));
+            link.className = "cartValueListNavigate";
+            var prevIndex =  (Number(index) - chunkSize);
+            if ((Number(index)  - Number(chunkSize)) < 0) {
+               prevIndex = 0;
+            }
+            link.setAttribute("onclick", "showCartItems('" + prevIndex + "','" + chunkSize + "')");
+            cell.appendChild(link);
+            row.appendChild(cell);
+        }
+
+        }
+        if (Number(cart.length) > (Number(index) + Number(count)) ) {
+            cell = document.createElement("td");
+            cell.setAttribute("bgcolor", "white");
+            cell.setAttribute("nowrap", "true");
+            cell.setAttribute("valign", "top");
+            cell.setAttribute("align", "right");
+            var link = document.createElement("a");
+            link.appendChild(document.createTextNode("次へ"));
+            link.className = "cartValueListNavigate";
+            var nextCount = count;
+            if ((Number(index) + Number(count) + Number(chunkSize)) > Number(cart.length)) {
+                nextCount = Number(cart.length) - (Number(index) + Number(count));
+            }
+            
+            link.setAttribute("onclick", "showCartItems('"  + (Number(index) + chunkSize) + "','" + nextCount + "')");
+            cell.appendChild(link);
+            row.appendChild(cell);
+        }
+        
+        bodyTable.appendChild(row);
+        var cartTotal = $("cartTotal");
+        cartTotal.innerHTML = "¥" + cart.getTotal();
+        if (cart.length == 0) $("coItem").style.visibility='hidden';
+        else $("coItem").style.visibility='visible';
+}
+
+function showCategoryItems(catid, index, count) {
+    var c = gcats.get(catid);
+    var bodyTable = $("bodyTable");
+
+    if (c.length == 0) {
+        clearNodes("bodyTable");
+
+        if (isIE) {
+          bodyTable.innerHTML = "<tr><td>No items</td></tr>";
+        } else {
+            var cell;
+            var row;
+            clearNodes("bodyTable");
             row = document.createElement("tr");
             row.setAttribute("bgcolor", "white");
             cell = document.createElement("td");
             cell.setAttribute("bgcolor", "white");
             cell.setAttribute("nowrap", "true");
             cell.setAttribute("valign", "top");
-            cell.appendChild(document.createTextNode( "No items available in this category."));
+            cell.appendChild(document.createTextNode( "登録なし"));
             row.appendChild(cell);
             bodyTable.appendChild(row);
         }
-    }
+    } else {
+        clearNodes("bodyTable");
+
+        var  loopLength = Number(index) + Number(count);
+        for (l = index; l  < loopLength; l++) {
+           var i = c.getItem(l);
+           addCategoryItem(catid, i.id, i.image,i.name,i.description,i.price);
+        }
+        var cell;
+        var row;
+        // put the next and previous links
+        row = document.createElement("tr");
+        row.setAttribute("bgcolor", "white");
+
+        if (Number(index) >= chunkSize) {
+            cell = document.createElement("td");
+            cell.setAttribute("bgcolor", "white");
+            cell.setAttribute("nowrap", "true");
+            cell.setAttribute("valign", "top");
+            cell.setAttribute("align", "left");
+            var link = document.createElement("a");
+            link.appendChild(document.createTextNode("前へ"));
+            link.className = "valueListNavigate";
+            var prevIndex =  (Number(index) - chunkSize);
+            if ((Number(index)  - Number(chunkSize)) < 0) {
+               prevIndex = 0;
+            }
+            link.setAttribute("onclick", "showCategoryItems('" + catid + "','" + prevIndex + "','" + chunkSize + "')");
+            cell.appendChild(link);
+            row.appendChild(cell);
+        }
+
+        }
+        if (Number(c.length) > (Number(index) + Number(count)) ) {
+            cell = document.createElement("td");
+            cell.setAttribute("bgcolor", "white");
+            cell.setAttribute("nowrap", "true");
+            cell.setAttribute("valign", "top");
+            cell.setAttribute("align", "right");
+            var link = document.createElement("a");
+            link.appendChild(document.createTextNode("次へ"));
+            link.className = "valueListNavigate";
+            var nextCount = count;
+            if ((Number(index) + Number(count) + Number(chunkSize)) > Number(c.length)) {
+                nextCount = Number(c.length) - (Number(index) + Number(count));
+            }
+            
+            link.setAttribute("onclick", "showCategoryItems('" + catid + "','" + (Number(index) + chunkSize) + "','" + nextCount + "')");
+            cell.appendChild(link);
+            row.appendChild(cell);
+        }
+        
+        bodyTable.appendChild(row);
 }
+
+ 
 
 function addCategory(id, name, src) {
     var cell;
@@ -129,6 +947,8 @@ function addCategory(id, name, src) {
         cell.setAttribute("valign", "top");
         var img = document.createElement("img");
         img.src = ("images\\" + src);
+        img.setAttribute("height", "50");
+        img.setAttribute("width", "50");
         var link = document.createElement("a");
         link.className ="category";
         link.appendChild(document.createTextNode(name));
@@ -141,8 +961,10 @@ function addCategory(id, name, src) {
     }
 }
 
-function addCategoryItem(id,image,name,description,price) {
+function addCategoryItem(catid, id,image,name,description,price) {
     var cell;
+    var cell2;
+    var cell3;
     var bodyTable = document.getElementById("bodyTable");
     var row;
     if (isIE) {
@@ -156,14 +978,68 @@ function addCategoryItem(id,image,name,description,price) {
         var img = document.createElement("img");
         img.src = ("images\\" + image);
         cell.appendChild(img);
-        cell.appendChild(document.createTextNode( name + " - " + description + " " + "Price $" + price + "  "));
-        var plink = document.createElement("a");
-        plink.className ="category";
-        plink.appendChild(document.createTextNode("Purchase"));
-        plink.setAttribute("onClick", "purchaseItem('" + id + "')");
-        cell.appendChild(plink);
-        
         row.appendChild(cell);
+        cell2 = document.createElement("td");
+        var dDiv = document.createElement("div")
+         dDiv.appendChild(document.createTextNode(name));
+        dDiv.className = "itemName";
+        cell2.appendChild(dDiv);
+        var dDiv2= document.createElement("div");
+        dDiv2.appendChild(document.createTextNode(description));
+        dDiv2.className = "item";
+        cell2.appendChild(dDiv2);
+        row.appendChild(cell2);
+        var cell3 = document.createElement("td");
+        var dDiv3= document.createElement("div");
+        dDiv3.appendChild(document.createTextNode("¥" + price + "  "));
+        dDiv3.className = "item";
+        cell3.appendChild(dDiv3);
+        //cell3.appendChild(document.createElement("br"));
+        var plink = document.createElement("a");
+        plink.className ="purchaseItem";
+        plink.appendChild(document.createTextNode("カートに追加"));
+        plink.setAttribute("onClick", "purchaseItem('" + catid + "','" + id + "')");
+        cell3.appendChild(plink);
+        row.appendChild(cell3);
+        bodyTable.appendChild(row);
+    }
+}
+
+function addCartItem(id,image,name,description,price) {
+    var cell0;
+    var cell1;
+    var cell2;
+    var cell3;
+    
+    var bodyTable = $("cartBody");
+    var row;
+    if (isIE) {
+    } else {
+        row = document.createElement("tr");
+        row.setAttribute("bgcolor", "white");
+        cell0 = document.createElement("td");
+        var img = document.createElement("img");
+        img.setAttribute("width", "25");
+        img.setAttribute("height", "25");
+        img.src = ("images\\" + image);
+        cell0.appendChild(img);
+        row.appendChild(cell0);
+        cell1 = document.createElement("td");
+        var dDiv = document.createTextNode(name);
+        dDiv.className = "cartItemName";
+        cell1.appendChild(dDiv);
+        row.appendChild(cell1);
+        cell2 = document.createElement("td");
+        var dDiv2 = document.createTextNode( "¥" + price);
+        cell2.appendChild(dDiv2);
+        row.appendChild(cell2);
+        cell3 = document.createElement("td");
+        var plink = document.createElement("a");
+        plink.appendChild(document.createTextNode("削除"));
+        plink.className = "removeItem";
+        plink.setAttribute("onClick", "removeCartItem('" + id + "')");
+        cell3.appendChild(plink);
+        row.appendChild(cell3);
         bodyTable.appendChild(row);
     }
 }
@@ -177,49 +1053,67 @@ function clearNodes(id) {
     }
 }
 
-function showItem(id, image, name, description, price) {
-    var body = document.getElementById("body");
-    var img = document.createElement("img");
-    img.src = ("images\\" + image);
-    body.appendChild(img);
-    body.appendChild(document.createTextNode(name));
-    body.appendChild(document.createTextNode(description));
-    body.appendChild(document.createTextNode("Price $" + price));  
-}
-
 </script>
 
 </head>
 <body onload="loadCategories()">
 
 
+<table border="0" bordercolor="gray" cellpadding="0" cellspacing="0" bgcolor="white" width="100%">
+ <tr>
+  <td width="100"><img src="images/banner_logo.gif"></td>
+  <td>
+  <div class="banner">Petstore</div>
+  </td>
+  <td align="right">
+      <form name="autofillform" action="autocomplete"  onsubmit="return false;">
+        <input type="hidden" name="action" value="lookupbyname"/>
+         <input    type="text"
+                size="15"
+                autocomplete="off"
+                  id="complete-field"
+				name="id"
+             onkeyup="doCompletion();">
+             <input    type="button"
+                  id="search-button"
+				value="検索"
+             onclick="doSearch();">
+    </form>
+  </td>
+  </td>
+ </tr>
+  <tr bgcolor="gray">
+  <td colspan="3"  align="right">
+   <a class="menuLink" onclick="showCart();">カート</a> <span class="menuItem">|</span > <a class="menuLink" onclick="showSupport();">サポート</a>
+  </td>
+ </tr>
+ </table>
 
-<div class="banner">Petstore</div>
-
-<table>
+ 
+<table bgcolor="white">
  <tr>
   <td valign="top" width="300"><table id="sidebar"vbgoclor="red" border="0" cellpadding="0"></table></td>
-  <td valign="top" width="100%" bgcolor="blue">
+  <td valign="top" width="100%" bgcolor="white">
    <table valign="top" id="bodyTable" border="0">
      <tr>
       <td>
         <map name="petmap">
-        <area href="category.screen?category_id=BIRDS" 
+        <area onclick="loadCategory('birds')" 
             alt="Birds" 
             coords="72,2,280,250">
-        <area href="category.screen?category_id=FISH" 
+        <area onclick="loadCategory('fish')" 
             alt="Fish" 
             coords="2,180,72,250">
-        <area href="category.screen?category_id=DOGS" 
+        <area onclick="loadCategory('dogs')" 
             alt="Dogs" 
             coords="60,250,130,320">
-       <area href="category.screen?category_id=REPTILES" 
+       <area onclick="loadCategory('reptiles')" 
             alt="Reptiles" 
             coords="140,270,210,340">
-        <area href="category.screen?category_id=CATS" 
+        <area onclick="loadCategory('cats')" 
             alt="Cats" 
             coords="225,240,295,310">
-        <area href="category.screen?category_id=BIRDS" 
+        <area onclick="loadCategory('birds')" 
             alt="Birds" 
             coords="280,180,350,250">
         </map>
@@ -236,6 +1130,80 @@ function showItem(id, image, name, description, price) {
  </td>
  </tr>
 </table>
+
+<div style="position: absolute; top:0px;left:0:px;width:357;visibility: hidden" id="chit-chat">
+ <form id="chatForm" name="chatForm" onsubmit="register();return false;">
+  <table bordercolor="black" border="0" cellpadding="3" cellspacing="0" bgcolor="yellow">
+   <tr>
+    <td><h2>チャット:</h2></td><td colspan="4" align="left"><a onclick="hideSupport();"><img src="images/cbutton.gif" border="0"></a></td>
+   </tr>
+   <tr>
+    <td colspan="4">
+     <div id="north">
+        <b>Id:</b>
+         <input    type="text"
+               size="20"  
+                 id="userid"
+                name="userid"
+             onkeyup="validateUserId()"
+              onblur="validateUserId()"/>
+              <input onclick="register()" id="login_btn" type="Button" value="Login" name="Login"/>
+     </div>
+     </td>
+    </tr>
+    <tr><td colspan="4" border="1">
+    <div id="center">
+    </div>
+    </td>
+   </tr>
+   <tr>
+    <td align="right" colspan="4">
+    <div id="south">
+    </div>
+   </td>
+   </tr>
+   <tr><td colspan="4"><div id="statusMessage"></div><td></tr>
+   <tr><td colspan="4">&nbsp;<td></tr>   
+ </table>
+</form>
+</div>
+
+ <div style="position: absolute; visibility: visible;z-index:5" id="menu-popup">
+ <table id="completeTable" border="1" bordercolor="black" cellpadding="0" cellspacing="0" ></table>
+ </div>
+
+ 
+  <div style="position: absolute; visibility: hidden" id="cart-popup">
+   <table id="cartTable" border="0" bgcolor="black" bordercolor="black" cellpadding="0" cellspacing="0">
+   <tr>
+    <td align="center" width="80"><div class="cartHeader">カート</div></td><td align="right"><a onclick="hideCart();"><img src="images/cbutton.gif" border="0"></a> &nbsp;</td>
+   </tr>
+   <tr><td colspan="2">
+        <table id="cartBody" border="0" width="100%" bgcolor="white" cellpadding="0" cellspacing="0"><tr><td align="center"><div class="cartItem">空です。</div></td></tr></table>
+      </td>
+   </tr>
+   <tr>
+ 　  <td align="right" valign="top"><div class="cartTotal">合計</div></td>
+   　<td align="right" valign="top"><div class="cartTotal" id="cartTotal">0</div></td>
+   </tr>
+   <tr>
+   　<td align="center" colspan="2">
+        <span id="coItem" class="cartCheckout"　style="width:110px; visibility: hidden">
+          <a onclick="checkout();">チェックアウトへ</a>
+        </span>
+     </td>
+   </tr>
+ </table>
+
+ </div>
+ 
+ <div style="position: absolute; visibility: hidden" id="progress-popup">
+  <table border="2" bgcolor="yellow" cellpadding="0">
+   <tr><td align="center"><div id="task_id"></div></td></tr>
+   <tr><td align="center"><div id="progress"></div></td></tr>
+  </table>
+ </div>
+ 
 </body>
 </html>
 

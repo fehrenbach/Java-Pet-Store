@@ -53,6 +53,10 @@ public class Item {
     public String getImageURL() {
         return imageURL;
     }
+    
+    public String toString() {
+        return "Item [id=" + itemId + ", name=" + itemName + ", description=" + description + "]"; 
+    }
 
 }
 

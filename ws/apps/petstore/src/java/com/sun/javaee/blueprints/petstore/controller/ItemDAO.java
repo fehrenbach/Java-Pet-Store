@@ -18,9 +18,6 @@ public class ItemDAO {
 
   public ItemDAO (DataSource ds) {
       try  {               
-          //Context initCtx = new InitialContext();
-          //Context envCtx = (Context) initCtx.lookup("java:comp/env");
-          //DataSource ds = (DataSource) envCtx.lookup("jdbc/PetstoreDB");
           con =  ds.getConnection();     
       } catch (Exception ex) {
           throw new RuntimeException("Couldn't open connection to database: " + ex.getMessage());
@@ -59,69 +56,103 @@ public class ItemDAO {
    }
 
 
+  public ArrayList doSearch(String searchString) {
+    ArrayList items = new ArrayList();
+    PreparedStatement prepStmt = null;
+    try {
+
+      String selectStatement = "select productid, products.categoryid, name, description, imageurl, price " + "from products where (name like ? or description like ?)";
+      getConnection();
+      prepStmt = con.prepareStatement(selectStatement);
+      prepStmt.setString(1, "%" + searchString + "%");
+      prepStmt.setString(2, "%" + searchString + "%");
+      ResultSet rs = prepStmt.executeQuery();
+      while (rs.next()) {
+        Item item = new Item(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getFloat(6));
+        items.add(item);
+      }
+    } catch (SQLException ex) {
+      System.out.println("ItemDAO caught: " + ex);
+    } finally {
+        try {
+            prepStmt.close();
+        } catch (java.sql.SQLException sqx) {}
+        releaseConnection();
+    }
+    return items;
+  }
 
   public ArrayList getItems(String categoryId) {
     ArrayList items = new ArrayList();
+    PreparedStatement prepStmt = null;
     try {
 
       String selectStatement = "select productid, name, description, imageurl, price " + "from products where categoryid = ?";
       getConnection();
-      PreparedStatement prepStmt = con.prepareStatement(selectStatement);
+      prepStmt = con.prepareStatement(selectStatement);
       prepStmt.setString(1, categoryId);
-      System.out.println("*** Statement==" + prepStmt);
       ResultSet rs = prepStmt.executeQuery();
       while (rs.next()) {
         Item item = new Item(rs.getString(1), categoryId, rs.getString(2), rs.getString(3), rs.getString(4), rs.getFloat(5));
         items.add(item);
       }
-      prepStmt.close();
     } catch (SQLException ex) {
       System.out.println("ItemDAO caught: " + ex);
+    } finally { 
+        try {
+            prepStmt.close();
+        } catch (java.sql.SQLException sqx) {}
+        releaseConnection();
     }
-	releaseConnection();
     return items;
 
   }
   
   public ArrayList getCategories() {
     ArrayList categories = new ArrayList();
+    PreparedStatement prepStmt = null;
     try {
 
       String selectStatement = "select categoryid, name, description, imageurl from category";
       getConnection();
-      PreparedStatement prepStmt = con.prepareStatement(selectStatement);
+      prepStmt = con.prepareStatement(selectStatement);
       ResultSet rs = prepStmt.executeQuery();
       while (rs.next()) {
         Category cat = new Category(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4));
         categories.add(cat);
       }
-      prepStmt.close();
     } catch (SQLException ex) {
       System.out.println("ItemDAO caught: " + ex);
+    } finally {
+        try {
+            prepStmt.close();
+        } catch (java.sql.SQLException sqx) {}
+        releaseConnection();
     }
-	releaseConnection();
     return categories;
 
   }
 
   public Item getItem(String itemId) {
+    PreparedStatement prepStmt = null;
     try {
-      String selectStatement = "select productid, categoryid, name, description, imageurl, price " + "from products where id = ? ";
+      String selectStatement = "select productid, categoryid, name, description, imageurl, price " + "from products where productid = ? ";
       getConnection();
-      PreparedStatement prepStmt = con.prepareStatement(selectStatement);
+      prepStmt = con.prepareStatement(selectStatement);
       prepStmt.setString(1, itemId);
       ResultSet rs = prepStmt.executeQuery();
       if (rs.next()) {
         Item item = new Item(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),   rs.getString(5), rs.getFloat(6));
-        prepStmt.close();
-        releaseConnection();                
         return item;
-      } else {          
-        prepStmt.close();
-        releaseConnection();
       }
     } catch (SQLException ex) {
-      releaseConnection();
+       System.out.println(ex);
+       ex.printStackTrace();
+    } finally {
+        try {
+            prepStmt.close();
+        } catch (java.sql.SQLException sqx) {}
+        releaseConnection();
     }
     return null;
   }

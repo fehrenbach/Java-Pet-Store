@@ -3,6 +3,7 @@ package com.sun.javaee.blueprints.petstore.controller;
 
 import java.io.*;
 import java.util.*;
+import java.text.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.sql.DataSource;
@@ -25,7 +26,6 @@ public class CatalogServlet extends HttpServlet {
        dao =
             (ItemDAO)context.getAttribute("itemDAO");
          if (dao == null)
-             System.out.println("Creating the DAO with DS=" + PetstoreDB);
              dao = new ItemDAO(PetstoreDB);
              context.setAttribute("itemDAO", dao);
    }
@@ -37,62 +37,78 @@ public class CatalogServlet extends HttpServlet {
    public void doGet (HttpServletRequest request,
                       HttpServletResponse response)
        throws ServletException, IOException {
-           
-           
+            request.setCharacterEncoding("UTF-8");
             String command = request.getParameter("command");
            
             if ("category".equals(command)) {
                 String catid = request.getParameter("catid");
+                System.out.println("Request for category with id: " + catid);
                 // set content-type header before accessing the Writer
-                response.setContentType("text/xml");
+                response.setContentType("text/xml;charset=UTF-8");
                 PrintWriter out = response.getWriter();
-           
+                StringBuffer sb = new StringBuffer();
                 // then write the data of the response
-                out.println("<items>");
+                sb.append("<items>\n");
                 ArrayList items = dao.getItems(catid);
                 Iterator it = items.iterator();
+                NumberFormat formatter = new DecimalFormat("0000");
                 while (it.hasNext()) {
                     Item i = (Item)it.next();
-                    out.println("<item>");
-                    out.println(" <id>" + i.getId() + "</id>");
-                    out.println(" <cat-id>" + i.getCategoryId() + "</cat-id>");
-                    out.println(" <name>" + i.getName() + "</name>");
-                    out.println(" <description>" + i.getDescription() + "</description>");
-                    out.println(" <image-url>" + i.getImageURL() + "</image-url>");
-                    out.println(" <price>" + i.getPrice() + "</price>");
-                    out.println("</item>");
+                    sb.append("<item>\n");
+                    sb.append(" <id>" + i.getId() + "</id>\n");
+                    sb.append(" <cat-id>" + i.getCategoryId() + "</cat-id>\n");
+                    sb.append(" <name>" + i.getName() + "</name>\n");
+                    sb.append(" <description>" + i.getDescription() + "</description>\n");
+                    sb.append(" <image-url>" + i.getImageURL() + "</image-url>\n");
+                    sb.append(" <price>" + formatter.format(i.getPrice())  + "</price>\n");
+                    sb.append("</item>\n");
                 }
-                out.println("</items>");
+                sb.append("</items>");
+                out.println(sb.toString());
+                System.out.println("Returning:\n" + sb.toString());
                 out.close();
          } else if ("categories".equals(command)) {
-                response.setContentType("text/xml");
-                PrintWriter out = response.getWriter();
-           
-                // then write the data of the response
-                out.println("<categories>");
+                System.out.println("Request for categories.");
+                StringBuffer sb = new StringBuffer();
+                sb.append("<categories>\n");
                 ArrayList items = dao.getCategories();
                 Iterator it = items.iterator();
+                
                 while (it.hasNext()) {
                     Category c = (Category)it.next();
-                    out.println("<category>");
-                    out.println(" <id>" + c.getId() + "</id>");
-                    out.println(" <cat-id>" + c.getId() + "</cat-id>");
-                    out.println(" <name>" + c.getName() + "</name>");
-                    out.println(" <description>" + c.getDescription() + "</description>");
-                    out.println(" <image-url>" + c.getImageURL() + "</image-url>");
-                    out.println("</category>");
+                    sb.append("<category>\n");
+                    sb.append(" <id>" + c.getId() + "</id>\n");
+                    sb.append(" <cat-id>" + c.getId() + "</cat-id>\n");
+                    sb.append(" <name>" + c.getName() + "</name>\n");
+                    sb.append(" <description>" + c.getDescription() + "</description>\n");
+                    sb.append(" <image-url>" + c.getImageURL() + "</image-url>\n");
+                    sb.append("</category>\n");
                 }
-                out.println("</categories>");
-                out.close();         
-        } else if ("categories".equals(command)) {
-                String orderId = "A1234";
-                response.setContentType("text/xml");
+                sb.append("</categories>\n");
+                response.setContentType("text/xml;charset=UTF-8");
                 PrintWriter out = response.getWriter();
-                // then write the data of the response
-                out.println("<status>");
-                out.println("<message>" + orderId + "<message>");
-                out.println("</status>");
+                out.println(sb.toString());
+                System.out.println("Returning:\n" + sb.toString());
                 out.close();         
+         } else if ("item".equals(command)) {
+             String targetId = request.getParameter("id");
+             NumberFormat formatter = new DecimalFormat("0000");
+             System.out.println("Request for item with id: " + targetId);
+             Item i = dao.getItem(targetId);
+             StringBuffer sb = new StringBuffer();
+             sb.append("<item>\n");
+             sb.append(" <id>" + i.getId() + "</id>\n");
+             sb.append(" <cat-id>" + i.getCategoryId() + "</cat-id>\n");
+             sb.append(" <name>" + i.getName() + "</name>\n");
+             sb.append(" <description>" + i.getDescription() + "</description>\n");
+             sb.append(" <image-url>" + i.getImageURL() + "</image-url>\n");
+             sb.append(" <price>" + formatter.format(i.getPrice())  + "</price>\n");
+             sb.append("</item>\n");
+             response.setContentType("text/xml;charset=UTF-8");
+             PrintWriter out = response.getWriter();
+             out.println(sb.toString());
+             System.out.println("Returning:" + sb.toString());
+             out.close();  
          }
      }
 

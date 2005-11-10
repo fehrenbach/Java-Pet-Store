@@ -17,6 +17,7 @@
   <property name="src.web" value="web" />
   <property name="build.classes.dir" value="${build.dir}/classes" />
   <property name="war.build.dir" value="${build.dir}/war" />
+  <property name="commons.script" value="lib/js/ajax-commons.js" /> 
   <property name="dojo.script" value="lib/dojo/dojo.js" />
 
 
@@ -38,6 +39,7 @@
     <copy todir="${war.build.dir}">
      <fileset dir="${src.web}"/>
     </copy>
+    <copy file="${commons.script}" todir="${war.build.dir}" />
     <copy file="${dojo.script}" todir="${war.build.dir}" />
     <copy todir="${war.build.dir}">
      <fileset dir="${war.build.dir}"/>

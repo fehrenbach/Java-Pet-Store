@@ -19,12 +19,37 @@
     <url-pattern>/catalog</url-pattern>
   </servlet-mapping>
 
-  <!--resource-ref>
-    <res-ref-name>jdbc/PetstoreDB</res-ref-name>
-    <res-type>javax.sql.DataSource</res-type>
-    <res-auth>Container</res-auth>
-    <res-sharing-scope>Shareable</res-sharing-scope>
-  </resource-ref-->
+  <servlet>
+    <description>Checkout</description>
+    <servlet-name>CheckoutServlet </servlet-name>
+    <servlet-class>com.sun.javaee.blueprints.petstore.controller.CheckoutServlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>CheckoutServlet</servlet-name>
+    <url-pattern>/checkout</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description>AutoCompletes Form Input using XmlHttpRequest Objects</description>
+    <servlet-name> AutocompleteServlet </servlet-name>
+    <servlet-class>com.sun.javaee.blueprints.petstore.controller.AutocompleteServlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>AutocompleteServlet</servlet-name>
+    <url-pattern>/autocomplete</url-pattern>
+  </servlet-mapping>
+  
+ <servlet>
+    <description>Chat Servlet</description>
+    <servlet-name>ChatServlet</servlet-name>
+    <servlet-class>com.sun.javaee.blueprints.petstore.controller.ChatServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ChatServlet</servlet-name>
+    <url-pattern>/chat</url-pattern>
+  </servlet-mapping>
 
 </web-app>
 

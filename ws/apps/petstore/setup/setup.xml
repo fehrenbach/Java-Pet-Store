@@ -2,6 +2,8 @@
 
     <property file="${user.home}/build.properties" />
 	<property file="derby.properties" />
+    
+    <property name="db.url" value="jdbc:derby://${javaee.server.name}:${db.port}/${db.sid};create=true;" />
 
   <path id="classpath">
     <fileset dir="${javaee.home}/lib">
@@ -38,6 +40,7 @@
      			description="Create database tables and populate database." >
 
 		<sql driver="${db.driver}"
+         encoding="utf-8"
          url="${db.url}"
          userid="${db.user}"
          password="${db.password}"
@@ -55,6 +58,7 @@
   <echo>user=${db.user}</echo>
   <echo>password=${db.password}</echo>
   <sql driver="${db.driver}"
+         encoding="utf-8"
          url="${db.url}"
          userid="${db.user}"
          password="${db.password}"
@@ -69,12 +73,14 @@
   <target name="start-db" depends="tools" description="Starts the Derby databse server." >
     <exec executable="${asadmin}" failonerror="${failonerror}" dir="${javaee.home}">
         <arg line=" start-database"/>
+        <arg line=" --dbhost=${javaee.server.name} --dbport=${db.port}" />
     </exec>
   </target>
   
   <target name="stop-db" depends="tools" description="Stops the Derby database server." >
     <exec executable="${asadmin}" failonerror="${failonerror}">
         <arg line=" stop-database"/>
+        <arg line=" --dbhost=${javaee.server.name} --dbport=${db.port}" />
     </exec> 
   </target>
   
