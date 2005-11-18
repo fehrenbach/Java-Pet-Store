@@ -201,7 +201,7 @@ function complete() {
     var idiv = window.document.getElementById("task_id");
     idiv.innerHTML = "";
     var idiv = window.document.getElementById("progress");
-    idiv.innerHTML = "<div class=\"progressItem\">チェックアウトが完了。注文番号は" + targetId + "。</div><br><input type=\"button\" onclick=\"hideProgressBar()\" value=\"続く\">";
+    idiv.innerHTML = "<div class=\"progressItem\">Checkout Complete。Your order number is" + targetId + "。</div><br><input type=\"button\" onclick=\"hideProgressBar()\" value=\"Continue\">";
     cart.empty();
     showCartItems(0,0);
 }
@@ -217,7 +217,7 @@ function processInitialRequest(responseXML) {
     createProgressBar();
     showProgress(0);
     var idiv = window.document.getElementById("task_id");
-    idiv.innerHTML = "<div class=\"progressItem\">処理中です。発注番号は" + targetId + "。</div>";
+    idiv.innerHTML = "<div class=\"progressItem\">Processing。The transaction id is " + targetId + "。</div>";
     // do the initial poll in 2 seconds
     setTimeout("pollTaskmaster()", 2000);
 }
@@ -258,15 +258,39 @@ function showProgress(percentage) {
 }
 
 function showCart() {
- var cartPop = $("cart-popup");
- if (!cart) {
-    cart = new Cart();
-    var dragme = new Dragable(cartPop);
-    cartPop.style.top="140px";
-    cartPop.style.left="500px";
- }
- cartPop.style.visibility='visible';
+    var cartPop = $("cart-popup");
+    cartPop.style.visibility='visible';
 }
+
+
+function loadCart() {
+    
+    if (!cart) {
+        // load the cart html and inject
+        var cartHTMLArgs = {
+            url:  "controller?command=content&target=/cart.htmf",
+            mimetype: "text/html",
+            load: function(type, data) {
+               var injectionPoint = document.createElement("div");
+               injectionPoint.innerHTML = data;
+               document.firstChild.appendChild(injectionPoint);
+               // now load the associated JavaScript
+                var bindArgs = {
+                    url:  "controller?command=content&target=/cart.js",
+                    mimetype: "text/javascript",
+                    load: function(type, data) {
+                        initCart();
+                        cartPop = $("cart-popup");
+                    }
+                };
+                dojo.io.bind(bindArgs);
+            }
+        };
+        dojo.io.bind(cartHTMLArgs);
+
+    }
+}
+
 
 
 function showProgressBar() {
@@ -283,10 +307,6 @@ function hideProgressBar() {
 }
 
 
-function hideCart() {
- var cartPop = $("cart-popup");
- cartPop.style.visibility='hidden';
-}
 
 
 function showSupport() {
@@ -571,6 +591,7 @@ function init() {
     autorow.style.left = findX(completeField) + 5 +  "px";
     completeTable = document.getElementById("completeTable");
     completeTable.setAttribute("bordercolor", "white");
+    loadCart();
 }
 
 function doSearch() {
@@ -670,21 +691,6 @@ function loadCategoriesCallback(responseXML) {
     }
 }
 
-function purchaseItem(catid,id) {
-    showCart();
-    var tcat = gcats.get(catid);
-    var i = tcat.getItemById(id);
-    cart.addItem(i.id, i.image,i.name,i.description, i.price);
-    showCartItems(0,chunkSize);
-}
-
-function removeCartItem(id) {
-    showCart();
-    cart.removeItem(id);
-    showCartItems(0,chunkSize);
-}
-
-
 function showSearchItem(id) {
       var c = gcats.get("search");
       if (c != null) {
@@ -772,87 +778,6 @@ function loadCategoryCallback(catid, responseXML) {
 }
 
 
-function showCartItems(index, count) {
-    var bodyTable = $("cartBody");
-
-    if (cart.length == 0) {
-        clearNodes("cartBody");
-
-        if (isIE) {
-          bodyTable.innerHTML = "<tr><td>No items</td></tr>";
-        } else {
-            var cell;
-            var row;
-            clearNodes("cartBody");
-            row = document.createElement("tr");
-            row.setAttribute("bgcolor", "white");
-            cell = document.createElement("td");
-            cell.setAttribute("bgcolor", "white");
-            cell.setAttribute("nowrap", "true");
-            cell.setAttribute("align", "center");
-            var empty = document.createTextNode( "空です。");
-            empty.className = "cartItem";
-            cell.appendChild(empty);
-            row.appendChild(cell);
-            bodyTable.appendChild(row);
-        }
-    } else {
-        clearNodes("cartBody");
-        var  loopLength = Number(index) + Number(count);
-        for (l = index; l  < loopLength; l++) {
-           var i = cart.getItem(l);
-           if (i) addCartItem(i.id,i.image,i.name,i.description,i.price);
-        }
-        var cell;
-        var row;
-        // put the next and previous links
-        row = document.createElement("tr");
-        row.setAttribute("bgcolor", "white");
-
-        if (Number(index) >= chunkSize) {
-            cell = document.createElement("td");
-            cell.setAttribute("bgcolor", "white");
-            cell.setAttribute("nowrap", "true");
-            cell.setAttribute("valign", "top");
-            cell.setAttribute("align", "left");
-            var link = document.createElement("a");
-            link.appendChild(document.createTextNode("前へ"));
-            link.className = "cartValueListNavigate";
-            var prevIndex =  (Number(index) - chunkSize);
-            if ((Number(index)  - Number(chunkSize)) < 0) {
-               prevIndex = 0;
-            }
-            link.setAttribute("onclick", "showCartItems('" + prevIndex + "','" + chunkSize + "')");
-            cell.appendChild(link);
-            row.appendChild(cell);
-        }
-
-        }
-        if (Number(cart.length) > (Number(index) + Number(count)) ) {
-            cell = document.createElement("td");
-            cell.setAttribute("bgcolor", "white");
-            cell.setAttribute("nowrap", "true");
-            cell.setAttribute("valign", "top");
-            cell.setAttribute("align", "right");
-            var link = document.createElement("a");
-            link.appendChild(document.createTextNode("次へ"));
-            link.className = "cartValueListNavigate";
-            var nextCount = count;
-            if ((Number(index) + Number(count) + Number(chunkSize)) > Number(cart.length)) {
-                nextCount = Number(cart.length) - (Number(index) + Number(count));
-            }
-            
-            link.setAttribute("onclick", "showCartItems('"  + (Number(index) + chunkSize) + "','" + nextCount + "')");
-            cell.appendChild(link);
-            row.appendChild(cell);
-        }
-        
-        bodyTable.appendChild(row);
-        var cartTotal = $("cartTotal");
-        cartTotal.innerHTML = "¥" + cart.getTotal();
-        if (cart.length == 0) $("coItem").style.visibility='hidden';
-        else $("coItem").style.visibility='visible';
-}
 
 function showCategoryItems(catid, index, count) {
     var c = gcats.get(catid);
@@ -873,7 +798,7 @@ function showCategoryItems(catid, index, count) {
             cell.setAttribute("bgcolor", "white");
             cell.setAttribute("nowrap", "true");
             cell.setAttribute("valign", "top");
-            cell.appendChild(document.createTextNode( "登録なし"));
+            cell.appendChild(document.createTextNode( "No items availabe at this time."));
             row.appendChild(cell);
             bodyTable.appendChild(row);
         }
@@ -898,7 +823,7 @@ function showCategoryItems(catid, index, count) {
             cell.setAttribute("valign", "top");
             cell.setAttribute("align", "left");
             var link = document.createElement("a");
-            link.appendChild(document.createTextNode("前へ"));
+            link.appendChild(document.createTextNode("Previous"));
             link.className = "valueListNavigate";
             var prevIndex =  (Number(index) - chunkSize);
             if ((Number(index)  - Number(chunkSize)) < 0) {
@@ -917,7 +842,7 @@ function showCategoryItems(catid, index, count) {
             cell.setAttribute("valign", "top");
             cell.setAttribute("align", "right");
             var link = document.createElement("a");
-            link.appendChild(document.createTextNode("次へ"));
+            link.appendChild(document.createTextNode("Next"));
             link.className = "valueListNavigate";
             var nextCount = count;
             if ((Number(index) + Number(count) + Number(chunkSize)) > Number(c.length)) {
@@ -991,53 +916,14 @@ function addCategoryItem(catid, id,image,name,description,price) {
         row.appendChild(cell2);
         var cell3 = document.createElement("td");
         var dDiv3= document.createElement("div");
-        dDiv3.appendChild(document.createTextNode("¥" + price + "  "));
+        dDiv3.appendChild(document.createTextNode("$" + price + "  "));
         dDiv3.className = "item";
         cell3.appendChild(dDiv3);
         //cell3.appendChild(document.createElement("br"));
         var plink = document.createElement("a");
         plink.className ="purchaseItem";
-        plink.appendChild(document.createTextNode("カートに追加"));
+        plink.appendChild(document.createTextNode("Add to Cart"));
         plink.setAttribute("onClick", "purchaseItem('" + catid + "','" + id + "')");
-        cell3.appendChild(plink);
-        row.appendChild(cell3);
-        bodyTable.appendChild(row);
-    }
-}
-
-function addCartItem(id,image,name,description,price) {
-    var cell0;
-    var cell1;
-    var cell2;
-    var cell3;
-    
-    var bodyTable = $("cartBody");
-    var row;
-    if (isIE) {
-    } else {
-        row = document.createElement("tr");
-        row.setAttribute("bgcolor", "white");
-        cell0 = document.createElement("td");
-        var img = document.createElement("img");
-        img.setAttribute("width", "25");
-        img.setAttribute("height", "25");
-        img.src = ("images\\" + image);
-        cell0.appendChild(img);
-        row.appendChild(cell0);
-        cell1 = document.createElement("td");
-        var dDiv = document.createTextNode(name);
-        dDiv.className = "cartItemName";
-        cell1.appendChild(dDiv);
-        row.appendChild(cell1);
-        cell2 = document.createElement("td");
-        var dDiv2 = document.createTextNode( "¥" + price);
-        cell2.appendChild(dDiv2);
-        row.appendChild(cell2);
-        cell3 = document.createElement("td");
-        var plink = document.createElement("a");
-        plink.appendChild(document.createTextNode("削除"));
-        plink.className = "removeItem";
-        plink.setAttribute("onClick", "removeCartItem('" + id + "')");
         cell3.appendChild(plink);
         row.appendChild(cell3);
         bodyTable.appendChild(row);
@@ -1076,7 +962,7 @@ function clearNodes(id) {
              onkeyup="doCompletion();">
              <input    type="button"
                   id="search-button"
-				value="検索"
+				value="Search"
              onclick="doSearch();">
     </form>
   </td>
@@ -1084,7 +970,7 @@ function clearNodes(id) {
  </tr>
   <tr bgcolor="gray">
   <td colspan="3"  align="right">
-   <a class="menuLink" onclick="showCart();">カート</a> <span class="menuItem">|</span > <a class="menuLink" onclick="showSupport();">サポート</a>
+   <a class="menuLink" onclick="showCart();">Cart</a> <span class="menuItem">|</span > <a class="menuLink" onclick="showSupport();">Support</a>
   </td>
  </tr>
  </table>
@@ -1135,7 +1021,7 @@ function clearNodes(id) {
  <form id="chatForm" name="chatForm" onsubmit="register();return false;">
   <table bordercolor="black" border="0" cellpadding="3" cellspacing="0" bgcolor="yellow">
    <tr>
-    <td><h2>チャット:</h2></td><td colspan="4" align="left"><a onclick="hideSupport();"><img src="images/cbutton.gif" border="0"></a></td>
+    <td><h2>Chat:</h2></td><td colspan="4" align="left"><a onclick="hideSupport();"><img src="images/cbutton.gif" border="0"></a></td>
    </tr>
    <tr>
     <td colspan="4">
@@ -1170,31 +1056,6 @@ function clearNodes(id) {
 
  <div style="position: absolute; visibility: visible;z-index:5" id="menu-popup">
  <table id="completeTable" border="1" bordercolor="black" cellpadding="0" cellspacing="0" ></table>
- </div>
-
- 
-  <div style="position: absolute; visibility: hidden" id="cart-popup">
-   <table id="cartTable" border="0" bgcolor="black" bordercolor="black" cellpadding="0" cellspacing="0">
-   <tr>
-    <td align="center" width="80"><div class="cartHeader">カート</div></td><td align="right"><a onclick="hideCart();"><img src="images/cbutton.gif" border="0"></a> &nbsp;</td>
-   </tr>
-   <tr><td colspan="2">
-        <table id="cartBody" border="0" width="100%" bgcolor="white" cellpadding="0" cellspacing="0"><tr><td align="center"><div class="cartItem">空です。</div></td></tr></table>
-      </td>
-   </tr>
-   <tr>
- 　  <td align="right" valign="top"><div class="cartTotal">合計</div></td>
-   　<td align="right" valign="top"><div class="cartTotal" id="cartTotal">0</div></td>
-   </tr>
-   <tr>
-   　<td align="center" colspan="2">
-        <span id="coItem" class="cartCheckout"　style="width:110px; visibility: hidden">
-          <a onclick="checkout();">チェックアウトへ</a>
-        </span>
-     </td>
-   </tr>
- </table>
-
  </div>
  
  <div style="position: absolute; visibility: hidden" id="progress-popup">

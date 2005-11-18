@@ -1,0 +1,25 @@
+
+  <div style="position: absolute; visibility: hidden" id="cart-popup">
+   <table id="cartTable" border="0" bgcolor="black" bordercolor="black" cellpadding="0" cellspacing="0">
+   <tr>
+    <td align="center" width="80"><div class="cartHeader">Cart</div></td><td align="right"><a onclick="hideCart();"><img src="images/cbutton.gif" border="0"></a> &nbsp;</td>
+   </tr>
+   <tr>
+   <td colspan="2">
+    <table id="cartBody" border="0" width="100%" bgcolor="white" cellpadding="0" cellspacing="0">
+    <tr><td align="center"><div class="cartItem">Empty</div></td></tr></table>
+    </td>
+   </tr>
+   <tr>
+    <td align="right" valign="top"><div class="cartTotal">Total</div></td>
+    <td align="right" valign="top"><div class="cartTotal" id="cartTotal">0</div></td>
+   </tr>
+   <tr>
+   　<td align="center" colspan="2">
+        <span id="coItem" class="cartCheckout"　style="width:110px; visibility: hidden">
+          <a onclick="checkout();">Checkout</a>
+        </span>
+     </td>
+   </tr>
+ </table>
+ </div>

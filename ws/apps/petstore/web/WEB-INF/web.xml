@@ -20,6 +20,18 @@
   </servlet-mapping>
 
   <servlet>
+    <display-name>ControllerServlet</display-name>
+    <servlet-name>ControllerServlet</servlet-name>
+    <servlet-class>com.sun.javaee.blueprints.petstore.controller.ControllerServlet</servlet-class>
+
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>ControllerServlet</servlet-name>
+    <url-pattern>/controller</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <description>Checkout</description>
     <servlet-name>CheckoutServlet </servlet-name>
     <servlet-class>com.sun.javaee.blueprints.petstore.controller.CheckoutServlet</servlet-class>

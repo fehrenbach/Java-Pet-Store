@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: ajax-commons.js,v 1.1 2005-11-17 23:11:53 gmurray71 Exp $
+$Id: ajax-commons.js,v 1.2 2005-11-18 06:13:16 gmurray71 Exp $
 */
 
 var isIE;
@@ -131,8 +131,6 @@ function Dragable(element) {
        element.onmousedown = mouseDown;
        element.onmouseup  = done;
        element.onmousemove = mouseMove;
-
-
     }
     
     function mouseOver(e) {
@@ -167,7 +165,6 @@ function Dragable(element) {
     function done(e) {
          anchor = null;
          offset = null;
-        // alert("done!!!");
     }
     
     function getMousePosition(e){
