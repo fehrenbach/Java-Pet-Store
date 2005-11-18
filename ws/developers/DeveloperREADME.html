@@ -1,0 +1,193 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1"
+ http-equiv="content-type">
+  <title>Developer Readme for builds</title>
+</head>
+<body>
+<h2>README For Developers of petstore Project</h2>
+This doc will explain how to build the various builds of the bpcatalog
+project, including the<br>
+<ul>
+  <li><a href="#project_apps">Building all the petstore
+application</a><br>
+  </li>
+  <li><a href="#building-viewer-distribution">Building the
+distribution bundle</a>, which is
+made available for
+download</li>
+  <li><a href="#building-blueprints-netbeans-module">Building
+the
+NetBeans module</a>, whats needed
+for NB support builds(TBD)</li>
+</ul>
+These instructions are useful for the developers on this project or
+anyone else that would like to check out the cvs and build the project
+and play around. This is just another way to use this project, in
+addition to downloading the zip file or browsing the online version or
+using the NetBeans Solutions Catalog project, some folks may want to
+build their own dist from the latest versions for things. <br>
+This is also useful for new developers on the team.<br>
+<h3><a name="project_apps"></a>Building
+the Project apps in ee5/
+directory</h3>
+Here are the instructions for building all the applications in the
+project under the ee5/ directory<br>
+These are the intructions for users of ant based builds. NetBeans users
+will have separate instructions.<br>
+<ol>
+  <li>Download and install Java
+1.5.x or later</li>
+  <li>&nbsp;Download the latest public
+release(promoted binary bundle) of GlassFish app server, the Java EE 5
+app server SDK</li>
+  <li>Download Ant version
+1.6.2</li>
+  <li>Copy the
+bpcatalog/ee5/build.properties.sample file to the user
+directory such as
+C:\DocumentsandSettings\myusername\build.properties&nbsp;
+and <br>
+  </li>
+  <li>Setup build.properties file.
+Copy <code>build.properties.sample</code>
+to the user
+directory such as
+C:\DocumentsandSettings\myusername\build.properties . Note the
+".samples" extension is removed. Now Edit <code>build.properties</code>
+and change the following properties in <code>build.properties</code>:
+    <table border="1" cellpadding="5" cellspacing="0" width="80%">
+      <tbody>
+        <tr>
+          <td align="center" valign="top" width="20%"><tt>Property
+Name</tt></td>
+          <td align="center" valign="top" width="50%"><tt>Description</tt></td>
+          <td align="center" valign="top" width="30%"><tt>Examples</tt></td>
+        </tr>
+        <tr align="left">
+          <td valign="top">javaee.home</td>
+          <td valign="top">The
+directory where the GlassFish, the Java EE 5 SDK, is
+installed.</td>
+          <td valign="top"><code>c:/Sun/AppServer</code>
+for windows,
+and <code>/home/username/SUNWappserver</code>
+for unix</td>
+        </tr>
+        <tr align="left">
+          <td valign="top">javaee.server.name</td>
+          <td valign="top">Host
+name of the server where the J2EE SDK
+is installed</td>
+          <td valign="top">localhost</td>
+        </tr>
+        <tr align="left">
+          <td valign="top">javaee.server.port</td>
+          <td valign="top">The
+port number for the server you chose
+while installing GlassFish, the Java EE 5 SDK</td>
+          <td valign="top">8080</td>
+        </tr>
+        <tr align="left">
+          <td valign="top">javaee.server.username</td>
+          <td valign="top">The administrator username specified for the
+serve while installing GlassFish, the Java EE 5 SDK</td>
+          <td valign="top">admin</td>
+        </tr>
+        <tr align="left">
+          <td valign="top">javaee.server.passwordfile</td>
+          <td valign="top">The
+path to a file containing the admin
+password for the J2EE SDK. The password file needs to be in the
+following format:
+          <p><code>AS_ADMIN_PASSWORD=&lt;j2eesdk-admin-password&gt;</code>
+          </p>
+          <p>Where you will
+replace &lt;j2eesdk-admin-password&gt; with
+the admin password for the GlassFish, the Java EE 5 SDK. We recommend
+you use adminadmin as the password since it is the default for
+glassfish app server.<br>
+          </p>
+          </td>
+          <td valign="top">/path/to/passwordfile</td>
+        </tr>
+        <tr valign="top">
+          <td valign="top">javaee.adminserver.port</td>
+          <td valign="top">The
+port number for admin server you chose
+while installing GlassFish, the Java EE 5 SDK</td>
+          <td valign="top">4848</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>set ANT_HOME and path to use
+ant version 1.6.2 and put
+ANT_HOME\bin in PATH</li>
+  <li>set&nbsp; JAVA_HOME and
+JAVA_HOME\bin in PATH</li>
+  <li>build the petstore app. Go to the directory petstore/&nbsp; and
+run ant.&nbsp; This will build all the
+apps.</li>
+  <li>Build is complete</li>
+  <li>Test the build</li>
+  <li>Start the GlassFish app server, the Java EE 5 SDK app server<br>
+  </li>
+  <li>Deploy and test the app
+onto the GlassFish, the Java EE 5 SDK app server. Usually by
+running "ant run"</li>
+</ol>
+<h3><a name="building-viewer-distribution"></a>Building
+the Viewer
+Distribution zip bundle</h3>
+Here are the steps to build the viewer zip bundle that is made
+available for distribution as a download on the petstore project site.<br>
+TBD........<br>
+These are the intructions for users of ant based builds. NetBeans users
+will have separate instructions.<br>
+<ol>
+  <li>Do the steps above for <a href="#project_apps">Building the
+Project Apps</a><br>
+  </li>
+  <li>build viewer distribution.
+Go to petstore/ws/tools/ and run
+"ant dist". <br>
+  </li>
+  <li>This will generate a zip file
+in petstore/ws/tools/viewer/dist/ which will
+contain a bpcatalog zip file</li>
+  <li>Build is complete. Now test
+it out.<br>
+  </li>
+  <li>Unzip the zip file in a
+directory you like.</li>
+  <li>Look in the unzipped petstore and follow the instructions on the
+included README.html which tell you how to deploy and test it.</li>
+  <li>copy over *.jar from alleycat/setup/ to the petstore/tools/&nbsp;
+directory</li>
+  <li>Make sure the property release.version in setup/installer is
+matching the release version that you want</li>
+  <li>run ant -buildfile setup/installer.xml to create the viewer
+distribution in dist/bpcatalog-1.0.x.jar <br>
+  </li>
+</ol>
+<ol>
+</ol>
+<h3><a name="building-blueprints-netbeans-module"></a>
+Building NetBeans Module(Not Yet Started for Java EE 5)<br>
+</h3>
+Follow <a href="docs/NetBeansModule.html">Instructions
+for NetBeans
+Module</a>.<br>
+<h3>Other Resources</h3>
+Also see the <a
+ href="file:///C:/workspace/petstore/ws/developers/docs/DeveloperPolicy.html">developer
+policy</a>
+document in this workspace<br>
+Also see the <a
+ href="file:///C:/workspace/petstore/ws/developers/IssueTracker.html">Issue
+Tracker</a> policy doc
+in this workspace.<br>
+</body>
+</html>

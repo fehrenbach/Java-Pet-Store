@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1"
+ http-equiv="content-type">
+  <title>BP Catalog Developer Policy</title>
+</head>
+<body>
+<h2>Developer Policy for petstore workspace</h2>
+This document describes some of the rules, standards, and conventions
+that we expect developers of the bpcatalog workspace to follow.<br>
+<h3>Public CVS workspace</h3>
+Note, this project is developed on java.net as a public project. Please
+be sure that comments etc are appropraite for public viewing.<br>
+<h3>Project Directory Structure and Build Conventions</h3>
+For the directory structure and placement of files and source code in
+the cvs workspace, we follow the <a
+ href="http://java.sun.com/blueprints/code/projectconventions.html">
+BluePrints Project conventions</a>.
+You can look at other examples of existing apps in the workspace as a
+guide.<br>
+<br>
+For the build conventions, you can look at other examples of existing
+apps in the workspace as a guide. We are writing these details up and
+will add them soon. The project conventions offer some advice on this
+topic, such as placement of build files etc.<br>
+<h3>Issue Tracker</h3>
+Also see the <a href="IssueTracker.html">Issue Tracker</a> policy doc
+in this workspace.<br>
+<h3>Legal</h3>
+Note that every file should include the copyright notice embedded at
+the top of the file. This includes&nbsp; java&nbsp; files,
+xml files, JSP pages etc.<br>
+To insert the copyright, please include a blurb at the top. This blurb
+will be used later to insert and expand&nbsp; the copyright when we
+build a dist build for release.The blurb is different for different
+file types.<br>
+<br>
+<span style="font-weight: bold;">For Java files:</span><br>
+/* Copyright 2004-2005 Sun Microsystems, Inc.&nbsp; All rights
+reserved.&nbsp; You may not modify, use, reproduce, or distribute this
+software except in compliance with the terms of the License at:
+http://developer.sun.com/berkeley_license.html <br>
+$Id: DeveloperPolicy.html,v 1.1 2004/06/22 22:45:39 sean_brydon Exp
+$&nbsp; */<br>
+Please note
+that the $Id: DeveloperPolicy.html,v 1.1 2004/06/22 22:45:39
+sean_brydon Exp
+$ gets replaced by cvs with a username and date.<br>
+<br>
+<span style="font-weight: bold;">For xml files:</span> (Place this
+right below the &lt;?XML ....&gt; header)<br>
+&lt;!-- Copyright 2004-2005 Sun Microsystems, Inc.&nbsp; All rights
+reserved.&nbsp; You may not modify, use, reproduce, or distribute this
+software except in compliance with the terms of the License at:&nbsp;
+http://developer.sun.com/berkeley_license.html<br>
+&nbsp;$Id: anypurchaseorderservice-client-config.xml,v 1.4 2004/10/13
+23:18:07 smitha Exp $ --&gt;<br>
+<br>
+<span style="font-weight: bold;">For JSPs:</span><br
+ style="font-weight: bold;">
+&lt;%-- Copyright 2004-2005 Sun Microsystems, Inc.&nbsp; All rights
+reserved.&nbsp; You may not modify, use, reproduce, or distribute this
+software except in compliance with the terms of the License at:&nbsp;
+http://developer.sun.com/berkeley_license.html<br>
+&nbsp;$Id: DeveloperPolicy.html,v 1.1 2005/02/25 02:14:41 sean_brydon
+Exp $ --%&gt;<br>
+<h3>Third Party Code</h3>
+All third party code or bunary used must first get legal
+approval.&nbsp; Here is the<a href="ThirdPartyCode.html"> list of third
+party code</a> now
+in blueprints catalog project :<br>
+<h3>Target Platform</h3>
+Please be sure all code runs on GlassFish, the Java EE 5 SDK. We should
+all be
+using <a
+ href="https://glassfish.dev.java.net/public/downloadsindex.html">
+the latest release(promoted build)</a>.&nbsp; Please be sure to include
+all
+the J2EE deployment descriptors and keep
+code portable. <br>
+<h3><span style="font-weight: bold;">Releases</span></h3>
+We will be tagging the workspace after each release.
+<h3>Code Style</h3>
+Please follow <a href="http://java.sun.com/docs/codeconv/">
+Code Convention for the Java Programming Language</a>, and remember
+that your code is read by
+lots of other people, so try to make it readable. And try to include
+good javadocs.<br>
+</body>
+</html>
