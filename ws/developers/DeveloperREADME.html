@@ -122,21 +122,21 @@ while installing GlassFish, the Java EE 5 SDK</td>
       </tbody>
     </table>
   </li>
-  <li>set ANT_HOME and path to use
-ant version 1.6.2 and put
+  <li>set ANT_HOME and path to use ant version 1.6.2 and put
 ANT_HOME\bin in PATH</li>
-  <li>set&nbsp; JAVA_HOME and
-JAVA_HOME\bin in PATH</li>
-  <li>build the petstore app. Go to the directory petstore/&nbsp; and
-run ant.&nbsp; This will build all the
-apps.</li>
-  <li>Build is complete</li>
-  <li>Test the build</li>
-  <li>Start the GlassFish app server, the Java EE 5 SDK app server<br>
+  <li>set JAVA_HOME and JAVA_HOME\bin in PATH</li>
+  <li>build the petstore app. Go to the directory petstore/ and
+run "ant".</li>
+  <li>Start the GlassFish app server, the Java EE 5 SDK app server. go
+to javaee_home/bin and run "asadmin start-domain domain1"<br>
   </li>
+  <li>Run setup to start the DB and to populate the tables with data.
+Go to ws/apps/petstore and type "ant setup"</li>
   <li>Deploy and test the app
 onto the GlassFish, the Java EE 5 SDK app server. Usually by
 running "ant run"</li>
+  <li>To clean the workspace, just do ant clean<br>
+  </li>
 </ol>
 <h3><a name="building-viewer-distribution"></a>Building
 the Viewer
@@ -162,9 +162,11 @@ it out.<br>
   </li>
   <li>Unzip the zip file in a
 directory you like.</li>
-  <li>Look in the unzipped petstore and follow the instructions on the
+  <li>Look in the unzipped petstore and follow the instructions on
+the
 included README.html which tell you how to deploy and test it.</li>
-  <li>copy over *.jar from alleycat/setup/ to the petstore/tools/&nbsp;
+  <li>copy over *.jar from alleycat/setup/ to the
+petstore/tools/&nbsp;
 directory</li>
   <li>Make sure the property release.version in setup/installer is
 matching the release version that you want</li>
@@ -174,8 +176,8 @@ distribution in dist/bpcatalog-1.0.x.jar <br>
 </ol>
 <ol>
 </ol>
-<h3><a name="building-blueprints-netbeans-module"></a>
-Building NetBeans Module(Not Yet Started for Java EE 5)<br>
+<h3><a name="building-blueprints-netbeans-module"></a>Building NetBeans
+Module(Not Yet Started for Java EE 5)<br>
 </h3>
 Follow <a href="docs/NetBeansModule.html">Instructions
 for NetBeans
@@ -189,5 +191,6 @@ Also see the <a
  href="file:///C:/workspace/petstore/ws/developers/IssueTracker.html">Issue
 Tracker</a> policy doc
 in this workspace.<br>
+<br>
 </body>
 </html>
