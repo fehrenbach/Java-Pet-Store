@@ -125,7 +125,8 @@ while installing GlassFish, the Java EE 5 SDK</td>
   <li>set ANT_HOME and path to use ant version 1.6.2 and put
 ANT_HOME\bin in PATH</li>
   <li>set JAVA_HOME and JAVA_HOME\bin in PATH</li>
-  <li>build the petstore app. Go to the directory petstore/ and
+  <li>build the petstore app. Go to the directory go to the directory
+/apps/petstore/ and type and
 run "ant".</li>
   <li>Start the GlassFish app server, the Java EE 5 SDK app server. go
 to javaee_home/bin and run "asadmin start-domain domain1"<br>
@@ -133,9 +134,18 @@ to javaee_home/bin and run "asadmin start-domain domain1"<br>
   <li>Run setup to start the DB and to populate the tables with data.
 Go to ws/apps/petstore and type "ant setup"</li>
   <li>Deploy and test the app
-onto the GlassFish, the Java EE 5 SDK app server. Usually by
-running "ant run"</li>
-  <li>To clean the workspace, just do ant clean<br>
+onto the GlassFish, the Java EE 5 SDK app server. Go to the directory
+/apps/petstore/ and type "ant deploy"</li>
+  <li>Running go to&nbsp; /apps/petstore/ type "ant launch" or open
+your browser to:http://localhost:8080/petstore/<br>
+  </li>
+  <li>To clean the workspace, go to&nbsp; /apps/petstore/&nbsp; and
+type&nbsp; "ant clean"</li>
+  <li>To undeploy go to&nbsp; /apps/petstore/ and type "ant undeploy"<br>
+  </li>
+  <li>To clean up the app server and the database DB and remove all the
+petstore data, go to the directory /apps/petstore/ and type "ant
+unsetup"<br>
   </li>
 </ol>
 <h3><a name="building-viewer-distribution"></a>Building
