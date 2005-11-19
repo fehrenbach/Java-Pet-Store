@@ -1,6 +1,6 @@
-DO NOT TRANSLATE OR LOCALIZE.
+﻿DO NOT TRANSLATE OR LOCALIZE.
 
-- Java BluePrints Solutions Catalog
+- Java BluePrints Petstore
 
 %% The following software may be included in this product: The dojo toolkit (http://dojotoolkit.org/). Use of any of this software is governed by the terms of the license below:
 
