@@ -35,6 +35,7 @@
     <copy todir="${war.build.dir}/WEB-INF/classes">
      <fileset dir="${build.classes.dir}"/>
     </copy>  
+    <copy todir="${war.build.dir}/WEB-INF/classes/META-INF" file="${src.web}/WEB-INF/persistence.xml"/>
     <!-- Copy in the content -->
     <copy todir="${war.build.dir}">
      <fileset dir="${src.web}"/>
@@ -50,7 +51,24 @@
     <delete dir="${war.build.dir}"/>
   </target>
   
-  <target name="clean" depends="build" description="Cleans up">
+  <target name="package-persistence-jar" depends="build" description="Packages the persistence unit">
+    <mkdir dir="${jar.build.dir}"/>
+    <!-- Copy in the compiled Classes -->
+    <copy todir="${jar.build.dir}">
+      <fileset dir="${build.classes.dir}">
+      </fileset>
+    </copy>
+    <delete file="${jar.build.dir}/com/sun/javaee/blueprints/petstore/model/Category.class"/>
+    <delete file="${jar.build.dir}/com/sun/javaee/blueprints/petstore/model/Customer.class"/>
+    <delete file="${jar.build.dir}/com/sun/javaee/blueprints/petstore/model/Item.class"/>
+    <delete file="${jar.build.dir}/com/sun/javaee/blueprints/petstore/model/Order.class"/>   
+    <copy todir="${jar.build.dir}/META-INF" file="${src.web}/WEB-INF/persistence.xml"/>
+    <delete file="./build/catalog-persistence.jar"/>
+    <jar jarfile="./build/catalog-persistence.jar" basedir="${jar.build.dir}" />
+    <delete dir="${jar.build.dir}"/>
+  </target>
+
+  <target name="clean" description="Cleans up">
     <delete dir="${dist.dir}"/>
     <delete dir="${build.dir}"/>
   </target>
