@@ -1,6 +1,6 @@
 /* Copyright 2005 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at:
  http://developer.sun.com/berkeley_license.html
- $Id: CatalogBD.java,v 1.1 2005-11-23 21:09:22 smitha Exp $ */
+ $Id: CatalogBD.java,v 1.2 2005-11-23 22:56:06 smitha Exp $ */
 
 package com.sun.javaee.blueprints.catalogclient;
 
@@ -25,12 +25,8 @@ public class CatalogBD {
         
         try {
             InitialContext ic = new InitialContext();
-            System.out.println("here 1");
             CatalogFacade cf = (CatalogFacade)ic.lookup("java:comp/env/ejb/CatalogFacade");
-            //CategoryFacade cf = cfh.create();
-            System.out.println("here 2");
-            return cf.getCategories();
-            
+            return cf.getCategories();            
         }  catch(Exception re){
             re.printStackTrace(System.err);
             throw new RequestHandlerException(re.getMessage());
@@ -41,12 +37,21 @@ public class CatalogBD {
         
         try {
             InitialContext ic = new InitialContext();
-            System.out.println("here 1");
-            CatalogFacade cf = (CatalogFacade)ic.lookup("java:comp/env/ejb/CatalogFacade");
-            //CategoryFacade cf = cfh.create();
-            System.out.println("here 2");
-            
+            CatalogFacade cf = (CatalogFacade)ic.lookup("java:comp/env/ejb/CatalogFacade");            
             return cf.getProducts(catID);
+            
+        }  catch(Exception re){
+            re.printStackTrace(System.err);
+            throw new RequestHandlerException(re.getMessage());
+        }
+    }
+    
+    public Collection getItems(String prodID) throws RequestHandlerException {
+        
+        try {
+            InitialContext ic = new InitialContext();
+            CatalogFacade cf = (CatalogFacade)ic.lookup("java:comp/env/ejb/CatalogFacade");            
+            return cf.getItems(prodID);
             
         }  catch(Exception re){
             re.printStackTrace(System.err);

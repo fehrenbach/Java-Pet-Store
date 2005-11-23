@@ -15,18 +15,20 @@ public class CatalogFacadeBean implements CatalogFacade{
 private static EntityManager em;
 
 public Collection getCategories(){
-    System.out.println("em is" + em);
-return em.createNativeQuery("SELECT * FROM Category_1").getResultList();
+return em.createQuery("SELECT OBJECT(c) FROM Category_1 c").getResultList();
 }
 
 public Collection getProducts(String catID){
-
 return em.createQuery(
 "SELECT p FROM Product_1 p WHERE p.categoryID LIKE :categoryID")
-.setParameter("categoryID", catID)
-.setMaxResults(10)
-.getResultList();
+.setParameter("categoryID", catID).getResultList();
 }
 
+
+public Collection getItems(String prodID){
+return em.createQuery(
+"SELECT i FROM Item_1 i WHERE i.productID LIKE :productID")
+.setParameter("productID", prodID).getResultList();
+}
 
 }

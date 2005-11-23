@@ -1,6 +1,6 @@
 /* Copyright 2005 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at:
  http://developer.sun.com/berkeley_license.html
- $Id: RequestHandler.java,v 1.1 2005-11-23 21:09:23 smitha Exp $ */
+ $Id: RequestHandler.java,v 1.2 2005-11-23 22:56:06 smitha Exp $ */
 
 package com.sun.javaee.blueprints.catalogclient;
 
@@ -33,25 +33,20 @@ public class RequestHandler {
         try {
             Collection ret = null;
             //extract request parameters
-            String catID = request.getParameter("cat_id");
+            
             String targetAction = request.getParameter("action");
-        
-            //if((catID == null) || (catID.equals(""))|| (desc.equals(""))|| (image.equals("")))
-            //   throw new RequestHandlerException("Request Handler Exception: Please enter a valid Cat ID.");
+            
             if (targetAction.equals("getcategories")) {
-                
                 ret = bd.getCategories();
             }
             if (targetAction.equals("getproducts")) {
-                System.out.println("find called");
-                
+                String catID = request.getParameter("cat_id");
                 ret = bd.getProducts(catID);
             }
-            //if (targetAction.equals("getitems")) {
-            //    System.out.println("find called");
-                
-            //    ret = bd.getItems(prodID);
-            //}
+            if (targetAction.equals("getitems")) {
+                String prodID = request.getParameter("prod_id");
+                ret = bd.getItems(prodID);
+            }
             
             request.setAttribute("result", ret);
         } catch(java.lang.Exception exe){
