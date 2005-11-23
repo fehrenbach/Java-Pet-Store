@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2004 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
+ http://adventurebuilder.dev.java.net/LICENSE.txt
+ $Id: application.xml,v 1.1 2005-11-23 21:09:21 smitha Exp $ -->
+
+<application version="1.4" xmlns="http://java.sun.com/xml/ns/j2ee" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                       xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/application_1_4.xsd">
+
+  <display-name>BluePrints Adventure Builder</display-name>
+
+   <module>
+    <web>
+      <web-uri>bp-catalog-client.war</web-uri>
+      <context-root>bp-catalog-client</context-root>
+    </web>
+  </module>
+  <module>
+    <ejb>bp-catalog-client-ejb.jar</ejb>
+  </module>
+
+</application>
+
+

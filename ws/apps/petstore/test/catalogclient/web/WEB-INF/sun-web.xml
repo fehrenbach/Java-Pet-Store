@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- Copyright 2005 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at:  http://developer.sun.com/berkeley_license.html $Id: sun-web.xml,v 1.1 2005-11-23 21:10:43 smitha Exp $ --><!DOCTYPE sun-web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Application Server 8.1 Servlet 2.4//EN" "http://www.sun.com/software/appserver/dtds/sun-web-app_2_4-1.dtd"><sun-web-app>   <session-config>    <session-manager/>  </session-config> 
+
+<ejb-ref>
+  <ejb-ref-name>ejb/CatalogFacade</ejb-ref-name>
+  <jndi-name>ejb/CatalogFacade</jndi-name>
+</ejb-ref>
+</sun-web-app>
