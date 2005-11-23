@@ -59,8 +59,6 @@
         <include name="**/ejb/**"/>
       </fileset>
     </copy>
-    <copy file="src/conf/ejb-jar.xml"  todir="${ejb.build.dir}/META-INF" />
-    <copy file="src/conf/persistence.xml"  todir="${ejb.build.dir}/META-INF" />
     <copy file="src/conf/sun-ejb-jar.xml"  todir="${ejb.build.dir}/META-INF" />
     <jar jarfile="./build/bp-catalog-client-ejb.jar" basedir="${ejb.build.dir}" excludes="cvs"/>
     <delete dir="${ejb.build.dir}" quiet="true"/>
@@ -73,7 +71,7 @@
     <copy file="src/conf/application.xml" todir="${ear.build.dir}/META-INF/" />
     <copy file="./build/bp-catalog-client-ejb.jar" todir="${ear.build.dir}" failonerror="false" />
     <copy file="./build/bp-catalog-client.war" todir="${ear.build.dir}" failonerror="false" />
-    <!-- <copy file="../../build/catalog-persistence.jar" todir="${ear.build.dir}" failonerror="false" /> -->
+    <copy file="../../build/catalog-persistence.jar" todir="${ear.build.dir}" failonerror="false" />
     <delete file="./build/bp-catalog-client.ear"/>
     <jar jarfile="./build/bp-catalog-client.ear" basedir="${ear.build.dir}">
       <manifest>
