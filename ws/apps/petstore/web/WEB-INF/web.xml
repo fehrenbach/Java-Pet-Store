@@ -32,6 +32,18 @@
   </servlet-mapping>
 
   <servlet>
+    <display-name>AccountServlet</display-name>
+    <servlet-name>AccountServlet</servlet-name>
+    <servlet-class>com.sun.javaee.blueprints.petstore.controller.AccountServlet</servlet-class>
+
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>AccountServlet</servlet-name>
+    <url-pattern>/account</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <description>Checkout</description>
     <servlet-name>CheckoutServlet </servlet-name>
     <servlet-class>com.sun.javaee.blueprints.petstore.controller.CheckoutServlet</servlet-class>

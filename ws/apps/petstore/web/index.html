@@ -4,140 +4,7 @@
  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
 <title>Petstore</title>
 
-<style type="text/css">
-.banner {
- height:95;
- font-size:95;
- font-weight: bold;
- font-family: Arial
-}
-
-.category {
- height:55;
- cursor:pointer;
- font-size:22px;
- font-weight: bold;
- font-family: Arial
-}
-
-.category:hover {
-  background: #7A8AFF;
-  color: #FFFAFA;
-}
-
-.popupItem {
-  background: #FFFAFA;
-  color: #000000;
-  text-decoration: none;
-  font-size: 1.2em;
-}
-
-.item {
-  color: black;
-  text-decoration: none;
-  font-size: 1.0em;
-}
-
-.itemName {
-  color: black;
-  text-decoration: none;
-  font-size: 1.4em;
-}
-
-.cartCheckout {
-  color: white;
-  cursor:pointer;
-  text-decoration: underline;
-  font-size: .8em;
-}
-
-.purchaseItem {
-  color: blue;
-  cursor:pointer;
-  text-decoration: underline;
-  font-size: 1.0em;
-}
-
-.valueListNavigate {
-  color: blue;
-  cursor:pointer;
-  text-decoration: underline;
-  font-size: 1.2em;
-}
-
-
-.cartValueListNavigate {
-  color: blue;
-  cursor:pointer;
-  text-decoration: underline;
-  font-size: .8em;
-}
-
-
-.cartItem {
-  color: black;
-  text-decoration: none;
-  font-size: 1.2em;
-}
-
-.cartItem {
-　background: white;
-  color: black;
-  text-decoration: none;
-  font-size: 1.0em;
-}
-
-.removeItem {
-  color: blue;
-  text-decoration: underline;
-  font-size: 1.0em;
-}
-
-.cartTotal {
-  color: white;
-  text-decoration: none;
-  font-size: 1.0em;
-}
-
-.progressItem {
-  color: black;
-  text-decoration: none;
-  font-size: 1.4em;
-}
-
-.cartHeader {
-  color: white;
-  text-decoration: none;
-  font-size: 1.4em;
-}
-
-.menuItem {
-  background: gray;
-  color: white;
-  text-decoration: none;
-  font-size: 1.4em;
-}
-
-.menuLink {
-  background: gray;
-  cursor:pointer;
-  color: white;
-  text-decoration: underline;
-  font-size: 1.2em;
-}
-
-.popupItem:hover {
-  background: #7A8AFF;
-  color: #FFFAFA;
-}
-
-.popupRow {
-  border: 1;
-  bodercolor: black;
-  background: #FFFAFA;
-}
-</style>
-
+<link rel="stylesheet" type="text/css" href="styles.css"></link>
 <script  src="dojo.js" ></script>
 <script  src="model.js" ></script>
 <script  src="ajax-commons.js" ></script>
@@ -147,6 +14,7 @@
 var isIE;
 var gcats = new Map();
 var cart;
+var account;
 var chunkSize = 3;
 
 var completeTable;
@@ -201,7 +69,7 @@ function complete() {
     var idiv = window.document.getElementById("task_id");
     idiv.innerHTML = "";
     var idiv = window.document.getElementById("progress");
-    idiv.innerHTML = "<div class=\"progressItem\">Checkout Complete。Your order number is" + targetId + "。</div><br><input type=\"button\" onclick=\"hideProgressBar()\" value=\"Continue\">";
+    idiv.innerHTML = "<div class=\"progressItem\">Checkout Complete. Your order number is " + targetId + ".</div><br><input type=\"button\" onclick=\"hideProgressBar()\" value=\"Continue\">";
     cart.empty();
     showCartItems(0,0);
 }
@@ -217,7 +85,7 @@ function processInitialRequest(responseXML) {
     createProgressBar();
     showProgress(0);
     var idiv = window.document.getElementById("task_id");
-    idiv.innerHTML = "<div class=\"progressItem\">Processing。The transaction id is " + targetId + "。</div>";
+    idiv.innerHTML = "<div class=\"progressItem\">Processing Order. The transaction id is " + targetId + ".</div>";
     // do the initial poll in 2 seconds
     setTimeout("pollTaskmaster()", 2000);
 }
@@ -291,6 +159,32 @@ function loadCart() {
     }
 }
 
+function loadAccount() {
+    
+    if (!account) {
+        // load the cart html and inject
+        var accountHTMLArgs = {
+            url:  "controller?command=content&target=/account.htmf",
+            mimetype: "text/html",
+            load: function(type, data) {
+               var injectionPoint = document.createElement("div");
+               injectionPoint.innerHTML = data;
+               document.firstChild.appendChild(injectionPoint);
+               // now load the associated JavaScript
+                var bindArgs = {
+                    url:  "controller?command=content&target=/account.js",
+                    mimetype: "text/javascript",
+                    load: function(type, data) {
+                        initAccount();
+                    }
+                };
+                dojo.io.bind(bindArgs);
+            }
+        };
+        dojo.io.bind(accountHTMLArgs);
+
+    }
+}
 
 
 function showProgressBar() {
@@ -585,13 +479,12 @@ function init() {
     completeField = document.getElementById("complete-field");
     var menu = document.getElementById("auto-row");
     autorow = document.getElementById("menu-popup");
-    //autorow.style.top = completeField.offsetBottom + "px";
     autorow.style.top = (getElementY(completeField) + 30) + "px";
-    //autorow.style.left = completeField.offsetLeft + 5 + "px";
     autorow.style.left = findX(completeField) + 5 +  "px";
     completeTable = document.getElementById("completeTable");
     completeTable.setAttribute("bordercolor", "white");
     loadCart();
+    loadAccount();
 }
 
 function doSearch() {
@@ -626,7 +519,6 @@ function postProcess(responseXML) {
     } else {
         clearTable();
     }
-    //completeTable.style.visibility='visible';
     for (loop = 0; loop < items.length; loop++) {
         var id = responseXML.getElementsByTagName("id")[loop].childNodes[0].nodeValue;
         var image = responseXML.getElementsByTagName("image-url")[loop].childNodes[0].nodeValue;
@@ -643,7 +535,6 @@ function clearTable() {
 
 function appendAutoComplete(productId, name) {
     completeTable.style.visibility='visible';
-    //completeTable.style.visibility='visible'
     var firstNameCell;
     var lastNameCell;
     var row;
@@ -759,7 +650,6 @@ function loadItemCallback(responseXML) {
       }
       c.addItem(id,image,name,description,price);
       addCategoryItem("search", id,image,name,description,price);
-      //addCategoryItem(id,image,name,description,price);
 }
 
 function loadCategoryCallback(catid, responseXML) {
@@ -853,7 +743,6 @@ function showCategoryItems(catid, index, count) {
             cell.appendChild(link);
             row.appendChild(cell);
         }
-        
         bodyTable.appendChild(row);
 }
 
@@ -970,7 +859,7 @@ function clearNodes(id) {
  </tr>
   <tr bgcolor="gray">
   <td colspan="3"  align="right">
-   <a class="menuLink" onclick="showCart();">Cart</a> <span class="menuItem">|</span > <a class="menuLink" onclick="showSupport();">Support</a>
+   <a class="menuLink" onclick="showAccount();">Account</a> <span class="menuItem">|</span > <a class="menuLink" onclick="showCart();">Cart</a> <span class="menuItem">|</span > <a class="menuLink" onclick="showSupport();">Support</a>
   </td>
  </tr>
  </table>
@@ -1017,7 +906,7 @@ function clearNodes(id) {
  </tr>
 </table>
 
-<div style="position: absolute; top:0px;left:0:px;width:357;visibility: hidden" id="chit-chat">
+<div style="position: absolute; top:0px;left:0px;width:357;visibility: hidden" id="chit-chat">
  <form id="chatForm" name="chatForm" onsubmit="register();return false;">
   <table bordercolor="black" border="0" cellpadding="3" cellspacing="0" bgcolor="yellow">
    <tr>

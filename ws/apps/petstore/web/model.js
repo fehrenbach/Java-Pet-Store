@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: model.js,v 1.2 2005-11-18 06:13:22 gmurray71 Exp $
+$Id: model.js,v 1.3 2005-11-25 09:49:29 gmurray71 Exp $
 */
 function Category(id) {
 
@@ -37,3 +37,4 @@ function Category(id) {
         return null;
     }
 }
+
