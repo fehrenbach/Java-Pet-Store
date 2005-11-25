@@ -1,0 +1,151 @@
+
+.banner {
+ height:95;
+ font-size:95;
+ font-weight: bold;
+ font-family: Arial
+}
+
+.category {
+ height:55;
+ cursor:pointer;
+ font-size:22px;
+ font-weight: bold;
+ font-family: Arial
+}
+
+.category:hover {
+  background: #7A8AFF;
+  color: #FFFAFA;
+}
+
+.popupItem {
+  background: #FFFAFA;
+  color: #000000;
+  text-decoration: none;
+  font-size: 1.2em;
+}
+
+.item {
+  color: black;
+  text-decoration: none;
+  font-size: 1.0em;
+}
+
+.itemName {
+  color: black;
+  text-decoration: none;
+  font-size: 1.4em;
+}
+
+.cartCheckout {
+  color: white;
+  cursor:pointer;
+  text-decoration: underline;
+  font-size: .8em;
+}
+
+.purchaseItem {
+  color: blue;
+  cursor:pointer;
+  text-decoration: underline;
+  font-size: 1.0em;
+}
+
+.valueListNavigate {
+  color: blue;
+  cursor:pointer;
+  text-decoration: underline;
+  font-size: 1.2em;
+}
+
+
+.cartValueListNavigate {
+  color: blue;
+  cursor:pointer;
+  text-decoration: underline;
+  font-size: .8em;
+}
+
+
+.cartItem {
+  color: black;
+  text-decoration: none;
+  font-size: 1.2em;
+}
+
+.cartItem {
+  background: white;
+  color: black;
+  text-decoration: none;
+  font-size: 1.0em;
+}
+
+.removeItem {
+  color: blue;
+  text-decoration: underline;
+  font-size: 1.0em;
+}
+
+.cartTotal {
+  color: white;
+  text-decoration: none;
+  font-size: 1.0em;
+}
+
+.progressItem {
+  color: black;
+  text-decoration: none;
+  font-size: 1.4em;
+}
+
+.cartHeader {
+  color: white;
+  text-decoration: none;
+  font-size: 1.4em;
+}
+
+.accountBody {
+  color: black;
+  text-decoration: none;
+  font-size: 1.4em;
+}
+
+.accountTable {
+  background:gray;
+  width:300;
+  height:200;
+  padding:0;
+  border-spacing: 0;
+}
+
+.accountHeader {
+  color: white;
+  background: gray;
+  text-decoration: none;
+  font-size: 1.4em;
+}
+
+.menuItem {
+  background: gray;
+  color: white;
+  text-decoration: none;
+  font-size: 1.4em;
+}
+
+.menuLink {
+  background: gray;
+  cursor:pointer;
+  color: white;
+  text-decoration: underline;
+  font-size: 1.2em;
+}
+
+.popupItem:hover {
+  background: #7A8AFF;
+  color: #FFFAFA;
+}
+
+.popupRow {
+  background: #FFFAFA;
+}
