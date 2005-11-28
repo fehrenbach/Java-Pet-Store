@@ -1,0 +1,19 @@
+
+  <div style="position: absolute; visibility: hidden" id="signin-popup">
+   <table id="accountTable" class="accountTable">
+   <tr>
+   <td colspan="2">
+    <table id="accountBody" border="0" width="100%" bgcolor="white" cellpadding="0" cellspacing="0">
+      <tr><td class="accountBody" align="center" colspan="2">Sign In</td></tr>
+      <tr><td class="accountBody" align="left">UserId:</td><td align="right"><input id="userId" type="text" size="20" value="gmurray"></td></tr>
+      <tr><td class="accountBody" align="left">Password:</td><td align="right"><input id="password" type="password" value="foo" size="20"></td></tr>
+      <tr><td align="right" colspan="2"><input type="button" value="SignIn" onClick="signIn();"><input type="button" value="Cancel" onClick="hideSignin();"></td></tr>
+    </table>
+    </td>
+   </tr>
+   <tr>
+    <td align="accountStatus" valign="top"></td>
+   </tr>
+   <tr>
+ </table>
+ </div>

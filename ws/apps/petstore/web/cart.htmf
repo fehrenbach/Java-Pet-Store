@@ -15,9 +15,9 @@
     <td align="right" valign="top"><div class="cartTotal" id="cartTotal">0</div></td>
    </tr>
    <tr>
-   　<td align="center" colspan="2">
-        <span id="coItem" class="cartCheckout"　style="width:110px; visibility: hidden">
-          <a onclick="checkout();">Checkout</a>
+   <td align="center" colspan="2">
+        <span id="coItem" class="cartCheckout" style="width:110px; visibility: hidden">
+          <a onclick="showAccount();">Checkout</a>
         </span>
      </td>
    </tr>

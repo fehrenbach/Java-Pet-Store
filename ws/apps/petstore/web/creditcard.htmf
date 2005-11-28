@@ -1,0 +1,72 @@
+
+<div style="position: absolute; visibility: hidden" id="creditcard-popup">
+
+<table class="creditCard">
+
+<tr>
+ <td colspan="4" align="right"><a onclick="hideCreditCard();"><img src="images/cbutton.gif" border="0"></a> &nbsp;</td>
+</tr>
+
+<tr>
+ <td class="plainText">Card Type:</td><td colspan="3" align="left">
+  <select id="creditCardType">
+   <option>Visa</option>
+   <option>Mastercard</option>
+   <option>American Express</option>
+  </select>
+ </td>
+</tr>
+
+<tr>
+ <td class="plainText">Name on Card:</td><td colspan="3" align="left"><div id="creditCardName">Name</div></td>
+</tr>
+
+
+<tr colspan="2">
+ <td class="plainText">Number:</td><td colspan="3" align="left"><div id="creditCardNumber">Number</div></td>
+</tr>
+
+<tr>
+ <td class="plainText">Card Type:</td><td colspan="3" align="left">
+  <select id="creditCardType">
+   <option>Visa</option>
+   <option>Mastercard</option>
+   <option>American Express</option>
+  </select>
+ </td>
+</tr>
+
+<tr>
+ <td class="plainText">Expiry Month:</td><td  align="left">
+  <select id="creditCardExpiryMonth">
+   <option value="01">January (01)</option>
+   <option value="02">February (02)</option>
+   <option value="03">March (03)</option>
+   <option value="04">April (04)</option>
+   <option value="05">May (05)</option>
+   <option value="06">June (06)</option>
+   <option value="07">July (07)</option>
+   <option value="08">August (08)</option>
+   <option value="09">September (09)</option>
+   <option value="10">October (10)</option>
+   <option value="11">November (11)</option>
+   <option value="12">December (12)</option>
+  </select>
+ </td>
+  <td class="plainText">Expiry Year:</td><td align="left">
+  <select id="creditCardExpiryYear">
+   <option>2005</option>
+   <option>2006</option>
+   <option>2007</option>
+   <option>2008</option>
+  </select>
+ </td>
+</tr>
+
+<tr>
+ <td colspan="4" align="right"><form onsubmit="return false;"><input type="button" onclick="completePurchase();" value="Submit Order"></form></td>
+</tr>
+
+</table>
+
+</div>

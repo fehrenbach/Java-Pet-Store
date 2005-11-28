@@ -1,22 +1,45 @@
 
-  <div style="position: absolute; visibility: hidden" id="account-popup">
-   <table id="accountTable" class="accountTable">
-   <tr>
-    <td align="center"><div class="accountHeader">Account</div></td><td align="right"><a onclick="hideAccount();"><img src="images/cbutton.gif" border="0"></a> &nbsp;</td>
-   </tr>
-   <tr>
-   <td colspan="2">
-    <table id="accountBody" border="0" width="100%" bgcolor="white" cellpadding="0" cellspacing="0">
-      <tr><td class="accountBody" align="center" colspan="2">Sign In</td></tr>
-      <tr><td class="accountBody" align="left">UserId:</td><td align="right"><input id="userId" type="text" size="20"></td></tr>
-      <tr><td class="accountBody" align="left">Password:</td><td align="right"><input id="password" type="password" size="20"></td></tr>
-      <tr><td align="right" colspan="2"><input type="button" value="SignIn" onClick="signIn();"></td></tr>
-    </table>
-    </td>
-   </tr>
-   <tr>
-    <td align="accountStatus" valign="top"></td>
-   </tr>
-   <tr>
- </table>
- </div>
+<div style="position: absolute; visibility: hidden" id="account-popup">
+
+<table class="account">
+
+<tr>
+ <td colspan="4" align="right"><a onclick="hideAccount();"><img src="images/cbutton.gif" border="0"></a> &nbsp;</td>
+</tr>
+
+<tr>
+ <td class="plainText">First Name:</td><td colspan="3" align="left"><div id="accountFirstName">First Name</div></td>
+</tr>
+
+<tr>
+ <td class="plainText">Last Name:</td><td colspan="3" align="left"><div id="accountLastName">Last Name</div></td>
+</tr>
+
+<tr>
+ <td class="plainText">Street 1:</td><td colspan="3" align="left"><div id="accountStreet1">Street 1</div></td>
+</tr>
+
+<tr>
+ <td class="plainText">Street 2:</td><td colspan="3" align="left"><div id="accountStreet2">Street 2</div></td>
+</tr>
+
+<tr>
+ <td class="plainText">City:</td><td align="left"><div id="accountCity">City</div></td>
+ <td class="plainText">State:</td><td align="left"><div id="accountState">State</div></td>
+</tr>
+
+<tr>
+ <td class="plainText">Zip:</td><td colspan="3" align="left"><div id="accountZip">Zip</div></td>
+</tr>
+
+<tr>
+ <td class="plainText">Ship to Billing Address</td><td colspan="3" align="left"><form><input id="accountShipToBilling" type="checkbox" checked></form></td>
+</tr>
+
+<tr>
+ <td colspan="4" align="right"><form onsubmit="return false;"><input type="button" onclick="showCreditCard();" value="Next"></td>
+</tr>
+
+</table>
+
+</div>

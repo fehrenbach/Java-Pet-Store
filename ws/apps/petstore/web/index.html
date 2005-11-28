@@ -132,7 +132,6 @@ function showCart() {
 
 
 function loadCart() {
-    
     if (!cart) {
         // load the cart html and inject
         var cartHTMLArgs = {
@@ -155,37 +154,34 @@ function loadCart() {
             }
         };
         dojo.io.bind(cartHTMLArgs);
-
     }
 }
 
-function loadAccount() {
-    
+function loadSignin() {
     if (!account) {
-        // load the cart html and inject
+        // load the sigin html and inject
         var accountHTMLArgs = {
-            url:  "controller?command=content&target=/account.htmf",
+            url:  "controller?command=content&target=/signin.htmf",
             mimetype: "text/html",
             load: function(type, data) {
+               
                var injectionPoint = document.createElement("div");
                injectionPoint.innerHTML = data;
                document.firstChild.appendChild(injectionPoint);
                // now load the associated JavaScript
                 var bindArgs = {
-                    url:  "controller?command=content&target=/account.js",
+                    url:  "controller?command=content&target=/signin.js",
                     mimetype: "text/javascript",
                     load: function(type, data) {
-                        initAccount();
+                        initSignin();
                     }
                 };
                 dojo.io.bind(bindArgs);
             }
         };
         dojo.io.bind(accountHTMLArgs);
-
     }
 }
-
 
 function showProgressBar() {
     var progress = $("progress-popup");
@@ -199,9 +195,6 @@ function hideProgressBar() {
     var progress = $("progress-popup");
     progress.style.visibility='hidden';
 }
-
-
-
 
 function showSupport() {
  var chat = $("chit-chat");
@@ -484,7 +477,7 @@ function init() {
     completeTable = document.getElementById("completeTable");
     completeTable.setAttribute("bordercolor", "white");
     loadCart();
-    loadAccount();
+    loadSignin();
 }
 
 function doSearch() {
@@ -947,7 +940,7 @@ function clearNodes(id) {
  <table id="completeTable" border="1" bordercolor="black" cellpadding="0" cellspacing="0" ></table>
  </div>
  
- <div style="position: absolute; visibility: hidden" id="progress-popup">
+ <div style="position: absolute; visibility: hidden;z-index:10" id="progress-popup">
   <table border="2" bgcolor="yellow" cellpadding="0">
    <tr><td align="center"><div id="task_id"></div></td></tr>
    <tr><td align="center"><div id="progress"></div></td></tr>
