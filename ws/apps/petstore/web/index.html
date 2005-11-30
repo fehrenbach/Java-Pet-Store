@@ -21,453 +21,86 @@ var completeTable;
 var completeField;
 var autorow;
 
-
-var req;
-var isIE;
-var uderId;
-var msgIndex = 0;
-var chatTable;
-var chatIFrame;
-var timeout = 3000;
-var scroller;
-var scollerY = 0;
-
-
-var req;
-var messageHash = -1;
-var targetId = -1;
-var centerCell;
-var size=40;
-var increment = 100/size;
-
-function pollTaskmaster() {
-    var url = "checkout?messageHash=" + escape(messageHash) + "&targetId=" + targetId;
-    var ai = new AJAXInteraction(url,processPollRequest);
-    ai.doGet();
-}
-
-
 function checkout() {
     var url = "checkout?action=startTask";
-    var ai = new AJAXInteraction(url,processInitialRequest);
+    var ai = new AJAXInteraction(url,processCheckoutCallback);
     ai.doGet();
-}
-
-function processPollRequest(responseXML) {
-    var item = responseXML.getElementsByTagName("message")[0];
-    var message = item.firstChild.nodeValue;
-    showProgress(message);
-    messageHash = message;             
-    if (messageHash < 100) {
-        setTimeout("pollTaskmaster()", 2000);
-    } else {
-        setTimeout("complete()", 2500);
-    }
-}
-
-function complete() {
-    var idiv = window.document.getElementById("task_id");
-    idiv.innerHTML = "";
-    var idiv = window.document.getElementById("progress");
-    idiv.innerHTML = "<div class=\"progressItem\">Checkout Complete. Your order number is " + targetId + ".</div><br><input type=\"button\" onclick=\"hideProgressBar()\" value=\"Continue\">";
-    cart.empty();
-    showCartItems(0,0);
-}
-
-// callback function for intial request to schedule a task
-function processInitialRequest(responseXML) {
-    showProgressBar();
-    var item = responseXML.getElementsByTagName("message")[0];
-    var message = item.firstChild.nodeValue;
-    // the initial requests gets the targetId
-    targetId = message;
-    messageHash = 0;
-    createProgressBar();
-    showProgress(0);
-    var idiv = window.document.getElementById("task_id");
-    idiv.innerHTML = "<div class=\"progressItem\">Processing Order. The transaction id is " + targetId + ".</div>";
-    // do the initial poll in 2 seconds
-    setTimeout("pollTaskmaster()", 2000);
-}
-
-// create the progress bar
-function createProgressBar() {
-    var centerCellName;
-    var tableText = "";
-    for (x = 0; x < size; x++) {
-      tableText += "<td id=\"progress_" + x + "\" width=\"10\" height=\"10\" bgcolor=\"blue\"/>";
-      if (x == (size/2)) {
-          centerCellName = "progress_" + x;
-      }
-    }
-    var idiv = window.document.getElementById("progress");
-    idiv.innerHTML = "<table with=\"100\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\"><tr>" + tableText + "</tr></table>";
-    centerCell = window.document.getElementById(centerCellName);
-}
-
-// show the current percentage
-function showProgress(percentage) {
-    var percentageText = "";
-    if (percentage < 10) {
-        percentageText = "&nbsp;" + percentage;
-    } else {
-        percentageText = percentage;
-    }
-    centerCell.innerHTML = "<font color=\"white\">" + percentageText + "%</font>";
-    var tableText = "";
-    for (x = 0; x < size; x++) {
-      var cell = window.document.getElementById("progress_" + x);
-      if ((cell) && percentage/x < increment) {
-        cell.style.backgroundColor = "blue";
-      } else {
-        cell.style.backgroundColor = "red";
-      }      
-    }
 }
 
 function showCart() {
     var cartPop = $("cart-popup");
-    cartPop.style.visibility='visible';
-}
-
-
-function loadCart() {
-    if (!cart) {
-        // load the cart html and inject
-        var cartHTMLArgs = {
-            url:  "controller?command=content&target=/cart.htmf",
-            mimetype: "text/html",
-            load: function(type, data) {
-               var injectionPoint = document.createElement("div");
-               injectionPoint.innerHTML = data;
-               document.firstChild.appendChild(injectionPoint);
-               // now load the associated JavaScript
-                var bindArgs = {
-                    url:  "controller?command=content&target=/cart.js",
-                    mimetype: "text/javascript",
-                    load: function(type, data) {
-                        initCart();
-                        cartPop = $("cart-popup");
-                    }
-                };
-                dojo.io.bind(bindArgs);
-            }
-        };
-        dojo.io.bind(cartHTMLArgs);
+    if (cartPop) {
+        cartPop.style.visibility='visible';
     }
 }
 
-function loadSignin() {
-    if (!account) {
-        // load the sigin html and inject
-        var accountHTMLArgs = {
-            url:  "controller?command=content&target=/signin.htmf",
-            mimetype: "text/html",
-            load: function(type, data) {
-               
-               var injectionPoint = document.createElement("div");
-               injectionPoint.innerHTML = data;
-               document.firstChild.appendChild(injectionPoint);
-               // now load the associated JavaScript
-                var bindArgs = {
-                    url:  "controller?command=content&target=/signin.js",
-                    mimetype: "text/javascript",
-                    load: function(type, data) {
-                        initSignin();
-                    }
-                };
-                dojo.io.bind(bindArgs);
-            }
-        };
-        dojo.io.bind(accountHTMLArgs);
-    }
+// callback function for intial request to schedule a task
+function processCheckoutCallback(responseXML) {
+    var item = responseXML.getElementsByTagName("message")[0];
+    showProgressBar(item.firstChild.nodeValue);
 }
 
-function showProgressBar() {
-    var progress = $("progress-popup");
-    progress.style.top="150px";
-    progress.style.left="200px";
-    var dragme = new Dragable(progress);
+function showProgressBar(id) {
+  var progress = $("progress-popup");
+  if (!progress) {
+      inject("progressbar.htmf",
+             "progressbar.js",
+             function(type, data) {
+                initProgressBar();
+                targetId = id;
+                showProgress(0);
+                var idiv = window.document.getElementById("task_id");
+                idiv.innerHTML = "<div class=\"progressItem\">Processing Order. The transaction id is " + targetId + ".</div>";
+                // do the initial poll in 2 seconds
+                progress = $("progress-popup");
+                progress.style.visibility='visible';
+                setTimeout("pollTaskmaster()", 2000);
+             });
+  } else {
+    targetId = id;
+    showProgress(0);
+    var idiv = window.document.getElementById("task_id");
+    idiv.innerHTML = "<div class=\"progressItem\">Processing Order. The transaction id is " + targetId + ".</div>";
     progress.style.visibility='visible';
-}
-
-function hideProgressBar() {
-    var progress = $("progress-popup");
-    progress.style.visibility='hidden';
+  }
 }
 
 function showSupport() {
- var chat = $("chit-chat");
- if (!$("chatFrame")) {
-   var dragme = new Dragable(chat);
-   chat.style.top="140px";
- }
- chat.style.visibility='visible';
+  var chat = $("chat-popup");
+  if (!chat) {
+      inject("support.htmf",
+             "support.js",
+             function(type, data) {
+                 initSupport();
+                 chat.style.visibility='visible';
+             });
+  } else {
+    chat.style.visibility='visible';
+  }
 }
 
-
-function hideSupport() {
- var chat = $("chit-chat");
- chat.style.visibility='hidden';
+function inject(template, script, initFunc, injectionPoint) {
+        var templateArgs = {
+            url:  "controller?command=content&target=/" + template,
+            mimetype: "text/html",
+            load: function(type, data) {
+               if (!injectionPoint) injectionPoint = document.createElement("div");
+               injectionPoint.innerHTML = data;
+               document.firstChild.appendChild(injectionPoint);
+               // now load the associated JavaScript
+                var bindArgs = {
+                    url:  "controller?command=content&target=/" + script,
+                    mimetype: "text/javascript",
+                    load: initFunc
+                };
+                dojo.io.bind(bindArgs);
+            }
+        };
+        dojo.io.bind(templateArgs);
 }
-
-function initRequest(url) {
-    if (window.XMLHttpRequest) {
-        req = new XMLHttpRequest();
-    } else if (window.ActiveXObject) {
-        isIE = true;
-        req = new ActiveXObject("Microsoft.XMLHTTP");
-    }
-}
-
-function validateUserId() {
-    var url = "chat?action=valid-register";
-    initRequest(url);
-    req.onreadystatechange = processRequest;
-    req.open("POST", url, true);
-    req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    var target = document.getElementById("userid");
-    req.send("userid=" + escape(target.value));
-}
-
-function register() {
-    var url = "chat?action=register";
-    initRequest(url);
-    req.onreadystatechange = processRegistration;
-    req.open("POST", url, true);
-    req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    var target = document.getElementById("userid");
-    req.send("userid=" + escape(target.value) + "&icon=default");
-}
-
-function sendMessage() {
-    var url = "chat?action=add-message";
-    initRequest(url);
-    req.onreadystatechange = processMessagePost;
-    req.open("POST", url, true);
-    req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    var messageText = document.getElementById("messageText");
-    req.send("message=" + encodeURI(messageText.value) + "&userid=" + userId);
-    // clear the message field
-    var messageText = document.getElementById("messageText");
-    if (messageText) messageText.value = "";
-    // do an immediate fetch
-    getMessages();
-}
-
-function getMessages() {
-    var url = "chat?action=get-messages&index=" + msgIndex + "&userid=" + userId;
-    initRequest(url);
-    req.onreadystatechange = processMessages;
-    req.open("GET", url, true);
-    req.send(null);
-    setTimeout("getMessages()", timeout);
-}
-
-function processMessagePost() {
-    if (req.readyState == 4) {
-        if (req.status == 200) {
-           var errorMsg = "<message>invalid</message>";
-           var msg = req.responseText;
-           if (msg == errorMsg){
-               var mdiv = document.getElementById("statusMessage");
-               mdiv.innerHTML = "<font color=\"red\">Error Posting Message</font>";
-               submitBtn.disabled = true;
-            } else {
-               mdiv = document.getElementById("statusMessage");
-               mdiv.innerHTML = "<font color=\"green\">Meessage Sent</font>";
-            }  
-         }
-    }
-}
-
-function processRegistration() {
-    if (req.readyState == 4) {
-        if (req.status == 200) {
-           var errorMsg = "<message>invalid</message>";
-           var msg = req.responseText;
-           if (msg == errorMsg){
-               var mdiv = document.getElementById("statusMessage");
-               mdiv.innerHTML = "<font color=\"red\">Invalid User Id</font>";
-               submitBtn.disabled = true;
-            } else {
-               mdiv = document.getElementById("statusMessage");
-               mdiv.innerHTML = "<font color=\"green\">Valid User Id</font>";
-               var submitBtn = document.getElementById("login_btn");
-               submitBtn.disabled = true;
-               var target = document.getElementById("userid");
-               userId = target.value;
-               postRegister();
-               getMessages();
-            }  
-         }
-    }
-}
-
-function processRequest() {
-    if (req.readyState == 4) {
-        if (req.status == 200) {
-           var errorMsg = "<message>invalid</message>";
-           var msg = req.responseText;
-           if (msg == errorMsg){
-               var mdiv = document.getElementById("statusMessage");
-               mdiv.innerHTML = "<font color=\"red\">Invalid Handle</font>";
-               var submitBtn = document.getElementById("login_btn");
-               submitBtn.disabled = true;
-            } else {
-               mdiv = document.getElementById("statusMessage");
-               mdiv.innerHTML = "<font color=\"green\">Valid Handle</font>";
-               var submitBtn = document.getElementById("login_btn");
-               submitBtn.disabled = false;
-            }  
-         }
-    }
-}
-
-function processMessages() {
-    if (req.readyState == 4) {
-        if (req.status == 200) {
-           parseMessages();
-         }
-    }
-}
-
-function parseMessages() {
-    var messageList = document.getElementById("messageList");
-	var messages = req.responseXML.getElementsByTagName("messages")[0];
-     for (loop = 0; loop < messages.childNodes.length; loop++) {
-	    var message = messages.childNodes[loop];
-        var messagesText = message.getElementsByTagName("text")[0];
-        var messageSender = message.getElementsByTagName("sender")[0];
-        var message = messageSender.childNodes[0].nodeValue + " - " + messagesText.childNodes[0].nodeValue;
-        appendMessage(messageSender.childNodes[0].nodeValue,messagesText.childNodes[0].nodeValue);
-    }
-    msgIndex = msgIndex + messages.childNodes.length;
-}
-
-function appendMessage(sender,message) {
-    var doc;
-    if (isIE) {
-       doc = chatIFrame.contentWindow.document;
-    } else {
-       doc =  document;
-    }
-    var senderCell;
-    var messageCell;
-    if (isIE) {
-        row = chatTable.insertRow(chatTable.rows.length);
-        senderCell = row.insertCell(0);
-        messageCell = row.insertCell(1);
-    } else {
-        row = doc.createElement("tr");
-        senderCell = doc.createElement("td");
-        messageCell = doc.createElement("td");
-        row.appendChild(senderCell);
-        row.appendChild(messageCell);
-        chatTable.appendChild(row);
-    }
-    senderCell.setAttribute("width", "100");
-    senderCell.setAttribute("align", "left");
-    var senderFontElement = doc.createElement("font");
-    senderFontElement.setAttribute("size", "+1");
-    senderFontElement.setAttribute("color", "green");
-    senderFontElement.appendChild(doc.createTextNode(sender));
-    senderCell.appendChild(senderFontElement);
-    messageCell.setAttribute("width", "150");
-    var messageFontElement = doc.createElement("font");
-    messageFontElement.setAttribute("size", "+2");
-    messageFontElement.setAttribute("size", "+2");
-    messageFontElement.appendChild(doc.createTextNode(message));
-    messageCell.appendChild(messageFontElement);
-    setTimeout("scrollChatIFrame()",0);
-}
-
-function scrollChatIFrame(target) {
-    if (chatIFrame.contentWindow) {
-        chatIFrame.contentWindow.scrollBy(0,50);
-    } else {
-        chatIFrame.self.scrollBy(0,50);
-    }
-}
-
-function postRegister() {
-   var south = document.getElementById("south");
-   south.innerHTML = "<input type=\"text\" size=\"30\" id=\"messageText\" name=\"message\">" +
-                   "<input onclick=\"sendMessage()\" id=\"message_btn\" type=\"Button\" value=\"Send\" name=\"Send\">";
-
-   var north = document.getElementById("north");
-   north.innerHTML = "";
-   //reset chat form action
-   var chatForm = document.getElementById("chatForm");
-   chatForm.setAttribute("onsubmit", "sendMessage();return false;");
-   var status = document.getElementById("statusMessage");
-   status.innerHTML = "";
-   // insert iframe for chat panel
-   var center = $("center");
-   var tempIFrame = document.createElement("iframe");
-   tempIFrame.setAttribute("id", "chatIFrame");
-   tempIFrame.setAttribute("scrolling", "yes");
-   tempIFrame.setAttribute("style", "width:350px; height:150px; border: 0px"); 
-
-   chatIFrame = center.appendChild(tempIFrame);   
-   var doc;
-   if (isIE) {
-     doc = chatIFrame.contentWindow.document;
-   } else {
-       doc =  document;
-   }
-   chatTable = doc.createElement("table");
-   chatTable.setAttribute("id", "chatTable");
-   chatTable.setAttribute("width", "340");
-
-   if (isIE) {
-       var row = chatTable.insertRow(0);
-       var cell = row.insertCell(0);
-       cell.appendChild(doc.createTextNode(userId + "has joined"));
-   } else {
-       var chatRow = doc.createElement("tr");
-       var chatCell = doc.createElement("td");
-       chatCell.appendChild(doc.createTextNode(userId + " has joined"));
-       chatRow.appendChild(chatCell);
-       chatTable.appendChild(chatRow);
-   }
-   // do a delayed insertion because some browers skip ahead
-   setTimeout("insertChatTable()",0);
-}
-
-function insertChatTable() {
-   var tscroller = document.createElement("div");
-   tscroller.setAttribute("id", "scroller");
-   tscroller.setAttribute("style", "position: absolute;width: 300");
-   if (isIE) {
-     scroller = chatIFrame.contentWindow.document.appendChild(tscroller);
-     scroller.appendChild(chatTable);
-     //chatIFrame.contentWindow.document.appendChild(chatTable);
-   } else {
-       if (chatIFrame.document) {
-          scroller = chatIFrame.document.appendChild(tscroller);
-          scroller.appendChild(chatTable);
-          //chatIFrame.document.appendChild(chatTable);
-       } else {
-          //chatIFrame.contentWindow.document.body.appendChild(chatTable);
-          scroller = chatIFrame.contentWindow.document.body.appendChild(tscroller);
-          scroller.appendChild(chatTable);
-       }
-   }  
-}
-
-function disableSubmitBtn() {
-    var submitBtn = document.getElementById("login_btn");
-    submitBtn.disabled = true;
-}
-
-// chat ends
-
 
 function init() {
-    var chat = $("chit-chat");
-    chat.visible = true;
-    disableSubmitBtn();
+
     if (navigator.userAgent.indexOf("ie") != -1) isIE = true;
     completeField = document.getElementById("complete-field");
     var menu = document.getElementById("auto-row");
@@ -476,17 +109,32 @@ function init() {
     autorow.style.left = findX(completeField) + 5 +  "px";
     completeTable = document.getElementById("completeTable");
     completeTable.setAttribute("bordercolor", "white");
-    loadCart();
-    loadSignin();
+    // load the cart
+    inject("cart.htmf",
+           "cart.js",
+           function(type, data) {
+               initCart();
+                cartPop = $("cart-popup");
+           });
+    // load signin
+    inject("signin.htmf",
+           "signin.js",
+           function(type, data) {
+            initSignin();
+           });  
 }
 
 function doSearch() {
     if (completeField.value == "") {
-       // message
     } else {
-        var url = "autocomplete?action=complete&id=" + encodeURI(completeField.value);
-        var ajax = new AJAXInteraction(url,processSearch);
-        ajax.doGet();
+       var bindArgs = {
+            url:  "autocomplete?action=complete&id=" + encodeURI(completeField.value),
+            mimetype: "text/xml",
+            load: function(type, data) {
+               processSearch(data);
+             }
+        };
+        dojo.io.bind(bindArgs);
     }
     completeTable.style.visibility='hidden';
     clearTable();
@@ -498,27 +146,28 @@ function doCompletion() {
         completeTable.style.visibility='hidden';
     } else {
         clearTable();
-        var url = "autocomplete?action=complete&id=" + encodeURI(completeField.value);
-        var ajax = new AJAXInteraction(url,postProcess);
-        ajax.doGet();
+        var bindArgs = {
+            url:  "autocomplete?action=complete&id=" + encodeURI(completeField.value),
+            mimetype: "text/xml",
+            load: function(type, data) {
+               autocompleteCallback(data);
+             }
+        };
+        dojo.io.bind(bindArgs);
     }
 }
 
-function postProcess(responseXML) {
+function autocompleteCallback(responseXML) {
     var items = responseXML.getElementsByTagName("id");
-    if (items.length > 0) {
-        completeTable.setAttribute("bordercolor", "black");
-        completeTable.setAttribute("border", "1");
-    } else {
+    if (items.length <= 0) {
+        completeTable.style.visibility='hidden';
         clearTable();
-    }
-    for (loop = 0; loop < items.length; loop++) {
-        var id = responseXML.getElementsByTagName("id")[loop].childNodes[0].nodeValue;
-        var image = responseXML.getElementsByTagName("image-url")[loop].childNodes[0].nodeValue;
-        var name = responseXML.getElementsByTagName("name")[loop].childNodes[0].nodeValue;
-        var description = responseXML.getElementsByTagName("description")[loop].childNodes[0].nodeValue;
-        var price = responseXML.getElementsByTagName("price")[loop].childNodes[0].nodeValue;
-        appendAutoComplete(id, name);
+    }  else {
+        for (loop = 0; loop < items.length; loop++) {
+            var id = responseXML.getElementsByTagName("id")[loop].childNodes[0].nodeValue;
+            var name = responseXML.getElementsByTagName("name")[loop].childNodes[0].nodeValue;
+            appendAutoComplete(id, name);
+        }
     }
 }
 
@@ -543,8 +192,6 @@ function appendAutoComplete(productId, name) {
     }
     row.className = "popupRow";
     nameCell.setAttribute("bgcolor", "#FFFAFA");
-
-    
     var linkElement = document.createElement("a");
     linkElement.className = "popupItem";
     linkElement.setAttribute("onclick", "showSearchItem('" + productId + "')");
@@ -660,15 +307,12 @@ function loadCategoryCallback(catid, responseXML) {
     showCategoryItems(catid,0,chunkSize);
 }
 
-
-
 function showCategoryItems(catid, index, count) {
     var c = gcats.get(catid);
     var bodyTable = $("bodyTable");
 
     if (c.length == 0) {
         clearNodes("bodyTable");
-
         if (isIE) {
           bodyTable.innerHTML = "<tr><td>No items</td></tr>";
         } else {
@@ -814,11 +458,7 @@ function addCategoryItem(catid, id,image,name,description,price) {
 
 function clearNodes(id) {
     var target = document.getElementById(id);
-    if (target) {
-      for (loop = target.childNodes.length -1; loop >=0 ; loop--) {
-        target.removeChild(target.childNodes[loop]);
-      }
-    }
+    if (target) target.innerHTML = "";
 }
 
 </script>
@@ -940,31 +580,5 @@ function clearNodes(id) {
  <table id="completeTable" border="1" bordercolor="black" cellpadding="0" cellspacing="0" ></table>
  </div>
  
- <div style="position: absolute; visibility: hidden;z-index:10" id="progress-popup">
-  <table border="2" bgcolor="yellow" cellpadding="0">
-   <tr><td align="center"><div id="task_id"></div></td></tr>
-   <tr><td align="center"><div id="progress"></div></td></tr>
-  </table>
- </div>
- 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

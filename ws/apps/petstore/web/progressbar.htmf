@@ -1,0 +1,6 @@
+ <div style="position: absolute; visibility: hidden;z-index:10" id="progress-popup">
+  <table border="2" bgcolor="yellow" cellpadding="0">
+   <tr><td align="center"><div id="task_id"></div></td></tr>
+   <tr><td align="center"><div id="progress"></div></td></tr>
+  </table>
+ </div>
