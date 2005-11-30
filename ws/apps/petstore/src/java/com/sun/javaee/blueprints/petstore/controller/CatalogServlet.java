@@ -6,6 +6,8 @@ import java.util.*;
 import java.text.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
+import javax.annotation.*;
+import javax.persistence.*;
 import javax.sql.DataSource;
 
 import com.sun.javaee.blueprints.petstore.model.*;
@@ -17,21 +19,21 @@ import javax.annotation.Resource;
  */
 public class CatalogServlet extends HttpServlet { 
 
-   private ItemDAO dao;
+   private CatalogFacade cf;
    private ServletContext context;
-   @Resource private DataSource PetstoreDB;
+   @PersistenceContext(name="bppu")
+   private static EntityManager em;
 
    public void init(ServletConfig config) throws ServletException {
        context = config.getServletContext();
-       dao =
-            (ItemDAO)context.getAttribute("itemDAO");
-         if (dao == null)
-             dao = new ItemDAO(PetstoreDB);
-             context.setAttribute("itemDAO", dao);
+       cf = (CatalogFacade)context.getAttribute("CatalogFacade");
+         if (cf == null)
+             cf = new CatalogFacade(em);
+             context.setAttribute("CatalogFacade", cf);
    }
 
    public void destroy() {
-   	  dao = null;
+   	  cf = null;
    }   
    
    public void doGet (HttpServletRequest request,
@@ -48,22 +50,21 @@ public class CatalogServlet extends HttpServlet {
                 PrintWriter out = response.getWriter();
                 StringBuffer sb = new StringBuffer();
                 // then write the data of the response
-                sb.append("<items>\n");
-                ArrayList items = dao.getItems(catid);
+                sb.append("<products>\n");
+                Collection items = cf.getProducts(catid);
                 Iterator it = items.iterator();
                 NumberFormat formatter = new DecimalFormat("0000");
                 while (it.hasNext()) {
-                    Item i = (Item)it.next();
-                    sb.append("<item>\n");
-                    sb.append(" <id>" + i.getId() + "</id>\n");
-                    sb.append(" <cat-id>" + i.getCategoryId() + "</cat-id>\n");
-                    sb.append(" <name>" + i.getName() + "</name>\n");
-                    sb.append(" <description>" + i.getDescription() + "</description>\n");
-                    sb.append(" <image-url>" + i.getImageURL() + "</image-url>\n");
-                    sb.append(" <price>" + formatter.format(i.getPrice())  + "</price>\n");
-                    sb.append("</item>\n");
+                    Product_1 p = (Product_1)it.next();
+                    sb.append("<product>\n");
+                    sb.append(" <id>" + p.getProductID() + "</id>\n");
+                    sb.append(" <cat-id>" + p.getCategoryID() + "</cat-id>\n");
+                    sb.append(" <name>" + p.getName() + "</name>\n");
+                    sb.append(" <description>" + p.getDescription() + "</description>\n");
+                    sb.append(" <image-url>" + p.getImageURL() + "</image-url>\n");
+                    sb.append("</product>\n");
                 }
-                sb.append("</items>");
+                sb.append("</products>");
                 out.println(sb.toString());
                 System.out.println("Returning:\n" + sb.toString());
                 out.close();
@@ -71,14 +72,14 @@ public class CatalogServlet extends HttpServlet {
                 System.out.println("Request for categories.");
                 StringBuffer sb = new StringBuffer();
                 sb.append("<categories>\n");
-                ArrayList items = dao.getCategories();
+                Collection items = cf.getCategories();
                 Iterator it = items.iterator();
                 
                 while (it.hasNext()) {
-                    Category c = (Category)it.next();
+                    Category_1 c = (Category_1)it.next();
                     sb.append("<category>\n");
-                    sb.append(" <id>" + c.getId() + "</id>\n");
-                    sb.append(" <cat-id>" + c.getId() + "</cat-id>\n");
+                    sb.append(" <id>" + c.getCategoryID() + "</id>\n");
+                    sb.append(" <cat-id>" + c.getCategoryID() + "</cat-id>\n");
                     sb.append(" <name>" + c.getName() + "</name>\n");
                     sb.append(" <description>" + c.getDescription() + "</description>\n");
                     sb.append(" <image-url>" + c.getImageURL() + "</image-url>\n");
@@ -94,15 +95,15 @@ public class CatalogServlet extends HttpServlet {
              String targetId = request.getParameter("id");
              NumberFormat formatter = new DecimalFormat("0000");
              System.out.println("Request for item with id: " + targetId);
-             Item i = dao.getItem(targetId);
+             Item_1 i = cf.getItem(targetId);
              StringBuffer sb = new StringBuffer();
              sb.append("<item>\n");
-             sb.append(" <id>" + i.getId() + "</id>\n");
-             sb.append(" <cat-id>" + i.getCategoryId() + "</cat-id>\n");
+             sb.append(" <id>" + i.getItemID() + "</id>\n");
+             sb.append(" <cat-id>" + i.getProductID() + "</cat-id>\n");
              sb.append(" <name>" + i.getName() + "</name>\n");
              sb.append(" <description>" + i.getDescription() + "</description>\n");
              sb.append(" <image-url>" + i.getImageURL() + "</image-url>\n");
-             sb.append(" <price>" + formatter.format(i.getPrice())  + "</price>\n");
+             sb.append(" <price>" + formatter.format(i.getListPrice())  + "</price>\n");
              sb.append("</item>\n");
              response.setContentType("text/xml;charset=UTF-8");
              PrintWriter out = response.getWriter();
