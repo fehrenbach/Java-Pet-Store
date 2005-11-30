@@ -21,10 +21,17 @@ var completeTable;
 var completeField;
 var autorow;
 
+var bodyTable;
+
 function checkout() {
-    var url = "checkout?action=startTask";
-    var ai = new AJAXInteraction(url,processCheckoutCallback);
-    ai.doGet();
+    var bindArgs = {
+       url:  "checkout?action=startTask",
+       mimetype: "text/xml",
+       load: function(type, data) {
+               processCheckoutCallback(data);
+             }
+     };
+    dojo.io.bind(bindArgs);
 }
 
 function showCart() {
@@ -233,7 +240,7 @@ function showSearchItem(id) {
             return;
         }
       }
-    var bindArgs = {
+      var bindArgs = {
             url:  "catalog?command=item&id=" + id,
             mimetype: "text/xml",
             load: function(type, data) {
@@ -263,7 +270,6 @@ function loadCategory(catid) {
 function processSearch(responseXML) {
 	var categories = responseXML.getElementsByTagName("id");
     var c = new Category("search");
-    
     for (var loop = 0; loop < categories.length; loop++) {
       var id = responseXML.getElementsByTagName("id")[loop].childNodes[0].nodeValue;
       var image = responseXML.getElementsByTagName("image-url")[loop].childNodes[0].nodeValue;
@@ -307,18 +313,25 @@ function loadCategoryCallback(catid, responseXML) {
     showCategoryItems(catid,0,chunkSize);
 }
 
+function resetBody() {
+    var body = $("body");
+    body.innerHTML = "";
+    bodyTable = document.createElement("table");
+    body.appendChild(bodyTable);
+    
+}
+
 function showCategoryItems(catid, index, count) {
     var c = gcats.get(catid);
-    var bodyTable = $("bodyTable");
+    resetBody();
 
     if (c.length == 0) {
-        clearNodes("bodyTable");
         if (isIE) {
           bodyTable.innerHTML = "<tr><td>No items</td></tr>";
         } else {
             var cell;
             var row;
-            clearNodes("bodyTable");
+            resetBody();
             row = document.createElement("tr");
             row.setAttribute("bgcolor", "white");
             cell = document.createElement("td");
@@ -330,8 +343,6 @@ function showCategoryItems(catid, index, count) {
             bodyTable.appendChild(row);
         }
     } else {
-        clearNodes("bodyTable");
-
         var  loopLength = Number(index) + Number(count);
         for (l = index; l  < loopLength; l++) {
            var i = c.getItem(l);
@@ -375,7 +386,6 @@ function showCategoryItems(catid, index, count) {
             if ((Number(index) + Number(count) + Number(chunkSize)) > Number(c.length)) {
                 nextCount = Number(c.length) - (Number(index) + Number(count));
             }
-            
             link.setAttribute("onclick", "showCategoryItems('" + catid + "','" + (Number(index) + chunkSize) + "','" + nextCount + "')");
             cell.appendChild(link);
             row.appendChild(cell);
@@ -416,7 +426,6 @@ function addCategoryItem(catid, id,image,name,description,price) {
     var cell;
     var cell2;
     var cell3;
-    var bodyTable = document.getElementById("bodyTable");
     var row;
     if (isIE) {
     } else {
@@ -432,7 +441,7 @@ function addCategoryItem(catid, id,image,name,description,price) {
         row.appendChild(cell);
         cell2 = document.createElement("td");
         var dDiv = document.createElement("div")
-         dDiv.appendChild(document.createTextNode(name));
+        dDiv.appendChild(document.createTextNode(name));
         dDiv.className = "itemName";
         cell2.appendChild(dDiv);
         var dDiv2= document.createElement("div");
@@ -445,7 +454,6 @@ function addCategoryItem(catid, id,image,name,description,price) {
         dDiv3.appendChild(document.createTextNode("$" + price + "  "));
         dDiv3.className = "item";
         cell3.appendChild(dDiv3);
-        //cell3.appendChild(document.createElement("br"));
         var plink = document.createElement("a");
         plink.className ="purchaseItem";
         plink.appendChild(document.createTextNode("Add to Cart"));
@@ -502,7 +510,8 @@ function clearNodes(id) {
  <tr>
   <td valign="top" width="300"><table id="sidebar"vbgoclor="red" border="0" cellpadding="0"></table></td>
   <td valign="top" width="100%" bgcolor="white">
-   <table valign="top" id="bodyTable" border="0">
+   <div id="body">
+   <table valign="top" id="bodyTable" border="1" bgcolor="red">
      <tr>
       <td>
         <map name="petmap">
@@ -535,46 +544,11 @@ function clearNodes(id) {
      </td>
     </tr>
    </table>
+  </div>
+   </td>
  </td>
  </tr>
 </table>
-
-<div style="position: absolute; top:0px;left:0px;width:357;visibility: hidden" id="chit-chat">
- <form id="chatForm" name="chatForm" onsubmit="register();return false;">
-  <table bordercolor="black" border="0" cellpadding="3" cellspacing="0" bgcolor="yellow">
-   <tr>
-    <td><h2>Chat:</h2></td><td colspan="4" align="left"><a onclick="hideSupport();"><img src="images/cbutton.gif" border="0"></a></td>
-   </tr>
-   <tr>
-    <td colspan="4">
-     <div id="north">
-        <b>Id:</b>
-         <input    type="text"
-               size="20"  
-                 id="userid"
-                name="userid"
-             onkeyup="validateUserId()"
-              onblur="validateUserId()"/>
-              <input onclick="register()" id="login_btn" type="Button" value="Login" name="Login"/>
-     </div>
-     </td>
-    </tr>
-    <tr><td colspan="4" border="1">
-    <div id="center">
-    </div>
-    </td>
-   </tr>
-   <tr>
-    <td align="right" colspan="4">
-    <div id="south">
-    </div>
-   </td>
-   </tr>
-   <tr><td colspan="4"><div id="statusMessage"></div><td></tr>
-   <tr><td colspan="4">&nbsp;<td></tr>   
- </table>
-</form>
-</div>
 
  <div style="position: absolute; visibility: visible;z-index:5" id="menu-popup">
  <table id="completeTable" border="1" bordercolor="black" cellpadding="0" cellspacing="0" ></table>
