@@ -98,14 +98,14 @@
     <echo message="Registering jdbc resource jdbc/PetstoreDB."/>
     <antcall target="create-jdbc-resource">
       <param name="pool.name"            value="PetstorePool" />
-      <param name="jdbc.resource.name"   value="com.sun.javaee.blueprints.petstore.controller.CatalogServlet/PetstoreDB" />
+      <param name="jdbc.resource.name"   value="jdbc/PetstoreDB" />
     </antcall>
  </target>
 
   <target name="delete-resource-local" depends="tools" >
     <echo message="Deleting jdbc resource jdbc/PetstoreDB"/>
     <antcall target="delete-jdbc-resource">
-      <param name="jdbc.resource.name" value="com.sun.javaee.blueprints.petstore.controller.CatalogServlet/PetstoreDB" />
+      <param name="jdbc.resource.name" value="jdbc/PetstoreDB" />
     </antcall> 
  </target>
 

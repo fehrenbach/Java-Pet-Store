@@ -29,13 +29,13 @@
 	</javac>
   </target>
   
-  <target name="war" depends="build" description="Packages the War file">
+  <target name="war" depends="build,package-persistence-jar" description="Packages the War file">
     <mkdir dir="${war.build.dir}"/>
     <!-- Copy in the compiled Classes -->
     <copy todir="${war.build.dir}/WEB-INF/classes">
      <fileset dir="${build.classes.dir}"/>
     </copy>  
-    <copy todir="${war.build.dir}/WEB-INF/classes/META-INF" file="${src.web}/WEB-INF/persistence.xml"/>
+    <copy todir="${war.build.dir}/WEB-INF/lib" file="./build/catalog-persistence.jar"/>
     <!-- Copy in the content -->
     <copy todir="${war.build.dir}">
      <fileset dir="${src.web}"/>
@@ -58,6 +58,7 @@
       <fileset dir="${build.classes.dir}">
       </fileset>
     </copy>
+    <delete file="${jar.build.dir}/com/sun/javaee/blueprints/petstore/model/CatalogFacade.class"/>
     <delete file="${jar.build.dir}/com/sun/javaee/blueprints/petstore/model/Category.class"/>
     <delete file="${jar.build.dir}/com/sun/javaee/blueprints/petstore/model/Customer.class"/>
     <delete file="${jar.build.dir}/com/sun/javaee/blueprints/petstore/model/Item.class"/>
