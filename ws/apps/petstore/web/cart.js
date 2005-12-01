@@ -79,6 +79,7 @@ function addCartItem(id,image,name,description,price) {
     } else {
         row = document.createElement("tr");
         row.setAttribute("bgcolor", "white");
+        row.setAttribute("valign", "top");
         cell0 = document.createElement("td");
         var img = document.createElement("img");
         img.setAttribute("width", "25");
@@ -112,10 +113,16 @@ function purchaseItem(catid,id) {
     var tcat = gcats.get(catid);
     var i = tcat.getItemById(id);
     cart.addItem(i.id, i.image,i.name,i.description, i.price);
-    showCartItems(0,chunkSize);
+    showLastItems();
 }
 
-function showCartItems(index, count) {
+function showLastItems() {
+    var startIndex = 0;
+    if (cart.length >= chunkSize) startIndex = (cart.length- chunkSize);
+    showCartItems(startIndex, chunkSize);
+}
+
+function showCartItems(ci, count) {
     var bodyTable = $("cartBody");
 
     if (cart.length == 0) {
@@ -141,8 +148,8 @@ function showCartItems(index, count) {
         }
     } else {
         clearNodes("cartBody");
-        var  loopLength = Number(index) + Number(count);
-        for (l = index; l  < loopLength; l++) {
+        var  loopLength = Number(ci) + Number(count);
+        for (l = ci; l  < loopLength; l++) {
            var i = cart.getItem(l);
            if (i) addCartItem(i.id,i.image,i.name,i.description,i.price);
         }
@@ -152,7 +159,7 @@ function showCartItems(index, count) {
         row = document.createElement("tr");
         row.setAttribute("bgcolor", "white");
 
-        if (Number(index) >= chunkSize) {
+        if (ci > 0) {
             cell = document.createElement("td");
             cell.setAttribute("bgcolor", "white");
             cell.setAttribute("nowrap", "true");
@@ -161,8 +168,8 @@ function showCartItems(index, count) {
             var link = document.createElement("a");
             link.appendChild(document.createTextNode("Previous"));
             link.className = "cartValueListNavigate";
-            var prevIndex =  (Number(index) - chunkSize);
-            if ((Number(index)  - Number(chunkSize)) < 0) {
+            var prevIndex =  (Number(ci) - chunkSize);
+            if ((Number(ci)  - Number(chunkSize)) < 0) {
                prevIndex = 0;
             }
             link.setAttribute("onclick", "showCartItems('" + prevIndex + "','" + chunkSize + "')");
@@ -171,7 +178,7 @@ function showCartItems(index, count) {
         }
 
         }
-        if (Number(cart.length) > (Number(index) + Number(count)) ) {
+        if (Number(cart.length) > (Number(ci) + Number(count)) ) {
             cell = document.createElement("td");
             cell.setAttribute("bgcolor", "white");
             cell.setAttribute("nowrap", "true");
@@ -181,11 +188,11 @@ function showCartItems(index, count) {
             link.appendChild(document.createTextNode("Next"));
             link.className = "cartValueListNavigate";
             var nextCount = count;
-            if ((Number(index) + Number(count) + Number(chunkSize)) > Number(cart.length)) {
-                nextCount = Number(cart.length) - (Number(index) + Number(count));
+            if ((Number(ci) + Number(count) + Number(chunkSize)) > Number(cart.length)) {
+                nextCount = Number(cart.length) - (Number(ci) + Number(count));
             }
             
-            link.setAttribute("onclick", "showCartItems('"  + (Number(index) + chunkSize) + "','" + nextCount + "')");
+            link.setAttribute("onclick", "showCartItems('"  + (Number(ci) + chunkSize) + "','" + nextCount + "')");
             cell.appendChild(link);
             row.appendChild(cell);
         }

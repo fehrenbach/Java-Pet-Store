@@ -139,6 +139,17 @@
 }
 
 
+.cart {
+  background:black;
+  width:225;
+  height:200;
+  padding:0;
+  border-spacing: 0;
+  border-width:1px;
+  border-style:solid;
+  border-color:black;
+}
+
 .account {
   background:lightgray;
   width:500;

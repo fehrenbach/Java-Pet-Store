@@ -41,28 +41,33 @@ function showCart() {
     }
 }
 
-// callback function for intial request to schedule a task
 function processCheckoutCallback(responseXML) {
     var item = responseXML.getElementsByTagName("message")[0];
     showProgressBar(item.firstChild.nodeValue);
 }
 
+function showMain() {
+    inject({template: "main.htmf", injectionPoint: $("bodyCenter")});
+}
+
 function showProgressBar(id) {
   var progress = $("progress-popup");
   if (!progress) {
-      inject("progressbar.htmf",
-             "progressbar.js",
-             function(type, data) {
+      injectArgs = {
+             template: "progressbar.htmf",
+             script: "progressbar.js",
+             initFunction: function(type, data) {
                 initProgressBar();
                 targetId = id;
                 showProgress(0);
                 var idiv = window.document.getElementById("task_id");
                 idiv.innerHTML = "<div class=\"progressItem\">Processing Order. The transaction id is " + targetId + ".</div>";
-                // do the initial poll in 2 seconds
                 progress = $("progress-popup");
                 progress.style.visibility='visible';
                 setTimeout("pollTaskmaster()", 2000);
-             });
+             }
+        }
+        inject(injectArgs);
   } else {
     targetId = id;
     showProgress(0);
@@ -75,30 +80,42 @@ function showProgressBar(id) {
 function showSupport() {
   var chat = $("chat-popup");
   if (!chat) {
-      inject("support.htmf",
-             "support.js",
-             function(type, data) {
-                 initSupport();
-                 chat.style.visibility='visible';
-             });
+      var injectArgs = {
+        template: "support.htmf",
+        script: "support.js",
+        initFunction: function() {
+                        initSupport();
+                        chat.style.visibility='visible';
+                    }
+      }
+     inject(injectArgs);
   } else {
     chat.style.visibility='visible';
   }
 }
 
-function inject(template, script, initFunc, injectionPoint) {
+function inject(p) {
+
         var templateArgs = {
-            url:  "controller?command=content&target=/" + template,
+            url:  "controller?command=content&target=/" + p.template,
             mimetype: "text/html",
             load: function(type, data) {
-               if (!injectionPoint) injectionPoint = document.createElement("div");
-               injectionPoint.innerHTML = data;
-               document.firstChild.appendChild(injectionPoint);
+               //if no parent is given append to the document root
+               if (!p.injectionPoint) {
+                    var injectionPoint = document.createElement("div");
+                    injectionPoint.innerHTML = data;
+                    document.firstChild.appendChild(injectionPoint);
+               } else {
+                    p.injectionPoint.innerHTML = data;
+               }
+            
                // now load the associated JavaScript
                 var bindArgs = {
-                    url:  "controller?command=content&target=/" + script,
+                    url:  "controller?command=content&target=/" + p.script,
                     mimetype: "text/javascript",
-                    load: initFunc
+                    load: function(type,data) {
+                        if (p.initFunction) p.initFunction(type,data);
+                    }
                 };
                 dojo.io.bind(bindArgs);
             }
@@ -107,7 +124,6 @@ function inject(template, script, initFunc, injectionPoint) {
 }
 
 function init() {
-
     if (navigator.userAgent.indexOf("ie") != -1) isIE = true;
     completeField = document.getElementById("complete-field");
     var menu = document.getElementById("auto-row");
@@ -117,18 +133,23 @@ function init() {
     completeTable = document.getElementById("completeTable");
     completeTable.setAttribute("bordercolor", "white");
     // load the cart
-    inject("cart.htmf",
-           "cart.js",
-           function(type, data) {
-               initCart();
-                cartPop = $("cart-popup");
-           });
+    var cartArgs = {
+            template: "cart.htmf",
+            script: "cart.js",
+            initFunction: function() {
+                initCart();
+            }
+    };
+    inject(cartArgs);
     // load signin
-    inject("signin.htmf",
-           "signin.js",
-           function(type, data) {
+    var signinArgs = {
+           template: "signin.htmf",
+           script: "signin.js",
+           initFunction: function() {
             initSignin();
-           });  
+        }
+    };
+    inject(signinArgs);  
 }
 
 function doSearch() {
@@ -208,6 +229,7 @@ function appendAutoComplete(productId, name) {
 
 function loadCategories() {
     init();
+    showMain();
     var bindArgs = {
        url:  "catalog?command=categories",
        mimetype: "text/xml",
@@ -314,7 +336,7 @@ function loadCategoryCallback(catid, responseXML) {
 }
 
 function resetBody() {
-    var body = $("body");
+    var body = $("bodyCenter");
     body.innerHTML = "";
     bodyTable = document.createElement("table");
     body.appendChild(bodyTable);
@@ -399,7 +421,6 @@ function addCategory(id, name, src) {
     var cell;
     var row;
     var sidebar = document.getElementById("sidebar");
-
     if (isIE) {
     } else {
         row = document.createElement("tr");
@@ -474,10 +495,9 @@ function clearNodes(id) {
 </head>
 <body onload="loadCategories()">
 
-
 <table border="0" bordercolor="gray" cellpadding="0" cellspacing="0" bgcolor="white" width="100%">
  <tr>
-  <td width="100"><img src="images/banner_logo.gif"></td>
+  <td width="100"><img src="images/banner_logo.gif" border="0"></td>
   <td>
   <div class="banner">Petstore</div>
   </td>
@@ -500,7 +520,7 @@ function clearNodes(id) {
  </tr>
   <tr bgcolor="gray">
   <td colspan="3"  align="right">
-   <a class="menuLink" onclick="showAccount();">Account</a> <span class="menuItem">|</span > <a class="menuLink" onclick="showCart();">Cart</a> <span class="menuItem">|</span > <a class="menuLink" onclick="showSupport();">Support</a>
+   <a class="menuLink" onclick="showAccount();">Account</a> <span class="menuItem">|</span > <a class="menuLink" onclick="showCart();">Cart</a> <span class="menuItem">|</span > <a class="menuLink" onclick="showSupport();">Support</a> <span class="menuItem">|</span > <a class="menuLink" onclick="showMain();">Main</a>
   </td>
  </tr>
  </table>
@@ -508,42 +528,9 @@ function clearNodes(id) {
  
 <table bgcolor="white">
  <tr>
-  <td valign="top" width="300"><table id="sidebar"vbgoclor="red" border="0" cellpadding="0"></table></td>
-  <td valign="top" width="100%" bgcolor="white">
-   <div id="body">
-   <table valign="top" id="bodyTable" border="1" bgcolor="red">
-     <tr>
-      <td>
-        <map name="petmap">
-        <area onclick="loadCategory('birds')" 
-            alt="Birds" 
-            coords="72,2,280,250">
-        <area onclick="loadCategory('fish')" 
-            alt="Fish" 
-            coords="2,180,72,250">
-        <area onclick="loadCategory('dogs')" 
-            alt="Dogs" 
-            coords="60,250,130,320">
-       <area onclick="loadCategory('reptiles')" 
-            alt="Reptiles" 
-            coords="140,270,210,340">
-        <area onclick="loadCategory('cats')" 
-            alt="Cats" 
-            coords="225,240,295,310">
-        <area onclick="loadCategory('birds')" 
-            alt="Birds" 
-            coords="280,180,350,250">
-        </map>
-
-        <img src="images/splash.gif" 
-            alt="Pet Selection Map"
-            usemap="#petmap" 
-            width="350" 
-            height="355" 
-        border="0">
-     </td>
-    </tr>
-   </table>
+  <td valign="top" width="300"><table id="sidebar" border="0" cellpadding="0"></table></td>
+  <td valign="top" width="100%">
+   <div id="bodyCenter"><h1>Loading....</h1>
   </div>
    </td>
  </td>
