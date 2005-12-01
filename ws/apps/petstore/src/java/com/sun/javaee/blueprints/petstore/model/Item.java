@@ -1,61 +1,88 @@
-
 package com.sun.javaee.blueprints.petstore.model;
 
+import javax.persistence.*;
 
+@Entity
+@Table(name="ITEM") 
 
 public class Item {
 
-    private String itemId = null;
-    private String categoryId = null;
-    private String itemName = null;
-    private String description = null;
-    private String imageURL = null;
+    private String itemID;
+    private String productID;
+    private String name;
+    private String description;
+    private String imageURL;
+    private float listPrice;
+    private float unitCost;
 
-
-    private float price = 0.0F;
-    private boolean onSale = false;  
-
-    public Item(String itemId,
-                String categoryId,
-                String itemName,
+    public Item(String itemID,
+                String productID,
+                String name,
                 String description,
                 String imageURL,
-                float price) {
+                float listPrice,
+                float unitCost) {
 
-        this.itemId = itemId;
-        this.categoryId = categoryId;
-        this.itemName = itemName;
+        this.itemID = itemID;
+        this.productID = productID;
+        this.name = name;
         this.description =  description;
         this.imageURL = imageURL;
-        this.price = price;
-    }
-
-    public String getId() {
-        return this.itemId;
+        this.listPrice = listPrice;
+        this.unitCost = unitCost;
     }
     
-    public String getCategoryId() {
-        return categoryId;
+    public Item() { }
+    
+    @Id
+    public String getItemID() {
+        return itemID;
+    }
+    
+    public String getProductID() {
+        return productID;
     }
 
     public String getName() {
-        return this.itemName;
+        return name;
     }    
 
     public String getDescription() {
-        return this.description;
+        return description;
     }
 
-    public float getPrice() {
-       return this.price;
+    public float getListPrice() {
+       return listPrice;
+    }
+    
+    public float getUnitCost() {
+       return unitCost;
     }
     
     public String getImageURL() {
         return imageURL;
     }
     
-    public String toString() {
-        return "Item [id=" + itemId + ", name=" + itemName + ", description=" + description + "]"; 
+    public void setItemID(String itemID) {
+        this.itemID = itemID;
+    }     
+    public void setProductID(String productID) {
+        this.productID = productID;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
+    public void setListPrice(float listPrice) {
+        this.listPrice = listPrice;
+    }
+    public void setUnitCost(float unitCost) {
+        this.unitCost = unitCost;
     }
 
 }

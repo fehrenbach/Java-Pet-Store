@@ -8,10 +8,9 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.annotation.*;
 import javax.persistence.*;
-import javax.sql.DataSource;
 
 import com.sun.javaee.blueprints.petstore.model.*;
-import javax.annotation.Resource;
+
 
 /**
  * This is a simple example of an HTTP Servlet.  It responds to the GET
@@ -27,9 +26,10 @@ public class CatalogServlet extends HttpServlet {
    public void init(ServletConfig config) throws ServletException {
        context = config.getServletContext();
        cf = (CatalogFacade)context.getAttribute("CatalogFacade");
-         if (cf == null)
+       if (cf == null) {
              cf = new CatalogFacade(em);
              context.setAttribute("CatalogFacade", cf);
+       }
    }
 
    public void destroy() {
@@ -41,8 +41,35 @@ public class CatalogServlet extends HttpServlet {
        throws ServletException, IOException {
             request.setCharacterEncoding("UTF-8");
             String command = request.getParameter("command");
-           
             if ("category".equals(command)) {
+                String catid = request.getParameter("catid");
+                System.out.println("Request for category with id: " + catid);
+                // set content-type header before accessing the Writer
+                response.setContentType("text/xml;charset=UTF-8");
+                PrintWriter out = response.getWriter();
+                StringBuffer sb = new StringBuffer();
+                // then write the data of the response
+                sb.append("<items>\n");
+                Collection items = cf.getAllItemsFromCategory(catid);
+                Iterator it = items.iterator();
+                NumberFormat formatter = new DecimalFormat("0000");
+                while (it.hasNext()) {
+                    Item i = (Item)it.next();
+                    sb.append("<item>\n");
+                    sb.append(" <id>" + i.getProductID() + "</id>\n");
+                    sb.append(" <prod-id>" + i.getProductID() + "</prod-id>\n");
+                    sb.append(" <cat-id>" + catid + "</cat-id>\n");
+                    sb.append(" <name>" + i.getName() + "</name>\n");
+                    sb.append(" <price>" + i.getUnitCost() + "</price>\n");
+                    sb.append(" <description>" + i.getDescription() + "</description>\n");
+                    sb.append(" <image-url>" + i.getImageURL() + "</image-url>\n");
+                    sb.append("</item>\n");
+                }
+                sb.append("</items>");
+                out.println(sb.toString());
+                System.out.println("Returning:\n" + sb.toString());
+                out.close();
+            } else if ("products".equals(command)) {
                 String catid = request.getParameter("catid");
                 System.out.println("Request for category with id: " + catid);
                 // set content-type header before accessing the Writer
@@ -55,7 +82,7 @@ public class CatalogServlet extends HttpServlet {
                 Iterator it = items.iterator();
                 NumberFormat formatter = new DecimalFormat("0000");
                 while (it.hasNext()) {
-                    Product_1 p = (Product_1)it.next();
+                    Product p = (Product)it.next();
                     sb.append("<product>\n");
                     sb.append(" <id>" + p.getProductID() + "</id>\n");
                     sb.append(" <cat-id>" + p.getCategoryID() + "</cat-id>\n");
@@ -95,7 +122,7 @@ public class CatalogServlet extends HttpServlet {
              String targetId = request.getParameter("id");
              NumberFormat formatter = new DecimalFormat("0000");
              System.out.println("Request for item with id: " + targetId);
-             Item_1 i = cf.getItem(targetId);
+             Item i = cf.getItem(targetId);
              StringBuffer sb = new StringBuffer();
              sb.append("<item>\n");
              sb.append(" <id>" + i.getItemID() + "</id>\n");

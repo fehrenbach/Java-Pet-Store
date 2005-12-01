@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html  
-$Id: AutocompleteServlet.java,v 1.1 2005-11-10 12:06:32 gmurray71 Exp $ */
+$Id: AutocompleteServlet.java,v 1.2 2005-12-01 04:26:36 gmurray71 Exp $ */
 package com.sun.javaee.blueprints.petstore.controller;
 
 import java.io.*;
@@ -9,21 +9,27 @@ import java.util.*;
 import java.text.*;
 
 import com.sun.javaee.blueprints.petstore.model.*;
+import javax.annotation.Resource;
+import javax.persistence.*;
 
 public class AutocompleteServlet extends HttpServlet {
     
-    private ServletContext context;
-    private ItemDAO dao;
-
+   private CatalogFacade cf;
+   private ServletContext context;
+   @PersistenceContext(name="bppu")
+   private static EntityManager em;
  
     public void init(ServletConfig config) throws ServletException {
-        this.context = config.getServletContext();
-
+       context = config.getServletContext();
+       cf = (CatalogFacade)context.getAttribute("CatalogFacade");
+       if (cf == null) { 
+             cf = new CatalogFacade(em);
+             context.setAttribute("CatalogFacade", cf);
+       }
     }
 
     public  void doGet(HttpServletRequest request, HttpServletResponse  response)
         throws IOException, ServletException {
-        if (dao == null)  dao = (ItemDAO)context.getAttribute("itemDAO");
         request.setCharacterEncoding("UTF-8");
 	    String action = request.getParameter("action");        
         String targetId = request.getParameter("id");
@@ -37,19 +43,19 @@ public class AutocompleteServlet extends HttpServlet {
             
             // then write the data of the response
             sb.append("<items>\n");
-            ArrayList items = dao.doSearch(targetId);
+            Collection items = cf.doSearch(targetId);
             if (items.size() > 0) {
                 NumberFormat formatter = new DecimalFormat("0000");
                 Iterator it = items.iterator();
                 while (it.hasNext()) {
                     Item i = (Item)it.next();
                     sb.append("<item>\n");
-                    sb.append(" <id>" + i.getId() + "</id>\n");
-                    sb.append(" <cat-id>" + i.getCategoryId() + "</cat-id>\n");
+                    sb.append(" <id>" + i.getItemID() + "</id>\n");
+                    sb.append(" <cat-id>" + i.getProductID() + "</cat-id>\n");
                     sb.append(" <name>" + i.getName() + "</name>\n");
                     sb.append(" <description>" + i.getDescription() + "</description>\n");
                     sb.append(" <image-url>" + i.getImageURL() + "</image-url>\n");
-                    sb.append(" <price>" + formatter.format(i.getPrice())  + "</price>\n");
+                    sb.append(" <price>" + formatter.format(i.getListPrice())  + "</price>\n");
                    sb.append("</item>\n");
                 }
                 sb.append("</items>\n");
