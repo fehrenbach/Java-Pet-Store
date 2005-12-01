@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html  
-$Id: AutocompleteServlet.java,v 1.2 2005-12-01 04:26:36 gmurray71 Exp $ */
+$Id: AutocompleteServlet.java,v 1.3 2005-12-01 08:10:16 gmurray71 Exp $ */
 package com.sun.javaee.blueprints.petstore.controller;
 
 import java.io.*;
@@ -16,16 +16,10 @@ public class AutocompleteServlet extends HttpServlet {
     
    private CatalogFacade cf;
    private ServletContext context;
-   @PersistenceContext(name="bppu")
-   private static EntityManager em;
  
     public void init(ServletConfig config) throws ServletException {
        context = config.getServletContext();
        cf = (CatalogFacade)context.getAttribute("CatalogFacade");
-       if (cf == null) { 
-             cf = new CatalogFacade(em);
-             context.setAttribute("CatalogFacade", cf);
-       }
     }
 
     public  void doGet(HttpServletRequest request, HttpServletResponse  response)
@@ -48,7 +42,7 @@ public class AutocompleteServlet extends HttpServlet {
                 NumberFormat formatter = new DecimalFormat("0000");
                 Iterator it = items.iterator();
                 while (it.hasNext()) {
-                    Item i = (Item)it.next();
+                    PItem i = (PItem)it.next();
                     sb.append("<item>\n");
                     sb.append(" <id>" + i.getItemID() + "</id>\n");
                     sb.append(" <cat-id>" + i.getProductID() + "</cat-id>\n");

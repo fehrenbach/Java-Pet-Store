@@ -7,6 +7,11 @@
 
   <display-name>Petstore</display-name>
 
+  <listener>
+   <listener-class>com.sun.javaee.blueprints.petstore.model.CatalogFacade</listener-class>
+  </listener>
+  
+  
   <servlet>
     <display-name>CatalogServlet</display-name>
     <servlet-name>CatalogServlet</servlet-name>

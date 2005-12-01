@@ -20,14 +20,14 @@ return em.createQuery("SELECT OBJECT(c) FROM Category_1 c").getResultList();
 
 public Collection getProducts(String catID){
 return em.createQuery(
-"SELECT p FROM Product_1 p WHERE p.categoryID LIKE :categoryID")
+"SELECT p FROM Product p WHERE p.categoryID LIKE :categoryID")
 .setParameter("categoryID", catID).getResultList();
 }
 
 
 public Collection getItems(String prodID){
 return em.createQuery(
-"SELECT i FROM Item_1 i WHERE i.productID LIKE :productID")
+"SELECT i FROM Item i WHERE i.productID LIKE :productID")
 .setParameter("productID", prodID).getResultList();
 }
 

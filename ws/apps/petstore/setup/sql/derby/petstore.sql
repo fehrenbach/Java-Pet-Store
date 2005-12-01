@@ -1,6 +1,6 @@
 
 
-create table category_1 (
+create table category(
     categoryid VARCHAR(10) NOT NULL,
     name VARCHAR(25) NOT NULL,
     description VARCHAR(255) NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE product (
  description VARCHAR(255) NOT NULL,
  imageurl VARCHAR(55),
  primary key (productid),
- foreign key (categoryid) references category_1(categoryid)
+ foreign key (categoryid) references category(categoryid)
 );
 
 CREATE TABLE item (
@@ -57,11 +57,11 @@ CREATE TABLE lineitem (
 );
 
 
-INSERT INTO category_1 VALUES('CATS', 'Cats', 'Loving and furry friends', 'cats_icon.gif');
-INSERT INTO category_1 VALUES('DOGS', 'Dogs', 'Loving and furry friends', 'dogs_icon.gif');
-INSERT INTO category_1 VALUES('BIRDS', 'Birds', 'Loving and furry friends', 'birds_icon.gif');
-INSERT INTO category_1 VALUES('REPTILES', 'Reptiles', 'Loving and scaly friends', 'reptiles_icon.gif');
-INSERT INTO category_1 VALUES('FISH', 'Fish', 'Loving aquatic friends', 'fish_icon.gif');
+INSERT INTO category VALUES('CATS', 'Cats', 'Loving and furry friends', 'cats_icon.gif');
+INSERT INTO category VALUES('DOGS', 'Dogs', 'Loving and furry friends', 'dogs_icon.gif');
+INSERT INTO category VALUES('BIRDS', 'Birds', 'Loving and furry friends', 'birds_icon.gif');
+INSERT INTO category VALUES('REPTILES', 'Reptiles', 'Loving and scaly friends', 'reptiles_icon.gif');
+INSERT INTO category VALUES('FISH', 'Fish', 'Loving aquatic friends', 'fish_icon.gif');
 
 INSERT INTO product VALUES('feline01', 'CATS', 'Long Hair', 'Great for reducing mouse populations', 'cat1.gif');
 INSERT INTO product VALUES('feline02', 'CATS', 'Short Hair', 'Friendly house cat', 'cat2.gif');

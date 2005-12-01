@@ -20,16 +20,10 @@ public class CatalogServlet extends HttpServlet {
 
    private CatalogFacade cf;
    private ServletContext context;
-   @PersistenceContext(name="bppu")
-   private static EntityManager em;
 
    public void init(ServletConfig config) throws ServletException {
        context = config.getServletContext();
        cf = (CatalogFacade)context.getAttribute("CatalogFacade");
-       if (cf == null) {
-             cf = new CatalogFacade(em);
-             context.setAttribute("CatalogFacade", cf);
-       }
    }
 
    public void destroy() {
@@ -54,7 +48,7 @@ public class CatalogServlet extends HttpServlet {
                 Iterator it = items.iterator();
                 NumberFormat formatter = new DecimalFormat("0000");
                 while (it.hasNext()) {
-                    Item i = (Item)it.next();
+                    PItem i = (PItem)it.next();
                     sb.append("<item>\n");
                     sb.append(" <id>" + i.getProductID() + "</id>\n");
                     sb.append(" <prod-id>" + i.getProductID() + "</prod-id>\n");
@@ -103,7 +97,7 @@ public class CatalogServlet extends HttpServlet {
                 Iterator it = items.iterator();
                 
                 while (it.hasNext()) {
-                    Category_1 c = (Category_1)it.next();
+                    PCategory c = (PCategory)it.next();
                     sb.append("<category>\n");
                     sb.append(" <id>" + c.getCategoryID() + "</id>\n");
                     sb.append(" <cat-id>" + c.getCategoryID() + "</cat-id>\n");
@@ -121,8 +115,8 @@ public class CatalogServlet extends HttpServlet {
          } else if ("item".equals(command)) {
              String targetId = request.getParameter("id");
              NumberFormat formatter = new DecimalFormat("0000");
-             System.out.println("Request for item with id: " + targetId);
-             Item i = cf.getItem(targetId);
+             System.out.println("**** Request for item with id: " + targetId);
+             PItem i = cf.getItem(targetId);
              StringBuffer sb = new StringBuffer();
              sb.append("<item>\n");
              sb.append(" <id>" + i.getItemID() + "</id>\n");
@@ -139,5 +133,4 @@ public class CatalogServlet extends HttpServlet {
              out.close();  
          }
      }
-
 }
