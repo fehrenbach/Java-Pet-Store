@@ -1,0 +1,7 @@
+<div id="slider-popup" style="position:relative; left:100; top:10; width:130; height:90; overflow:hidden; background-color:#ffffff">
+
+<div id="layerOne" style="position:absolute;width:130;left:1px;top:0px;"></div>
+<div id="layerTwo" style="position:absolute;width:130;left:0px;top:0px"></div></div>
+
+
+
