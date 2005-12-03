@@ -10,6 +10,24 @@
 <script  src="ajax-commons.js" ></script>
 
 <script type="text/javascript">
+	//var djConfig = {isDebug: true, debugAtAllCosts: true};
+</script>
+<script type="text/javascript" src="dojo.js"></script>
+<script language="JavaScript" type="text/javascript">       
+	dojo.require("dojo.widget.HtmlFisheyeList");
+	dojo.hostenv.writeIncludes();
+    dojo.addOnLoad(function () {
+    init();
+    showMain();});
+</script>
+
+<script>
+	function load_app(id){
+		alert('Icon '+id+' was clicked');
+	}
+</script>
+
+<script type="text/javascript">
 
 var isIE;
 var gcats = new Map();
@@ -22,6 +40,8 @@ var completeField;
 var autorow;
 
 var bodyTable;
+
+//window.onload = loadPetstore;
 
 function checkout() {
     var bindArgs = {
@@ -77,27 +97,37 @@ function showProgressBar(id) {
   }
 }
 
-function showSupport() {
-  var chat = $("chat-popup");
-  if (!chat) {
+function showSlider() {
+  var slider = $("slider-popup");
+  if (!slider) {
       var injectArgs = {
-        template: "support.htmf",
-        script: "support.js",
+        template: "slider.htmf",
+        script: "slider.js",
         initFunction: function() {
-                        initSupport();
-                        chat.style.visibility='visible';
+                        startSlider();
                     }
       }
      inject(injectArgs);
   } else {
-    chat.style.visibility='visible';
+    slider.style.visibility='visible';
   }
 }
 
-function inject(p) {
+function showFishEye() {
+     inject({ template: "fisheye.htmf",
+      initFunction: function() {
 
+                        alert("loaded fisheye" + $("myeye").show());
+                    }
+     });
+}
+
+function inject(p) {
+        var targetUrl;
+        if (!p.url) targetUrl = "controller?command=content&target=/" + p.template;
+        else targetUrl = p.url;
         var templateArgs = {
-            url:  "controller?command=content&target=/" + p.template,
+            url:  targetUrl,
             mimetype: "text/html",
             load: function(type, data) {
                //if no parent is given append to the document root
@@ -108,16 +138,19 @@ function inject(p) {
                } else {
                     p.injectionPoint.innerHTML = data;
                }
-            
-               // now load the associated JavaScript
-                var bindArgs = {
+               if (p.script) {
+                  // now load the associated JavaScript
+                  var bindArgs = {
                     url:  "controller?command=content&target=/" + p.script,
                     mimetype: "text/javascript",
                     load: function(type,data) {
                         if (p.initFunction) p.initFunction(type,data);
                     }
-                };
-                dojo.io.bind(bindArgs);
+                  }
+                  dojo.io.bind(bindArgs);
+               } else {
+                  if ( p.initFunction) p.initFunction();
+               }
             }
         };
         dojo.io.bind(templateArgs);
@@ -227,17 +260,9 @@ function appendAutoComplete(productId, name) {
     nameCell.appendChild(linkElement);
 }
 
-function loadCategories() {
+function loadPetstore() {
     init();
     showMain();
-    var bindArgs = {
-       url:  "catalog?command=categories",
-       mimetype: "text/xml",
-       load: function(type, data) {
-               loadCategoriesCallback(data);
-             }
-     };
-    dojo.io.bind(bindArgs);
 }
 
 function loadCategoriesCallback(responseXML) {
@@ -345,6 +370,9 @@ function resetBody() {
 
 function showCategoryItems(catid, index, count) {
     var c = gcats.get(catid);
+    if ($("slider-popup")) {
+        setSliderItems(c.items);
+    }
     resetBody();
 
     if (c.length == 0) {
@@ -493,7 +521,10 @@ function clearNodes(id) {
 </script>
 
 </head>
-<body onload="loadCategories()">
+<body onload1="loadCategories()">
+
+
+
 
 <table border="0" bordercolor="gray" cellpadding="0" cellspacing="0" bgcolor="white" width="100%">
  <tr>
@@ -520,7 +551,7 @@ function clearNodes(id) {
  </tr>
   <tr bgcolor="gray">
   <td colspan="3"  align="right">
-   <a class="menuLink" onclick="showAccount();">Account</a> <span class="menuItem">|</span > <a class="menuLink" onclick="showCart();">Cart</a> <span class="menuItem">|</span > <a class="menuLink" onclick="showSupport();">Support</a> <span class="menuItem">|</span > <a class="menuLink" onclick="showMain();">Main</a>
+   <a class="menuLink" onclick="showSlider();">Slider</a> <a class="menuLink" onclick="showAccount();">Account</a> <span class="menuItem">|</span > <a class="menuLink" onclick="showCart();">Cart</a> <span class="menuItem">|</span > <span class="menuItem">|</span > <a class="menuLink" onclick="showMain();">Main</a>
   </td>
  </tr>
  </table>
@@ -528,7 +559,42 @@ function clearNodes(id) {
  
 <table bgcolor="white">
  <tr>
-  <td valign="top" width="300"><table id="sidebar" border="0" cellpadding="0"></table></td>
+  <td valign="top" width="300"><table id="sidebar" border="0" cellpadding="0">
+  <div class="outerbar">
+
+<div dojoType="FisheyeList"
+	itemWidth="170" itemHeight="50"
+	itemMaxWidth="340" itemMaxHeight="100"
+	orientation="vertical"
+	effectUnits="2"
+	itemPadding="10"
+	attachEdge="top"
+	labelEdge="bottom"
+	enableCrappySvgSupport="false"
+>
+
+	<div dojoType="FisheyeListItem" onClick="loadCategory('DOGS');"
+		iconsrc="images/dogs_icon.gif" caption="">
+	</div>
+
+	<div dojoType="FisheyeListItem" onClick="loadCategory('CATS');"
+		iconsrc="images/cats_icon.gif" caption="">
+	</div>
+    
+    <div dojoType="FisheyeListItem" onClick="loadCategory('BIRDS');"
+		iconsrc="images/birds_icon.gif" caption="">
+	</div>
+
+	<div dojoType="FisheyeListItem" onClick="loadCategory('FISH');"
+		iconsrc="images/fish_icon.gif" caption="">
+	</div>
+
+	<div dojoType="FisheyeListItem" onClick="loadCategory('REPTILES');"
+		iconsrc="images/reptiles_icon.gif" caption="" >
+	</div>
+</div>
+
+</div></table></td>
   <td valign="top" width="100%">
    <div id="bodyCenter"><h1>Loading....</h1>
   </div>
@@ -540,6 +606,7 @@ function clearNodes(id) {
  <div style="position: absolute; visibility: visible;z-index:5" id="menu-popup">
  <table id="completeTable" border="1" bordercolor="black" cellpadding="0" cellspacing="0" ></table>
  </div>
- 
+
+
 </body>
 </html>

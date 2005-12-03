@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: ajax-commons.js,v 1.1 2005-11-30 00:43:37 gmurray71 Exp $
+$Id: ajax-commons.js,v 1.1 2005-12-03 06:51:29 gmurray71 Exp $
 */
 
 var isIE;

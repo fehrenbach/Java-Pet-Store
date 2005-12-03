@@ -17,9 +17,10 @@
   <property name="src.web" value="web" />
   <property name="build.classes.dir" value="${build.dir}/classes" />
   <property name="war.build.dir" value="${build.dir}/war" />
-  <property name="commons.script" value="lib/js/ajax-commons.js" /> 
-  <property name="dojo.script" value="lib/dojo/dojo.js" />
-
+  <property name="commons.script" value="../../lib/js/ajax-commons.js" /> 
+  <property name="dojo.script" value="../../lib/dojo/dojo.js" />
+  <property name="dojo.history" value="../../lib/dojo/iframe_histroy.js" />
+  <property name="dojo.src.dir" value="../../lib/dojo/src" />
 
   <target name="build" description="Compile petstore files." >
     <mkdir dir="${build.classes.dir}" />
@@ -34,7 +35,8 @@
     <!-- Copy in the compiled Classes -->
     <copy todir="${war.build.dir}/WEB-INF/classes">
      <fileset dir="${build.classes.dir}"/>
-    </copy>  
+    </copy> 
+    <copy todir="${war.build.dir}/WEB-INF/lib" file="lib/bp-dynamic-text-comp.jar"/>
     <copy todir="${war.build.dir}/WEB-INF/lib" file="./build/catalog-persistence.jar"/>
     <!-- Copy in the content -->
     <copy todir="${war.build.dir}">
@@ -42,9 +44,15 @@
     </copy>
     <copy file="${commons.script}" todir="${war.build.dir}" />
     <copy file="${dojo.script}" todir="${war.build.dir}" />
-    <copy todir="${war.build.dir}">
+
+   <copy todir="${war.build.dir}/src">
+     <fileset dir="${dojo.src.dir}"/>
+    </copy>
+    
+   <copy todir="${war.build.dir}">
      <fileset dir="${war.build.dir}"/>
     </copy> 
+    
     <mkdir dir="${dist.dir}"/>
     <delete file="${app.module}"/>
     <jar jarfile="${app.module}" basedir="${war.build.dir}" />
@@ -75,8 +83,5 @@
   </target>
 
 </project>
-
-
-
 
 

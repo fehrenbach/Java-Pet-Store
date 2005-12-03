@@ -51,8 +51,11 @@ function initCart() {
  if (!cart) {
     cart = new Cart();
     var dragme = new Dragable(cartPop);
+    var winX = 430;
+    if (!isIE) winX = window.innerWidth - 228;
+    else winX = document.body.offsetWidth - 228;
     cartPop.style.top="140px";
-    cartPop.style.left="500px";
+    cartPop.style.left= winX +"px";
  }
 }
 

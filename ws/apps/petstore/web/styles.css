@@ -1,4 +1,24 @@
 
+.dojoHtmlFisheyeListBar {
+    cursor:pointer;
+	margin: 0;
+    width: 300px;
+	text-align: right;
+}
+
+.outerbar {
+	background-color: white;
+	text-align: left;
+	width: 300px;
+}
+
+body {
+	font-family: Arial, Helvetica, sans-serif;
+	padding: 0;
+	margin: 0;
+}
+
+
 .editText {
  height:25;
  font-size:18px;
@@ -128,7 +148,7 @@
 }
 
 .creditCard {
-  background:lightgray;
+  background:white;
   width:500;
   height:300;
   padding:0;
@@ -151,9 +171,11 @@
 }
 
 .account {
-  background:lightgray;
+  position: absolute;
+  visibility: hidden;
+  background: white;
   width:500;
-  height:330;
+  height:370;
   padding:0;
   border-spacing: 0;
   border-width:1px;

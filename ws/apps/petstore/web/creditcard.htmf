@@ -18,12 +18,12 @@
 </tr>
 
 <tr>
- <td class="plainText">Name on Card:</td><td colspan="3" align="left"><div id="creditCardName">Name</div></td>
+ <td class="plainText">Name on Card:</td><td colspan="3" align="left"><div id="creditCardName">Greg Murray</div></td>
 </tr>
 
 
 <tr colspan="2">
- <td class="plainText">Number:</td><td colspan="3" align="left"><div id="creditCardNumber">Number</div></td>
+ <td class="plainText">Number:</td><td colspan="3" align="left"><div id="creditCardNumber">111-222-333-44-5555</div></td>
 </tr>
 
 <tr>

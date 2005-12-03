@@ -50,7 +50,7 @@ public class CatalogServlet extends HttpServlet {
                 while (it.hasNext()) {
                     PItem i = (PItem)it.next();
                     sb.append("<item>\n");
-                    sb.append(" <id>" + i.getProductID() + "</id>\n");
+                    sb.append(" <id>" + i.getItemID() + "</id>\n");
                     sb.append(" <prod-id>" + i.getProductID() + "</prod-id>\n");
                     sb.append(" <cat-id>" + catid + "</cat-id>\n");
                     sb.append(" <name>" + i.getName() + "</name>\n");

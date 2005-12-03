@@ -1,0 +1,42 @@
+
+.dojoFloatingPane {
+	position: absolute;
+	z-index: 5;
+	border: 1px solid;
+	border-color: ThreeDHighlight ThreeDShadow ThreeDShadow ThreeDHighlight;
+	background-color: ThreeDFace;
+	overflow: hidden;
+}
+
+.dojoFloatingPaneDragbar {
+	z-index: 10;
+	padding: 4px;
+	margin: 2px 2px 0px 2px;
+	background-color: ActiveCaption;
+	color: CaptionText;
+	font: small-caption;	
+	cursor: default;
+	width: 100%;
+}
+
+.dojoFloatingPaneClient {
+	position: absolute;
+	z-index: 10;
+	border: 1px solid;
+	border-color: ThreeDShadow ThreeDHighlight ThreeDHighlight ThreeDShadow;
+	margin: 2px;
+	background-color: ThreeDFace;
+	padding: 8px;
+	font-family: Verdana, Helvetica, Garamond, sans-serif;
+	font-size: 12px;
+	width: 100%;
+	overflow: auto;
+}
+
+.dojoDropShadow {
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	z-index: -1;
+	background: gray;
+}

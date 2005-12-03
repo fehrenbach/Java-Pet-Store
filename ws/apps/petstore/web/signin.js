@@ -9,6 +9,7 @@ function Account() {
 }
 
 function initSignin() {
+    loadAccount();
     var signinPop = $("signin-popup");
     if (!account) {
         var dragme = new Dragable(signinPop);
@@ -32,21 +33,22 @@ function showSignin() {
     signinPop.style.visibility='visible';
 }
 
-function showAccount() {
-    if (account && account.signedIn) {
-        var accountPop = $("account-popup");
-        if (accountPop) {
-            var dragme = new Dragable(accountPop);
-            accountPop.style.top="150px";
-            accountPop.style.left="200px";
-            accountPop.style.visibility='visible';
-        } else {
-            loadAccount();
-        }
+function initAccount() {
+    var accountPop = $("account-popup");
+    var dragme = new Dragable(accountPop);
 
+}
+
+function showAccount() {
+    var accountPop = $("account-popup");
+    if (account && account.signedIn) {
+            accountPop.style.top="150px";
+            accountPop.style.left="220px";
+            accountPop.style.visibility='visible';
     } else {
         var signinPop = $("signin-popup");
         signinPop.style.visibility='visible';
+ 
     }
 }
 
@@ -71,45 +73,23 @@ function signinCallback(responseXML) {
         account = new Account();
         account.signedIn = true;
         hideSignin();
+        initAccount();
         showAccount();
     } else {
         alert("invalid signin");
     }
 }
 
-function loadAccountData() {
-    //alert("loading account data");
-    updateItem(document.getElementById("accountFirstName"), "Gregory");
-    updateItem(document.getElementById("accountLastName"), "Murray");
-    updateItem(document.getElementById("accountStreet1"), "123 Network Circle");
-    updateItem(document.getElementById("accountStreet2"), "            ");
-    updateItem(document.getElementById("accountCity"), "Santa Clara");
-    updateItem(document.getElementById("accountState"), "CA");
-    updateItem(document.getElementById("accountZip"), "95054");
-    showAccount();
-    
-}
-
 
 function loadAccount() {
-        // load the sigin html and inject
-        var accountHTMLArgs = {
-            url:  "controller?command=content&target=/account.htmf",
-            mimetype: "text/html",
-            load: function(type, data) {
-               var injectionPoint = document.createElement("div");
-               injectionPoint.innerHTML = data;
-               document.firstChild.appendChild(injectionPoint);
-               // now load the associated JavaScript
-                var bindArgs = {
-                    url:  "controller?command=content&target=/account.js",
-                    mimetype: "text/javascript",
-                    load: function(type, data) {
-                        loadAccountData();
-                    }
-                };
-                dojo.io.bind(bindArgs);
+
+    var accountArgs = {
+            url: "faces/address.jsp",
+            script: "account.js",
+            initFunction: function() {
+
+                loadAccountData();
             }
-        };
-        dojo.io.bind(accountHTMLArgs);    
+    };
+    inject(accountArgs);
 }
