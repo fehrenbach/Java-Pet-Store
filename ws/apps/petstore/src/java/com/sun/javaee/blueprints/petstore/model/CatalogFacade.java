@@ -47,8 +47,10 @@ public class CatalogFacade implements ServletContextListener {
     }
 
     public Collection doSearch(String querryString){
-        return em.createQuery("SELECT i FROM Item i WHERE i.productName LIKE :  querryString")
-                .setParameter("querryString", querryString).getResultList();
+        Query searchQuery = em.createNativeQuery("SELECT * FROM Item WHERE (name LIKE ? OR description LIKE ?) " );
+        searchQuery.setParameter(1, "%"+querryString+"%");
+        searchQuery.setParameter(2,"%"+querryString+"%");
+        return searchQuery.getResultList();
     }
 
 }
