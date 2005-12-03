@@ -41,7 +41,26 @@ var autorow;
 
 var bodyTable;
 
-//window.onload = loadPetstore;
+window.onresize=resized;
+
+function resized() {
+    // reposition the autocomplete
+    completeField = $("complete-field");
+    autorow = $("menu-popup");
+    if (autorow && completeField) {
+        autorow.style.top = findY(completeField) + completeField.offsetHeight +  "px";
+        autorow.style.left = findX(completeField)  +  "px";
+    }
+    // reposition the cart to the right
+    var cartPop = $("cart-popup");
+    if (cartPop) {
+        var winX = 430;
+        if (!isIE) winX = window.innerWidth - 228;
+        else winX = document.body.offsetWidth - 228;
+        cartPop.style.top="140px";
+        cartPop.style.left= winX +"px";
+    }
+}
 
 function checkout() {
     var bindArgs = {
@@ -156,13 +175,13 @@ function inject(p) {
         dojo.io.bind(templateArgs);
 }
 
+
 function init() {
     if (navigator.userAgent.indexOf("ie") != -1) isIE = true;
     completeField = document.getElementById("complete-field");
-    var menu = document.getElementById("auto-row");
     autorow = document.getElementById("menu-popup");
-    autorow.style.top = (getElementY(completeField) + 30) + "px";
-    autorow.style.left = findX(completeField) + 5 +  "px";
+    autorow.style.top = findY(completeField) + completeField.offsetHeight +  "px";
+    autorow.style.left = findX(completeField)  +  "px";
     completeTable = document.getElementById("completeTable");
     completeTable.setAttribute("bordercolor", "white");
     // load the cart
@@ -252,10 +271,11 @@ function appendAutoComplete(productId, name) {
         completeTable.appendChild(row);
     }
     row.className = "popupRow";
-    nameCell.setAttribute("bgcolor", "#FFFAFA");
+    row.setAttribute("onmouseover", "this.className='popupRowHover'");
+    row.setAttribute("onmouseout", "this.className='popupRow'");
     var linkElement = document.createElement("a");
-    linkElement.className = "popupItem";
     linkElement.setAttribute("onclick", "showSearchItem('" + productId + "')");
+
     linkElement.appendChild(document.createTextNode(name));
     nameCell.appendChild(linkElement);
 }
@@ -335,7 +355,7 @@ function loadItemCallback(responseXML) {
       var name = responseXML.getElementsByTagName("name")[0].childNodes[0].nodeValue;
       var description = responseXML.getElementsByTagName("description")[0].childNodes[0].nodeValue;
       var price = responseXML.getElementsByTagName("price")[0].childNodes[0].nodeValue;
-      clearNodes("bodyTable");
+      resetBody();
       var c = gcats.get("search");
       if (c == null) {
         c= new Category("search");
@@ -364,8 +384,7 @@ function resetBody() {
     var body = $("bodyCenter");
     body.innerHTML = "";
     bodyTable = document.createElement("table");
-    body.appendChild(bodyTable);
-    
+    body.appendChild(bodyTable); 
 }
 
 function showCategoryItems(catid, index, count) {
@@ -551,7 +570,7 @@ function clearNodes(id) {
  </tr>
   <tr bgcolor="gray">
   <td colspan="3"  align="right">
-   <a class="menuLink" onclick="showSlider();">Slider</a> <a class="menuLink" onclick="showAccount();">Account</a> <span class="menuItem">|</span > <a class="menuLink" onclick="showCart();">Cart</a> <span class="menuItem">|</span > <span class="menuItem">|</span > <a class="menuLink" onclick="showMain();">Main</a>
+   <a class="menuLink" onclick="showAccount();">Account</a> <span class="menuItem">|</span > <a class="menuLink" onclick="showCart();">Cart</a> <span class="menuItem">|</span > <span class="menuItem">|</span > <a class="menuLink" onclick="showMain();">Main</a>
   </td>
  </tr>
  </table>
