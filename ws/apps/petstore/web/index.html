@@ -98,9 +98,7 @@ function showMain() {
 }
 
 function showProgressBar(id) {
-  var progress = $("progress-popup");
-  if (!progress) {
-      injectArgs = {
+    injectArgs = {
              template: "progressbar.htmf",
              script: "progressbar.js",
              initFunction: function(type, data) {
@@ -113,15 +111,8 @@ function showProgressBar(id) {
                 progress.style.visibility='visible';
                 setTimeout("pollTaskmaster()", 2000);
              }
-        }
-        inject(injectArgs);
-  } else {
-    targetId = id;
-    showProgress(0);
-    var idiv = window.document.getElementById("task_id");
-    idiv.innerHTML = "<div class=\"progressItem\">Processing Order. The transaction id is " + targetId + ".</div>";
-    progress.style.visibility='visible';
-  }
+    }
+    inject(injectArgs);
 }
 
 function showSlider() {
@@ -512,13 +503,11 @@ function clearNodes(id) {
 </script>
 
 </head>
-<body onload1="loadCategories()">
-
-
+<body>
 
 
 <table border="0" bordercolor="gray" cellpadding="0" cellspacing="0" bgcolor="white" width="100%">
- <tr>
+ <tr id="injectionPoint">
   <td width="100"><img src="images/banner_logo.gif" border="0"></td>
   <td>
   <div class="banner">Petstore</div>

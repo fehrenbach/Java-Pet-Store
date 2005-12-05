@@ -1,10 +1,10 @@
 
-<div style="position: absolute; visibility: hidden" id="creditcard-popup">
+<div "class="creditCard" id="creditcard-popup">
 
-<table class="creditCard" height="100%">
+<table class="creditCardTable" height="100%">
 
 <tr>
- <td bgcolor="gray" colspan="3" class="plainText" align="center">Credit Card Details<td bgcolor="gray" align="right"><a onclick="hideCreditCard();"><img src="images/cbutton.gif" border="0"></a> &nbsp;</td>
+ <td bgcolor="gray" colspan="3" class="plainText" align="center">Credit Card Details<td bgcolor="gray" align="right"><a onclick="hideCreditCard();"><img src="images/cbutton.gif" border="0"></a></td><td  bgcolor="gray"></td>
 </tr>
 
 <tr>
@@ -63,8 +63,8 @@
  </td>
 </tr>
 
-<tr>
- <td colspan="4" align="right"><div id="checkoutDiv"></div>&nbsp;&nbsp;</td>
+<tr valign="bottom">
+ <td colspan="4" nowrap="true" align="right"><div id="checkoutDiv"></div><td>&nbsp;</td>
 </tr>
 
 </table>

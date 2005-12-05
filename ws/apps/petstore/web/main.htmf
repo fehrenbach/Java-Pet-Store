@@ -2,22 +2,22 @@
      <tr>
       <td>
         <map name="petmap">
-        <area onclick="loadCategory('birds')" 
+        <area onmouseover="javascript:this.style.cursor='pointer';" onclick="loadCategory('BIRDS')" 
             alt="Birds" 
             coords="72,2,280,250">
-        <area onclick="loadCategory('fish')" 
+        <area onmouseover="javascript:this.style.cursor='pointer';" onclick="loadCategory('FISH')" 
             alt="Fish" 
             coords="2,180,72,250">
-        <area onclick="loadCategory('dogs')" 
+        <area onmouseover="javascript:this.style.cursor='pointer';" onclick="loadCategory('DOGS')" 
             alt="Dogs" 
             coords="60,250,130,320">
-       <area onclick="loadCategory('reptiles')" 
+       <area onmouseover="javascript:this.style.cursor='pointer';" onclick="loadCategory('REPTILES')" 
             alt="Reptiles" 
             coords="140,270,210,340">
-        <area onclick="loadCategory('cats')" 
+        <area onmouseover="javascript:this.style.cursor='pointer';" onclick="loadCategory('CATS')" 
             alt="Cats" 
             coords="225,240,295,310">
-        <area onclick="loadCategory('birds')" 
+        <area onmouseover="javascript:this.style.cursor='pointer';" onclick="loadCategory('BIRDS')" 
             alt="Birds" 
             coords="280,180,350,250">
         </map>

@@ -1,5 +1,5 @@
 
-  <div style="position: absolute; visibility: hidden" id="signin-popup">
+  <div class="signin" id="signin-popup">
    <table id="accountTable" class="accountTable">
    <tr>
    <td colspan="2">

@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: account.js,v 1.4 2005-12-05 08:08:37 gmurray71 Exp $
+$Id: account.js,v 1.5 2005-12-05 09:58:09 gmurray71 Exp $
 */
 
 
@@ -25,18 +25,18 @@ function hideCreditCard() {
 }
 
 function initCreditCard() {
-        var creditCardPop = $("creditcard-popup");
-            var dragme = new Dragable(creditCardPop);
-            creditCardPop.style.top="150px";
-            creditCardPop.style.left="200px";
+    var creditCardPop = $("creditcard-popup");
+    var dragme = new Dragable(creditCardPop);
+    creditCardPop.style.top="165px";
+    creditCardPop.style.left="200px";
 }
 
 function showCreditCardDialog() {
     var checkoutDiv = $("checkoutDiv");
     if (checkingOut) {
-        checkoutDiv.innerHTML = "<input type='button' onclick='completePurchase();' value='Complete Order'>";
+        checkoutDiv.innerHTML = "<form><input type='button' onclick='completePurchase();' value='Complete Order'></from>";
     } else {
-        checkoutDiv.innerHTML = "<input type='button' onclick='hideCreditCard();' value='Close'>";
+        checkoutDiv.innerHTML = "<form><input type='button' onclick='hideCreditCard();' value='Close'></form>";
     }
     var creditCardPop = $("creditcard-popup");
     creditCardPop.style.visibility='visible';
@@ -47,35 +47,23 @@ function showCreditCard() {
     hideAccount();
     var creditCardPop = $("creditcard-popup");
     if (creditCardPop) {
-        creditCardPop.style.visibility='visible';
+        showCreditCardDialog();
      } else {
             loadCreditCard();
      }
 }
 
 function loadCreditCard() {
-        // load the sigin html and inject
-        var accountHTMLArgs = {
-            url:  "controller?command=content&target=/creditcard.htmf",
-            mimetype: "text/html",
-            load: function(type, data) {
-               var injectionPoint = document.createElement("div");
-               injectionPoint.innerHTML = data;
-               document.firstChild.appendChild(injectionPoint);
-               // now load the associated JavaScript
-                var bindArgs = {
-                    url:  "controller?command=content&target=/creditcard.js",
-                    mimetype: "text/javascript",
-                    load: function(type, data) {
-                        hideAccount();
-                        initCreditCard();
-                        showCreditCardDialog();
-                    }
-                };
-                dojo.io.bind(bindArgs);
+    var accountArgs = {
+            template: "creditcard.htmf",
+            script: "creditcard.js",
+            initFunction: function() {
+                 initCreditCard();
+                 hideAccount();
+                 showCreditCardDialog();
             }
-        };
-        dojo.io.bind(accountHTMLArgs);    
+    };
+    inject(accountArgs);
 }
 
 function updateOnServer(itemId, itemValue) {

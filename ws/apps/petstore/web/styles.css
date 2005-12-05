@@ -141,6 +141,16 @@
 }
 
 .creditCard {
+  position: absolute;
+  visibility: hidden;
+  top:0px;
+  left:0px;
+  border-width:1px;
+  border-style:solid;
+  border-color:black;
+}
+
+.creditCardTable {
   background:white;
   width:500;
   height:300;
@@ -152,7 +162,22 @@
 }
 
 
+.signin {
+  top:0px;
+  left:0px;
+  position: absolute;
+  visibility: hidden;
+  background:gray;
+  padding:0;
+  border-spacing: 0;
+  border-width:1px;
+  border-style:solid;
+  border-color:black;
+}
+
 .cart {
+  top:0px;
+  left:0px;
   background:black;
   width:225;
   height:200;
@@ -164,6 +189,8 @@
 }
 
 .account {
+  top:0px;
+  left:0px;
   position: absolute;
   visibility: hidden;
   background: white;
