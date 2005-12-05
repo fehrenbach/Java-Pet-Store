@@ -206,10 +206,18 @@
   font-size: 1.2em;
 }
 
+.popupTable {
+  padding:0;
+  border-spacing: 0;
+  border-width:1px;
+  border-style:solid;
+  border-color:black;
+}
+
 .popupRowHover {
   color: #FFFAFA;
   cursor:pointer;
-  padding:0;
+  padding:1;
   border-spacing: 0;
   border-width:1px;
   border-style:solid;

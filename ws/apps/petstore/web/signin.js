@@ -73,7 +73,6 @@ function signinCallback(responseXML) {
         account = new Account();
         account.signedIn = true;
         hideSignin();
-        initAccount();
         showAccount();
     } else {
         alert("invalid signin");
@@ -87,7 +86,7 @@ function loadAccount() {
             url: "faces/address.jsp",
             script: "account.js",
             initFunction: function() {
-
+                initAccount();
                 loadAccountData();
             }
     };

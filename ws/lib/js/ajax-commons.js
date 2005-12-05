@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: ajax-commons.js,v 1.1 2005-12-03 06:51:29 gmurray71 Exp $
+$Id: ajax-commons.js,v 1.2 2005-12-05 08:08:48 gmurray71 Exp $
 */
 
 var isIE;
@@ -34,43 +34,6 @@ function Map() {
     }
 }
 
-function AJAXInteraction(url) {
-   AJAXInteraction(url,null);
-}
-
-function AJAXInteraction(url, callback) {
-
-    var req = init();
-    req.onreadystatechange = processRequest;
-        
-    function init() {
-      if (window.XMLHttpRequest) {
-        return new XMLHttpRequest();
-      } else if (window.ActiveXObject) {
-        isIE = true;
-        return new ActiveXObject("Microsoft.XMLHTTP");
-      }
-    }
-    
-    function processRequest () {
-      if (req.readyState == 4) {
-        if (req.status == 200) {
-          if (callback) callback(req.responseXML);
-        }
-      }
-    }
-
-    this.doGet = function() {
-      req.open("GET", url, true);
-      req.send(null);
-    }
-    
-    this.doPost = function(body) {
-      req.open("POST", url, true);
-      req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-      req.send(body);
-    }
-}
 
 function getElementText(local, parent) {
   return getElementTextNS(null, local, parent, 0);
@@ -92,19 +55,6 @@ function getElementTextNS(prefix, local, parent, index) {
     } else {
         return "";
     }
-}
-
-function getElementY(element){
-	var targetTop = 0;
-	if (element.offsetParent) {
-		while (element.offsetParent) {
-			targetTop += element.offsetTop;
-            element = element.offsetParent;
-		}
-	} else if (element.y) {
-		targetTop += element.y;
-    }
-	return targetTop;
 }
 
 function $(targetElement){

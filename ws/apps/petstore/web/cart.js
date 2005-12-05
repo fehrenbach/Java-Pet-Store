@@ -68,9 +68,11 @@ function removeCartItem(id) {
     showCart();
     cart.removeItem(id);
     showCartItems(0,chunkSize);
+    if (cart.length == 0) checkingOut = false;
 }
 
 function addCartItem(id,image,name,description,price) {
+    checkingOut = true;
     var cell0;
     var cell1;
     var cell2;
@@ -202,7 +204,7 @@ function showCartItems(ci, count) {
         
         bodyTable.appendChild(row);
         var cartTotal = $("cartTotal");
-        cartTotal.innerHTML =  "$" + cart.getTotal();
+        cartTotal.innerHTML =  "$" + cart.getTotal() + ".00";
         if (cart.length == 0) $("coItem").style.visibility='hidden';
         else $("coItem").style.visibility='visible';
 }

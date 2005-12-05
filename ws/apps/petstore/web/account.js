@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: account.js,v 1.3 2005-12-03 06:50:47 gmurray71 Exp $
+$Id: account.js,v 1.4 2005-12-05 08:08:37 gmurray71 Exp $
 */
 
 
@@ -25,7 +25,6 @@ function hideCreditCard() {
 }
 
 function initCreditCard() {
-        loadCreditCardData();
         var creditCardPop = $("creditcard-popup");
             var dragme = new Dragable(creditCardPop);
             creditCardPop.style.top="150px";
@@ -33,12 +32,20 @@ function initCreditCard() {
 }
 
 function showCreditCardDialog() {
+    var checkoutDiv = $("checkoutDiv");
+    if (checkingOut) {
+        checkoutDiv.innerHTML = "<input type='button' onclick='completePurchase();' value='Complete Order'>";
+    } else {
+        checkoutDiv.innerHTML = "<input type='button' onclick='hideCreditCard();' value='Close'>";
+    }
     var creditCardPop = $("creditcard-popup");
     creditCardPop.style.visibility='visible';
+    
 }
 
 function showCreditCard() {
-     var creditCardPop = $("creditcard-popup");
+    hideAccount();
+    var creditCardPop = $("creditcard-popup");
     if (creditCardPop) {
         creditCardPop.style.visibility='visible';
      } else {
@@ -69,13 +76,6 @@ function loadCreditCard() {
             }
         };
         dojo.io.bind(accountHTMLArgs);    
-}
-
-function loadCreditCardData() {
-    //alert("loading account data");
-    //updateItem(document.getElementById("creditCardName"), "Gregory Murray");
-    //updateItem(document.getElementById("creditCardNumber"), "1234-1234-1234");
-    
 }
 
 function updateOnServer(itemId, itemValue) {
@@ -134,25 +134,24 @@ function removeAllChildren(targetElement) {
 }
 
 function updateItem(itemId, value) {
-
-    var item = document.getElementById(itemId);
-    // remove all children
-    removeAllChildren(item);
-      
-    var cellElement = document.createElement("div");
-    cellElement.setAttribute("id", itemId + "_dlabel");
-    cellElement.className = "plainText";
-    if (isIE) {
-        cellElement.attachEvent('onclick',preMorph);
-        cellElement.attachEvent('onmouseover',function(e){e.srcElement.style.backgroundColor='#FFCC33';});
-        cellElement.attachEvent('onmouseout',function(e){e.srcElement.style.backgroundColor='#FFFFFF';});
-    } else {
-        cellElement.addEventListener('click',preMorph,true);
-        cellElement.setAttribute("onmouseover","this.style.backgroundColor='#FFCC33'");
-        cellElement.setAttribute("onmouseout","this.style.backgroundColor='#FFFFFF'");
-    }  
-    cellElement.appendChild(document.createTextNode(value));
-    item.appendChild(cellElement);
+    var item = $(itemId);
+    if (item) {
+        removeAllChildren(item);
+        var cellElement = document.createElement("div");
+        cellElement.setAttribute("id", itemId + "_dlabel");
+        cellElement.className = "plainText";
+        if (isIE) {
+            cellElement.attachEvent('onclick',preMorph);
+            cellElement.attachEvent('onmouseover',function(e){e.srcElement.style.backgroundColor='#FFCC33';});
+            cellElement.attachEvent('onmouseout',function(e){e.srcElement.style.backgroundColor='#FFFFFF';});
+        } else {
+            cellElement.addEventListener('click',preMorph,true);
+            cellElement.setAttribute("onmouseover","this.style.backgroundColor='#FFCC33'");
+            cellElement.setAttribute("onmouseout","this.style.backgroundColor='#FFFFFF'");
+        }  
+        cellElement.appendChild(document.createTextNode(value));
+        item.appendChild(cellElement);
+    }
 }
 
 function showUpdateMessage(itemId, value) {

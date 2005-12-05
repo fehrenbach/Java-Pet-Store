@@ -1,13 +1,14 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: model.js,v 1.4 2005-11-28 07:33:20 gmurray71 Exp $
+$Id: model.js,v 1.5 2005-12-05 08:08:43 gmurray71 Exp $
 */
-function Category(id) {
+function Category(id,name) {
 
     this.index = 0;
     
     this.length = 0;
     
     this.id = id;
+    this.name = name;
     this.items = new Array();
 
     function Item(id,image,name,description,price){

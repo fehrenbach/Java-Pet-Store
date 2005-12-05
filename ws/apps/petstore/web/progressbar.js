@@ -47,6 +47,7 @@ function complete() {
     var idiv = window.document.getElementById("progress");
     idiv.innerHTML = "<div class=\"progressItem\">Checkout Complete. Your order number is " + targetId + ".</div><br><input type=\"button\" onclick=\"hideProgressBar()\" value=\"Continue\">";
     cart.empty();
+    checkingOut = false;
     showCartItems(0,0);
 }
 

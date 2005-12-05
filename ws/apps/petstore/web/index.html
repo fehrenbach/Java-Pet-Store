@@ -39,9 +39,17 @@ var completeTable;
 var completeField;
 var autorow;
 
-var bodyTable;
+var bodyRowText;
+var itemsElement;
+
+var checkingOut = false;
 
 window.onresize=resized;
+
+function loadPetstore() {
+    init();
+    showMain();
+}
 
 function resized() {
     // reposition the autocomplete
@@ -132,50 +140,6 @@ function showSlider() {
   }
 }
 
-function showFishEye() {
-     inject({ template: "fisheye.htmf",
-      initFunction: function() {
-
-                        alert("loaded fisheye" + $("myeye").show());
-                    }
-     });
-}
-
-function inject(p) {
-        var targetUrl;
-        if (!p.url) targetUrl = "controller?command=content&target=/" + p.template;
-        else targetUrl = p.url;
-        var templateArgs = {
-            url:  targetUrl,
-            mimetype: "text/html",
-            load: function(type, data) {
-               //if no parent is given append to the document root
-               if (!p.injectionPoint) {
-                    var injectionPoint = document.createElement("div");
-                    injectionPoint.innerHTML = data;
-                    document.firstChild.appendChild(injectionPoint);
-               } else {
-                    p.injectionPoint.innerHTML = data;
-               }
-               if (p.script) {
-                  // now load the associated JavaScript
-                  var bindArgs = {
-                    url:  "controller?command=content&target=/" + p.script,
-                    mimetype: "text/javascript",
-                    load: function(type,data) {
-                        if (p.initFunction) p.initFunction(type,data);
-                    }
-                  }
-                  dojo.io.bind(bindArgs);
-               } else {
-                  if ( p.initFunction) p.initFunction();
-               }
-            }
-        };
-        dojo.io.bind(templateArgs);
-}
-
-
 function init() {
     if (navigator.userAgent.indexOf("ie") != -1) isIE = true;
     completeField = document.getElementById("complete-field");
@@ -217,15 +181,15 @@ function doSearch() {
         dojo.io.bind(bindArgs);
     }
     completeTable.style.visibility='hidden';
-    clearTable();
+    clearAutocompletionResults();
 }
 
 function doCompletion() {
     if (completeField.value == "") {
-        clearTable();
+        clearAutocompletionResults();
         completeTable.style.visibility='hidden';
     } else {
-        clearTable();
+        clearAutocompletionResults();
         var bindArgs = {
             url:  "autocomplete?action=complete&id=" + encodeURI(completeField.value),
             mimetype: "text/xml",
@@ -241,7 +205,7 @@ function autocompleteCallback(responseXML) {
     var items = responseXML.getElementsByTagName("id");
     if (items.length <= 0) {
         completeTable.style.visibility='hidden';
-        clearTable();
+        clearAutocompletionResults();
     }  else {
         for (loop = 0; loop < items.length; loop++) {
             var id = responseXML.getElementsByTagName("id")[loop].childNodes[0].nodeValue;
@@ -251,7 +215,7 @@ function autocompleteCallback(responseXML) {
     }
 }
 
-function clearTable() {
+function clearAutocompletionResults() {
        clearNodes("completeTable");
 }
 
@@ -275,14 +239,8 @@ function appendAutoComplete(productId, name) {
     row.setAttribute("onmouseout", "this.className='popupRow'");
     var linkElement = document.createElement("a");
     linkElement.setAttribute("onclick", "showSearchItem('" + productId + "')");
-
     linkElement.appendChild(document.createTextNode(name));
     nameCell.appendChild(linkElement);
-}
-
-function loadPetstore() {
-    init();
-    showMain();
 }
 
 function loadCategoriesCallback(responseXML) {
@@ -294,29 +252,6 @@ function loadCategoriesCallback(responseXML) {
       var itemSrc = responseXML.getElementsByTagName("image-url")[loop];
       addCategory(itemId.childNodes[0].nodeValue, itemValue.childNodes[0].nodeValue, itemSrc.childNodes[0].nodeValue);
     }
-}
-
-function showSearchItem(id) {
-      var c = gcats.get("search");
-      if (c != null) {
-        var i = c.getItemById(id);
-        if (i != null) {
-            if (completeTable) completeTable.style.visibility='hidden';
-            clearTable();
-            addCategoryItem("search", i.id,i.image,i.name,i.description,i.price);
-            return;
-        }
-      }
-      var bindArgs = {
-            url:  "catalog?command=item&id=" + id,
-            mimetype: "text/xml",
-            load: function(type, data) {
-            loadItemCallback(data);
-        }
-     };
-    dojo.io.bind(bindArgs);
-    if (completeTable) completeTable.style.visibility='hidden';
-    clearTable();
 }
 
 function loadCategory(catid) {
@@ -349,25 +284,54 @@ function processSearch(responseXML) {
     showCategoryItems("search",0,chunkSize);
 }
 
+
+function showSearchItem(id) {
+   resetBody();
+   inject({template: "items.htmf", injectionPoint: $("bodyCenter"), initFunction: function(){getSearchItem(id);}});
+}
+
+function getSearchItem(id) {
+      var c = gcats.get("search");
+      if (c != null) {
+        var i = c.getItemById(id);
+        if (i != null) {
+            if (completeTable) completeTable.style.visibility='hidden';
+            clearAutocompletionResults();
+            addCategoryItem($("items_table"),"search", i.id,i.image,i.name,i.description,i.price);
+            return;
+        }
+      }
+      var bindArgs = {
+            url:  "catalog?command=item&id=" + id,
+            mimetype: "text/xml",
+            load: function(type, data) {
+            loadItemCallback(data);
+        }
+     };
+    dojo.io.bind(bindArgs);
+    if (completeTable) completeTable.style.visibility='hidden';
+    clearAutocompletionResults();
+}
+
 function loadItemCallback(responseXML) {
       var id = responseXML.getElementsByTagName("id")[0].childNodes[0].nodeValue;
       var image = responseXML.getElementsByTagName("image-url")[0].childNodes[0].nodeValue;
       var name = responseXML.getElementsByTagName("name")[0].childNodes[0].nodeValue;
       var description = responseXML.getElementsByTagName("description")[0].childNodes[0].nodeValue;
       var price = responseXML.getElementsByTagName("price")[0].childNodes[0].nodeValue;
-      resetBody();
       var c = gcats.get("search");
       if (c == null) {
-        c= new Category("search");
+        c= new Category("search", "Search Results");
         gcats.put("search", c);
       }
       c.addItem(id,image,name,description,price);
-      addCategoryItem("search", id,image,name,description,price);
+      addCategoryItem($("items_table"),"search", id,image,name,description,price);
 }
 
 function loadCategoryCallback(catid, responseXML) {
 	var categories = responseXML.getElementsByTagName("id");
-    var c = new Category(catid);
+    var catName = responseXML.getElementsByTagName("cat-name")[0].childNodes[0].nodeValue
+    var c = new Category(catid,catName);
     for (var loop = 0; loop < categories.length; loop++) {
       var id = responseXML.getElementsByTagName("id")[loop].childNodes[0].nodeValue;
       var image = responseXML.getElementsByTagName("image-url")[loop].childNodes[0].nodeValue;
@@ -380,67 +344,75 @@ function loadCategoryCallback(catid, responseXML) {
     showCategoryItems(catid,0,chunkSize);
 }
 
+function inject(p) {
+        var targetUrl;
+        if (!p.url) targetUrl = "controller?command=content&target=/" + p.template;
+        else targetUrl = p.url;
+        var templateArgs = {
+            url:  targetUrl,
+            mimetype: "text/html",
+            load: function(type, data) {
+               //if no parent is given append to the document root
+               if (!p.injectionPoint) {
+                    var injectionPoint = document.createElement("div");
+                    injectionPoint.innerHTML = data;
+                    document.firstChild.appendChild(injectionPoint);
+               } else {
+                    p.injectionPoint.innerHTML = data;
+               }
+               if (p.script) {
+                  // now load the associated JavaScript
+                  var bindArgs = {
+                    url:  "controller?command=content&target=/" + p.script,
+                    mimetype: "text/javascript",
+                    load: function(type,data) {
+                        if (p.initFunction) p.initFunction(type,data);
+                    }
+                  }
+                  dojo.io.bind(bindArgs);
+               } else {
+                  if ( p.initFunction) p.initFunction();
+               }
+            }
+        };
+        dojo.io.bind(templateArgs);
+}
+
 function resetBody() {
     var body = $("bodyCenter");
     body.innerHTML = "";
-    bodyTable = document.createElement("table");
-    body.appendChild(bodyTable); 
+    
 }
 
 function showCategoryItems(catid, index, count) {
+   inject({template: "items.htmf", injectionPoint: $("bodyCenter"), initFunction: function(){showItems(catid, index,count);}});
+}
+
+function showItems(catid, index, count) {
+    var itemsTable= $("items_table");
     var c = gcats.get(catid);
     if ($("slider-popup")) {
         setSliderItems(c.items);
     }
-    resetBody();
-
     if (c.length == 0) {
-        if (isIE) {
-          bodyTable.innerHTML = "<tr><td>No items</td></tr>";
-        } else {
-            var cell;
-            var row;
-            resetBody();
-            row = document.createElement("tr");
-            row.setAttribute("bgcolor", "white");
-            cell = document.createElement("td");
-            cell.setAttribute("bgcolor", "white");
-            cell.setAttribute("nowrap", "true");
-            cell.setAttribute("valign", "top");
-            cell.appendChild(document.createTextNode( "No items availabe at this time."));
-            row.appendChild(cell);
-            bodyTable.appendChild(row);
-        }
+        itemsTable.innerHTML = "<tr valign='center'><td class='plainText'>No " + c.name + " available at this time.</td></tr>";
     } else {
-        var  loopLength = Number(index) + Number(count);
+        var iTitle = $("items_title");
+        iTitle.innerHTML = "<span class='plainText'>" + c.name + "</span>";
+           var  loopLength = Number(index) + Number(count);
         for (l = index; l  < loopLength; l++) {
            var i = c.getItem(l);
-           addCategoryItem(catid, i.id, i.image,i.name,i.description,i.price);
+           addCategoryItem(itemsTable, catid, i.id, i.image,i.name,i.description,i.price);
         }
-        var cell;
-        var row;
-        // put the next and previous links
-        row = document.createElement("tr");
-        row.setAttribute("bgcolor", "white");
-
         if (Number(index) >= chunkSize) {
-            cell = document.createElement("td");
-            cell.setAttribute("bgcolor", "white");
-            cell.setAttribute("nowrap", "true");
-            cell.setAttribute("valign", "top");
-            cell.setAttribute("align", "left");
-            var link = document.createElement("a");
-            link.appendChild(document.createTextNode("Previous"));
-            link.className = "valueListNavigate";
             var prevIndex =  (Number(index) - chunkSize);
             if ((Number(index)  - Number(chunkSize)) < 0) {
                prevIndex = 0;
             }
-            link.setAttribute("onclick", "showCategoryItems('" + catid + "','" + prevIndex + "','" + chunkSize + "')");
-            cell.appendChild(link);
-            row.appendChild(cell);
+            var itemsBottomLeft = $("items_bottom_left");
+            itemsBottomLeft.innerHTML = "<a class=\"valueListNavigate\" onclick=\"showCategoryItems('" + catid + "','" + prevIndex + "','" + chunkSize + "')\">Previous</a>";
+        
         }
-
         }
         if (Number(c.length) > (Number(index) + Number(count)) ) {
             cell = document.createElement("td");
@@ -455,11 +427,9 @@ function showCategoryItems(catid, index, count) {
             if ((Number(index) + Number(count) + Number(chunkSize)) > Number(c.length)) {
                 nextCount = Number(c.length) - (Number(index) + Number(count));
             }
-            link.setAttribute("onclick", "showCategoryItems('" + catid + "','" + (Number(index) + chunkSize) + "','" + nextCount + "')");
-            cell.appendChild(link);
-            row.appendChild(cell);
+            var itemsBottomRight = $("items_bottom_right");
+            itemsBottomRight.innerHTML = "<a class=\"valueListNavigate\" onclick=\"showCategoryItems('" + catid + "','" + (Number(index) + chunkSize) + "','" + nextCount + "')\">Next</a>";
         }
-        bodyTable.appendChild(row);
 }
 
  
@@ -490,7 +460,7 @@ function addCategory(id, name, src) {
     }
 }
 
-function addCategoryItem(catid, id,image,name,description,price) {
+function addCategoryItem(itemsTable, catid, id,image,name,description,price) {
     var cell;
     var cell2;
     var cell3;
@@ -508,6 +478,7 @@ function addCategoryItem(catid, id,image,name,description,price) {
         cell.appendChild(img);
         row.appendChild(cell);
         cell2 = document.createElement("td");
+        cell2.setAttribute("valign", "top");
         var dDiv = document.createElement("div")
         dDiv.appendChild(document.createTextNode(name));
         dDiv.className = "itemName";
@@ -518,6 +489,7 @@ function addCategoryItem(catid, id,image,name,description,price) {
         cell2.appendChild(dDiv2);
         row.appendChild(cell2);
         var cell3 = document.createElement("td");
+        cell3.setAttribute("valign", "top");
         var dDiv3= document.createElement("div");
         dDiv3.appendChild(document.createTextNode("$" + price + "  "));
         dDiv3.className = "item";
@@ -528,7 +500,7 @@ function addCategoryItem(catid, id,image,name,description,price) {
         plink.setAttribute("onClick", "purchaseItem('" + catid + "','" + id + "')");
         cell3.appendChild(plink);
         row.appendChild(cell3);
-        bodyTable.appendChild(row);
+        itemsTable.appendChild(row);
     }
 }
 
@@ -570,7 +542,7 @@ function clearNodes(id) {
  </tr>
   <tr bgcolor="gray">
   <td colspan="3"  align="right">
-   <a class="menuLink" onclick="showAccount();">Account</a> <span class="menuItem">|</span > <a class="menuLink" onclick="showCart();">Cart</a> <span class="menuItem">|</span > <span class="menuItem">|</span > <a class="menuLink" onclick="showMain();">Main</a>
+   <a class="menuLink" onclick="showAccount();">Account</a> <span class="menuItem">|</span > <a class="menuLink" onclick="showCart();">Cart</a> <span class="menuItem">|</span > <a class="menuLink" onclick="showMain();">Main</a>
   </td>
  </tr>
  </table>
@@ -623,9 +595,8 @@ function clearNodes(id) {
 </table>
 
  <div style="position: absolute; visibility: visible;z-index:5" id="menu-popup">
- <table id="completeTable" border="1" bordercolor="black" cellpadding="0" cellspacing="0" ></table>
+ <table id="completeTable" class="popupTable"></table>
  </div>
-
 
 </body>
 </html>

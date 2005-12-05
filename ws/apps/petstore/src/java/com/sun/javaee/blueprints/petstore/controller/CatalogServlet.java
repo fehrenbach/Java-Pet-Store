@@ -20,6 +20,7 @@ public class CatalogServlet extends HttpServlet {
 
    private CatalogFacade cf;
    private ServletContext context;
+   private Collection categories;
 
    public void init(ServletConfig config) throws ServletException {
        context = config.getServletContext();
@@ -29,6 +30,7 @@ public class CatalogServlet extends HttpServlet {
    public void destroy() {
    	  cf = null;
    }   
+   
    
    public void doGet (HttpServletRequest request,
                       HttpServletResponse response)
@@ -43,10 +45,13 @@ public class CatalogServlet extends HttpServlet {
                 PrintWriter out = response.getWriter();
                 StringBuffer sb = new StringBuffer();
                 // then write the data of the response
+                sb.append("<category>\n");
+                sb.append("<cat-id>" + catid + "</cat-id>\n");
+                sb.append("<cat-name>" + cf.getCategory(catid).getName()  + "</cat-name>\n");
                 sb.append("<items>\n");
                 Collection items = cf.getAllItemsFromCategory(catid);
                 Iterator it = items.iterator();
-                NumberFormat formatter = new DecimalFormat("0000");
+                NumberFormat formatter = new DecimalFormat("000.00");
                 while (it.hasNext()) {
                     PItem i = (PItem)it.next();
                     sb.append("<item>\n");
@@ -54,12 +59,13 @@ public class CatalogServlet extends HttpServlet {
                     sb.append(" <prod-id>" + i.getProductID() + "</prod-id>\n");
                     sb.append(" <cat-id>" + catid + "</cat-id>\n");
                     sb.append(" <name>" + i.getName() + "</name>\n");
-                    sb.append(" <price>" + i.getUnitCost() + "</price>\n");
+                    sb.append(" <price>" + formatter.format(i.getUnitCost()) + "</price>\n");
                     sb.append(" <description>" + i.getDescription() + "</description>\n");
                     sb.append(" <image-url>" + i.getImageURL() + "</image-url>\n");
                     sb.append("</item>\n");
                 }
                 sb.append("</items>");
+                sb.append("</category>\n");
                 out.println(sb.toString());
                 System.out.println("Returning:\n" + sb.toString());
                 out.close();
@@ -74,7 +80,7 @@ public class CatalogServlet extends HttpServlet {
                 sb.append("<products>\n");
                 Collection items = cf.getProducts(catid);
                 Iterator it = items.iterator();
-                NumberFormat formatter = new DecimalFormat("0000");
+                NumberFormat formatter = new DecimalFormat("000.00");
                 while (it.hasNext()) {
                     Product p = (Product)it.next();
                     sb.append("<product>\n");
@@ -114,8 +120,8 @@ public class CatalogServlet extends HttpServlet {
                 out.close();         
          } else if ("item".equals(command)) {
              String targetId = request.getParameter("id");
-             NumberFormat formatter = new DecimalFormat("0000");
-             System.out.println("**** Request for item with id: " + targetId);
+             NumberFormat formatter = new DecimalFormat("000.00");
+             System.out.println("CatalogServlet: Request for item with id: " + targetId);
              PItem i = cf.getItem(targetId);
              StringBuffer sb = new StringBuffer();
              sb.append("<item>\n");
