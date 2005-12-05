@@ -82,7 +82,7 @@ function showProgress(percentage) {
       if ((cell) && percentage/x < increment) {
         cell.style.backgroundColor = "blue";
       } else {
-        cell.style.backgroundColor = "red";
+        cell.style.backgroundColor = "green";
       }      
     }
 }

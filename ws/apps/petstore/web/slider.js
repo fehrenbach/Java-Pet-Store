@@ -2,7 +2,7 @@
    You may not modify, use, reproduce, or distribute this software except in
    compliance with the terms of the License at:
    http://developer.sun.com/berkeley_license.html
-$Id: slider.js,v 1.1 2005-12-03 08:08:04 gmurray71 Exp $
+$Id: slider.js,v 1.2 2005-12-05 20:52:42 gmurray71 Exp $
 */
 
 var layerLeft=100;
@@ -11,14 +11,13 @@ var layerWidth=130;
 var layerHeight=90;
 var pause=3000;
 var speed=60;
-
 var sliderItems = new Array();
 
 function initItems() {
-    sliderItems[0]= new SliderItem('cat1', 'A Cat 1', 'Furry Cat 1', 'cat1.gif', alert);
-    sliderItems[1]= new SliderItem('cat2', 'A Cat 2', 'Furry Cat 2', 'cat2.gif', alert);
-    sliderItems[2]= new SliderItem('cat3', 'A Cat 3', 'Furry Cat 3', 'cat3.gif', alert);
-    sliderItems[3]= new SliderItem('cat4', 'A Cat 4', 'Furry Cat 4', 'cat4.gif', alert);
+    sliderItems[0]= new SliderItem('pet-001', 'A Cat 1', 'Cat ', 'cat1.gif', "showSearchItem");
+    sliderItems[1]= new SliderItem('pet-012', 'A Cat 2', 'Dog', 'dog1.gif', "showSearchItem");
+    sliderItems[2]= new SliderItem('pet-002', 'A Cat 3', 'Cat', 'cat2.gif', "showSearchItem");
+    sliderItems[3]= new SliderItem('pet-013', 'A Cat 4', 'Dog', 'dog2.gif', "showSearchItem");
 }
 
 function SliderItem(id, name, description, image, handler){
@@ -37,7 +36,13 @@ var nextImg = 2;
 var layerMoveRate = 6;
 
 function setSliderItems(items){
-    this.sliderItems = items;
+    
+    if (items) {
+        for (loop=0;loop < items.length;loop++) {
+          items[loop].handler = "showSearchItem";
+        }
+        this.sliderItems = items;
+    }
     nextImg = 0;
 }
 
@@ -99,7 +104,6 @@ function slideOther(layerLocation){
 }
 
 function startSlider(){
-  var slider = new Dragable($("slider-popup"));
   
   initItems();
   if (document.all) {
@@ -114,6 +118,7 @@ function startSlider(){
   slide(l1, 0);
   // set next layer's x position to the "ready" position.
   l2.style.left = layerWidth;
+  sliderStarted = true;
 }
 
 function viewLarge(filepath) {
@@ -122,7 +127,8 @@ function viewLarge(filepath) {
 }
 
 function getImage(item) {
-    return "<img src='images\\" + item.image + "' border='0' onClick=\"" + item.handler + "('" + item.id + "')\">";
+    if (item) return "<img onmouseover=\"javascript:this.style.cursor='pointer';\" src='images\\" + item.image + "' border='0' onClick=\"" + item.handler + "('" + item.id + "')\">";
+    else return "";
 }
 
 function popupImage(path){

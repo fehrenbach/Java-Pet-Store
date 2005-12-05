@@ -34,6 +34,7 @@ var gcats = new Map();
 var cart;
 var account;
 var chunkSize = 3;
+var sliderStarted = false;
 
 var completeTable;
 var completeField;
@@ -95,6 +96,8 @@ function processCheckoutCallback(responseXML) {
 
 function showMain() {
     inject({template: "main.htmf", injectionPoint: $("bodyCenter")});
+    hideSlider();
+
 }
 
 function showProgressBar(id) {
@@ -115,7 +118,15 @@ function showProgressBar(id) {
     inject(injectArgs);
 }
 
-function showSlider() {
+
+function hideSlider() {
+  var slider = $("slider-popup");
+  if (slider) {
+    slider.style.visibility='hidden';
+  }
+}
+
+function showSlider(items) {
   var slider = $("slider-popup");
   if (!slider) {
       var injectArgs = {
@@ -123,6 +134,9 @@ function showSlider() {
         script: "slider.js",
         initFunction: function() {
                         startSlider();
+                        setSliderItems(items);
+                        var slider = $("slider-popup");
+                        slider.style.visibility='visible';
                     }
       }
      inject(injectArgs);
@@ -273,6 +287,7 @@ function processSearch(responseXML) {
     }
     gcats.put("search", c);
     showCategoryItems("search",0,chunkSize);
+    showSlider(c);
 }
 
 
@@ -377,13 +392,15 @@ function resetBody() {
 
 function showCategoryItems(catid, index, count) {
    inject({template: "items.htmf", injectionPoint: $("bodyCenter"), initFunction: function(){showItems(catid, index,count);}});
-}
+   }
 
 function showItems(catid, index, count) {
     var itemsTable= $("items_table");
     var c = gcats.get(catid);
-    if ($("slider-popup")) {
+    if (sliderStarted) {
         setSliderItems(c.items);
+    } else {
+       showSlider(c.items);
     }
     if (c.length == 0) {
         itemsTable.innerHTML = "<tr valign='center'><td class='plainText'>No " + c.name + " available at this time.</td></tr>";
