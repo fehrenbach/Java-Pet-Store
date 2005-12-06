@@ -51,7 +51,7 @@ public class CatalogServlet extends HttpServlet {
                 sb.append("<items>\n");
                 Collection items = cf.getAllItemsFromCategory(catid);
                 Iterator it = items.iterator();
-                NumberFormat formatter = new DecimalFormat("000.00");
+                NumberFormat formatter = new DecimalFormat("00.00");
                 while (it.hasNext()) {
                     PItem i = (PItem)it.next();
                     sb.append("<item>\n");
