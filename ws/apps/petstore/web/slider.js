@@ -2,7 +2,7 @@
    You may not modify, use, reproduce, or distribute this software except in
    compliance with the terms of the License at:
    http://developer.sun.com/berkeley_license.html
-$Id: slider.js,v 1.3 2005-12-06 10:34:56 gmurray71 Exp $
+$Id: slider.js,v 1.4 2005-12-06 17:53:09 gmurray71 Exp $
 */
 
 var layerLeft=100;
@@ -49,6 +49,7 @@ function setSliderItems(items){
 function stopSlider() {
     $("slider-popup").style.visibility = "hidden";
     paused = true;
+    sliderStarted = false;
 }
 
 

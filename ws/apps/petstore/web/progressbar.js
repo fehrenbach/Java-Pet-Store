@@ -53,6 +53,7 @@ function complete() {
     cart.empty();
     checkingOut = false;
     showCartItems(0,0);
+    if (sliderStarted) startSlider();
 }
 
 

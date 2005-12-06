@@ -76,6 +76,7 @@ function resized() {
 }
 
 function checkout() {
+    if (sliderStarted) stopSlider();
     var bindArgs = {
        url:  "checkout?action=startTask",
        mimetype: "text/xml",
@@ -122,7 +123,6 @@ function hideSlider() {
   var slider = $("slider-popup");
   if (slider) {
     dojo.graphics.htmlEffects.fadeHide(slider, 1000);
-    //slider.style.visibility='hidden';
     pauseSlider();
   }
 }
