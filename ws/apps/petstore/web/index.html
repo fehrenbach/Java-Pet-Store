@@ -8,6 +8,7 @@
 <script  src="dojo.js" ></script>
 <script  src="model.js" ></script>
 <script  src="ajax-commons.js" ></script>
+<script  src="slider.js" ></script>
 
 <script type="text/javascript">
 	//var djConfig = {isDebug: true, debugAtAllCosts: true};
@@ -36,16 +37,19 @@ var account;
 var chunkSize = 3;
 var sliderStarted = false;
 
-var completeTable;
-var completeField;
-var autorow;
-
 var bodyRowText;
 var itemsElement;
 
 var checkingOut = false;
 
 window.onresize=resized;
+
+window.onclick = handleMouseClick;
+
+function handleMouseClick() {
+    clearAutocompletionResults();
+    return true;
+}
 
 function loadPetstore() {
     init();
@@ -54,8 +58,8 @@ function loadPetstore() {
 
 function resized() {
     // reposition the autocomplete
-    completeField = $("complete-field");
-    autorow = $("menu-popup");
+    var completeField = $("complete-field");
+    var autorow = $("menu-popup");
     if (autorow && completeField) {
         autorow.style.top = findY(completeField) + completeField.offsetHeight +  "px";
         autorow.style.left = findX(completeField)  +  "px";
@@ -82,13 +86,6 @@ function checkout() {
     dojo.io.bind(bindArgs);
 }
 
-function showCart() {
-    var cartPop = $("cart-popup");
-    if (cartPop) {
-        cartPop.style.visibility='visible';
-    }
-}
-
 function processCheckoutCallback(responseXML) {
     var item = responseXML.getElementsByTagName("message")[0];
     showProgressBar(item.firstChild.nodeValue);
@@ -97,7 +94,6 @@ function processCheckoutCallback(responseXML) {
 function showMain() {
     inject({template: "main.htmf", injectionPoint: $("bodyCenter")});
     hideSlider();
-
 }
 
 function showProgressBar(id) {
@@ -112,17 +108,22 @@ function showProgressBar(id) {
                 idiv.innerHTML = "<div class=\"progressItem\">Processing Order. The transaction id is " + targetId + ".</div>";
                 progress = $("progress-popup");
                 progress.style.visibility='visible';
+                var shadow= $("progress-popup_shadow");
+                if (shadow) {
+                    shadow.style.visibility='visible';
+                }
                 setTimeout("pollTaskmaster()", 2000);
              }
     }
     inject(injectArgs);
 }
 
-
 function hideSlider() {
   var slider = $("slider-popup");
   if (slider) {
-    slider.style.visibility='hidden';
+    dojo.graphics.htmlEffects.fadeHide(slider, 1000);
+    //slider.style.visibility='hidden';
+    pauseSlider();
   }
 }
 
@@ -136,23 +137,27 @@ function showSlider(items) {
                         startSlider();
                         setSliderItems(items);
                         var slider = $("slider-popup");
+                        dojo.graphics.htmlEffects.fadeShow(slider, 1000);
                         slider.style.visibility='visible';
+                        
                     }
       }
      inject(injectArgs);
   } else {
-    slider.style.visibility='visible';
+     setSliderItems(items);
+     unPauseSlider();
+     dojo.graphics.htmlEffects.fadeShow(slider, 1000);
+
   }
 }
 
 function init() {
     if (navigator.userAgent.indexOf("ie") != -1) isIE = true;
-    completeField = document.getElementById("complete-field");
-    autorow = document.getElementById("menu-popup");
+    var completeField = document.getElementById("complete-field");
+    var autorow = document.getElementById("menu-popup");
     autorow.style.top = findY(completeField) + completeField.offsetHeight +  "px";
     autorow.style.left = findX(completeField)  +  "px";
-    completeTable = document.getElementById("completeTable");
-    completeTable.setAttribute("bordercolor", "white");
+
     // load the cart
     var cartArgs = {
             template: "cart.htmf",
@@ -185,14 +190,13 @@ function doSearch() {
         };
         dojo.io.bind(bindArgs);
     }
-    completeTable.style.visibility='hidden';
     clearAutocompletionResults();
 }
 
 function doCompletion() {
-    if (completeField.value == "") {
+    var completeField = $("complete-field");
+    if (completeField && completeField.value == "") {
         clearAutocompletionResults();
-        completeTable.style.visibility='hidden';
     } else {
         clearAutocompletionResults();
         var bindArgs = {
@@ -208,45 +212,32 @@ function doCompletion() {
 
 function autocompleteCallback(responseXML) {
     var items = responseXML.getElementsByTagName("id");
+    var completeText = "";
     if (items.length <= 0) {
-        completeTable.style.visibility='hidden';
         clearAutocompletionResults();
+        clearNodes("completeTable");
     }  else {
+        clearNodes("completeTable");
         for (loop = 0; loop < items.length; loop++) {
             var id = responseXML.getElementsByTagName("id")[loop].childNodes[0].nodeValue;
             var name = responseXML.getElementsByTagName("name")[loop].childNodes[0].nodeValue;
-            appendAutoComplete(id, name);
+            completeText += "<tr>" +
+                        "<td class=\"popupRow\" onmouseover=\"this.className='popupRowHover'\"" +
+                        " onmouseout=\"this.className='popupRow'\"" +
+                        "<a onclick=\"showSearchItem('" + id + "');return false;\">" + name + "</a>" +
+                       "</td></tr>";
         }
+        completeTable.style.visibility='visible';
+        $("completeTable").innerHTML = completeText;
     }
 }
 
 function clearAutocompletionResults() {
-       clearNodes("completeTable");
+    var popUp = $("menu-popup");
+    completeTable.style.visibility='hidden';
+    clearNodes("completeTable");
 }
 
-function appendAutoComplete(productId, name) {
-    completeTable.style.visibility='visible';
-    var firstNameCell;
-    var lastNameCell;
-    var row;
-    var nameCell;
-    if (isIE) {
-        row = completeTable.insertRow(completeTable.rows.length);
-        nameCell = row.insertCell(0);
-    } else {
-        row = document.createElement("tr");
-        nameCell = document.createElement("td");
-        row.appendChild(nameCell);
-        completeTable.appendChild(row);
-    }
-    row.className = "popupRow";
-    row.setAttribute("onmouseover", "this.className='popupRowHover'");
-    row.setAttribute("onmouseout", "this.className='popupRow'");
-    var linkElement = document.createElement("a");
-    linkElement.setAttribute("onclick", "showSearchItem('" + productId + "')");
-    linkElement.appendChild(document.createTextNode(name));
-    nameCell.appendChild(linkElement);
-}
 
 function loadCategoriesCallback(responseXML) {
 	var categories = responseXML.getElementsByTagName("id");
@@ -289,7 +280,6 @@ function processSearch(responseXML) {
     showCategoryItems("search",0,chunkSize);
     showSlider(c);
 }
-
 
 function showSearchItem(id) {
    resetBody();
@@ -387,12 +377,11 @@ function inject(p) {
 function resetBody() {
     var body = $("bodyCenter");
     body.innerHTML = "";
-    
 }
 
 function showCategoryItems(catid, index, count) {
    inject({template: "items.htmf", injectionPoint: $("bodyCenter"), initFunction: function(){showItems(catid, index,count);}});
-   }
+}
 
 function showItems(catid, index, count) {
     var itemsTable= $("items_table");
@@ -419,30 +408,27 @@ function showItems(catid, index, count) {
             }
             var itemsBottomLeft = $("items_bottom_left");
             itemsBottomLeft.innerHTML = "<a class=\"valueListNavigate\" onclick=\"showCategoryItems('" + catid + "','" + prevIndex + "','" + chunkSize + "')\">Previous</a>";
-        
         }
+    }
+    if (Number(c.length) > (Number(index) + Number(count)) ) {
+        cell = document.createElement("td");
+        cell.setAttribute("bgcolor", "white");
+        cell.setAttribute("nowrap", "true");
+        cell.setAttribute("valign", "top");
+        cell.setAttribute("align", "right");
+        var link = document.createElement("a");
+        link.appendChild(document.createTextNode("Next"));
+        link.className = "valueListNavigate";
+        var nextCount = count;
+        if ((Number(index) + Number(count) + Number(chunkSize)) > Number(c.length)) {
+            nextCount = Number(c.length) - (Number(index) + Number(count));
         }
-        if (Number(c.length) > (Number(index) + Number(count)) ) {
-            cell = document.createElement("td");
-            cell.setAttribute("bgcolor", "white");
-            cell.setAttribute("nowrap", "true");
-            cell.setAttribute("valign", "top");
-            cell.setAttribute("align", "right");
-            var link = document.createElement("a");
-            link.appendChild(document.createTextNode("Next"));
-            link.className = "valueListNavigate";
-            var nextCount = count;
-            if ((Number(index) + Number(count) + Number(chunkSize)) > Number(c.length)) {
-                nextCount = Number(c.length) - (Number(index) + Number(count));
-            }
-            var itemsBottomRight = $("items_bottom_right");
-            itemsBottomRight.innerHTML = "<a class=\"valueListNavigate\" onclick=\"showCategoryItems('" + catid + "','" + (Number(index) + chunkSize) + "','" + nextCount + "')\">Next</a>";
-        }
+        var itemsBottomRight = $("items_bottom_right");
+        itemsBottomRight.innerHTML = "<a class=\"valueListNavigate\" onclick=\"showCategoryItems('" + catid + "','" + (Number(index) + chunkSize) + "','" + nextCount + "')\">Next</a>";
+   }
 }
 
- 
-
-function addCategory(id, name, src) {
+ function addCategory(id, name, src) {
     var cell;
     var row;
     var sidebar = document.getElementById("sidebar");
@@ -474,6 +460,7 @@ function addCategoryItem(itemsTable, catid, id,image,name,description,price) {
     var cell3;
     var row;
     if (isIE) {
+        // do ie stuff
     } else {
         row = document.createElement("tr");
         row.setAttribute("bgcolor", "white");
@@ -600,8 +587,8 @@ function clearNodes(id) {
  </tr>
 </table>
 
- <div style="position: absolute; visibility: visible;z-index:5" id="menu-popup">
- <table id="completeTable" class="popupTable"></table>
+ <div style="position: absolute; visibility: hidden;z-index:5" id="menu-popup">
+ <table id="completeTable" class="popupTable" ></table>
  </div>
 
 </body>

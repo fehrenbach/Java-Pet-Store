@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: AutocompleteServlet.java,v 1.4 2005-12-03 04:03:06 smitha Exp $ */
+$Id: AutocompleteServlet.java,v 1.5 2005-12-06 10:34:52 gmurray71 Exp $ */
 package com.sun.javaee.blueprints.petstore.controller;
 
 import java.io.*;
@@ -39,7 +39,7 @@ public class AutocompleteServlet extends HttpServlet {
             sb.append("<items>\n");
             Collection items = cf.doSearch(targetId);
             if (items.size() > 0) {
-                NumberFormat formatter = new DecimalFormat("0000");
+                NumberFormat formatter = new DecimalFormat("00.00");
                 Iterator it = items.iterator();
                 while (it.hasNext()) {
                     Vector i = (Vector)it.next();

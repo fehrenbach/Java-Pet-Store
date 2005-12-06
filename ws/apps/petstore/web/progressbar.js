@@ -8,14 +8,18 @@ function initProgressBar() {
     createProgressBar();
     var progress = $("progress-popup");
     progress.style.top="150px";
-    progress.style.left="200px";
+    centerX(progress);
     messageHash = 0;
-    var dragme = new Dragable(progress);
+    var dragme = new Dragable(progress,$("progressbar-dargpoint"));
 }
 
 function hideProgressBar() {
     var progress = $("progress-popup");
     progress.style.visibility='hidden';
+    var shadow= $("progress-popup_shadow");
+    if (shadow) {
+        shadow.style.visibility='hidden';
+    }
 }
 
 function pollTaskmaster() {    

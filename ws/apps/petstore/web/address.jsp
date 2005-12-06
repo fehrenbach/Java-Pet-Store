@@ -1,5 +1,5 @@
 <%-- Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: address.jsp,v 1.2 2005-12-05 08:08:38 gmurray71 Exp $ --%>
+$Id: address.jsp,v 1.3 2005-12-06 10:34:54 gmurray71 Exp $ --%>
 
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
@@ -8,7 +8,7 @@ $Id: address.jsp,v 1.2 2005-12-05 08:08:38 gmurray71 Exp $ --%>
 
 <div id="account-popup" class="account">
 <table cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
-<tr>
+<tr id="address-drag-target">
  <td colspan="2" bgcolor="gray" align="center" class="plainText">Billing Details</td>
  <td bgcolor="gray" align="right" ><a onclick="hideAccount();" style="{cursor:pointer;}"><img src="images/cbutton.gif" border="0"></a>&nbsp;</td>
  </tr>

@@ -1,7 +1,7 @@
 
   <div style="position: absolute; visibility: hidden" id="cart-popup">
    <table id="cartTable" class="cart">
-   <tr>
+   <tr id="cartDragTarget">
     <td align="center" width="80"><div class="cartHeader">Cart</div></td><td align="right"><a onclick="hideCart();"><img src="images/cbutton.gif" border="0"></a> &nbsp;</td>
    </tr>
    <tr>
@@ -12,13 +12,13 @@
    </tr>
    <tr>
     <td align="right" valign="top"><div class="cartTotal">Total</div></td>
-    <td align="right" valign="top"><div class="cartTotal" id="cartTotal">0</div></td>
+    <td align="right" valign="top"><div class="cartTotal" id="cartTotal">0.00</div></td>
    </tr>
    <tr>
    <td align="center" colspan="2">
-        <span id="coItem" class="cartCheckout" style="width:110px; visibility: hidden">
-          <a onclick="showAccount();">Checkout</a>
-        </span>
+        <div id="coItem" class="cartCheckout" style="width:110px; visibility: hidden">
+          <a onclick="showAccount();" style="{cursor:pointer;}">Checkout</a>
+        </div>
      </td>
    </tr>
  </table>

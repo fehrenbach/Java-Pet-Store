@@ -1,9 +1,8 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: ajax-commons.js,v 1.2 2005-12-05 08:08:48 gmurray71 Exp $
+$Id: ajax-commons.js,v 1.3 2005-12-06 10:34:56 gmurray71 Exp $
 */
 
 var isIE;
-
 
 function Map() {
 
@@ -34,27 +33,47 @@ function Map() {
     }
 }
 
-
-function getElementText(local, parent) {
-  return getElementTextNS(null, local, parent, 0);
+function getWindowX() {
+    if (!isIE) return window.innerWidth;
+    else return document.body.offsetWidth;
 }
 
-function getElementTextNS(prefix, local, parent, index) {
-    var result = "";
-    if (prefix && isIE) {
-        result = parent.getElementsByTagName(prefix + ":" + local)[index];
-    } else {
-        result = parent.getElementsByTagName(local)[index];
+function centerX(element) {
+    var eW = element.offsetWidth;
+    var xPos =  (getWindowX() /2) - (eW / 2);
+    // reposition
+    element.style.left= xPos +"px";
+    // create shadow
+    var eH = element.offsetHeight;
+    var shadow = document.createElement("div");
+    var shadowId = element.getAttribute("id") + "_shadow";
+    shadow.setAttribute("id", shadowId);
+    shadow.className = "shadow";
+    shadow.style.width = eW + "px";
+    shadow.style.height = eH + "px"
+    document.firstChild.appendChild(shadow);
+    shadow.style.top = findY(element) + 10;
+    shadow.style.left = xPos + 10;
+}
+
+
+function Point(x,y) {
+    this.x = x;
+    this.y = y;
+}
+
+function getMousePosition(e){
+    var lx = 0;
+    var ly = 0;
+    if (!e) var e = window.event;
+    if (e.pageX || e.pageY) {
+        lx = e.pageX;
+        ly = e.pageY;
+    } else if (e.clientX || e.clientY) {
+        lx = e.clientX;
+        ly = e.clientY;
     }
-    if (result) {
-        if (result.childNodes.length > 1) {
-            return result.childNodes[1].nodeValue;
-        } else {
-            return result.firstChild.nodeValue;    		
-        }
-    } else {
-        return "";
-    }
+    return new Point(lx,ly);
 }
 
 function $(targetElement){
@@ -64,76 +83,71 @@ function $(targetElement){
         return document.getElementById(targetElement);
     }
 }
-function Dragable(element) {
-    init();
 
-    var anchor;
-    var offset;
+function Dragable(element, dragTarget) {
+    init();
     
-    function Point(x,y) {
-      this.x = x;
-      this.y = y;
-    }
+    var dockable;
+    var offset;
+    var id;
+    var shadow;
     
     function init() {
-       element.style.cursor = "move";
-       element.onmouseover = mouseOver;
-       element.onmousedown = mouseDown;
-       element.onmouseup  = done;
-       element.onmousemove = mouseMove;
+        id = element.getAttribute("id");
+       if (!dragTarget) dragTarget = element;
+       dragTarget.style.cursor = "move";
+       dragTarget.onmouseout = done;
+       dragTarget.onmousedown = mouseDown;
+       dragTarget.onmouseup  = done;
+       dragTarget.onmousemove = mouseMove;
     }
     
     function mouseOver(e) {
         over = true;
-        //element.setAttribute("style", "cursor:hand");
+        if (e)e.preventDefault();
+        else return false;
     }
     
     function mouseDown(e) {
-        anchor = new Point( e.clientX + window.scrollX, e.clientY + window.scrollY);
-        var ox  = parseInt(element.style.left, 10);
-        var oy   = parseInt(element.style.top,  10);
-        if (isNaN(ox)) ox = 0;
-        if (isNaN(oy))  oy  = 0;
-        offset = new Point(ox,oy);
+        if (id) {
+            shadow= $(id + "_shadow");
+        } 
+        var mp = getMousePosition(e);
+        var eX = findX(element);
+        var eY = findY(element);
+        offset = new Point(eX - mp.x, eY - mp.y);
+        if (e)e.preventDefault();
+        else return false;
     }
 
     function mouseMove(e) {
-        if (anchor) {
-        var x;
-        var y;
-        x = e.clientX + window.scrollX;
-        y = e.clientY + window.scrollY;
-        element.style.left =
-            (offset.x + x - anchor.x) + "px";
-        element.style.top  =
-            (offset.y  + y - anchor.y) + "px";
-        e.preventDefault();
+        if (offset) {
+            var x;
+            var y;
+            if (e) x = e.clientX + window.scrollX;
+            else x = event.x;
+            if (e) y = e.clientY + window.scrollY;
+            else y = event.y;
+            element.style.left = (offset.x + x ) + "px";
+            element.style.top  = (offset.y  + y) + "px";
+            if (shadow) {
+                shadow.style.left = (offset.x + x + 10 ) + "px";
+                shadow.style.top  = (offset.y  + y + 10) + "px";            
+            }
+            if (e)e.preventDefault();
+            else return false;
         }
     }
-
-    
+     
     function done(e) {
-         anchor = null;
-         offset = null;
-    }
-    
-    function getMousePosition(e){
-        var lx = 0;
-        var ly = 0;
-        if (!e) var e = window.event;
-        if (e.pageX || e.pageY) {
-            lx = e.pageX;
-            ly = e.pageY;
-        } else if (e.clientX || e.clientY) {
-            lx = e.clientX;
-            ly = e.clientY;
-        }
-        return new Point(lx,ly);
-    }
+	  offset = null;
+	  if (e)e.preventDefault();
+	  else return false;
+    }	
 }
 
 
-    function findX(element) {
+function findX(element) {
         var l = 0;
         if (element.offsetParent) {
             while (element.offsetParent) {
@@ -143,9 +157,9 @@ function Dragable(element) {
         } else if (element.x)
             l += element.x;
         return l;
-    }
+}
 
-    function findY(element) {
+function findY(element) {
         var t = 0;
         if (element.offsetParent) {
             while (element.offsetParent) {
@@ -156,4 +170,4 @@ function Dragable(element) {
          t += element.y;
         }
         return t;
-    }
+}

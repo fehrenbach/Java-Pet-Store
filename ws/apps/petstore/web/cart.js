@@ -1,3 +1,5 @@
+var cartVisible = false;
+
 function Cart() {
 
     this.index = 0;
@@ -12,7 +14,6 @@ function Cart() {
       this.description = description;
       this.price = price;
     };
-
     
     this.addItem = function(id,image,name,description,price) {
         this.items[this.length++] = new Item(id,image,name,description,price);
@@ -50,7 +51,7 @@ function initCart() {
  var cartPop = $("cart-popup");
  if (!cart) {
     cart = new Cart();
-    var dragme = new Dragable(cartPop);
+    var dragme = new Dragable(cartPop, $("cartDragTarget"));
     var winX = 430;
     if (!isIE) winX = window.innerWidth - 228;
     else winX = document.body.offsetWidth - 228;
@@ -59,9 +60,20 @@ function initCart() {
  }
 }
 
+function showCart() {
+    var cartPop = $("cart-popup");
+    if (cartPop && !cartVisible) {
+        dojo.graphics.htmlEffects.fadeShow(cartPop, 1000);
+        cartPop.style.visibility='visible';
+        cartVisible = true;
+    }
+}
+
 function hideCart() {
  var cartPop = $("cart-popup");
+ dojo.graphics.htmlEffects.fadeHide(cartPop, 1000);
  cartPop.style.visibility='hidden';
+ cartVisible = true;
 }
 
 function removeCartItem(id) {
@@ -112,7 +124,6 @@ function addCartItem(id,image,name,description,price) {
     }
 }
 
-
 function purchaseItem(catid,id) {
     showCart();
     var tcat = gcats.get(catid);
@@ -129,7 +140,6 @@ function showLastItems() {
 
 function showCartItems(ci, count) {
     var bodyTable = $("cartBody");
-
     if (cart.length == 0) {
         clearNodes("cartBody");
 
@@ -181,8 +191,7 @@ function showCartItems(ci, count) {
             cell.appendChild(link);
             row.appendChild(cell);
         }
-
-        }
+   }
         if (Number(cart.length) > (Number(ci) + Number(count)) ) {
             cell = document.createElement("td");
             cell.setAttribute("bgcolor", "white");
@@ -196,7 +205,6 @@ function showCartItems(ci, count) {
             if ((Number(ci) + Number(count) + Number(chunkSize)) > Number(cart.length)) {
                 nextCount = Number(cart.length) - (Number(ci) + Number(count));
             }
-            
             link.setAttribute("onclick", "showCartItems('"  + (Number(ci) + chunkSize) + "','" + nextCount + "')");
             cell.appendChild(link);
             row.appendChild(cell);

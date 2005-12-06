@@ -80,7 +80,7 @@ public class CatalogServlet extends HttpServlet {
                 sb.append("<products>\n");
                 Collection items = cf.getProducts(catid);
                 Iterator it = items.iterator();
-                NumberFormat formatter = new DecimalFormat("000.00");
+                NumberFormat formatter = new DecimalFormat("00.00");
                 while (it.hasNext()) {
                     Product p = (Product)it.next();
                     sb.append("<product>\n");
@@ -120,7 +120,7 @@ public class CatalogServlet extends HttpServlet {
                 out.close();         
          } else if ("item".equals(command)) {
              String targetId = request.getParameter("id");
-             NumberFormat formatter = new DecimalFormat("000.00");
+             NumberFormat formatter = new DecimalFormat("00.00");
              System.out.println("CatalogServlet: Request for item with id: " + targetId);
              PItem i = cf.getItem(targetId);
              StringBuffer sb = new StringBuffer();

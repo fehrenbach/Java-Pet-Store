@@ -1,6 +1,6 @@
- <div style="position: absolute; visibility: hidden;z-index:10" id="progress-popup">
-  <table border="2" bgcolor="white" cellpadding="0">
-   <tr><td align="center"><div id="task_id"></div></td></tr>
+ <div id="progress-popup" class="progressbar">
+  <table with="100%" border="0" cellspacing="0" bgcolor="white" cellpadding="0">
+   <tr id="progressbar-dragpoint"><td align="center"><div id="task_id"></div></td></tr>
    <tr><td align="center"><div id="progress"></div></td></tr>
   </table>
  </div>

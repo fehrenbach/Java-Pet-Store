@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: account.js,v 1.5 2005-12-05 09:58:09 gmurray71 Exp $
+$Id: account.js,v 1.6 2005-12-06 10:34:53 gmurray71 Exp $
 */
 
 
@@ -22,13 +22,17 @@ function Address(street1, street2, city, zip, state) {
 function hideCreditCard() {
     var creditCardPop = $("creditcard-popup");
     creditCardPop.style.visibility='hidden';
+    var shadow= $("creditcard-popup_shadow");
+    if (shadow) {
+        shadow.style.visibility='hidden';
+    }
 }
 
 function initCreditCard() {
     var creditCardPop = $("creditcard-popup");
     var dragme = new Dragable(creditCardPop);
     creditCardPop.style.top="165px";
-    creditCardPop.style.left="200px";
+    centerX(creditCardPop);
 }
 
 function showCreditCardDialog() {
@@ -40,7 +44,10 @@ function showCreditCardDialog() {
     }
     var creditCardPop = $("creditcard-popup");
     creditCardPop.style.visibility='visible';
-    
+    var shadow= $("creditcard-popup_shadow");
+    if (shadow) {
+        shadow.style.visibility='visible';
+    }
 }
 
 function showCreditCard() {

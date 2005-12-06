@@ -1,15 +1,15 @@
 
 .dojoHtmlFisheyeListBar {
-    cursor:pointer;
-	margin: 0;
-    width: 300px;
-	text-align: right;
+  cursor:pointer;
+  margin: 0;
+  width: 300px;
+  text-align: right;
 }
 
 .outerbar {
-	background-color: white;
-	text-align: left;
-	width: 300px;
+  background-color: white;
+  text-align: left;
+  width: 300px;
 }
 
 .editText {
@@ -21,26 +21,32 @@
 }
 
 .plainText {
- height:35;
- font-size:22px;
- font-weight: bold;
- font-family: Arial
+  height:35;
+  font-size:22px;
+  font-weight: bold;
+  font-family: Arial
 }
 
+.smallText {
+  height:15;
+  font-size:13px;
+  font-weight: bold;
+  font-family: Arial
+}
 
 .banner {
- height:95;
- font-size:95;
- font-weight: bold;
- font-family: Arial
+  height:95;
+  font-size:95;
+  font-weight: bold;
+  font-family: Arial
 }
 
 .category {
- height:55;
- cursor:pointer;
- font-size:22px;
- font-weight: bold;
- font-family: Arial
+  height:55;
+  cursor:pointer;
+  font-size:22px;
+  font-weight: bold;
+  font-family: Arial
 }
 
 .category:hover {
@@ -112,6 +118,7 @@
 
 .removeItem {
   color: blue;
+  cursor:pointer;
   text-decoration: underline;
   font-size: 1.0em;
 }
@@ -143,9 +150,10 @@
 .creditCard {
   position: absolute;
   visibility: hidden;
+  z-index:2;
   top:0px;
   left:0px;
-  border-width:1px;
+  border-width:2px;
   border-style:solid;
   border-color:black;
 }
@@ -165,12 +173,13 @@
 .signin {
   top:0px;
   left:0px;
+  z-index:2;
   position: absolute;
   visibility: hidden;
   background:gray;
   padding:0;
   border-spacing: 0;
-  border-width:1px;
+  border-width:2px;
   border-style:solid;
   border-color:black;
 }
@@ -191,6 +200,7 @@
 .account {
   top:0px;
   left:0px;
+  z-index:2;
   position: absolute;
   visibility: hidden;
   background: white;
@@ -198,7 +208,7 @@
   height:370;
   padding:0;
   border-spacing: 0;
-  border-width:1px;
+  border-width:2px;
   border-style:solid;
   border-color:black;
 }
@@ -244,19 +254,72 @@
 .popupRowHover {
   color: #FFFAFA;
   cursor:pointer;
-  padding:1;
+  padding:0;
   border-spacing: 0;
-  border-width:1px;
-  border-style:solid;
-  border-color:black;
+  border-width:0px;
   background: #7A8AFF;
 }
 
 .popupRow {
   padding:0;
   border-spacing: 0;
-  border-width:1px;
+  border-width:0px;
+  background: #FFFAFA;
+}
+
+.sliderTable {
+  padding:0;
+  border-spacing: 0;
+  border-width:0px;
+  background: white;
+}
+
+.innerSlider {
+  position:absolute;
+  width:130;
+  height:120;
+  overflow:hidden;
+  background-color:#ffffff
+}
+
+.shadow {
+  top:0px;
+  left:0px;
+  position: absolute;
+  visibility: hidden;
+  width:0;
+  height:0;
+  z-index:0;
+  background:gray;
+  opacity: .5;
+}
+
+.slider {
+  position:absolute;
+  left:40;
+  top:450;
+  width:130;
+  height:120;
+  padding-left: 10;
+  border-width:3px;
   border-style:solid;
   border-color:black;
-  background: #FFFAFA;
+  overflow:hidden;
+  background-color:#ffffff
+}
+
+.progressbar {
+  top:0px;
+  left:0px;
+  padding-left: 10;
+  border-spacing: 0;
+  position: absolute;
+  visibility: hidden;
+  z-index:10;
+  width:422;
+  height:90;
+  background:white;
+  border-width:2px;
+  border-style:solid;
+  border-color:black;
 }
