@@ -39,9 +39,9 @@ function progressbarCallback(responseXML) {
     showProgress(message);
     messageHash = message;             
     if (messageHash < 100) {
-        setTimeout("pollTaskmaster()", 2000);
+        setTimeout("pollTaskmaster()", 1000);
     } else {
-        setTimeout("complete()", 2500);
+        setTimeout("complete()", 1000);
     }
 }
 
@@ -53,7 +53,6 @@ function complete() {
     cart.empty();
     checkingOut = false;
     showCartItems(0,0);
-    if (sliderStarted) startSlider();
 }
 
 
