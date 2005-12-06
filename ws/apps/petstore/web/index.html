@@ -8,7 +8,6 @@
 <script  src="dojo.js" ></script>
 <script  src="model.js" ></script>
 <script  src="ajax-commons.js" ></script>
-<script  src="slider.js" ></script>
 
 <script type="text/javascript">
 	//var djConfig = {isDebug: true, debugAtAllCosts: true};
@@ -35,7 +34,6 @@ var gcats = new Map();
 var cart;
 var account;
 var chunkSize = 3;
-var sliderStarted = false;
 
 var bodyRowText;
 var itemsElement;
@@ -76,7 +74,6 @@ function resized() {
 }
 
 function checkout() {
-    if (sliderStarted) stopSlider();
     var bindArgs = {
        url:  "checkout?action=startTask",
        mimetype: "text/xml",
@@ -117,38 +114,6 @@ function showProgressBar(id) {
              }
     }
     inject(injectArgs);
-}
-
-function hideSlider() {
-  var slider = $("slider-popup");
-  if (slider) {
-    dojo.graphics.htmlEffects.fadeHide(slider, 1000);
-    pauseSlider();
-  }
-}
-
-function showSlider(items) {
-  var slider = $("slider-popup");
-  if (!slider) {
-      var injectArgs = {
-        template: "slider.htmf",
-        script: "slider.js",
-        initFunction: function() {
-                        startSlider();
-                        setSliderItems(items);
-                        var slider = $("slider-popup");
-                        dojo.graphics.htmlEffects.fadeShow(slider, 1000);
-                        slider.style.visibility='visible';
-                        
-                    }
-      }
-     inject(injectArgs);
-  } else {
-     setSliderItems(items);
-     if (sliderStarted) startSlider();
-     dojo.graphics.htmlEffects.fadeShow(slider, 1000);
-
-  }
 }
 
 function init() {
@@ -389,11 +354,6 @@ function showCategoryItems(catid, index, count) {
 function showItems(catid, index, count) {
     var itemsTable= $("items_table");
     var c = gcats.get(catid);
-    if (sliderStarted) {
-        setSliderItems(c.items);
-    } else {
-       showSlider(c.items);
-    }
     if (c.length == 0) {
         itemsTable.innerHTML = "<tr valign='center'><td class='plainText'>No " + c.name + " available at this time.</td></tr>";
     } else {
