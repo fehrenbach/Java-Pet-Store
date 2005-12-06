@@ -254,14 +254,16 @@
 .popupRowHover {
   color: #FFFAFA;
   cursor:pointer;
-  padding:0;
+  padding-left:3;
+  padding-right:3;
   border-spacing: 0;
   border-width:0px;
   background: #7A8AFF;
 }
 
 .popupRow {
-  padding:0;
+  padding-left:3;
+  padding-right:3;
   border-spacing: 0;
   border-width:0px;
   background: #FFFAFA;
