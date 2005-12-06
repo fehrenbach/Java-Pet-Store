@@ -227,13 +227,15 @@ function autocompleteCallback(responseXML) {
                         "<a onclick=\"showSearchItem('" + id + "');return false;\">" + name + "</a>" +
                        "</td></tr>";
         }
+        var completeTable = $("completeTable");
+        completeTable.innerHTML = completeText;
         completeTable.style.visibility='visible';
-        $("completeTable").innerHTML = completeText;
     }
 }
 
 function clearAutocompletionResults() {
     var popUp = $("menu-popup");
+    var completeTable = $("completeTable");
     completeTable.style.visibility='hidden';
     clearNodes("completeTable");
 }
