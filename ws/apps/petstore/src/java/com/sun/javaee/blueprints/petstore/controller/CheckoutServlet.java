@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html  
-$Id: CheckoutServlet.java,v 1.2 2005-12-06 19:37:49 gmurray71 Exp $ */
+$Id: CheckoutServlet.java,v 1.3 2005-12-06 19:45:52 gmurray71 Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -60,7 +60,7 @@ public class CheckoutServlet extends HttpServlet implements Runnable {
             if ((action != null) && action.equals("startTask")) {
                 // this task will take 20 cycles of the counter to complete
                 System.out.println("Checkout: starting new Checkout targetId=" + targetId + " start=" + counter);
-                Task t = new Task(counter, 5);
+                Task t = new Task(counter, 8);
                 taskCounter++;
                 tasks.put(taskCounter + "", t);
                 // return intial content
