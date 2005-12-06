@@ -39,9 +39,9 @@ function progressbarCallback(responseXML) {
     showProgress(message);
     messageHash = message;             
     if (messageHash < 100) {
-        setTimeout("pollTaskmaster()", 1000);
+        setTimeout("pollTaskmaster()", 500);
     } else {
-        setTimeout("complete()", 1000);
+        setTimeout("complete()", 100);
     }
 }
 
