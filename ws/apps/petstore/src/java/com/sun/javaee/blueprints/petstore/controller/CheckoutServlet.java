@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html  
-$Id: CheckoutServlet.java,v 1.1 2005-11-10 12:06:34 gmurray71 Exp $ */
+$Id: CheckoutServlet.java,v 1.2 2005-12-06 19:37:49 gmurray71 Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -30,7 +30,7 @@ public class CheckoutServlet extends HttpServlet implements Runnable {
     public void run() {
         while (true) {
             try {
-                timer.sleep(2000);
+                timer.sleep(1000);
              } catch (InterruptedException ie) {
              }
              counter++;
@@ -74,18 +74,12 @@ public class CheckoutServlet extends HttpServlet implements Runnable {
                 if (tasks.get(targetId) != null) {
                     percentage = ((Task)tasks.get(targetId)).getPrecentComplete(counter);
                 }
-                if ((messageHash !=null) &&
-                        (Integer.valueOf(messageHash).intValue()) == percentage) {
-                    // nothing has changed
-                    response.setStatus(HttpServletResponse.SC_NO_CONTENT);
-                } else {
                     response.setContentType("text/xml");
                     response.setHeader("Cache-Control", "no-cache");
                     PrintWriter pw = response.getWriter();
                     if (percentage > 100) percentage = 100;
                     pw.write("<message>" + percentage +  "</message>");
                     pw.flush();
-                }
             }
         } catch (Throwable e) {
             System.out.println("TaskMaster error:" + e);
