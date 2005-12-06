@@ -145,7 +145,7 @@ function showSlider(items) {
      inject(injectArgs);
   } else {
      setSliderItems(items);
-     unPauseSlider();
+     if (sliderStarted) startSlider();
      dojo.graphics.htmlEffects.fadeShow(slider, 1000);
 
   }

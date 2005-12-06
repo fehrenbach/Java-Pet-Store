@@ -2,15 +2,15 @@
    You may not modify, use, reproduce, or distribute this software except in
    compliance with the terms of the License at:
    http://developer.sun.com/berkeley_license.html
-$Id: slider.js,v 1.4 2005-12-06 17:53:09 gmurray71 Exp $
+$Id: slider.js,v 1.5 2005-12-06 18:08:32 gmurray71 Exp $
 */
 
 var layerLeft=100;
 var layerTop=10;
 var layerWidth=130;
 var layerHeight=90;
-var pause=3000;
-var speed= 65;
+var pause=1500;
+var speed= 50;
 var paused = false;
 var sliderOffset = 5;
 
