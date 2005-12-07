@@ -8,7 +8,7 @@
 <script  src="dojo.js" ></script>
 <script  src="model.js" ></script>
 <script  src="ajax-commons.js" ></script>
-
+<script  src="cart.js" ></script>
 <script type="text/javascript">
 	//var djConfig = {isDebug: true, debugAtAllCosts: true};
 </script>
@@ -143,6 +143,8 @@ function init() {
 }
 
 function doSearch() {
+	var completeTable = $("completeTable");
+	var completeField = $("complete-field");
     if (completeField.value == "") {
     } else {
        var bindArgs = {
@@ -244,7 +246,6 @@ function processSearch(responseXML) {
     }
     gcats.put("search", c);
     showCategoryItems("search",0,chunkSize);
-    showSlider(c);
 }
 
 function showSearchItem(id) {
@@ -254,6 +255,7 @@ function showSearchItem(id) {
 
 function getSearchItem(id) {
       var c = gcats.get("search");
+      var completeTable = $("completeTable");
       if (c != null) {
         var i = c.getItemById(id);
         if (i != null) {
@@ -271,7 +273,6 @@ function getSearchItem(id) {
         }
      };
     dojo.io.bind(bindArgs);
-    var completeTable = $("completeTable");
     if (completeTable) completeTable.style.visibility='hidden';
     clearAutocompletionResults();
 }

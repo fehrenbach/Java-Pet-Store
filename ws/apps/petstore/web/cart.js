@@ -62,22 +62,23 @@ function initCart() {
 
 function showCart() {
     var cartPop = $("cart-popup");
-    if (cartPop && !cartVisible) {
-        dojo.graphics.htmlEffects.fadeShow(cartPop, 1000);
-        cartPop.style.visibility='visible';
-        cartVisible = true;
-    }
+    if (cartPop.style.visibility !='visible') {
+	    cartPop.style.visibility ='visible';
+	}
+    dojo.graphics.htmlEffects.fadeShow(cartPop, 1000);
 }
 
+
 function hideCart() {
- var cartPop = $("cart-popup");
- dojo.graphics.htmlEffects.fadeHide(cartPop, 1000);
- cartPop.style.visibility='hidden';
- cartVisible = true;
+	var cartPop = $("cart-popup");
+ 		dojo.graphics.htmlEffects.fadeHide(cartPop, 1000);
 }
 
 function removeCartItem(id) {
-    showCart();
+	var cartPop = $("cart-popup");
+	if (cartPop.style.visibility !='visible') {
+	    showCart();
+    }
     cart.removeItem(id);
     showCartItems(0,chunkSize);
     if (cart.length == 0) checkingOut = false;
@@ -125,7 +126,10 @@ function addCartItem(id,image,name,description,price) {
 }
 
 function purchaseItem(catid,id) {
-    showCart();
+	var cartPop = $("cart-popup");
+   	if (cartPop.style.visibility =='hidden') {
+	    showCart();
+    }
     var tcat = gcats.get(catid);
     var i = tcat.getItemById(id);
     cart.addItem(i.id, i.image,i.name,i.description, i.price);
@@ -142,7 +146,6 @@ function showCartItems(ci, count) {
     var bodyTable = $("cartBody");
     if (cart.length == 0) {
         clearNodes("cartBody");
-
         if (isIE) {
           bodyTable.innerHTML = "<tr><td>No items</td></tr>";
         } else {
