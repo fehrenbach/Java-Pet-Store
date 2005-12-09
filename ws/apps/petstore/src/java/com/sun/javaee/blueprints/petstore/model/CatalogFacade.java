@@ -27,7 +27,7 @@ public class CatalogFacade implements ServletContextListener {
     }
     
     public Collection getAllItemsFromCategory(String catID){
-        return em.createQuery("SELECT  OBJECT(i) FROM PItem i, Product p WHERE i.productID = p.productID AND p.categoryID LIKE :categoryID")
+        return em.createQuery("SELECT  i FROM PItem i, Product p WHERE i.productID = p.productID AND p.categoryID LIKE :categoryID")
         .setParameter("categoryID", catID).getResultList();
     }
 

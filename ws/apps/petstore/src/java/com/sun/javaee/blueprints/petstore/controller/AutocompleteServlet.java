@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: AutocompleteServlet.java,v 1.5 2005-12-06 10:34:52 gmurray71 Exp $ */
+$Id: AutocompleteServlet.java,v 1.6 2005-12-09 01:56:57 gmurray71 Exp $ */
 package com.sun.javaee.blueprints.petstore.controller;
 
 import java.io.*;
@@ -54,7 +54,6 @@ public class AutocompleteServlet extends HttpServlet {
                 }
                 sb.append("</items>\n");
                 response.getWriter().write(sb.toString());
-                System.out.println("Returning: " + sb.toString());
                 out.close();
             } else {
                 //nothing to show

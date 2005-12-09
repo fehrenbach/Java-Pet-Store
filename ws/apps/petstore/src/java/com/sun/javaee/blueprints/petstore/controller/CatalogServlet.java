@@ -67,7 +67,6 @@ public class CatalogServlet extends HttpServlet {
                 sb.append("</items>");
                 sb.append("</category>\n");
                 out.println(sb.toString());
-                System.out.println("Returning:\n" + sb.toString());
                 out.close();
             } else if ("products".equals(command)) {
                 String catid = request.getParameter("catid");
@@ -93,7 +92,6 @@ public class CatalogServlet extends HttpServlet {
                 }
                 sb.append("</products>");
                 out.println(sb.toString());
-                System.out.println("Returning:\n" + sb.toString());
                 out.close();
          } else if ("categories".equals(command)) {
                 System.out.println("Request for categories.");
@@ -116,7 +114,6 @@ public class CatalogServlet extends HttpServlet {
                 response.setContentType("text/xml;charset=UTF-8");
                 PrintWriter out = response.getWriter();
                 out.println(sb.toString());
-                System.out.println("Returning:\n" + sb.toString());
                 out.close();         
          } else if ("item".equals(command)) {
              String targetId = request.getParameter("id");
@@ -135,7 +132,6 @@ public class CatalogServlet extends HttpServlet {
              response.setContentType("text/xml;charset=UTF-8");
              PrintWriter out = response.getWriter();
              out.println(sb.toString());
-             System.out.println("Returning:" + sb.toString());
              out.close();  
          }
      }
