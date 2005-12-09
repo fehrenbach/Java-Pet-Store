@@ -1,7 +1,43 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: account.js,v 1.6 2005-12-06 10:34:53 gmurray71 Exp $
+$Id: account.js,v 1.7 2005-12-09 00:57:28 gmurray71 Exp $
 */
 
+function Account() {
+	
+ 	this.firstName = null;
+    this.lastName = null;   
+    this.billingAddress = null;
+    this.shippingAddress = null;
+    this.creditCard = null;
+	
+	this.init = function() {
+    	var accountPop = $("account-popup");
+    	var dragme = new Dragable(accountPop,$("address-drag-target"));
+	}
+
+	this.hide = function() {
+    	var accountPop = $("account-popup");
+    	accountPop.style.visibility='hidden';
+    	var shadow= $("account-popup_shadow");
+   	 	if (shadow) {
+        	shadow.style.visibility='hidden';
+    	}
+    	var shadow= $("account-popup_shadow");
+    	if (shadow) {
+        	shadow.style.visibility='hidden';
+    	}    
+	}
+	
+	this.show = function() {
+		var accountPop = $("account-popup");
+        accountPop.style.top="150px";
+        centerX(accountPop);
+        accountPop.style.visibility='visible';
+        var shadow= $("account-popup_shadow");
+        if (shadow) {
+        	shadow.style.visibility='visible';
+		}
+	}
 
 function CreditCard(nameOnCard, provider, number, expiryMonth, expiryYear){
     this.nameOnCard = nameOnCard;
@@ -17,60 +53,6 @@ function Address(street1, street2, city, zip, state) {
     this.street2 = street2;
     this.city = city;
     this.state = state;
-}
-
-function hideCreditCard() {
-    var creditCardPop = $("creditcard-popup");
-    creditCardPop.style.visibility='hidden';
-    var shadow= $("creditcard-popup_shadow");
-    if (shadow) {
-        shadow.style.visibility='hidden';
-    }
-}
-
-function initCreditCard() {
-    var creditCardPop = $("creditcard-popup");
-    var dragme = new Dragable(creditCardPop);
-    creditCardPop.style.top="165px";
-    centerX(creditCardPop);
-}
-
-function showCreditCardDialog() {
-    var checkoutDiv = $("checkoutDiv");
-    if (checkingOut) {
-        checkoutDiv.innerHTML = "<form><input type='button' onclick='completePurchase();' value='Complete Order'></from>";
-    } else {
-        checkoutDiv.innerHTML = "<form><input type='button' onclick='hideCreditCard();' value='Close'></form>";
-    }
-    var creditCardPop = $("creditcard-popup");
-    creditCardPop.style.visibility='visible';
-    var shadow= $("creditcard-popup_shadow");
-    if (shadow) {
-        shadow.style.visibility='visible';
-    }
-}
-
-function showCreditCard() {
-    hideAccount();
-    var creditCardPop = $("creditcard-popup");
-    if (creditCardPop) {
-        showCreditCardDialog();
-     } else {
-            loadCreditCard();
-     }
-}
-
-function loadCreditCard() {
-    var accountArgs = {
-            template: "creditcard.htmf",
-            script: "creditcard.js",
-            initFunction: function() {
-                 initCreditCard();
-                 hideAccount();
-                 showCreditCardDialog();
-            }
-    };
-    inject(accountArgs);
 }
 
 function updateOnServer(itemId, itemValue) {
@@ -250,3 +232,4 @@ function morph(itemid) {
     item.appendChild(cellElement);
 }
 
+}

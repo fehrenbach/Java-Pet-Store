@@ -1,11 +1,9 @@
-var cartVisible = false;
-
 function Cart() {
 
     this.index = 0;
-    this.length = 0;
+    var itemCount = 0;
     
-    this.items = new Array();
+    items = new Array();
 
     function Item(id,image,name,description,price){
       this.id = id;
@@ -15,52 +13,50 @@ function Cart() {
       this.price = price;
     };
     
-    this.addItem = function(id,image,name,description,price) {
-        this.items[this.length++] = new Item(id,image,name,description,price);
-    }
-    
-    this.getTotal = function(index){
+
+    this.getTotal = function(){
        var total = 0;
-       for (i=0; i < this.length; i++) {
-         total += Number(this.items[i].price);
+       for (i=0; i < itemCount; i++) {
+         total += Number(items[i].price);
       }
       return total;
     }
     
     this.empty = function(){
-        this.items = new Array();
-        this.length = 0;
+        items = new Array();
+        itemCount = 0;
     }
     
-    this.getItem = function(index){
-        return this.items[index];
+    function getItem(index){
+        return items[index];
     }
     
-    this.removeItem = function(key) {
-        for (i=0; i < this.length; i++) {
-            if (this.items[i].id == key) {
-               if (this.length == 1) this.items = new Array();
-               else this.items.splice(i,1);
-               this.length = this.items.length;
+    function removeItem (key) {
+        for (i=0; i < itemCount; i++) {
+            if (items[i].id == key) {
+               if (itemCount == 1) items = new Array();
+               else items.splice(i,1);
+               itemCount = items.length;
             }
         }
     }
-}
 
-function initCart() {
- var cartPop = $("cart-popup");
- if (!cart) {
-    cart = new Cart();
+this.init = function () {
+	alert("@#$$# cart init1");
+    items = new Array();
+    alert("cart init2");
+    var cartPop = $("cart-popup");
+    alert("cart init3");
     var dragme = new Dragable(cartPop, $("cartDragTarget"));
+    alert("cart init4");
     var winX = 430;
     if (!isIE) winX = window.innerWidth - 228;
     else winX = document.body.offsetWidth - 228;
     cartPop.style.top="140px";
     cartPop.style.left= winX +"px";
- }
 }
 
-function showCart() {
+this.show = function() {
     var cartPop = $("cart-popup");
     if (cartPop.style.visibility !='visible') {
 	    cartPop.style.visibility ='visible';
@@ -69,22 +65,26 @@ function showCart() {
 }
 
 
-function hideCart() {
+this.hide = function() {
 	var cartPop = $("cart-popup");
  		dojo.graphics.htmlEffects.fadeHide(cartPop, 1000);
 }
 
-function removeCartItem(id) {
+this.removeItem = function(id) {
 	var cartPop = $("cart-popup");
 	if (cartPop.style.visibility !='visible') {
-	    showCart();
+	    this.show();
     }
-    cart.removeItem(id);
-    showCartItems(0,chunkSize);
-    if (cart.length == 0) checkingOut = false;
+    removeItem(id);
+    this.showItems(0,chunkSize);
+    if (itemCount == 0) checkingOut = false;
 }
 
-function addCartItem(id,image,name,description,price) {
+ function addItem(id,image,name,description,price) {
+    items[itemCount++] = new Item(id,image,name,description,price);
+ }
+ 
+ function displayItem(id,image,name,description,price) {
     checkingOut = true;
     var cell0;
     var cell1;
@@ -118,33 +118,33 @@ function addCartItem(id,image,name,description,price) {
         var plink = document.createElement("a");
         plink.appendChild(document.createTextNode("Remove"));
         plink.className = "removeItem";
-        plink.setAttribute("onClick", "removeCartItem('" + id + "')");
+        plink.setAttribute("onClick", "cart.removeItem('" + id + "')");
         cell3.appendChild(plink);
         row.appendChild(cell3);
         bodyTable.appendChild(row);
     }
 }
 
-function purchaseItem(catid,id) {
-	var cartPop = $("cart-popup");
-   	if (cartPop.style.visibility =='hidden') {
-	    showCart();
-    }
+this.purchaseItem = function(catid,id) {
     var tcat = gcats.get(catid);
     var i = tcat.getItemById(id);
-    cart.addItem(i.id, i.image,i.name,i.description, i.price);
-    showLastItems();
+    addItem(i.id, i.image,i.name,i.description, i.price);
+    this.showLastItems();
+   	var cartPop = $("cart-popup");
+   	if (cartPop.style.visibility =='hidden') {
+	    this.show();
+    }
 }
 
-function showLastItems() {
+this.showLastItems = function() {
     var startIndex = 0;
-    if (cart.length >= chunkSize) startIndex = (cart.length- chunkSize);
-    showCartItems(startIndex, chunkSize);
+    if (itemCount >= chunkSize) startIndex = (itemCount- chunkSize);
+    this.showItems(startIndex, chunkSize);
 }
 
-function showCartItems(ci, count) {
+this.showItems = function(ci, count) {
     var bodyTable = $("cartBody");
-    if (cart.length == 0) {
+    if (itemCount == 0) {
         clearNodes("cartBody");
         if (isIE) {
           bodyTable.innerHTML = "<tr><td>No items</td></tr>";
@@ -168,8 +168,8 @@ function showCartItems(ci, count) {
         clearNodes("cartBody");
         var  loopLength = Number(ci) + Number(count);
         for (l = ci; l  < loopLength; l++) {
-           var i = cart.getItem(l);
-           if (i) addCartItem(i.id,i.image,i.name,i.description,i.price);
+           var i = getItem(l);
+           if (i) displayItem(i.id,i.image,i.name,i.description,i.price);
         }
         var cell;
         var row;
@@ -190,12 +190,12 @@ function showCartItems(ci, count) {
             if ((Number(ci)  - Number(chunkSize)) < 0) {
                prevIndex = 0;
             }
-            link.setAttribute("onclick", "showCartItems('" + prevIndex + "','" + chunkSize + "')");
+            link.setAttribute("onclick", "cart.showItems('" + prevIndex + "','" + chunkSize + "')");
             cell.appendChild(link);
             row.appendChild(cell);
         }
    }
-        if (Number(cart.length) > (Number(ci) + Number(count)) ) {
+        if (Number(itemCount) > (Number(ci) + Number(count)) ) {
             cell = document.createElement("td");
             cell.setAttribute("bgcolor", "white");
             cell.setAttribute("nowrap", "true");
@@ -204,18 +204,19 @@ function showCartItems(ci, count) {
             var link = document.createElement("a");
             link.appendChild(document.createTextNode("Next"));
             link.className = "cartValueListNavigate";
-            var nextCount = count;
-            if ((Number(ci) + Number(count) + Number(chunkSize)) > Number(cart.length)) {
-                nextCount = Number(cart.length) - (Number(ci) + Number(count));
+            var nextCount = itemCount;
+            if ((Number(ci) + Number(count) + Number(chunkSize)) > Number(itemCount)) {
+                nextCount = Number(itemCount) - (Number(ci) + Number(count));
             }
-            link.setAttribute("onclick", "showCartItems('"  + (Number(ci) + chunkSize) + "','" + nextCount + "')");
+            link.setAttribute("onclick", "cart.showItems('"  + (Number(ci) + chunkSize) + "','" + nextCount + "')");
             cell.appendChild(link);
             row.appendChild(cell);
         }
         
         bodyTable.appendChild(row);
         var cartTotal = $("cartTotal");
-        cartTotal.innerHTML =  "$" + cart.getTotal() + ".00";
-        if (cart.length == 0) $("coItem").style.visibility='hidden';
+        cartTotal.innerHTML =  "$" + this.getTotal() + ".00";
+        if (itemCount == 0) $("coItem").style.visibility='hidden';
         else $("coItem").style.visibility='visible';
+}
 }

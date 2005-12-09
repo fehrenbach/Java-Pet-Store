@@ -7,7 +7,7 @@
       <tr id="signin-drag-target"><td class="accountBody" align="center" colspan="2">Sign In</td></tr>
       <tr><td class="accountBody" align="left">UserId:</td><td align="right"><input id="userId" type="text" size="20" value="gmurray"></td></tr>
       <tr><td class="accountBody" align="left">Password:</td><td align="right"><input id="password" type="password" value="foo" size="20"></td></tr>
-      <tr><td align="right" colspan="2"><input type="button" value="SignIn" onClick="signIn();"><input type="button" value="Cancel" onClick="hideSignin();"></td></tr>
+      <tr><td align="right" colspan="2"><input type="button" value="SignIn" onClick="signin.signIn();"><input type="button" value="Cancel" onClick="signin.hide();"></td></tr>
     </table>
     </td>
    </tr>
