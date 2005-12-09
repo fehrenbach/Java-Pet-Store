@@ -2,7 +2,7 @@
   <div style="position: absolute; visibility: hidden" id="cart-popup">
    <table id="cartTable" class="cart">
    <tr id="cartDragTarget">
-    <td align="center" width="80"><div class="cartHeader">Cart</div></td><td align="right"><a onclick="hideCart();"><img style="{cursor:pointer}" src="images/cbutton.gif" border="0"></a> &nbsp;</td>
+    <td align="center" width="80"><div class="cartHeader">Cart</div></td><td align="right"><a onclick="cart.hide();"><img style="{cursor:pointer}" src="images/cbutton.gif" border="0"></a> &nbsp;</td>
    </tr>
    <tr>
    <td colspan="2">

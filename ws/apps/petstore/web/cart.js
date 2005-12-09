@@ -12,7 +12,6 @@ function Cart() {
       this.description = description;
       this.price = price;
     };
-    
 
     this.getTotal = function(){
        var total = 0;
@@ -25,6 +24,7 @@ function Cart() {
     this.empty = function(){
         items = new Array();
         itemCount = 0;
+        this.showItems(0,0);
     }
     
     function getItem(index){
@@ -42,18 +42,14 @@ function Cart() {
     }
 
 this.init = function () {
-	alert("@#$$# cart init1");
     items = new Array();
-    alert("cart init2");
     var cartPop = $("cart-popup");
-    alert("cart init3");
     var dragme = new Dragable(cartPop, $("cartDragTarget"));
-    alert("cart init4");
-    var winX = 430;
-    if (!isIE) winX = window.innerWidth - 228;
-    else winX = document.body.offsetWidth - 228;
-    cartPop.style.top="140px";
-    cartPop.style.left= winX +"px";
+    var sW = 430;
+    if (!isIE)  cartPop.style.left = (document.body.clientWidth - 228) + "px";
+    else cartPop.style.left = (document.body.offsetWidth - 228) + "px";
+    cartPop.style.top= "140px";
+
 }
 
 this.show = function() {
@@ -218,5 +214,5 @@ this.showItems = function(ci, count) {
         cartTotal.innerHTML =  "$" + this.getTotal() + ".00";
         if (itemCount == 0) $("coItem").style.visibility='hidden';
         else $("coItem").style.visibility='visible';
-}
+	}
 }

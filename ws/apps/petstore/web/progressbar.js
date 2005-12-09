@@ -1,10 +1,13 @@
-var messageHash = -1;
-var targetId = -1;
-var centerCell;
-var size=40;
-var increment = 100/size;
+function Progressbar() {
+	
+    var targetId;
+	var messageHash = -1;
+	var targetId = -1;
+	var centerCell;
+	var size=40;
+	var increment = 100/size;
 
-function initProgressBar() {
+this.init = function() {
     createProgressBar();
     var progress = $("progress-popup");
     progress.style.top="150px";
@@ -13,7 +16,16 @@ function initProgressBar() {
     var dragme = new Dragable(progress,$("progressbar-dargpoint"));
 }
 
-function hideProgressBar() {
+this.show = function() {
+    var progress = $("progress-popup");
+    progress.style.visibility='visible';
+    var shadow= $("progress-popup_shadow");
+    if (shadow) {
+        shadow.style.visibility='visible';
+    }
+}
+
+this.hide = function() {
     var progress = $("progress-popup");
     progress.style.visibility='hidden';
     var shadow= $("progress-popup_shadow");
@@ -22,7 +34,27 @@ function hideProgressBar() {
     }
 }
 
-function pollTaskmaster() {    
+this.start = function() {
+	showProgress(0);
+    var bindArgs = {
+       url:  "checkout?action=startTask",
+       mimetype: "text/xml",
+       load: function(type, data) {
+               processCheckoutCallback(data);
+             }
+     };
+    dojo.io.bind(bindArgs);
+}
+
+function processCheckoutCallback(responseXML) {
+    var item = responseXML.getElementsByTagName("message")[0];
+    targetId = item.firstChild.nodeValue;
+	var idiv = window.document.getElementById("task_id");
+    idiv.innerHTML = "<div class=\"progressItem\">Processing Order. The transaction id is " + targetId + ".</div>";
+	setTimeout("progressbar.poll()", 100);
+}
+
+this.poll = function() {    
     var bindArgs = {
         url:  "checkout?messageHash=" + encodeURI(messageHash) + "&targetId=" + targetId,
         mimetype: "text/xml",
@@ -39,20 +71,19 @@ function progressbarCallback(responseXML) {
     showProgress(message);
     messageHash = message;             
     if (messageHash < 100) {
-        setTimeout("pollTaskmaster()", 500);
+        setTimeout("progressbar.poll()", 500);
     } else {
-        setTimeout("complete()", 100);
+        setTimeout("progressbar.complete()", 100);
     }
 }
 
-function complete() {
+this.complete = function() {
+    cart.empty();
     var idiv = window.document.getElementById("task_id");
     idiv.innerHTML = "";
     var idiv = window.document.getElementById("progress");
-    idiv.innerHTML = "<div class=\"progressItem\">Checkout Complete. Your order number is " + targetId + ".</div><br><input type=\"button\" onclick=\"hideProgressBar()\" value=\"Continue\">";
-    cart.empty();
+    idiv.innerHTML = "<div class=\"progressItem\">Checkout Complete. Your order number is " + targetId + ".</div><br><input type=\"button\" onclick=\"progressbar.hide()\" value=\"Continue\">";
     checkingOut = false;
-    showCartItems(0,0);
 }
 
 
@@ -89,4 +120,5 @@ function showProgress(percentage) {
         cell.style.backgroundColor = "green";
       }      
     }
+}
 }
