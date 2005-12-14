@@ -23,23 +23,23 @@ public class CatalogFacade implements ServletContextListener {
     }
 
     public Collection getCategories(){
-        return em.createQuery("SELECT OBJECT(c) FROM PCategory c").getResultList();
+        return em.createNativeQuery("SELECT * FROM Category").getResultList();
     }
     
     public Collection getAllItemsFromCategory(String catID){
-        return em.createQuery("SELECT  i FROM PItem i, Product p WHERE i.productID = p.productID AND p.categoryID LIKE :categoryID")
-        .setParameter("categoryID", catID).getResultList();
+        return em.createNativeQuery("SELECT  * FROM Item, Product WHERE Item.productID = Product.productID AND Product.categoryID LIKE ?")
+        .setParameter(1, "%"+catID+"%").getResultList();
     }
 
     public Collection getProducts(String catID){
-        return em.createQuery("SELECT p FROM Product p WHERE p.categoryID LIKE :categoryID")
-        .setParameter("categoryID", catID).getResultList();
+        return em.createNativeQuery("SELECT * FROM Product WHERE categoryID LIKE ?")
+        .setParameter(1, "%"+catID+"%").getResultList();
     }
 
 
     public Collection getItems(String productID){
-        return em.createQuery("SELECT OBJECT(i) FROM PItem i WHERE i.productID LIKE :productID")
-                .setParameter("productID", productID).getResultList();
+        return em.createNativeQuery("SELECT * FROM Item WHERE productid LIKE ?")
+                .setParameter(1, "%"+productID+"%").getResultList();
     }
 
     public PCategory getCategory(String categoryID){

@@ -53,15 +53,15 @@ public class CatalogServlet extends HttpServlet {
                 Iterator it = items.iterator();
                 NumberFormat formatter = new DecimalFormat("00.00");
                 while (it.hasNext()) {
-                    PItem i = (PItem)it.next();
+                    Vector i = (Vector)it.next();
                     sb.append("<item>\n");
-                    sb.append(" <id>" + i.getItemID() + "</id>\n");
-                    sb.append(" <prod-id>" + i.getProductID() + "</prod-id>\n");
+                    sb.append(" <id>" + i.get(0) + "</id>\n");
+                    sb.append(" <prod-id>" + i.get(1) + "</prod-id>\n");
                     sb.append(" <cat-id>" + catid + "</cat-id>\n");
-                    sb.append(" <name>" + i.getName() + "</name>\n");
-                    sb.append(" <price>" + formatter.format(i.getUnitCost()) + "</price>\n");
-                    sb.append(" <description>" + i.getDescription() + "</description>\n");
-                    sb.append(" <image-url>" + i.getImageURL() + "</image-url>\n");
+                    sb.append(" <name>" + i.get(2) + "</name>\n");
+                    sb.append(" <price>" + formatter.format(i.get(5)) + "</price>\n");
+                    sb.append(" <description>" + i.get(3) + "</description>\n");
+                    sb.append(" <image-url>" + i.get(4) + "</image-url>\n");
                     sb.append("</item>\n");
                 }
                 sb.append("</items>");
@@ -81,13 +81,13 @@ public class CatalogServlet extends HttpServlet {
                 Iterator it = items.iterator();
                 NumberFormat formatter = new DecimalFormat("00.00");
                 while (it.hasNext()) {
-                    Product p = (Product)it.next();
+                    Vector p = (Vector)it.next();
                     sb.append("<product>\n");
-                    sb.append(" <id>" + p.getProductID() + "</id>\n");
-                    sb.append(" <cat-id>" + p.getCategoryID() + "</cat-id>\n");
-                    sb.append(" <name>" + p.getName() + "</name>\n");
-                    sb.append(" <description>" + p.getDescription() + "</description>\n");
-                    sb.append(" <image-url>" + p.getImageURL() + "</image-url>\n");
+                    sb.append(" <id>" + p.get(0) + "</id>\n");
+                    sb.append(" <cat-id>" + p.get(1) + "</cat-id>\n");
+                    sb.append(" <name>" + p.get(2) + "</name>\n");
+                    sb.append(" <description>" + p.get(3) + "</description>\n");
+                    sb.append(" <image-url>" + p.get(4) + "</image-url>\n");
                     sb.append("</product>\n");
                 }
                 sb.append("</products>");
@@ -101,13 +101,13 @@ public class CatalogServlet extends HttpServlet {
                 Iterator it = items.iterator();
                 
                 while (it.hasNext()) {
-                    PCategory c = (PCategory)it.next();
+                    Vector c = (Vector)it.next();
                     sb.append("<category>\n");
-                    sb.append(" <id>" + c.getCategoryID() + "</id>\n");
-                    sb.append(" <cat-id>" + c.getCategoryID() + "</cat-id>\n");
-                    sb.append(" <name>" + c.getName() + "</name>\n");
-                    sb.append(" <description>" + c.getDescription() + "</description>\n");
-                    sb.append(" <image-url>" + c.getImageURL() + "</image-url>\n");
+                    sb.append(" <id>" + c.get(0) + "</id>\n");
+                    sb.append(" <cat-id>" + c.get(0) + "</cat-id>\n");
+                    sb.append(" <name>" + c.get(1) + "</name>\n");
+                    sb.append(" <description>" + c.get(2) + "</description>\n");
+                    sb.append(" <image-url>" + c.get(3) + "</image-url>\n");
                     sb.append("</category>\n");
                 }
                 sb.append("</categories>\n");
