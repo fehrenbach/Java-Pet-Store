@@ -1,13 +1,12 @@
 var isIE;
 var gcats = new Map();
-var cart;
-var account;
 var chunkSize = 3;
 
 var bodyRowText;
 var itemsElement;
 
 // internal objects
+var account;
 var cart;
 var signin;
 var account;
@@ -18,13 +17,15 @@ var checkingOut = false;
 
 window.onresize=resized;
 
+// register this to give us a way to turn off the autocomplete when
+// a user clicks somewhere on the screen.
 window.onclick = handleMouseClick;
 
 dojo.require("dojo.widget.HtmlFisheyeList");
 dojo.hostenv.writeIncludes();
- dojo.addOnLoad(function () {
-    init();
-    showMain();});
+dojo.addOnLoad(function () {
+init();
+showMain();});
 
 function handleMouseClick() {
     clearAutocompletionResults();
@@ -34,6 +35,29 @@ function handleMouseClick() {
 function loadPetstore() {
     init();
     showMain();
+}
+
+function init() {
+    engine = new Engine();
+    if (navigator.userAgent.indexOf("IE") != -1) isIE = true;
+    var completeField = document.getElementById("complete-field");
+    var autorow = document.getElementById("menu-popup");
+    autorow.style.top = findY(completeField) + completeField.offsetHeight +  "px";
+    autorow.style.left = findX(completeField)  +  "px";
+    // load the cart
+    var cartArgs = {
+            template: "cart.htmf",
+            script: "cart.js",
+            initFunction : cartCallback
+    };
+    engine.inject(cartArgs);
+    // load signin
+    var signinArgs = {
+           template: "signin.htmf",
+           script: "signin.js",
+           initFunction: signinCallback
+    };
+    engine.inject(signinArgs);  
 }
 
 function resized() {
@@ -65,7 +89,7 @@ function processCheckoutCallback(responseXML) {
 }
 
 function showMain() {
-    inject({template: "main.htmf", injectionPoint: $("bodyCenter")});
+    engine.inject({template: "main.htmf", injectionPoint: $("bodyCenter")});
 }
 
 function progressbarCallback(type,data) {
@@ -82,7 +106,7 @@ function showProgressbar() {
              script: "progressbar.js",
              initFunction: progressbarCallback
     }
-    inject(injectArgs);
+    engine.inject(injectArgs);
 }
 
 function cartCallback(type, data) {
@@ -118,7 +142,7 @@ function loadCreditCard() {
             script: "creditcard.js",
             initFunction: creditCardCallback
     };
-    inject(creditCardArgs);
+    engine.inject(creditCardArgs);
 }
 
 function loadAccount() {
@@ -128,7 +152,7 @@ function loadAccount() {
             script: "account.js",
             initFunction: accountCallback
     };
-    inject(accountArgs);
+    engine.inject(accountArgs);
 }
 
 function showAccount() {
@@ -152,27 +176,7 @@ function showCreditCard() {
 	}
 }
 
-function init() {
-    if (navigator.userAgent.indexOf("IE") != -1) isIE = true;
-    var completeField = document.getElementById("complete-field");
-    var autorow = document.getElementById("menu-popup");
-    autorow.style.top = findY(completeField) + completeField.offsetHeight +  "px";
-    autorow.style.left = findX(completeField)  +  "px";
-    // load the cart
-    var cartArgs = {
-            template: "cart.htmf",
-            script: "cart.js",
-            initFunction : cartCallback
-    };
-    inject(cartArgs);
-    // load signin
-    var signinArgs = {
-           template: "signin.htmf",
-           script: "signin.js",
-           initFunction: signinCallback
-    };
-    inject(signinArgs);  
-}
+
 
 function doSearch() {
 	var completeTable = $("completeTable");
@@ -282,7 +286,7 @@ function processSearch(responseXML) {
 
 function showSearchItem(id) {
    resetBody();
-   inject({template: "items.htmf", injectionPoint: $("bodyCenter"), initFunction: function(){getSearchItem(id);}});
+   engine.inject({template: "items.htmf", injectionPoint: $("bodyCenter"), initFunction: function(){getSearchItem(id);}});
 }
 
 function getSearchItem(id) {
@@ -346,7 +350,7 @@ function resetBody() {
 }
 
 function showCategoryItems(catid, index, count) {
-   inject({template: "items.htmf", injectionPoint: $("bodyCenter"), initFunction: function(){showItems(catid, index,count);}});
+   engine.inject({template: "items.htmf", injectionPoint: $("bodyCenter"), initFunction: function(){showItems(catid, index,count);}});
 }
 
 function showItems(catid, index, count) {

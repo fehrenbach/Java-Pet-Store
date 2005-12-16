@@ -1,4 +1,31 @@
-function inject(p) {
+
+function Engine () {
+
+  /**
+   * 
+   * Load template text aloing with an associated script
+   * 
+   * Argument p properties are as follows:
+   *
+   * url :              Not required but used if you want to get the template from
+   *                    something other than the injection serlvet. For example if
+   *                    you want to load content directly from a a JSP or HTML file.
+   *       
+   * p.template :       Not required if you specficy a url property Otherewise this
+   *                    is the name of the template file.
+   *
+   * p.initFunction:    Not required. This function or function pointer will be called
+   *                    after the template text and script are loaded. The result of 
+   *                    the evaluated script will be accessible in the context of
+   *                    this function.
+   *
+   * p.injectionPoint:  Not required. This is the id of an element into. If this is
+   *                    not specfied a div will be created under the roon node of
+   *                    the document and the template will be injected into it.
+   *                    Content is injected by setting the innerHTML property
+   *                    of an element to the template text.
+   */
+  this.inject = function (p) {
         var targetUrl;
         if (!p.url) targetUrl = "controller?command=content&target=/" + p.template;
         else targetUrl = p.url;
@@ -23,22 +50,22 @@ function inject(p) {
             }
         };
         dojo.io.bind(templateArgs);
-}
+  }
 
-function loadScript(targetURL,callback) {
+  function loadScript(targetURL,callback) {
         var templateArgs = {
            url:  targetURL,
             mimetype: "text/plain",
             load: callback
         };
         dojo.io.bind(templateArgs);
-}
+  }
 
-/**
- * If were returning an XML document remove any script in the
- * the document and add it to the global scope using a time out.
-*/
-function includeEmbeddedScripts(xmlDocument) {
+  /**
+   * If were returning an XML document remove any script in the
+   * the document and add it to the global scope using a time out.
+   */
+  function includeEmbeddedScripts(xmlDocument) {
     var items = new Array();
     var xmlDocument = document.getElementsByTagName("script");
   
@@ -54,5 +81,5 @@ function includeEmbeddedScripts(xmlDocument) {
     for(var loop = 0; loop < items.length; loop++) {
         setTimeout(items[loop],0);
     }
+  }
 }
-

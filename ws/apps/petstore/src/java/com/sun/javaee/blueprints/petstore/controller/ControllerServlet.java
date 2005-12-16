@@ -42,7 +42,6 @@ public class ControllerServlet extends HttpServlet {
                 response.setContentType("text/html;charset=UTF-8");
                 PrintWriter out = response.getWriter();
                 StringBuffer content = getResource(target, true, true);
-                System.out.println("ControllerServlet returning: " + content.toString());
                 out.write(content.toString());
                 out.close();
          }
