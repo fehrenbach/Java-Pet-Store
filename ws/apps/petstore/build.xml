@@ -21,6 +21,10 @@
   <property name="dojo.script" value="../../lib/dojo/dojo.js" />
   <property name="dojo.history" value="../../lib/dojo/iframe_histroy.js" />
   <property name="dojo.src.dir" value="../../lib/dojo/src" />
+  
+  <!-- add lucene jar to path -->
+  <property name="extra.classpath" value="lib/lucene-1.4.3.jar" />
+
 
   <target name="build" description="Compile petstore files." >
     <mkdir dir="${build.classes.dir}" />
@@ -28,6 +32,14 @@
       <include name="**/*.java" />
 	  <classpath refid="classpath"/>
 	</javac>
+    
+    <!-- copy property files into build directory -->
+    <copy todir="${build.classes.dir}" overwrite="true">
+        <fileset dir="src/java">
+          <include name="**/*.properties"/>
+        </fileset>
+    </copy>
+    
   </target>
   
   <target name="war" depends="build,package-persistence-jar" description="Packages the War file">
@@ -38,6 +50,7 @@
     </copy> 
     <copy todir="${war.build.dir}/WEB-INF/lib" file="lib/bp-dynamic-text-comp.jar"/>
     <copy todir="${war.build.dir}/WEB-INF/lib" file="./build/catalog-persistence.jar"/>
+    <copy todir="${war.build.dir}/WEB-INF/lib" file="lib/lucene-1.4.3.jar"/>
     <!-- Copy in the content -->
     <copy todir="${war.build.dir}">
      <fileset dir="${src.web}"/>
@@ -57,7 +70,19 @@
     <delete file="${app.module}"/>
     <jar jarfile="${app.module}" basedir="${war.build.dir}" />
     <delete dir="${war.build.dir}"/>
+    
+    
+    <!-- unzip lucene indexes into the javaee.home/lib directory, if they don't exist -->
+    <available file="${javaee.home}/lib/petstore" type="dir" property="lucene.index.exists"/>
+    <antcall target="unzipIndexes"/>
   </target>
+
+  
+  <target name="unzipIndexes" unless="lucene.index.exists">
+      <unzip src="lib/petstoreIndexes.zip" dest="${javaee.home}/lib" overwrite="true"/>
+  </target>
+  
+  
   
   <target name="package-persistence-jar" depends="build" description="Packages the persistence unit">
     <mkdir dir="${jar.build.dir}"/>

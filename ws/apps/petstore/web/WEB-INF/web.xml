@@ -114,6 +114,12 @@
         <url-pattern>/faces/*</url-pattern>
     </servlet-mapping>
     
-   
+    <!-- need datasource for indexing Lucene search engine -->
+    <resource-ref>
+        <res-ref-name>jdbc/PetstoreDB</res-ref-name>
+        <res-type>javax.sql.DataSource</res-type>
+        <res-auth>Container</res-auth>
+        <res-sharing-scope>Shareable</res-sharing-scope>
+    </resource-ref>   
 </web-app>
 
