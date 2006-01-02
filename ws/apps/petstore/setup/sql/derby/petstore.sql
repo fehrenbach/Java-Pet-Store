@@ -83,5 +83,5 @@ INSERT INTO item VALUES('pet-011', 'feline02',' Scrapper Cat', 'A scapper cat', 
 INSERT INTO item VALUES('pet-012', 'canine01', 'Lazy Dog', 'A great pet', 'dog1.gif', 257, 201);
 INSERT INTO item VALUES('pet-013', 'canine01', 'Old Dog', 'A great old pet', 'dog2.gif', 70, 50);
 INSERT INTO item VALUES('pet-014', 'canine01', 'Young Dog', 'A great young pet', 'dog3.gif', 301, 210);
-INSERT INTO item VALUES('pet-015', 'canine02', 'Scrapper Dog', 'A scapper cat', 'dog4.gif', 410, 210);
+INSERT INTO item VALUES('pet-015', 'canine02', 'Scrapper Dog', 'A scapper dog', 'dog4.gif', 410, 210);
 INSERT INTO item VALUES('pet-016', 'canine02', 'Grey Hound', 'A great runner', 'dog5.gif', 200, 210);

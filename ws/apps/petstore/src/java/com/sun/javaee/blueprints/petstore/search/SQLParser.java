@@ -69,7 +69,7 @@ public class SQLParser {
                 indexDoc.setContents(title + " " + summary);
                 indexDoc.setTitle(title);
                 indexDoc.setSummary(summary);
-                getLogger().log(Level.FINE, "Adding document to index: " + indexDoc.toString());
+                getLogger().log(Level.INFO, "Adding document to index: " + indexDoc.toString());
 
                 // add doc to index
                 indexer.addDocument(indexDoc);
