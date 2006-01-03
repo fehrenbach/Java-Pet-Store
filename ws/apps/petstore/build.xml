@@ -57,6 +57,7 @@
     <copy todir="${war.build.dir}/WEB-INF/classes">
      <fileset dir="${build.classes.dir}"/>
     </copy> 
+    <copy todir="${war.build.dir}/WEB-INF/lib" file="lib/ajax-wrapper-comp.jar"/>
     <copy todir="${war.build.dir}/WEB-INF/lib" file="lib/bp-dynamic-text-comp.jar"/>
     <copy todir="${war.build.dir}/WEB-INF/lib" file="./build/catalog-persistence.jar"/>
     <copy todir="${war.build.dir}/WEB-INF/lib" file="lib/lucene-1.4.3.jar"/>
