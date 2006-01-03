@@ -47,8 +47,13 @@ public class SearchIndex {
         try {
             searcher=new IndexSearcher(indexFile);
             Analyzer analyzer=new StandardAnalyzer();
-            // search "contents" attribute where all relavant item words are kept
-            Query query=QueryParser.parse(searchString, "contents", analyzer);
+            // search "contents" attribute by default where all relavant words are kept
+            QueryParser queryParser=new QueryParser("contents", analyzer);
+            queryParser.setOperator(QueryParser.DEFAULT_OPERATOR_AND);
+            Query query=queryParser.parse(searchString);
+            
+            
+            
             getLogger().log(Level.INFO, "search.string", searchString);
 
             // execute search
@@ -97,6 +102,11 @@ public class SearchIndex {
                 fieldx=indexDoc.getField("product");
                 if(fieldx != null) {
                     indexDocument.setProduct(fieldx.stringValue());
+                }
+                
+                fieldx=indexDoc.getField("contents");
+                if(fieldx != null) {
+                    indexDocument.setContents(fieldx.stringValue());
                 }
                 
                 /*

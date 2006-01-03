@@ -66,7 +66,10 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
                         ${docxx.summary}<br>
                         ${docxx.image}<br>
                         ${docxx.price}<br>
-                        ${docxx.UID}<br><br>
+                        ${docxx.UID}<br>
+                        ${docxx.contents}<br><br>
+                        
+                        
                     </td>
                 </tr>
             </c:forEach>

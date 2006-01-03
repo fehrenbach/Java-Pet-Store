@@ -49,7 +49,8 @@ public class Indexer {
         // to tokenize the field into words.
         doc.add(Field.Keyword("modified", indexDoc.getModifiedDate()));
 
-        doc.add(Field.Text("contents", new StringReader(indexDoc.getContents())));
+        //doc.add(Field.Text("contents", new StringReader(indexDoc.getContents())));
+        doc.add(Field.Text("contents", indexDoc.getContents()));
         doc.add(Field.Text("title", indexDoc.getTitle()));
         doc.add(Field.UnIndexed("summary", indexDoc.getSummary()));
         writer.addDocument(doc);
