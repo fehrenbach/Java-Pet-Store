@@ -22,6 +22,7 @@ window.onresize=resized;
 window.onclick = handleMouseClick;
 
 dojo.require("dojo.widget.HtmlFisheyeList");
+
 dojo.hostenv.writeIncludes();
 dojo.addOnLoad(function () {
 init();
@@ -167,6 +168,29 @@ function showAccount() {
 	}
 }
 
+function accountCallback2(type, data) {
+   window.eval(data);
+   dojo.require("dojo.widget.Accordion");
+   dojo.hostenv.makeWidgets();
+   account = new Account();
+   account.init();
+}
+
+function loadAccount2() {
+	signin.hide();
+    var accountArgs = {
+            url: "faces/accountpane.jsp",
+            script: "accountpane.js",
+            injectionPoint: $("bodyCenter"),
+            initFunction: accountCallback2
+    };
+    engine.inject(accountArgs);
+}
+
+function showAccount2() {
+   loadAccount2();
+}
+
 function showCreditCard() {
 	account.hide();
     if (!creditCard) {
@@ -175,8 +199,6 @@ function showCreditCard() {
 	    creditCard.show();
 	}
 }
-
-
 
 function doSearch() {
 	var completeTable = $("completeTable");
