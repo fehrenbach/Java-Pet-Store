@@ -18,9 +18,7 @@
   <property name="build.classes.dir" value="${build.dir}/classes" />
   <property name="war.build.dir" value="${build.dir}/war" />
   <property name="commons.script" value="../../lib/js/ajax-commons.js" /> 
-  <property name="dojo.script" value="../../lib/dojo/dojo.js" />
-  <property name="dojo.history" value="../../lib/dojo/iframe_histroy.js" />
-  <property name="dojo.src.dir" value="../../lib/dojo/src" />
+  <property name="dojo.zip" value="../../lib/dojo/dojo.zip" />
   
   <!-- add lucene jar to path -->
   <property name="extra.classpath" value="lib/lucene-1.4.3.jar" />
@@ -41,8 +39,19 @@
     </copy>
     
   </target>
+
+<target name="dojo" description="Unzips the dojo.zip to the right place">
+    <mkdir dir="${war.build.dir}"/>
+    <unzip src="${dojo.zip}" dest="${war.build.dir}" >
+      <patternset>
+        <include name="**/dojo.js"/>
+        <include name="**/iframe_history.html"/>
+        <include name="**/src/**"/>
+      </patternset>
+    </unzip>
+  </target>
   
-  <target name="war" depends="build,package-persistence-jar" description="Packages the War file">
+  <target name="war" depends="build,package-persistence-jar,dojo" description="Packages the War file">
     <mkdir dir="${war.build.dir}"/>
     <!-- Copy in the compiled Classes -->
     <copy todir="${war.build.dir}/WEB-INF/classes">
@@ -56,12 +65,7 @@
      <fileset dir="${src.web}"/>
     </copy>
     <copy file="${commons.script}" todir="${war.build.dir}" />
-    <copy file="${dojo.script}" todir="${war.build.dir}" />
 
-   <copy todir="${war.build.dir}/src">
-     <fileset dir="${dojo.src.dir}"/>
-    </copy>
-    
    <copy todir="${war.build.dir}">
      <fileset dir="${war.build.dir}"/>
     </copy> 
