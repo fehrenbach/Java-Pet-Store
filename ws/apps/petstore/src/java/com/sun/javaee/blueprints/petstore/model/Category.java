@@ -3,16 +3,15 @@ package com.sun.javaee.blueprints.petstore.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name="CATEGORY") 
 
-public class PCategory implements java.io.Serializable {
+public class Category implements java.io.Serializable {
     
     private String categoryID;
     private String name;
     private String description;
     private String imageURL;
     
-    public PCategory() { }
+    public Category() { }
     
     @Id
     public String getCategoryID() {

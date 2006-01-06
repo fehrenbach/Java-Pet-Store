@@ -42,12 +42,12 @@ public class CatalogFacade implements ServletContextListener {
                 .setParameter(1, "%"+productID+"%").getResultList();
     }
 
-    public PCategory getCategory(String categoryID){
-        return em.find(PCategory.class,categoryID);
+    public Category getCategory(String categoryID){
+        return em.find(Category.class,categoryID);
     }
 
-    public PItem getItem(String itemID){
-        return em.find(PItem.class,itemID);
+    public Item getItem(String itemID){
+        return em.find(Item.class,itemID);
     }
 
     public Collection doSearch(String querryString){

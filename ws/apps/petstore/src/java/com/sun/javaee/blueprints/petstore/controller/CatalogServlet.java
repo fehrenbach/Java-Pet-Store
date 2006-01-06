@@ -119,7 +119,7 @@ public class CatalogServlet extends HttpServlet {
              String targetId = request.getParameter("id");
              NumberFormat formatter = new DecimalFormat("00.00");
              System.out.println("CatalogServlet: Request for item with id: " + targetId);
-             PItem i = cf.getItem(targetId);
+             Item i = cf.getItem(targetId);
              StringBuffer sb = new StringBuffer();
              sb.append("<item>\n");
              sb.append(" <id>" + i.getItemID() + "</id>\n");

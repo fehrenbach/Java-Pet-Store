@@ -3,9 +3,8 @@ package com.sun.javaee.blueprints.petstore.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name="item") 
 
-public class PItem implements java.io.Serializable {
+public class Item implements java.io.Serializable {
 
     private String itemID;
     private String productID;
@@ -15,7 +14,7 @@ public class PItem implements java.io.Serializable {
     private float listPrice;
     private float unitCost;
       
-    public PItem() { }
+    public Item() { }
     
     @Id
     public String getItemID() {
