@@ -10,7 +10,7 @@
 package com.sun.javaee.blueprints.wrapper.dojo;
 
 import javax.faces.context.FacesContext;
-import com.sun.javaee.blueprints.ikandi.*;
+import com.sun.javaee.blueprints.wrapper.*;
 
 public class ApplicationBean {
 
