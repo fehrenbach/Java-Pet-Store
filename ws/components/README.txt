@@ -8,7 +8,7 @@ Type:
 
 ant
 
-ant deploy
+ant deploy-all
 
 
 ----------
