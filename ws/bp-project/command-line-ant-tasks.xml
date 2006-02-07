@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Copyright 2005-2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
+ http://developer.sun.com/berkeley_license.html
+ $Id: command-line-ant-tasks.xml,v 1.1 2006-02-07 23:48:38 inder Exp $ -->
+
+
+<!-- command-line-ant-tasks.xml: This file defines various targets needed for 
+     command line operation. This file is not meant to be included directly. 
+     @Author: Inderjeet Singh -->
+<project name="command-line-ant-tasks" default="default">
+
+  <import file="${ant.file.command-line-ant-tasks}/../common-properties.xml"/>
+
+  <condition property="module-tasks-file" value="${ant.file.command-line-ant-tasks}/../jar-ant.xml">
+    <isset property="is.jar.module"/>
+  </condition>
+  <condition property="module-tasks-file" value="${ant.file.command-line-ant-tasks}/../ejb-jar-ant.xml">
+    <isset property="is.ejb-jar.module"/>
+  </condition>
+  <condition property="module-tasks-file" value="${ant.file.command-line-ant-tasks}/../war-ant.xml">
+    <isset property="is.war.module"/>
+  </condition>
+  <condition property="module-tasks-file" value="${ant.file.command-line-ant-tasks}/../ear-ant.xml">
+    <isset property="is.ear.module"/>
+  </condition>
+  <condition property="module-tasks-file" value="${ant.file.command-line-ant-tasks}/../app-client-ant.xml">
+    <isset property="is.app-client.module"/>
+  </condition>
+
+  <condition property="module-tasks-file" value="${ant.file.command-line-ant-tasks}/../free-form-project-ant.xml">
+    <not>
+      <isset property="module-tasks-file"/>
+    </not>
+  </condition>
+
+  <import file="${module-tasks-file}"/>
+  <import file="${ant.file.command-line-ant-tasks}/../app-server-ant.xml"/>
+
+  <import file="${ant.file.command-line-ant-tasks}/../persistence-unit-ant.xml"/>
+
+  <!-- Cleans the build directory -->
+  <target name="clean" depends="-pre-clean" description="Removes the build and dist directory">
+    <delete dir="${build.dir}" />
+    <delete dir="${dist.dir}" />
+  </target>
+
+ <target name="compile" depends="-pre-compile">
+    <echo>Compiling ${module.name}</echo>
+   <path id="classpath">
+     <pathelement location="${build.classes.dir}"/>
+     <pathelement location="${extra.classpath}"/>
+     <pathelement location="${extra2.classpath}"/>
+     <path refid="javaee.classpath" />
+   </path>
+    <mkdir dir="${build.classes.dir}"/>
+    <javac srcdir="${src.dir}"
+	   source="${default.javac.source}"
+	   target="${default.javac.target}"
+           excludes="${javac.excludes}"
+           debug="${javac.debug}"
+           debuglevel="${javac.debuglevel}"
+           destdir="${build.classes.dir}"
+           includes="**">
+     <classpath refid="classpath"/>
+    </javac>
+  </target>
+  
+  <target name="getBrowser" unless="default.browser">
+  
+     <condition property="browser" value="rundll32">
+        <os family="windows"/>
+     </condition>
+     
+     <condition property="browser" value="/usr/bin/open">
+       <and>
+         <os family="mac"/>
+       </and>
+     </condition>
+
+    <property name="default.browser" value="${browser}"/>
+  </target>
+  
+  <!-- This target launches a browser for the specified URL -->
+  <target name="launch" depends="getBrowser">
+    <fail unless="module.name" message="The property module.name must be set before invoking this target. Otherwise there is no application to launch."/>
+    <condition property="extra-args" value="url.dll,FileProtocolHandler">
+      <os family="windows"/>
+    </condition>
+    <condition property="extra-args" value="">
+      <not>
+        <os family="windows"/>
+      </not>
+    </condition>
+    <echo>Launching ${module.name}.</echo>
+    <exec executable="${default.browser}" spawn="true">
+      <arg line ="${extra-args} http://${javaee.server.name}:${javaee.server.port}/${module.name}" />
+    </exec>
+  </target>
+
+  <!-- Dummy placeholder targets. They can be overridden by application build file -->
+  <target name="init"/>
+  <target name="-pre-compile"/>
+  <target name="-post-compile" depends="compile"/>
+  <target name="-pre-clean"/>
+  <target name="-pre-package"/>
+
+  <target name="default" depends="compile,-post-compile,package,copy-dist"/>
+  <target name="copy-dist">
+    <mkdir dir="${dist.dir}"/>
+    <copy todir="${dist.dir}">
+      <fileset file="${app.module}"/>
+    </copy>
+  </target>
+  <target name="run" depends="default,deploy,launch"/>
+
+</project>

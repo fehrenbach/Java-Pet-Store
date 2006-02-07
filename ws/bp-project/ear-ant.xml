@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Copyright 2005-2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
+ http://developer.sun.com/berkeley_license.html
+ $Id: ear-ant.xml,v 1.1 2006-02-07 23:48:39 inder Exp $ -->
+
+
+<!-- ear-ant.xml: contains targets for projects that produce 
+     ear files. This file is not meant to be included in a project directly. 
+     This file should only be included if this project is defining 
+     is.ear.module property.
+     @Author: Inderjeet Singh -->
+
+<project name="ear-ant" default="dummy-default">
+
+  <property name="app.module" value="${build.dir}/${module.name}.ear"/>
+  <property name="ear.build.dir" value="${build.dir}/ear"/>
+
+  <target name="package" depends="-pre-package">
+    <mkdir dir="${ear.build.dir}"/>
+    <mkdir dir="${ear.build.dir}/META-INF"/>
+    <copy file="${src.conf}/sun-application.xml" todir="${ear.build.dir}/META-INF/" failonerror="false" />
+    <copy file="${src.conf}/application.xml" todir="${ear.build.dir}/META-INF/" />
+    <copy file="${app.module}" todir="${ear.build.dir}" failonerror="false" />
+    <copy file="${ejb.module}" todir="${ear.build.dir}" failonerror="false" />
+    <copy file="${ejb.module2}" todir="${ear.build.dir}" failonerror="false" />
+    <delete file="${app.module}"/>
+    <jar jarfile="${app.module}" basedir="${ear.build.dir}" />
+    <delete dir="${ear.build.dir}"/>
+  </target>
+
+  <target name="dummy-default"/>
+
+</project>

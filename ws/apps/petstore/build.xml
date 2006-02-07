@@ -1,46 +1,20 @@
 
 
-<project name="petstore" default="war" basedir=".">
+<project name="petstore" default="default" basedir=".">
 
-  <property file="${user.home}/build.properties" />
+  <property name="is.war.module" value="true"/>
   <property file="./setup/derby.properties" />
   
+  <import file="../../bp-project/main.xml" />
   <import file="./setup/setup.xml" />
-  <import file="../../setup/common-ant.xml" />
 
-  <property name="module.name" value="petstore" />
-
-  <property name="dist.dir" value="dist" />
-  <property name="app.module" value="${dist.dir}/petstore.war" />
-    
-  <property name="build.dir" value="build" />
-  <property name="src.web" value="web" />
-  <property name="build.classes.dir" value="${build.dir}/classes" />
-  <property name="war.build.dir" value="${build.dir}/war" />
   <property name="commons.script" value="../../lib/js/ajax-commons.js" /> 
   <property name="dojo.zip" value="../../lib/dojo/dojo.zip" />
   
   <!-- add lucene jar to path -->
   <property name="extra.classpath" value="lib/lucene-1.4.3.jar" />
 
-
-  <target name="build" description="Compile petstore files." >
-    <mkdir dir="${build.classes.dir}" />
-    <javac srcdir="src/java" destdir="${build.classes.dir}">
-      <include name="**/*.java" />
-	  <classpath refid="classpath"/>
-	</javac>
-    
-    <!-- copy property files into build directory -->
-    <copy todir="${build.classes.dir}" overwrite="true">
-        <fileset dir="src/java">
-          <include name="**/*.properties"/>
-        </fileset>
-    </copy>
-    
-  </target>
-
-<target name="dojo" description="Unzips the dojo.zip to the right place">
+  <target name="dojo" description="Unzips the dojo.zip to the right place">
     <mkdir dir="${war.build.dir}"/>
     <unzip src="${dojo.zip}" dest="${war.build.dir}" >
       <patternset>
@@ -51,12 +25,13 @@
     </unzip>
   </target>
   
-  <target name="war" depends="build,package-persistence-jar,dojo" description="Packages the War file">
-    <mkdir dir="${war.build.dir}"/>
-    <!-- Copy in the compiled Classes -->
-    <copy todir="${war.build.dir}/WEB-INF/classes">
-     <fileset dir="${build.classes.dir}"/>
-    </copy> 
+  <target name="-pre-package" depends="package-persistence-jar,dojo" description="Packages the War file">
+    <!-- copy property files into build directory -->
+    <copy todir="${build.classes.dir}" overwrite="true">
+        <fileset dir="src/java">
+          <include name="**/*.properties"/>
+        </fileset>
+    </copy>
     <copy todir="${war.build.dir}/WEB-INF/lib" file="lib/ajax-wrapper-comp.jar"/>
     <copy todir="${war.build.dir}/WEB-INF/lib" file="lib/bp-dynamic-text-comp.jar"/>
     <copy todir="${war.build.dir}/WEB-INF/lib" file="./build/catalog-persistence.jar"/>
@@ -64,21 +39,8 @@
     <copy todir="${war.build.dir}/WEB-INF/lib" file="lib/ui.jar"/>
     
     <!-- Copy in the content -->
-    <copy todir="${war.build.dir}">
-     <fileset dir="${src.web}"/>
-    </copy>
     <copy file="${commons.script}" todir="${war.build.dir}" />
 
-   <copy todir="${war.build.dir}">
-     <fileset dir="${war.build.dir}"/>
-    </copy> 
-    
-    <mkdir dir="${dist.dir}"/>
-    <delete file="${app.module}"/>
-    <jar jarfile="${app.module}" basedir="${war.build.dir}" />
-    <delete dir="${war.build.dir}"/>
-    
-    
     <!-- unzip lucene indexes into the javaee.home/lib directory, if they don't exist -->
     <available file="${javaee.home}/lib/petstore" type="dir" property="lucene.index.exists"/>
     <antcall target="unzipIndexes"/>
@@ -91,7 +53,7 @@
   
   
   
-  <target name="package-persistence-jar" depends="build" description="Packages the persistence unit">
+  <target name="package-persistence-jar" depends="compile" description="Packages the persistence unit">
     <mkdir dir="${jar.build.dir}"/>
     <!-- Copy in the compiled Classes -->
     <copy todir="${jar.build.dir}">
@@ -106,12 +68,6 @@
     <jar jarfile="./build/catalog-persistence.jar" basedir="${jar.build.dir}" />
     <delete dir="${jar.build.dir}"/>
   </target>
-
-  <target name="clean" description="Cleans up">
-    <delete dir="${dist.dir}"/>
-    <delete dir="${build.dir}"/>
-  </target>
-
 </project>
 
 
