@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2005 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
+ http://developer.sun.com/berkeley_license.html
+ $Id: build.xml,v 1.1 2006-02-07 02:33:51 gmurray71 Exp $ -->
+
+<project name="wrapper" default="test" basedir=".">
+
+  
+  <import file="../setup/common-ant.xml"/>
+  <property name="app.module" value="${dist.dir}/wrapper.war" />
+  
+ <target name="default" depends="package-war, deploy, launch"/>
+
+
+  <target name="war" depends="build,dependencies" description="Packages the War file">
+    <mkdir dir="${war.build.dir}"/>
+
+    <!-- Copy in the content -->
+    <copy todir="${war.build.dir}">
+     <fileset dir="${src.web}"/>
+    </copy>
+ 
+    <mkdir dir="${dist.dir}"/>
+    <delete file="${app.module}"/>
+    <jar jarfile="${app.module}" basedir="${war.build.dir}" />
+    <delete dir="${war.build.dir}"/>
+       
+
+  </target>
+  
+  <target name="dependencies">
+ 
+  <target name="dependencies">
+   <ant inheritAll="false" target="default" antfile="dojo/build.xml"/>
+   <ant inheritAll="false" target="deploy" antfile="dojo/build.xml"/>
+  </target>
+                                                                            
+</project>

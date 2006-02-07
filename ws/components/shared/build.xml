@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2005 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
+ http://developer.sun.com/berkeley_license.html
+ $Id: build.xml,v 1.1 2006-02-07 02:33:58 gmurray71 Exp $ -->
+
+<project name="ajax-wrapper-comp" default="default" basedir=".">
+
+  <property name="is.jar.module" value="true"/>
+  
+  <import file="../../setup/common-ant.xml"/>
+
+  <property name="comp-jsf.tld" value="src/conf/component-jsf.tld" />
+  <property name="faces.cfg" value="src/conf/faces-config.xml" />
+  
+  <property name="test.war.name" value="${build.dir}/${module.name}.war" />
+                                                                                     
+  <target name="-post-compile">
+    <copy file="${comp-jsf.tld}" todir="${build.classes.dir}/META-INF/" />
+    <copy file="${faces.cfg}" todir="${build.classes.dir}/META-INF/" />
+  </target>
+  
+  <target name="dist" depends="clean,default">
+    <delete dir="dist" />
+    <mkdir dir="dist"/>
+    <copy file="${build.dir}/${module.name}.jar" todir="dist" />
+  </target>
+      
+</project>
