@@ -1,6 +1,6 @@
-
-
+<?xml version="1.0" encoding="UTF-8"?>
 <project name="petstore" default="default" basedir=".">
+    <description>Builds, tests, and runs the project petstore.</description>
 
   <property name="is.war.module" value="true"/>
   <property file="./setup/derby.properties" />
@@ -69,5 +69,3 @@
     <delete dir="${jar.build.dir}"/>
   </target>
 </project>
-
-
