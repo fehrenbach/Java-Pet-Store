@@ -18,9 +18,11 @@
                 <td>
                     <br>FileUpload Test 
                     <br>This section tests the default scenario.<br>
-                    <ui:FileUploadTag id="TestFileuploadForm2" enctype="multipart/form-data">
-                        <input type="file" size="40" name="fileToUpload5" id="fileToUploadId"/><br>
-                        <input type="submit" name="submit3x" value="Submit"/>
+                    <ui:FileUploadTag id="TestFileuploadForm" enctype="multipart/form-data" 
+                        postProcessingMethod="#{FileUploadBean.postProcessingMethod}">
+                        
+                        <input type="file" size="40" name="fileToUpload" id="fileToUploadId"/><br>
+                        <input type="submit" name="submitx" value="Submit"/>
                     </ui:FileUploadTag>
                 </td>
             </tr>

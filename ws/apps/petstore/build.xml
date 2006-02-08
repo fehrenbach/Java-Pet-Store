@@ -1,71 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project name="petstore" default="default" basedir=".">
-    <description>Builds, tests, and runs the project petstore.</description>
-
-  <property name="is.war.module" value="true"/>
-  <property file="./setup/derby.properties" />
-  
-  <import file="../../bp-project/main.xml" />
-  <import file="./setup/setup.xml" />
-
-  <property name="commons.script" value="../../lib/js/ajax-commons.js" /> 
-  <property name="dojo.zip" value="../../lib/dojo/dojo.zip" />
-  
-  <!-- add lucene jar to path -->
-  <property name="extra.classpath" value="lib/lucene-1.4.3.jar" />
-
-  <target name="dojo" description="Unzips the dojo.zip to the right place">
-    <mkdir dir="${war.build.dir}"/>
-    <unzip src="${dojo.zip}" dest="${war.build.dir}" >
-      <patternset>
-        <include name="**/dojo.js"/>
-        <include name="**/iframe_history.html"/>
-        <include name="**/src/**"/>
-      </patternset>
-    </unzip>
-  </target>
-  
-  <target name="-pre-package" depends="package-persistence-jar,dojo" description="Packages the War file">
-    <!-- copy property files into build directory -->
-    <copy todir="${build.classes.dir}" overwrite="true">
-        <fileset dir="src/java">
-          <include name="**/*.properties"/>
-        </fileset>
-    </copy>
-    <copy todir="${war.build.dir}/WEB-INF/lib" file="lib/ajax-wrapper-comp.jar"/>
-    <copy todir="${war.build.dir}/WEB-INF/lib" file="lib/bp-dynamic-text-comp.jar"/>
-    <copy todir="${war.build.dir}/WEB-INF/lib" file="./build/catalog-persistence.jar"/>
-    <copy todir="${war.build.dir}/WEB-INF/lib" file="lib/lucene-1.4.3.jar"/>
-    <copy todir="${war.build.dir}/WEB-INF/lib" file="lib/ui.jar"/>
-    
-    <!-- Copy in the content -->
-    <copy file="${commons.script}" todir="${war.build.dir}" />
-
-    <!-- unzip lucene indexes into the javaee.home/lib directory, if they don't exist -->
-    <available file="${javaee.home}/lib/petstore" type="dir" property="lucene.index.exists"/>
-    <antcall target="unzipIndexes"/>
-  </target>
-
-  
-  <target name="unzipIndexes" unless="lucene.index.exists">
-      <unzip src="lib/petstoreIndexes.zip" dest="${javaee.home}/lib" overwrite="true"/>
-  </target>
-  
-  
-  
-  <target name="package-persistence-jar" depends="compile" description="Packages the persistence unit">
-    <mkdir dir="${jar.build.dir}"/>
-    <!-- Copy in the compiled Classes -->
-    <copy todir="${jar.build.dir}">
-      <fileset dir="${build.classes.dir}">
-      </fileset>
-    </copy>
-    <delete file="${jar.build.dir}/com/sun/javaee/blueprints/petstore/model/CatalogFacade.class"/>
-    <delete file="${jar.build.dir}/com/sun/javaee/blueprints/petstore/model/Customer.class"/>
-    <delete file="${jar.build.dir}/com/sun/javaee/blueprints/petstore/model/Order.class"/>   
-    <copy todir="${jar.build.dir}/META-INF" file="${src.web}/WEB-INF/persistence.xml"/>
-    <delete file="./build/catalog-persistence.jar"/>
-    <jar jarfile="./build/catalog-persistence.jar" basedir="${jar.build.dir}" />
-    <delete dir="${jar.build.dir}"/>
-  </target>
-</project>
+<?xml version="1.0" encoding="UTF-8"?><project name="petstore" default="default" basedir=".">    <description>Builds, tests, and runs the project petstore.</description>  <property name="is.war.module" value="true"/>  <property file="./setup/derby.properties" />    <import file="../../bp-project/main.xml" />  <import file="./setup/setup.xml" />  <property name="commons.script" value="../../lib/js/ajax-commons.js" />   <property name="dojo.zip" value="../../lib/dojo/dojo.zip" />    <!-- add lucene jar to path -->  <property name="extra.classpath" value="lib/lucene-1.4.3.jar" />  <property name="extra2.classpath" value="lib/ui.jar" />  <target name="dojo" description="Unzips the dojo.zip to the right place">    <mkdir dir="${war.build.dir}"/>    <unzip src="${dojo.zip}" dest="${war.build.dir}" >      <patternset>        <include name="**/dojo.js"/>        <include name="**/iframe_history.html"/>        <include name="**/src/**"/>      </patternset>    </unzip>  </target>    <target name="-pre-package" depends="package-persistence-jar,dojo" description="Packages the War file">    <!-- copy property files into build directory -->    <copy todir="${build.classes.dir}" overwrite="true">        <fileset dir="src/java">          <include name="**/*.properties"/>        </fileset>    </copy>    <copy todir="${war.build.dir}/WEB-INF/lib" file="lib/ajax-wrapper-comp.jar"/>    <copy todir="${war.build.dir}/WEB-INF/lib" file="lib/bp-dynamic-text-comp.jar"/>    <copy todir="${war.build.dir}/WEB-INF/lib" file="./build/catalog-persistence.jar"/>    <copy todir="${war.build.dir}/WEB-INF/lib" file="lib/lucene-1.4.3.jar"/>    <copy todir="${war.build.dir}/WEB-INF/lib" file="lib/ui.jar"/>        <!-- Copy in the content -->    <copy file="${commons.script}" todir="${war.build.dir}" />    <!-- unzip lucene indexes into the javaee.home/lib directory, if they don't exist -->    <available file="${javaee.home}/lib/petstore" type="dir" property="lucene.index.exists"/>    <antcall target="unzipIndexes"/>  </target>    <target name="unzipIndexes" unless="lucene.index.exists">      <unzip src="lib/petstoreIndexes.zip" dest="${javaee.home}/lib" overwrite="true"/>  </target>        <target name="package-persistence-jar" depends="compile" description="Packages the persistence unit">    <mkdir dir="${jar.build.dir}"/>    <!-- Copy in the compiled Classes -->    <copy todir="${jar.build.dir}">      <fileset dir="${build.classes.dir}">      </fileset>    </copy>    <delete file="${jar.build.dir}/com/sun/javaee/blueprints/petstore/model/CatalogFacade.class"/>    <delete file="${jar.build.dir}/com/sun/javaee/blueprints/petstore/model/Customer.class"/>    <delete file="${jar.build.dir}/com/sun/javaee/blueprints/petstore/model/Order.class"/>       <copy todir="${jar.build.dir}/META-INF" file="${src.web}/WEB-INF/persistence.xml"/>    <delete file="./build/catalog-persistence.jar"/>    <jar jarfile="./build/catalog-persistence.jar" basedir="${jar.build.dir}" />    <delete dir="${jar.build.dir}"/>  </target></project>

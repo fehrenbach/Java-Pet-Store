@@ -2,7 +2,7 @@
 <!-- Copyright 2004-2005 Sun Microsystems, Inc.  All rights reserved.  You may not modify, 
 use, reproduce, or distribute this software except in compliance with the terms of the License 
 at:  http://developer.sun.com/berkeley_license.html
- $Id: faces-config.xml,v 1.1 2005-12-03 08:05:46 gmurray71 Exp $ -->
+ $Id: faces-config.xml,v 1.2 2006-02-08 17:20:35 basler Exp $ -->
 
 
 
@@ -15,7 +15,12 @@ at:  http://developer.sun.com/berkeley_license.html
 
   <!-- ========== Managed Beans ============================================ -->
   
-  
+    <managed-bean>
+        <managed-bean-name>FileUploadBean</managed-bean-name>
+        <managed-bean-class>com.sun.javaee.blueprints.petstore.controller.FileUploadBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    
     <managed-bean>
       <managed-bean-name>CreditCardBean</managed-bean-name>
       <managed-bean-class>com.sun.javaee.blueprints.petstore.CreditCardBean</managed-bean-class>
