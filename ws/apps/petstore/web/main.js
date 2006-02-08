@@ -21,7 +21,7 @@ window.onresize=resized;
 // a user clicks somewhere on the screen.
 window.onclick = handleMouseClick;
 
-dojo.require("dojo.widget.HtmlFisheyeList");
+dojo.require("dojo.widget.FisheyeList");
 
 dojo.hostenv.writeIncludes();
 dojo.addOnLoad(function () {
