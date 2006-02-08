@@ -1,41 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2005 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: build.xml,v 1.3 2006-02-07 02:56:09 gmurray71 Exp $ -->
+ $Id: build.xml,v 1.4 2006-02-08 22:52:40 inder Exp $ -->
 
 <project name="wrapper" default="default" basedir=".">
 
-  
-  <import file="../setup/common-ant.xml"/>
-  <property name="app.module" value="${dist.dir}/wrapper.war" />
-  
- <target name="default" depends="war"/>
-
-  <target name="war" depends="dependencies" description="Packages the War file">
-    <mkdir dir="${war.build.dir}"/>
-
-    <!-- Copy in the content -->
-    <copy todir="${war.build.dir}">
-     <fileset dir="${src.web}"/>
-    </copy>
- 
-    <mkdir dir="${dist.dir}"/>
-    <delete file="${app.module}"/>
-    <jar jarfile="${app.module}" basedir="${war.build.dir}" />
-    <delete dir="${war.build.dir}"/>
-  </target>
-  
- <target name="deploy-all" depends="deploy">
+  <property name="is.war.module" value="true"/>
+  <import file="../bp-project/main.xml"/>
+    
+ <target name="-pre-deploy">
    <ant inheritAll="false" target="deploy" antfile="dojo/build.xml"/>
   </target>
  
-  <target name="dependencies">
+  <target name="-pre-package">
    <ant inheritAll="false" target="default" antfile="shared/build.xml"/>
    <ant inheritAll="false" target="default" antfile="dojo/build.xml"/>
    <ant inheritAll="false" target="deploy" antfile="dojo/build.xml"/>
   </target>
 
-  <target name="clean-all" depends="clean">
+  <target name="-pre-clean">
    <ant inheritAll="false" target="clean" antfile="shared/build.xml"/>
    <ant inheritAll="false" target="clean" antfile="dojo/build.xml"/>
   </target>

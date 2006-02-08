@@ -2,7 +2,7 @@
 
 <!-- Copyright 2005-2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: command-line-ant-tasks.xml,v 1.1 2006-02-07 23:48:38 inder Exp $ -->
+ $Id: command-line-ant-tasks.xml,v 1.2 2006-02-08 22:52:38 inder Exp $ -->
 
 
 <!-- command-line-ant-tasks.xml: This file defines various targets needed for 
@@ -27,6 +27,9 @@
   <condition property="module-tasks-file" value="${ant.file.command-line-ant-tasks}/../app-client-ant.xml">
     <isset property="is.app-client.module"/>
   </condition>
+  <condition property="module-tasks-file" value="${ant.file.command-line-ant-tasks}/../java-client-ant.xml">
+    <isset property="is.java-client.module"/>
+  </condition>
 
   <condition property="module-tasks-file" value="${ant.file.command-line-ant-tasks}/../free-form-project-ant.xml">
     <not>
@@ -45,11 +48,12 @@
     <delete dir="${dist.dir}" />
   </target>
 
- <target name="compile" depends="-pre-compile">
+ <target name="compile" depends="-pre-compile" description="compiles the project">
     <echo>Compiling ${module.name}</echo>
    <path id="classpath">
      <pathelement location="${build.classes.dir}"/>
      <pathelement location="${extra.classpath}"/>
+     <pathelement location="${extra1.classpath}"/>
      <pathelement location="${extra2.classpath}"/>
      <path refid="javaee.classpath" />
    </path>
@@ -82,7 +86,7 @@
   </target>
   
   <!-- This target launches a browser for the specified URL -->
-  <target name="launch" depends="getBrowser">
+  <target name="launch" depends="getBrowser" description="launches the application in a browser">
     <fail unless="module.name" message="The property module.name must be set before invoking this target. Otherwise there is no application to launch."/>
     <condition property="extra-args" value="url.dll,FileProtocolHandler">
       <os family="windows"/>
@@ -104,6 +108,7 @@
   <target name="-post-compile" depends="compile"/>
   <target name="-pre-clean"/>
   <target name="-pre-package"/>
+  <target name="-pre-deploy"/>
 
   <target name="default" depends="compile,-post-compile,package,copy-dist"/>
   <target name="copy-dist">
@@ -112,6 +117,6 @@
       <fileset file="${app.module}"/>
     </copy>
   </target>
-  <target name="run" depends="default,deploy,launch"/>
+  <target name="run" depends="default,deploy,launch" description="builds, packages and runs the application"/>
 
 </project>
