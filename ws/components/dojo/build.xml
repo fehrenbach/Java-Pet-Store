@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2005 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: build.xml,v 1.1 2006-02-07 02:33:51 gmurray71 Exp $ -->
+ $Id: build.xml,v 1.2 2006-02-08 23:25:25 inder Exp $ -->
 
 <project name="dojo-test" default="default" basedir=".">
 
   <property name="is.war.module" value="true"/>
   <property name="comp.jar" value="../shared/dist/ajax-wrapper-comp.jar"/>
   <property name="faces.cfg" value="src/conf/faces-config.xml"/>
-  <import file="../../setup/common-ant.xml"/>
   <property name="extra.classpath" value="${comp.jar}"/>
+  <import file="../../bp-project/main.xml"/>
   
  <property name="dojo.zip" value="../../lib/dojo/dojo.zip" />
   
@@ -24,7 +24,7 @@
     </unzip>
   </target>
   
- <target name="-post-compile" depends="dojo">
+ <target name="-pre-package" depends="dojo">
     <ant inheritAll="false" antfile="../shared/build.xml"/>    
     <mkdir dir="${war.build.dir}/WEB-INF/lib"/>
     <copy file="${faces.cfg}" todir="${war.build.dir}/WEB-INF" />
