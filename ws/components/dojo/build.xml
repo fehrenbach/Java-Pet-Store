@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright 2005 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
- http://developer.sun.com/berkeley_license.html
- $Id: build.xml,v 1.2 2006-02-08 23:25:25 inder Exp $ -->
-
 <project name="dojo-test" default="default" basedir=".">
+  <description>Builds, tests, and runs the project dojo-test.</description>
 
   <property name="is.war.module" value="true"/>
   <property name="comp.jar" value="../shared/dist/ajax-wrapper-comp.jar"/>
@@ -24,12 +21,10 @@
     </unzip>
   </target>
   
- <target name="-pre-package" depends="dojo">
+ <target name="-post-compile" depends="dojo">
     <ant inheritAll="false" antfile="../shared/build.xml"/>    
     <mkdir dir="${war.build.dir}/WEB-INF/lib"/>
     <copy file="${faces.cfg}" todir="${war.build.dir}/WEB-INF" />
     <copy file="${comp.jar}" todir="${war.build.dir}/WEB-INF/lib" />
-        <!-- Copy in the resources -->
- </target>
-                                                                                      
+ </target>    
 </project>

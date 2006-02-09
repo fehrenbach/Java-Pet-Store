@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2005 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: build.xml,v 1.4 2006-02-08 22:52:40 inder Exp $ -->
+ $Id: build.xml,v 1.5 2006-02-09 17:00:39 inder Exp $ -->
 
 <project name="wrapper" default="default" basedir=".">
 
@@ -12,7 +12,7 @@
    <ant inheritAll="false" target="deploy" antfile="dojo/build.xml"/>
   </target>
  
-  <target name="-pre-package">
+  <target name="-post-compile">
    <ant inheritAll="false" target="default" antfile="shared/build.xml"/>
    <ant inheritAll="false" target="default" antfile="dojo/build.xml"/>
    <ant inheritAll="false" target="deploy" antfile="dojo/build.xml"/>
