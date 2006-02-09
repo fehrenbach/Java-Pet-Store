@@ -2,7 +2,7 @@
 
 <!-- Copyright 2005-2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: command-line-ant-tasks.xml,v 1.4 2006-02-09 17:51:36 inder Exp $ -->
+ $Id: command-line-ant-tasks.xml,v 1.5 2006-02-09 17:59:43 inder Exp $ -->
 
 
 <!-- command-line-ant-tasks.xml: This file defines various targets needed for 
@@ -109,7 +109,7 @@
   <!-- Dummy placeholder targets. They can be overridden by application build file -->
   <target name="init"/>
   <target name="-pre-compile"/>
-  <target name="-post-compile" depends="compile"/>
+  <target name="-post-compile"/>
   <target name="-pre-clean"/>
   <target name="-pre-deploy"/>
 
