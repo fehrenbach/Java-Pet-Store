@@ -34,6 +34,7 @@ public class SearchIndex {
     
     private boolean bDebug=false;
     private Vector vtHits=new Vector();
+    private Hits hits=null;
     private static Logger _logger=null;
     
     
@@ -41,24 +42,26 @@ public class SearchIndex {
     public SearchIndex() {
     }
     
-    public void query(String indexFile, String searchString) {
-
+    public Vector query(String indexFile, String searchString) {
+        return query(indexFile, searchString, "contents");
+    }
+        
+    public Vector query(String indexFile, String searchString, String searchField) {
+        
         Searcher searcher=null;
         try {
             searcher=new IndexSearcher(indexFile);
             Analyzer analyzer=new StandardAnalyzer();
             // search "contents" attribute by default where all relavant words are kept
-            QueryParser queryParser=new QueryParser("contents", analyzer);
+            QueryParser queryParser=new QueryParser(searchField, analyzer);
             queryParser.setOperator(QueryParser.DEFAULT_OPERATOR_AND);
             Query query=queryParser.parse(searchString);
-            
-            
             
             getLogger().log(Level.INFO, "search.string", searchString);
 
             // execute search
-            Hits hits=searcher.search(query);
-            getLogger().log(Level.INFO, "search.results", hits.length());
+            hits=searcher.search(query);
+            getLogger().log(Level.INFO, "search.results", String.valueOf(hits.length()));
             Document indexDoc;
             Enumeration enumx;
             Field fieldx;
@@ -108,20 +111,31 @@ public class SearchIndex {
                 if(fieldx != null) {
                     indexDocument.setContents(fieldx.stringValue());
                 }
-                
-                /*
-                // list all attributes indexed
-                enumx=indexDoc.fields();
-                while(enumx.hasMoreElements()) {
-                    fieldx=(Field)enumx.nextElement();
-                    System.out.println("\nField - " + fieldx);
-                    System.out.println(fieldx.name() + " - " +  fieldx.stringValue());
+
+                fieldx=indexDoc.getField("modified");
+                if(fieldx != null) {
+                    indexDocument.setModifiedDate(fieldx.stringValue());
                 }
-                */
+                
+                fieldx=indexDoc.getField("tag");
+                if(fieldx != null) {
+                    indexDocument.setTag(fieldx.stringValue());
+                }
+                
+                // list all attributes indexed
+                String outx="\nDocument" + indexDoc.toString() + "\n";
+
+                if(bDebug) {
+                    enumx=indexDoc.fields();
+                    while(enumx.hasMoreElements()) {
+                        fieldx=(Field)enumx.nextElement();
+                        outx += "\tField - " + fieldx.toString() + "\n";
+                        outx += "\t\t" + fieldx.name() + " - " +  fieldx.stringValue() + "\n";
+                    }
+                    System.out.println(outx);
+                }
                 
                 vtHits.add(indexDocument);
-                
-                
             }
         } catch(Exception e) {
             getLogger().log(Level.WARNING, "search.exception", e);
@@ -136,10 +150,16 @@ public class SearchIndex {
                 }
             }
         }
+        
+        return vtHits;
     }
     
     public Vector getHits() {
             return vtHits;
+    }
+    
+    public Hits getHitsNative() {
+            return hits;
     }
     
     

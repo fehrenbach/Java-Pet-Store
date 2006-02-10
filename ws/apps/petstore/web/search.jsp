@@ -1,6 +1,6 @@
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
-<%@page import="java.util.*, com.sun.javaee.blueprints.petstore.search.SearchIndex, com.sun.javaee.blueprints.petstore.search.IndexDocument"%>
+<%@page import="java.util.*, com.sun.javaee.blueprints.petstore.search.SearchIndex, com.sun.javaee.blueprints.petstore.search.IndexDocument, com.sun.javaee.blueprints.petstore.search.UpdateIndex, com.sun.javaee.blueprints.petstore.util.PetstoreConstants"%>
 
 <%--
 The taglib directive below imports the JSTL library. If you uncomment it,
@@ -18,13 +18,32 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
         String indexDirectory=request.getParameter("indexDirectory");
         if(searchString == null) searchString="cat";
         String submit=request.getParameter("submit");
+        String submitTag=request.getParameter("submitTag");
+        String searchTags=request.getParameter("searchTags");
+        String tagKeywords=request.getParameter("tagKeywords");
         
+        // perform search
         if(submit != null && searchString != null) {
             // string to search
             SearchIndex si=new SearchIndex();
-            si.query(indexDirectory, searchString);
-            request.setAttribute("hitsx", si.getHits());
+            // alter search string if tagged
+            String searchxx=searchString;
+            if(searchTags != null && searchTags.equals("true") && searchString.indexOf(":") < 0) {
+                searchxx="contents:" + searchString + " OR tag:" + searchString;
+            }
+            Vector vtHits=si.query(indexDirectory, searchxx);
+            request.setAttribute("searchStringx", searchxx);
+            request.setAttribute("numberOfHits", vtHits.size());
+            request.setAttribute("hitsx", vtHits);
         }
+        
+        // perform tagging
+        if(submitTag != null && tagKeywords != null) {
+            String docId=request.getParameter("docId");
+            UpdateIndex update=new UpdateIndex();
+            update.updateDocTag(indexDirectory, "tag" , tagKeywords, docId);
+        }
+        
 %>
 
 <html>
@@ -41,11 +60,14 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
         <table>
             <tr>
                 <th align="left">Index File Location:</th>
-                <td align="left"><input type="text" size="50" name="indexDirectory" value="<%=System.getProperty("com.sun.aas.installRoot")%>/lib/petstore/searchindex"/></td>
+                <td align="left"><input type="text" size="50" name="indexDirectory" value="<%= PetstoreConstants.PETSTORE_INDEX_DIRECTORY %>"/></td>
             </tr>
             <tr>
                 <th>Search String</th>
-                <td><input type="text" size="30" name="searchString" value="<%= searchString %>"/></td>
+                <td>
+                    <input type="text" size="30" name="searchString" value="<%= searchString %>"/> 
+                        Also Search Tags:<input type="checkbox" name="searchTags" value="true" CHECKED/>
+                </td>
             </tr>
             <tr>
                 <td align="center" colspan="2">
@@ -55,21 +77,27 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
         </table>
     </form>
     
-    here1<br>
     <c:if test="${!empty requestScope.hitsx}">
-        here2<br>
-        <table>
+        <b>${numberOfHits} hits returned for search string:</b> "${searchStringx}"<br>
+        <table border="1">
             <c:forEach items="${requestScope.hitsx}" var="docxx">
                 <tr>
                     <td>
-                        <a href="${docxx.pageURL}">${docxx.title}</a><br>
-                        ${docxx.summary}<br>
-                        ${docxx.image}<br>
-                        ${docxx.price}<br>
-                        ${docxx.UID}<br>
-                        ${docxx.contents}<br><br>
-                        
-                        
+                        <form action="./search.jsp" method="post">
+                            <b>URL:</b>${docxx.pageURL}<br>
+                            <b>Title:</b>${docxx.title}<br>
+                            <b>Summary:</b>${docxx.summary}<br>
+                            <b>Image:</b>${docxx.image}<br>
+                            <b>Price:</b>${docxx.price}<br>
+                            <b>UID:</b>${docxx.UID}<br>
+                            <b>Contents:</b>${docxx.contents}<br>
+                            <b>Tag:</b>${docxx.tag}<br>
+                            <b>Modified Date:</b>${docxx.modifiedDate}<br><br>
+                            Add Tag Keyword(s) <input name="tagKeywords" type="text" size="30"/><br>
+                            <input type="hidden" name="docId" value="${docxx.UID}"/><br>
+                            <input type="hidden" name="indexDirectory" value="<%= PetstoreConstants.PETSTORE_INDEX_DIRECTORY %>"/>
+                            <input type="submit" name="submitTag" value="Submit"/><br><br>
+                        </form>
                     </td>
                 </tr>
             </c:forEach>

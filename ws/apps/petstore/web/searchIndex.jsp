@@ -111,7 +111,7 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
                         </tr>
                         <tr>
                             <td align="left" colspan="2">
-                                <textarea rows="10" cols="70" wrap="soft" name="sqlStatement">select itemid "id", name "title", description "summary", imageurl "image", listprice "price", productid "product", '' "modifiedDate" from "APP"."ITEM"</textarea>
+                                <textarea rows="10" cols="70" wrap="soft" name="sqlStatement">select itemid "id", name "title", description "summary", imageurl "image", listprice "price", productid "product", CURRENT_TIMESTAMP "modifiedDate" from "APP"."ITEM"</textarea>
                             </td>
                         </tr>
                     </table>

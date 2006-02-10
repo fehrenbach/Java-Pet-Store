@@ -49,6 +49,8 @@ public class Indexer {
         // to tokenize the field into words.
         doc.add(Field.Keyword("modified", indexDoc.getModifiedDate()));
 
+        // use string return instead of reader, because info isn't retrievable which is 
+        // needed for delete/add of document to index when tagging occurs
         //doc.add(Field.Text("contents", new StringReader(indexDoc.getContents())));
         doc.add(Field.Text("contents", indexDoc.getContents()));
         doc.add(Field.Text("title", indexDoc.getTitle()));

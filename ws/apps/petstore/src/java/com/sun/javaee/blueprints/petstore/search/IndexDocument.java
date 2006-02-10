@@ -16,7 +16,7 @@ package com.sun.javaee.blueprints.petstore.search;
 public class IndexDocument {
     
     public String uid=null, pageURL=null, title=null, summary=null, image=null;
-    public String modifiedDate=null, contents=null, price=null, product=null;
+    public String modifiedDate=null, contents=null, price=null, product=null, tag=null;
     
     /** Creates a new instance of indexDocuments */
     public IndexDocument() {
@@ -92,12 +92,20 @@ public class IndexDocument {
     public void setProduct(String product) {
         this.product=product;
     }
+
+    public String getTag() {
+        return this.tag;
+    }
+    public void setTag(String tag) {
+        this.tag=tag;
+    }
+    
     
     public String toString() {
         String sxRet=" UID=" + uid + " pageURL=" + pageURL + " title=" + title +
             " summary=" + summary + " image=" + image + 
             " modifiedDate=" + modifiedDate + " contents=" + contents +
-            " price=" + price + " product=" + product;
+            " price=" + price + " product=" + product + " tag=" + tag;
         return sxRet;
                 
     }
