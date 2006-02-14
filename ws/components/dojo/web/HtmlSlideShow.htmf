@@ -1,0 +1,6 @@
+<dojo:slideshow
+    imgUrls="images/cat1.gif;images/cat2.gif;images/cat3.gif;images/cat4.gif" 
+    transitionInterval="700"
+    imgWidth="130"
+    imgHeight="60"
+    delay="7000" />

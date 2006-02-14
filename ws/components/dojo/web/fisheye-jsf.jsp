@@ -7,6 +7,6 @@
 <hr>
 
 <f:view>
-<a:ajax type="dojo" name="HtmlFisheyeList">
+<a:ajax type="dojo" name="FisheyeList">
 </a:ajax>
 </f:view>
