@@ -10,19 +10,30 @@
 package com.sun.javaee.blueprints.petstore.controller;
 
 import java.util.HashMap;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Set;
 import java.io.IOException;
+
+import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.UserTransaction;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
 import javax.servlet.http.HttpServletResponse;
 
+import com.sun.javaee.blueprints.petstore.model.Item;
 import com.sun.javaee.blueprints.components.ui.fileupload.FileUploadStatus;
 /**
  *
  * @author basler
  */
 public class FileUploadBean {
-    
+    @PersistenceContext(name="bppu")
+    private static EntityManager em;
+    @Resource UserTransaction utx;
     private boolean bDebug=false;
     
     /** Creates a new instance of FileUploadBean */
@@ -36,6 +47,47 @@ public class FileUploadBean {
             status.enableCustomReturn();
             FacesContext context=event.getFacesContext();
             HttpServletResponse response=(HttpServletResponse)context.getExternalContext().getResponse();
+            //persist the data
+            try{
+                String fileNameKey = null;
+                Set keySet = hmUpload.keySet();
+                Iterator iter = keySet.iterator();
+                while(iter.hasNext()){
+                    String key = iter.next().toString();
+                    if(key.startsWith("fileLocation"))
+                        fileNameKey = key;
+                }
+                String absoluteFileName = hmUpload.get(fileNameKey).toString();
+                String fileName = null;
+                int lastSeparator = absoluteFileName.lastIndexOf("/") + 1;
+                if (lastSeparator != -1) {
+                    fileName = absoluteFileName.substring(lastSeparator, absoluteFileName.length());
+                }
+                Item item = new Item();
+                String itemId = hmUpload.get("item").toString();
+                String prodId = hmUpload.get("product").toString();
+                String name = hmUpload.get("name").toString();
+                String desc = hmUpload.get("description").toString();
+                String unitCost = hmUpload.get("unitCost").toString();
+                String listPrice = hmUpload.get("listPrice").toString();
+                item.setItemID(itemId);
+                item.setProductID(prodId);
+                item.setDescription(desc);
+                item.setName(name);
+                item.setUnitCost(new Float(unitCost));
+                item.setListPrice(new Float(listPrice));
+                item.setImageURL(fileName);
+                utx.begin();
+                em.persist(item);
+                utx.commit();
+            }catch (Exception ex) {
+                System.out.println("Error persisting seller data: "+ex);
+                try {
+                    utx.rollback();
+                } catch (Exception exe) {
+                    System.out.println("Persisting seller data, rollback failed: "+exe.getMessage());
+                }
+            }
             StringBuffer sb=new StringBuffer();
             response.setContentType("text/xml;charset=UTF-8");
             response.setHeader("Cache-Control", "no-cache");
@@ -64,6 +116,7 @@ public class FileUploadBean {
             sb.append("</response>");
             if(bDebug) System.out.println("Response:\n" + sb);
             response.getWriter().write(sb.toString());
+            
         } catch (IOException iox) {
             System.out.println("FileUploadPhaseListener error writting AJAX response : " + iox);
         }
