@@ -79,6 +79,15 @@
                         <td><input type="text" size="20" name="email" id="emailId"/>
                         </td>
                     </tr>
+                    
+                    <tr>
+                        <td><b>Enter the text as it is shown below:</b></td>
+                    </tr>
+                    <tr>
+                        <td><img src="CaptchaServlet"></td>
+                        <td><input type="text" name="j_captcha_response"></td>
+                    </tr>
+                    
                     <tr>
                         <td colspan="2">
                             <input type="submit" name="submitx" value="Submit"/>

@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<web-app xmlns="http://java.sun.com/xml/ns/javaee" 
-        version="2.5" 
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
   <display-name>Petstore</display-name>
 
-  <listener>
+    <filter>
+        <filter-name>CaptchaValidateFilter</filter-name>
+        <filter-class>com.sun.javaee.blueprints.petstore.controller.CaptchaValidateFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CaptchaValidateFilter</filter-name>
+        <url-pattern>/faces/ProcessFileUpload</url-pattern>
+    </filter-mapping>
+    <listener>
    <listener-class>com.sun.javaee.blueprints.petstore.model.CatalogFacade</listener-class>
   </listener>
   
@@ -19,7 +23,11 @@
 
   </servlet>
 
-  <servlet-mapping>
+    <servlet>
+        <servlet-name>CaptchaServlet</servlet-name>
+        <servlet-class>com.sun.javaee.blueprints.petstore.captcha.CaptchaServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
     <servlet-name>CatalogServlet</servlet-name>
     <url-pattern>/catalog</url-pattern>
   </servlet-mapping>
@@ -115,6 +123,10 @@
     </servlet-mapping>
     
     <!-- need datasource for indexing Lucene search engine -->
+    <servlet-mapping>
+        <servlet-name>CaptchaServlet</servlet-name>
+        <url-pattern>/faces/CaptchaServlet</url-pattern>
+    </servlet-mapping>
     <resource-ref>
         <res-ref-name>jdbc/PetstoreDB</res-ref-name>
         <res-type>javax.sql.DataSource</res-type>
@@ -122,4 +134,3 @@
         <res-sharing-scope>Shareable</res-sharing-scope>
     </resource-ref>   
 </web-app>
-
