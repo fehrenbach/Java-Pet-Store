@@ -14,7 +14,8 @@
         <f:view>
     
             <ui:FileUploadTag id="TestFileuploadForm" serverLocationDir="../applications/j2ee-modules/petstore/images" enctype="multipart/form-data" 
-                postProcessingMethod="#{FileUploadBean.postProcessingMethod}">
+                postProcessingMethod="#{FileUploadBean.postProcessingMethod}"
+                progressBarDivId="progress" progressBarSubmitId="submitx" progressBarSize="40">
                 <br>To sell a pet, please enter all the reqired data.<br> 
                 <table colspacing="5" colpadding="5">
                     <tr>
@@ -90,10 +91,11 @@
                     
                     <tr>
                         <td colspan="2">
-                            <input type="submit" name="submitx" value="Submit"/>
+                            <input type="submit" id="submitx" name="submitx" value="Submit"/>
                         </td>
                     </tr>
                 </table>
+                <br><div id="progress"></div><br/>
             </ui:FileUploadTag>        
         </f:view>
         
