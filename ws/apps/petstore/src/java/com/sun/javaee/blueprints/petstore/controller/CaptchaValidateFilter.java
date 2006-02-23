@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CaptchaValidateFilter.java,v 1.1 2006-02-17 03:04:24 yutayoshida Exp $ */
+$Id: CaptchaValidateFilter.java,v 1.2 2006-02-23 20:25:38 yutayoshida Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -45,7 +45,7 @@ public class CaptchaValidateFilter implements Filter {
         
         Boolean validResponse = Boolean.FALSE;
         try {
-            validResponse = CaptchaSingleton.getInstance().validateResponseForID(captchaId, captchaString);
+            validResponse = CaptchaSingleton.getInstance().validateResponse(captchaId, captchaString);
 
         } catch (CaptchaServiceException e) {
             e.printStackTrace();
