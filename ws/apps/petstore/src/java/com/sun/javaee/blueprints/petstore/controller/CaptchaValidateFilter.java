@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CaptchaValidateFilter.java,v 1.2 2006-02-23 20:25:38 yutayoshida Exp $ */
+$Id: CaptchaValidateFilter.java,v 1.3 2006-02-23 20:31:26 yutayoshida Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -11,7 +11,6 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import com.sun.javaee.blueprints.petstore.captcha.CaptchaSingleton;
-import com.octo.captcha.service.CaptchaServiceException;
 
 import org.apache.commons.fileupload.*;
 
@@ -47,7 +46,7 @@ public class CaptchaValidateFilter implements Filter {
         try {
             validResponse = CaptchaSingleton.getInstance().validateResponse(captchaId, captchaString);
 
-        } catch (CaptchaServiceException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return validResponse.booleanValue();

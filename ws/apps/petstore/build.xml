@@ -14,7 +14,6 @@
   <!-- add lucene jar to path -->
   <property name="extra.classpath" value="lib/lucene-1.4.3.jar" />
   <property name="extra1.classpath" value="lib/ui.jar" />
-  <property name="extra2.classpath" value="lib/jcaptcha-all-1.0-RC2.0.1.jar" />
 
   <target name="-post-compile" depends="package-persistence-jar,dojo">
 
@@ -30,8 +29,6 @@
     <copy todir="${war.build.dir}/WEB-INF/lib" file="./build/catalog-persistence.jar"/>
     <copy todir="${war.build.dir}/WEB-INF/lib" file="lib/lucene-1.4.3.jar"/>
     <copy todir="${war.build.dir}/WEB-INF/lib" file="lib/ui.jar"/>   
-    <copy todir="${war.build.dir}/WEB-INF/lib" file="lib/jcaptcha-all-1.0-RC2.0.1.jar"/>
-    <copy todir="${war.build.dir}/WEB-INF/lib" file="lib/ehcache-1.2beta2.jar" />
 
     <!-- Copy in the content -->
     <copy file="${commons.script}" todir="${war.build.dir}" />

@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CaptchaServlet.java,v 1.2 2006-02-23 20:25:37 yutayoshida Exp $ */
+$Id: CaptchaServlet.java,v 1.3 2006-02-23 20:31:25 yutayoshida Exp $ */
 
 package com.sun.javaee.blueprints.petstore.captcha;
 
@@ -8,8 +8,6 @@ import java.net.*;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
-
-import com.octo.captcha.service.CaptchaServiceException;
 
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
 import com.sun.image.codec.jpeg.JPEGCodec;
