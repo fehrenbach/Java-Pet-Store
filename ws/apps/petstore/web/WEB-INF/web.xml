@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
-  <display-name>Petstore</display-name>
-
+    <display-name>Petstore</display-name>
     <filter>
         <filter-name>CaptchaValidateFilter</filter-name>
         <filter-class>com.sun.javaee.blueprints.petstore.controller.CaptchaValidateFilter</filter-class>
@@ -12,83 +11,88 @@
         <url-pattern>/faces/ProcessFileUpload</url-pattern>
     </filter-mapping>
     <listener>
-   <listener-class>com.sun.javaee.blueprints.petstore.model.CatalogFacade</listener-class>
-  </listener>
+        <listener-class>com.sun.javaee.blueprints.petstore.model.CatalogFacade</listener-class>
+    </listener>
   
-  
-  <servlet>
-    <display-name>CatalogServlet</display-name>
-    <servlet-name>CatalogServlet</servlet-name>
-    <servlet-class>com.sun.javaee.blueprints.petstore.controller.CatalogServlet</servlet-class>
-
-  </servlet>
+    <servlet>
+        <display-name>CatalogServlet</display-name>
+        <servlet-name>CatalogServlet</servlet-name>
+        <servlet-class>com.sun.javaee.blueprints.petstore.controller.CatalogServlet</servlet-class>
+    </servlet>
 
     <servlet>
         <servlet-name>CaptchaServlet</servlet-name>
         <servlet-class>com.sun.javaee.blueprints.petstore.captcha.CaptchaServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-    <servlet-name>CatalogServlet</servlet-name>
-    <url-pattern>/catalog</url-pattern>
-  </servlet-mapping>
+        <servlet-name>CatalogServlet</servlet-name>
+        <url-pattern>/catalog</url-pattern>
+    </servlet-mapping>
 
-  <servlet>
-    <display-name>ControllerServlet</display-name>
-    <servlet-name>ControllerServlet</servlet-name>
-    <servlet-class>com.sun.javaee.blueprints.petstore.controller.ControllerServlet</servlet-class>
+    <servlet>
+        <display-name>ControllerServlet</display-name>
+        <servlet-name>ControllerServlet</servlet-name>
+        <servlet-class>com.sun.javaee.blueprints.petstore.controller.ControllerServlet</servlet-class>
+    </servlet>
 
-  </servlet>
+    <servlet-mapping>
+        <servlet-name>ControllerServlet</servlet-name>
+        <url-pattern>/controller</url-pattern>
+    </servlet-mapping>
 
-  <servlet-mapping>
-    <servlet-name>ControllerServlet</servlet-name>
-    <url-pattern>/controller</url-pattern>
-  </servlet-mapping>
+    <servlet>
+        <display-name>AccountServlet</display-name>
+        <servlet-name>AccountServlet</servlet-name>
+        <servlet-class>com.sun.javaee.blueprints.petstore.controller.AccountServlet</servlet-class>
+    </servlet>
 
-  <servlet>
-    <display-name>AccountServlet</display-name>
-    <servlet-name>AccountServlet</servlet-name>
-    <servlet-class>com.sun.javaee.blueprints.petstore.controller.AccountServlet</servlet-class>
+    <servlet-mapping>
+        <servlet-name>AccountServlet</servlet-name>
+        <url-pattern>/account</url-pattern>
+    </servlet-mapping>
 
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>AccountServlet</servlet-name>
-    <url-pattern>/account</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <description>Checkout</description>
-    <servlet-name>CheckoutServlet </servlet-name>
-    <servlet-class>com.sun.javaee.blueprints.petstore.controller.CheckoutServlet</servlet-class>
-  </servlet>
+    <servlet>
+        <description>Checkout</description>
+        <servlet-name>CheckoutServlet </servlet-name>
+        <servlet-class>com.sun.javaee.blueprints.petstore.controller.CheckoutServlet</servlet-class>
+    </servlet>
   
-  <servlet-mapping>
-    <servlet-name>CheckoutServlet</servlet-name>
-    <url-pattern>/checkout</url-pattern>
-  </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CheckoutServlet</servlet-name>
+        <url-pattern>/checkout</url-pattern>
+    </servlet-mapping>
 
-  <servlet>
-    <description>AutoCompletes Form Input using XmlHttpRequest Objects</description>
-    <servlet-name> AutocompleteServlet </servlet-name>
-    <servlet-class>com.sun.javaee.blueprints.petstore.controller.AutocompleteServlet</servlet-class>
-  </servlet>
+    <servlet>
+        <description>AutoCompletes Form Input using XmlHttpRequest Objects</description>
+        <servlet-name> AutocompleteServlet </servlet-name>
+        <servlet-class>com.sun.javaee.blueprints.petstore.controller.AutocompleteServlet</servlet-class>
+    </servlet>
   
-  <servlet-mapping>
-    <servlet-name>AutocompleteServlet</servlet-name>
-    <url-pattern>/autocomplete</url-pattern>
-  </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AutocompleteServlet</servlet-name>
+        <url-pattern>/autocomplete</url-pattern>
+    </servlet-mapping>
   
- <servlet>
-    <description>Chat Servlet</description>
-    <servlet-name>ChatServlet</servlet-name>
-    <servlet-class>com.sun.javaee.blueprints.petstore.controller.ChatServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ChatServlet</servlet-name>
-    <url-pattern>/chat</url-pattern>
-  </servlet-mapping>
+    <servlet>
+        <description>Chat Servlet</description>
+        <servlet-name>ChatServlet</servlet-name>
+        <servlet-class>com.sun.javaee.blueprints.petstore.controller.ChatServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ChatServlet</servlet-name>
+        <url-pattern>/chat</url-pattern>
+    </servlet-mapping>
 
-      <context-param>
+    <context-param>
+        <description>
+            Google Maps authorization key for "http://localhost:8080/"
+            To use a another URL a new map key will have to be generated from http://www.google.com/apis/maps/
+        </description>
+        <param-name>com.sun.j2ee.blueprints.ui.mapviewer.KEY</param-name>
+        <param-value>ABQIAAAAyQYKk4__l80DyIsqLPvvuxTwM0brOpm-All5BF6PoaKBxRWWERSt2NPUufvDhWGdrb-pCzTZQ2vi2A</param-value>
+    </context-param>
+
+    <context-param>
         <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
         <param-value>server</param-value>
     </context-param>
@@ -114,7 +118,6 @@
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
         <load-on-startup> 1 </load-on-startup>
     </servlet>
-
 
     <!-- Faces Servlet Mapping -->
     <servlet-mapping>
