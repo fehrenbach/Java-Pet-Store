@@ -1,0 +1,22 @@
+.slider {
+	border-width:1px;
+	border-style:solid;
+    border-color:black;
+    background:white;
+}
+
+.tile {
+  position: absolute;
+  top:0px;
+  left:0px;
+  visibility:hidden;
+  z-index:0;
+  background:white;
+  opacity: .99;
+}
+
+.nav {
+  position: absolute;
+  z-index:11;
+  opacity: .85;
+}

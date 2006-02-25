@@ -1,0 +1,62 @@
+
+<h2>Catalog Scroller with Accordion</h2>
+<hr>
+        
+<script type="text/javascript" src="scroller.js"></script>
+<link rel="stylesheet" type="text/css" href="scroller.css"></link>
+<script type="text/javascript" src="accordion.js"></script>
+<link rel="stylesheet" type="text/css" href="accordion.css"></link>
+
+
+<script type="text/javascript">
+window.onload=init;
+
+function init() {
+    loadAccordion();
+    loadScroller();
+
+}
+</script>
+
+<body>
+<center>
+
+<body>
+
+
+<table border="0">
+<tr>
+<td>
+ <table id="accordion" border="0" class="accordion">
+ </table>
+
+</td>
+<td>
+<table border="0" class="slider" >
+ <tr height="385" valign="top">
+   <td id="bodySpace" border="0" align="center"></td>
+ </tr>
+ <tr id="targetRow">
+  <td width="400" height="70 align="top">
+     <div class="nav" id="right_button">
+      <a class="nav" id="right_button" onclick="getNext()"
+                    onMouseOver="roll('nextRoll', 'images/right.gif');getNext();"
+                    onMouseOut="roll('nextRoll', 'images/right.gif');scrollDone();"><img src="images/right.gif" name="nextRoll"  border="0"></a>
+     </div>
+     <div class="nav" id="left_button">
+      <a onclick="getPrevious()"
+                    onMouseOver="roll('prevRoll', 'images/left.gif');getPrevious();"
+                    onMouseOut="roll('prevRoll', 'images/left.gif');scrollDone();"><img src="images/left.gif" name="previousRoll"  border="0"></a>
+    </div>                  
+   </td>                    
+  </tr>
+
+</table>
+</td>
+</tr>
+
+<div id="status"></div> <div id="status_2"></div>
+
+<div id="injection_point"></div>
+</center>
+</body>

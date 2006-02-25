@@ -1,0 +1,50 @@
+.accordion {
+  width:150px;
+  height:463px;
+  border-spacing:5px;
+  border-width:1px;
+  border-style:solid;
+  border-color:black;
+  background:gray;
+}
+
+.accordionTitle {
+  text-align: center;
+  border: 5px;
+  width:150px;
+  height:200px;
+  color:white;
+  font-size:22px;
+  font-weight: bold;
+  background:black;
+  opacity: .99;
+}
+
+.accordionRow {
+  text-align: center;
+  border: 5px;
+  width:150px;
+  height:30px;
+  color:white;
+  font-size:18px;
+  font-weight: bold;
+  background:green;
+  opacity: .99;
+}
+
+.accordionProduct {
+  text-align: center;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  color:white;
+  font-size:14px;
+  font-weight: bold;
+  background:green;
+  opacity: .99;
+}
+
+.accordionLink {
+  text-decoration: none;
+  color:white;
+}
+

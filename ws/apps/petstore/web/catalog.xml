@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<products>
+ <product>
+  <name>Himilain</name>
+  <id>I-1</id>
+  <description>Long haired cat that with a great personality.</description>
+  <img-url>images/cat1.gif</img-url>
+ </product>
+ <product>
+  <name>Tiger</name>
+  <id>I-2</id>
+  <description>Don't forget to feed this cat.</description>
+  <img-url>images/cat2.gif</img-url>
+ </product>
+ <product>
+ <id>I-3</id>
+  <name>Kitten</name>
+  <description>This cat aspires to be the big cat on the block.</description>
+  <img-url>images/cat3.gif</img-url>
+ </product>
+ <product>
+  <id>I-4</id>
+  <name>Gray</name>
+  <description>This cat likes to think deep thoughts.</description>
+  <img-url>images/cat4.gif</img-url>
+ </product> 
+ <product>
+  <id>I-5</id>
+  <name>Lazy</name>
+  <description>This cat has nothing better to do than look cute.</description>
+  <img-url>images/cat5.gif</img-url>
+ </product>
+ <product>
+  <id>I-6</id>
+  <name>Yellow</name>
+  <description>This cat thinks it's a person.</description>
+  <img-url>images/cat6.gif</img-url>
+ </product>
+  <product>
+  <id>I-7</id>
+  <name>Model</name>
+  <description>This cat likes to strike a pose.</description>
+  <img-url>images/cat7.gif</img-url>
+ </product>
+ <product>
+  <id>I-8</id>
+  <name>Orange</name>
+  <description>Orange cat that enjoys a good nap.</description>
+  <img-url>images/cat8.gif</img-url>
+ </product>
+ <product>
+  <id>I-9</id>
+  <name>Black and White</name>
+  <description>This cat likes to sleep.</description>
+  <img-url>images/cat9.gif</img-url>
+ </product>
+  <product>
+  <id>I-10</id>
+  <name>Nosey</name>
+  <description>This is a very serious cat.</description>
+  <img-url>images/cat10.gif</img-url>
+ </product>
+ <product>
+  <id>I-11</id>
+  <name>Princess</name>
+  <description>This cat thinks she is a princess.</description>
+  <img-url>images/cat11.gif</img-url>
+ </product>
+  <product>
+  <id>I-12</id>
+  <name>Sunny</name>
+  <description>Cute cat that loves being in the sun..</description>
+  <img-url>images/cat12.gif</img-url>
+ </product>
+</products>
