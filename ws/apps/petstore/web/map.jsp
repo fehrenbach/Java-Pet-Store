@@ -15,7 +15,7 @@
         <f:view>
     
             <ui:mapViewer id="mapViewerx" center="#{MapBean.mapPoint}" info="#{MapBean.mapMarker}"
-            markers="#{MapBean.locations}" zoomLevel="4" style="height: 500px; width: 700px"/>
+            markers="#{MapBean.locations}" zoomLevel="#{MapBean.zoomLevel}" style="height: 500px; width: 700px"/>
 
         </f:view>
     </body>

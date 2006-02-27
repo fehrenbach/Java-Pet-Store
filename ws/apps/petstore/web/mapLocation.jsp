@@ -55,7 +55,7 @@
                     <tr>
                         <td align="center" colspan=3>
                             <br>
-                            <h:commandButton action="#{MapBean.findAction}" id="find" type="submit" value="Find It"/>
+                            <h:commandButton action="#{MapBean.findItAction}" id="find" type="submit" value="Find It"/>
                             <h:commandButton action="#{MapBean.mapAction}" disabled="#{MapBean.mapReady}" id="map" type="submit" value="Map It"/>
                             <br><br>
                         </td>
