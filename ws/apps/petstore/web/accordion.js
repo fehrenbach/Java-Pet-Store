@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: accordion.js,v 1.3 2006-02-28 08:01:04 gmurray71 Exp $
+$Id: accordion.js,v 1.4 2006-02-28 08:11:37 gmurray71 Exp $
 */
 
 var isIE;
@@ -29,7 +29,7 @@ var topX = 100;
 var topY = 50;
 
 
-var debug = true;
+var debug = false;
 
 var status;
 
