@@ -1,6 +1,6 @@
 .accordion {
   width:150px;
-  height:463px;
+  height:500px;
   border-spacing:5px;
   border-width:1px;
   border-style:solid;
@@ -9,10 +9,12 @@
 }
 
 .accordionTitle {
+  padding-top: 15px;
+  text-valign: center;
   text-align: center;
   border: 5px;
   width:150px;
-  height:200px;
+  height:190px;
   color:white;
   font-size:22px;
   font-weight: bold;
@@ -21,6 +23,7 @@
 }
 
 .accordionRow {
+  padding-top: 5px;
   text-align: center;
   border: 5px;
   width:150px;
@@ -34,8 +37,6 @@
 
 .accordionProduct {
   text-align: center;
-  padding-top: 5px;
-  padding-bottom: 5px;
   color:white;
   font-size:14px;
   font-weight: bold;

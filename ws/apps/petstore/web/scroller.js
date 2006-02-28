@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: scroller.js,v 1.1 2006-02-25 01:29:12 gmurray71 Exp $
+$Id: scroller.js,v 1.2 2006-02-28 05:12:47 gmurray71 Exp $
 */
 
 var isIE;
@@ -12,7 +12,7 @@ var tiles = new Array();
 // for scrolling
 var injectionPoint;
 var displayPortTiles = 4;
-var displayPortSize=400;
+var displayPortSize=500;
 var offset = 0;
 var thumbWidth=100;
 var thumbHeight=75;
@@ -71,7 +71,7 @@ function scroll() {
  function showImage(itemId) {
      var i = map.get(itemId);
      var targetElement = document.getElementById("bodySpace");
-     bodySpace.innerHTML = "<img src='" + i.image + "' width='400' height='300'>"
+     bodySpace.innerHTML = "<img src='" + i.image + "' width='500' height='370'>"
  }
  
  function getNext() {
@@ -156,11 +156,11 @@ function scroll() {
     
      var rightButton = document.getElementById("right_button");
      // this will need to be generic based on the right and left button image width
-     var rightX = findX(rightButton) + displayPortSize - 65;
+     var rightX = findX(rightButton) + displayPortSize - 55;
      rightButton.style.left = rightX  +  "px";   
      
      // this will need to be made generic depending on the thumb height
-	 tileY = findY(rightButton) + - 40;
+	 tileY = findY(rightButton) + - 30;
      tileX = findX(targetRow) + 1;
      // change the startX for safari
      if (ua.indexOf('safari') != -1) {
