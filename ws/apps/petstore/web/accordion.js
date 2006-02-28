@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: accordion.js,v 1.2 2006-02-28 05:12:47 gmurray71 Exp $
+$Id: accordion.js,v 1.3 2006-02-28 08:01:04 gmurray71 Exp $
 */
 
 var isIE;
@@ -125,6 +125,11 @@ function Row(id, div, height) {
             titleRow.setHeight(tHeight);
             // take all out of the old expanded
             divs[oExpandedIndex].setHeight(oHeight);
+            // do this for ie only?
+            
+        } else if (tHeight < 205 && isIE) {
+            tHeight = tHeight + increment;
+            titleRow.setHeight(tHeight);	        
         } else {
             // set the contents of the new menu
             var productContent =  categories[nExpandedIndex].name + "<br><br>";
