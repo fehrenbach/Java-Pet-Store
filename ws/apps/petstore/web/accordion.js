@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: accordion.js,v 1.5 2006-02-28 08:36:44 gmurray71 Exp $
+$Id: accordion.js,v 1.6 2006-02-28 08:41:20 gmurray71 Exp $
 */
 
 var isIE;
@@ -130,7 +130,7 @@ function Row(id, div, height) {
             divs[oExpandedIndex].setHeight(oHeight);
             // do this for ie only?
             
-        } else if (tHeight < 160 && isIE) {
+        } else if (tHeight < 155 && isIE) {
             tHeight = tHeight + increment;
             titleRow.setHeight(tHeight);	        
         } else {
