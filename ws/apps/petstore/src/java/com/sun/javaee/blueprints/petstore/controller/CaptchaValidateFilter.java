@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CaptchaValidateFilter.java,v 1.3 2006-02-23 20:31:26 yutayoshida Exp $ */
+$Id: CaptchaValidateFilter.java,v 1.4 2006-02-28 01:27:05 yutayoshida Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -13,10 +13,13 @@ import javax.servlet.http.*;
 import com.sun.javaee.blueprints.petstore.captcha.CaptchaSingleton;
 
 import org.apache.commons.fileupload.*;
+import org.apache.commons.fileupload.servlet.*;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 
 public class CaptchaValidateFilter implements Filter {
     
-    private static final boolean debug = true;
+    private static final boolean debug = false;
+    private static final String CAPTCHA_FIELD_NAME = "j_captcha_response";
     
     // The filter configuration object we are associated with.  If
     // this value is null, this filter instance is not currently
@@ -35,14 +38,30 @@ public class CaptchaValidateFilter implements Filter {
     private Boolean isCaptchaCorrect(HttpServletRequest request, HttpServletResponse response) {
         String captchaId = request.getSession().getId();
         String captchaString = null;
+        ServletRequestContext src = new ServletRequestContext(request);
         
-        if (FileUpload.isMultipartContent(request)) {
-            if (debug) System.out.println("This is multipart");
-            return Boolean.TRUE;
+        if (ServletFileUpload.isMultipartContent(src)) {
+            FileItemFactory factory = new DiskFileItemFactory();
+            ServletFileUpload upload = new ServletFileUpload(factory);
+            try {
+                List<FileItem> itemList = upload.parseRequest(request);
+                for (FileItem item : itemList) {
+                    if (item.isFormField()) {
+                        if (item.getFieldName().equals(CAPTCHA_FIELD_NAME)) {
+                            captchaString = item.getString();
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            captchaString = request.getParameter(CAPTCHA_FIELD_NAME);
         }
-        captchaString = request.getParameter("j_captcha_response");
-        
         Boolean validResponse = Boolean.FALSE;
+        if (captchaString == null) {
+            return validResponse;
+        }
         try {
             validResponse = CaptchaSingleton.getInstance().validateResponse(captchaId, captchaString);
 
@@ -96,8 +115,18 @@ public class CaptchaValidateFilter implements Filter {
                 sendProcessingError(problem, response);
             }
         } else {
-            RequestDispatcher rd = request.getRequestDispatcher("/captchaerror.jsp");
-            rd.forward(request, response);
+            //RequestDispatcher rd = request.getRequestDispatcher("/captchaerror.jsp");
+            //rd.forward(request, response);
+            // assuming this is a xmlhttprequest
+            response.setContentType("text/xml;charset=UTF-8");
+            ((HttpServletResponse)response).setHeader("Cache-Control", "no-store");
+            ((HttpServletResponse)response).setHeader("Pragma", "no-cache");
+            PrintWriter out = response.getWriter();
+            out.println("<response>");
+            out.println("<message>Please enter the correct captcha</message>");
+            out.println("</response>");
+            out.flush();
+            out.close();
         }
     }
     
