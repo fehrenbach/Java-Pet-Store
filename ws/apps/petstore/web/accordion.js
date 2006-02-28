@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: accordion.js,v 1.4 2006-02-28 08:11:37 gmurray71 Exp $
+$Id: accordion.js,v 1.5 2006-02-28 08:36:44 gmurray71 Exp $
 */
 
 var isIE;
@@ -9,9 +9,9 @@ var displayPortHeight=400;
 
 var itemWidth=100;
 var itemHeight=75;
-var increment = 4;
+var increment = 5;
 
-var timeout = 30; // in ms
+var timeout = 25; // in ms
 
 var accordion;
 var divs;
@@ -19,8 +19,8 @@ var titleRow;
 var titleSize = 200;
 var oExpandedIndex = -1;
 var nExpandedIndex = -1;
-var oHeight = 65;
-var nHeight = 65;
+var oHeight = 40;
+var nHeight = 40;
 var tHeight = 200;
 var expanding = false;
 var categories;
@@ -62,9 +62,12 @@ function Row(id, div, height) {
      // create title row
      titleRow = createRow(0, "accordionTitle",200);
      titleRow.div.innerHTML = "Pets";
+     if (isIE) {
+         titleRow.setHeight(265);
+     }
      // now create all the rows
      for (var l=0; l < categories.length; l++) {
-         var row = createRow(l,"accordionRow", 30);
+         var row = createRow(l,"accordionRow", 35);
          createLinks(row.div, categories[l].name, l, "accordionLink");
          divs.push(row);
      }
@@ -98,13 +101,13 @@ function Row(id, div, height) {
 
  function expandRow(id) {   
     if (expanding) {
-        if (nHeight < 145) {
+        if (nHeight < 150) {
           nHeight = nHeight + increment;         
           divs[nExpandedIndex].div.style.height = nHeight + "px";
 
           if (oExpandedIndex != -1) {
               // split between the old and new expanded 
-              if (tHeight > 30)  {
+              if (tHeight >= 40)  {
                 oHeight = oHeight - increment /2;
                 tHeight = tHeight - increment / 2;
                 titleRow.setHeight(tHeight);
@@ -119,7 +122,7 @@ function Row(id, div, height) {
               titleRow.setHeight(tHeight);   
           }
         // take out of the old and apply to the title
-        } else if (oExpandedIndex != -1 && oHeight > 30) {
+        } else if (oExpandedIndex != -1 && oHeight >= 40) {
             oHeight = oHeight - increment /2;
             tHeight = tHeight + increment / 2;
             titleRow.setHeight(tHeight);
@@ -127,7 +130,7 @@ function Row(id, div, height) {
             divs[oExpandedIndex].setHeight(oHeight);
             // do this for ie only?
             
-        } else if (tHeight < 205 && isIE) {
+        } else if (tHeight < 160 && isIE) {
             tHeight = tHeight + increment;
             titleRow.setHeight(tHeight);	        
         } else {
@@ -149,7 +152,7 @@ function Row(id, div, height) {
             oExpandedIndex = nExpandedIndex;
             nExpandedIndex = -1;
             oHeight = nHeight;
-            nHeight = 30;
+            nHeight = 40;
             return;
         }
         showStatus();

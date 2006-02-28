@@ -9,12 +9,12 @@
 }
 
 .accordionTitle {
+  vertical-align: top;
   padding-top: 15px;
   text-valign: center;
   text-align: center;
-  border: 5px;
   width:150px;
-  height:190px;
+  height:200px;
   color:white;
   font-size:22px;
   font-weight: bold;
@@ -25,9 +25,8 @@
 .accordionRow {
   padding-top: 5px;
   text-align: center;
-  border: 5px;
   width:150px;
-  height:30px;
+  height:40px;
   color:white;
   font-size:18px;
   font-weight: bold;
