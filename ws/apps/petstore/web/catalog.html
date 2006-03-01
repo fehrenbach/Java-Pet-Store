@@ -10,9 +10,10 @@
 
 <script type="text/javascript">
 window.onload=init;
-
+var ac;
 function init() {
-    loadAccordion();
+    ac = new AccordionMenu();
+    ac.load();
     loadScroller();
 
 }

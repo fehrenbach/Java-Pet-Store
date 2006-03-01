@@ -1,37 +1,38 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: accordion.js,v 1.6 2006-02-28 08:41:20 gmurray71 Exp $
+$Id: accordion.js,v 1.7 2006-03-01 07:50:10 gmurray71 Exp $
 */
 
-var isIE;
 
-var displayPortWidth = 100;
-var displayPortHeight=400;
+function AccordionMenu () {
+  var isIE;
 
-var itemWidth=100;
-var itemHeight=75;
-var increment = 5;
+  var displayPortWidth = 100;
+  var displayPortHeight=400;
 
-var timeout = 25; // in ms
+  var EXPANDED_HEIGHT = 135;
+  var ITEM_HEIGHT = 40;
+  var INCREMENT = 8;
 
-var accordion;
-var divs;
-var titleRow;
-var titleSize = 200;
-var oExpandedIndex = -1;
-var nExpandedIndex = -1;
-var oHeight = 40;
-var nHeight = 40;
-var tHeight = 200;
-var expanding = false;
-var categories;
+  var timeout = 10; // in ms
 
-var topX = 100;
-var topY = 50;
+  var accordion;
+  var divs;
+  var titleRow;
+  var titleSize = 200;
+  var oExpandedIndex = -1;
+  var nExpandedIndex = -1;
+  var oHeight = ITEM_HEIGHT;
+  var nHeight = ITEM_HEIGHT;
+  var tHeight = 200;
+  var expanding = false;
+  var categories;
 
-
-var debug = false;
-
-var status;
+  var topX = 100;
+  var topY = 50;
+   
+  // while control the inline debug statements
+  var debug = false;
+  var status;
 
 function Row(id, div, height) {
      this.id = id;
@@ -44,10 +45,12 @@ function Row(id, div, height) {
 }
 
 
-  function loadAccordion() {
+  this.load = function() {
      var agent = navigator.userAgent;
      if (agent.indexOf("IE") != -1) {
-       isIE = true;
+         isIE = true;
+     } else if (agent.indexOf("Safari") != -1) {
+         timeout = 0;
      }
      divs = [];
      status = document.getElementById("status");
@@ -67,7 +70,7 @@ function Row(id, div, height) {
      }
      // now create all the rows
      for (var l=0; l < categories.length; l++) {
-         var row = createRow(l,"accordionRow", 35);
+         var row = createRow(l,"accordionRow", ITEM_HEIGHT);
          createLinks(row.div, categories[l].name, l, "accordionLink");
          divs.push(row);
      }
@@ -98,40 +101,36 @@ function Row(id, div, height) {
     }
  }
  
-
- function expandRow(id) {   
+ function expandRow() {   
     if (expanding) {
-        if (nHeight < 150) {
-          nHeight = nHeight + increment;         
+        if (nHeight < EXPANDED_HEIGHT) {
+          nHeight = nHeight + INCREMENT;         
           divs[nExpandedIndex].div.style.height = nHeight + "px";
 
           if (oExpandedIndex != -1) {
-              // split between the old and new expanded 
-              if (tHeight >= 40)  {
-                oHeight = oHeight - increment /2;
-                tHeight = tHeight - increment / 2;
-                titleRow.setHeight(tHeight);
+              if (tHeight >= ITEM_HEIGHT)  {
+                oHeight = oHeight - INCREMENT;
               // take all out of the old expanded
               } else {
-                  oHeight = oHeight - increment;
+                  oHeight = oHeight - INCREMENT;
               }
               divs[oExpandedIndex].setHeight(oHeight);
               // take equal from the title row
           } else {
-              tHeight = tHeight - increment;
+              tHeight = tHeight - INCREMENT;
               titleRow.setHeight(tHeight);   
           }
         // take out of the old and apply to the title
-        } else if (oExpandedIndex != -1 && oHeight >= 40) {
-            oHeight = oHeight - increment /2;
-            tHeight = tHeight + increment / 2;
+        } else if (oExpandedIndex != -1 && oHeight > ITEM_HEIGHT) {
+            oHeight = oHeight - INCREMENT;
+            tHeight = tHeight + INCREMENT;
             titleRow.setHeight(tHeight);
             // take all out of the old expanded
             divs[oExpandedIndex].setHeight(oHeight);
             // do this for ie only?
             
-        } else if (tHeight < 155 && isIE) {
-            tHeight = tHeight + increment;
+        } else if (tHeight < 160 && isIE) {
+            tHeight = tHeight + INCREMENT;
             titleRow.setHeight(tHeight);	        
         } else {
             // set the contents of the new menu
@@ -142,7 +141,7 @@ function Row(id, div, height) {
                     "<a class='accordionLink' href=\"" + categories[nExpandedIndex].products[l].href + "\">"  +
                      categories[nExpandedIndex].products[l].name + "</a></span>";
                      if (l < categories[nExpandedIndex].products.length - 1) {
-                        productContent = productContent + "<br><br>";
+                        productContent = productContent + "<p>";
                      }
             }
             productContent = productContent;
@@ -152,11 +151,11 @@ function Row(id, div, height) {
             oExpandedIndex = nExpandedIndex;
             nExpandedIndex = -1;
             oHeight = nHeight;
-            nHeight = 40;
+            nHeight = ITEM_HEIGHT;
             return;
         }
         showStatus();
-        setTimeout("expandRow('" + id + "')", timeout);
+        setTimeout(expandRow, timeout);
     }
  }
  
@@ -190,4 +189,4 @@ function Row(id, div, height) {
     cell.appendChild(nDiv);
     return new Row(id, nDiv, height);
  }
- 
+ }

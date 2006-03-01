@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: scroller.js,v 1.2 2006-02-28 05:12:47 gmurray71 Exp $
+$Id: scroller.js,v 1.3 2006-03-01 07:50:11 gmurray71 Exp $
 */
 
 var isIE;
@@ -160,11 +160,13 @@ function scroll() {
      rightButton.style.left = rightX  +  "px";   
      
      // this will need to be made generic depending on the thumb height
-	 tileY = findY(rightButton) + - 30;
+	 tileY = findY(rightButton)  - 40;
      tileX = findX(targetRow) + 1;
      // change the startX for safari
      if (ua.indexOf('safari') != -1) {
          tileX = tileX + 17;
+         scrollIncrement = scrollIncrement + 5;
+         timeout = 40;
      } else if (ua.indexOf('firefox')) {
          tileX = tileX + 7;
      }

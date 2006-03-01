@@ -5,13 +5,12 @@
   border-width:1px;
   border-style:solid;
   border-color:black;
-  background:gray;
+  background:#BDB76B;
 }
 
 .accordionTitle {
   vertical-align: top;
   padding-top: 15px;
-  text-valign: center;
   text-align: center;
   width:150px;
   height:200px;
@@ -23,6 +22,9 @@
 }
 
 .accordionRow {
+  vertical-align: middle;
+  cursor: pointer;
+  cursor: hand;
   padding-top: 5px;
   text-align: center;
   width:150px;
@@ -30,16 +32,16 @@
   color:white;
   font-size:18px;
   font-weight: bold;
-  background:green;
+  background:#228B22;
   opacity: .99;
 }
 
 .accordionProduct {
   text-align: center;
   color:white;
-  font-size:14px;
+  font-size:12px;
   font-weight: bold;
-  background:green;
+  background:#228B22;
   opacity: .99;
 }
 
