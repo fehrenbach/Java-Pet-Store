@@ -29,26 +29,31 @@ import javax.faces.component.UIForm;
  */
 public class MapBean {
     
+    private ArrayList<Location> alLocations=new ArrayList();
     private ArrayList<MapMarker> alMapMarkers=new ArrayList();
     private MapMarker mapMarker=new MapMarker();
     private MapPoint mapPoint=new MapPoint();
-    private String location="4150 Network Circle, Santa Clara, CA 95054", foundLocation="", info="Sun's Santa Clara Campus";
-    private String location1="100 Main Street, Milpitas, CA 95035";
-    private String location2="400 Castro Street, Mountain View, CA";
-    private String location3="100 University Ave, Palo Alto, CA";
-    private String info1="info1";
-    private String info2="info2";
-    private String info3="info3";
-    
+    private String location="", foundLocation="", info="";
     private String mapReady="true", proxyHost="webcache.sfbay.sun.com";
     private double foundLatitude=0.0d, foundLongitude=0.0d;
     private int proxyPort=8080, zoomLevel=6;
     
     /** Creates a new instance of MapBean */
     public MapBean() {
+        init();
     }
-    
-    
+
+    public void init() {
+        alLocations.clear();
+        alMapMarkers.clear();
+        proxyHost="webcache.sfbay.sun.com";
+        proxyPort=8080;
+        location="4150 Network Circle, Santa Clara, CA 95054";
+        info="Sun's Santa Clara Campus";
+        alLocations.add(new Location("100 Main Street, Milpitas, CA 95035", "info1"));
+        alLocations.add(new Location("400 Castro Street, Mountain View, CA", "info2"));
+        alLocations.add(new Location("100 University Ave, Palo Alto, CA", "info3"));
+    }
     
     // index.jsp fields
     public void setProxyHost(String proxyHost) {
@@ -143,6 +148,20 @@ public class MapBean {
     }
     
     
+    // mapAll.jsp
+    public ArrayList getMapLocations() {
+        return alLocations;
+    }
+    
+    public void addMapLocation() {
+        alLocations.add(new Location());
+    }
+    public void initPage() {
+        init();
+    }
+    
+    
+    
     
     public String findItAction() {
         System.out.println("in findAction - " + getLocation());
@@ -177,7 +196,10 @@ public class MapBean {
         // Set up markers for the center and information window
         mapMarker.setLatitude(points[0].getLatitude());
         mapMarker.setLongitude(points[0].getLongitude());
-        mapMarker.setMarkup(points[0].toString() + "<br>" + getInfo());
+        mapMarker.setMarkup(changeSpaces(getLocation()) + "<br>" + changeSpaces(getInfo()));
+        
+        // clear old locations
+        alLocations.clear();
         addMapMarker(mapMarker) ;
 
         // set center point for map
@@ -208,9 +230,6 @@ public class MapBean {
         
         // use component to get points based on location (this uses Yahoo's map service
         GeoPoint points[]=geoCoder.geoCode(location);
-        GeoPoint points1[]=geoCoder.geoCode(location1);
-        GeoPoint points2[]=geoCoder.geoCode(location2);
-        GeoPoint points3[]=geoCoder.geoCode(location3);
         if ((points == null) || (points.length < 1)) {
             setFoundLocation("No geographic points matched this location OR the Yahoo server can't be reached, please try again");
             return null;
@@ -220,42 +239,37 @@ public class MapBean {
             System.out.println("Matched " + points.length + " locations, taking the first one");
         }
         
-       
         // Set up markers for the center and information window
         mapMarker.setLatitude(points[0].getLatitude());
         mapMarker.setLongitude(points[0].getLongitude());
-        mapMarker.setMarkup(points[0].toString() + "<br>" + getInfo());
+        mapMarker.setMarkup(changeSpaces(getLocation()) + "<br>" + changeSpaces(getInfo()));
         addMapMarker(mapMarker) ;
-       
-        MapMarker mm=new MapMarker();
-        mm.setLatitude(points1[0].getLatitude());
-        mm.setLongitude(points1[0].getLongitude());
-        mm.setMarkup(points1[0].toString() + "<br>" + getInfo1());
-        addMapMarker(mm) ;
-        
-        mm=new MapMarker();
-        mm.setLatitude(points2[0].getLatitude());
-        mm.setLongitude(points2[0].getLongitude());
-        mm.setMarkup(points2[0].toString() + "<br>" + getInfo2());
-        addMapMarker(mm) ;
-        
-        mm=new MapMarker();
-        mm.setLatitude(points3[0].getLatitude());
-        mm.setLongitude(points3[0].getLongitude());
-        mm.setMarkup(points3[0].toString() + "<br>" + getInfo3());
-        addMapMarker(mm) ;
         
         // set center point for map
         mapPoint.setLatitude(points[0].getLatitude());
         mapPoint.setLongitude(points[0].getLongitude());
+        
+
+        // add other locations
+        MapMarker mm=null;
+        Location loc=null;
+        for(int ii=0; ii < alLocations.size(); ii++) {
+            loc=alLocations.get(ii);
+            if(loc.getAddress() != null && !loc.getAddress().equals("")) {
+                mm=new MapMarker();
+                points=geoCoder.geoCode(loc.getAddress());
+                if ((points != null) && (points.length > 0)) {                
+                    mm.setLatitude(points[0].getLatitude());
+                    mm.setLongitude(points[0].getLongitude());
+                    mm.setMarkup(changeSpaces(loc.getAddress()) + "<br>" + changeSpaces(loc.getInfo()));
+                    addMapMarker(mm) ;
+                }
+            }
+        }
                 
         // return null so navigation will stay on main lookup page
         return "map";
     }
-    
-    
-    
-    
     
     
     public String mapAction() {
@@ -264,41 +278,8 @@ public class MapBean {
     }
     
     
-    public void setInfo1(String info) {
-        this.info1=info;
-    }
-    public String getInfo1() {
-        return this.info1;
-    }
-    public void setInfo2(String info) {
-        this.info2=info;
-    }
-    public String getInfo2() {
-        return this.info2;
-    }
-    public void setInfo3(String info) {
-        this.info3=info;
-    }
-    public String getInfo3() {
-        return this.info3;
-    }
-    public void setLocation1(String location) {
-        this.location1=location;
-    }
-    public String getLocation1() {
-        return this.location1;
-    }
-    public void setLocation2(String location) {
-        this.location2=location;
-    }
-    public String getLocation2() {
-        return this.location2;
-    }
-    public void setLocation3(String location) {
-        this.location3=location;
-    }
-    public String getLocation3() {
-        return this.location3;
+    public String changeSpaces(String text) {
+        return text.replaceAll(" ", "&nbsp;");
     }
     
     

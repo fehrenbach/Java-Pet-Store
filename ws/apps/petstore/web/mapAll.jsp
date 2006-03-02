@@ -25,58 +25,52 @@
                         </td>
                     </tr>
                     <tr>
-                        <th>
-                            Addresses (1st entry is the main/center point)
-                        </th>
-                        <th>
-                            Popup Balloon Information
-                        </th>
-                    </tr>
-                    
-                    <tr>
                         <td>
-                            <h:inputText size="75" id="location0" value="#{MapBean.location}"/>
+                            Map Center Location: 
                         </td>
-                        <td>
-                            <h:inputText size="30" id="info0" value="#{MapBean.info}"/>
+                        <td colspan=2>
+                            <h:inputText size="100" id="locationx" value="#{MapBean.location}"/>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <h:inputText size="75" id="location1" value="#{MapBean.location1}"/>
+                            Information Window Contents:  
                         </td>
-                        <td>
-                            <h:inputText size="30" id="info1" value="#{MapBean.info1}"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <h:inputText size="75" id="location2" value="#{MapBean.location2}"/>
-                        </td>
-                        <td>
-                            <h:inputText size="30" id="info2" value="#{MapBean.info2}"/>
+                        <td colspan=2>
+                            <h:inputText size="100" id="info" value="#{MapBean.info}"/>
                         </td>
                     </tr>
                     <tr>
-                        <td>
-                            <h:inputText size="75" id="location3" value="#{MapBean.location3}"/>
-                        </td>
-                        <td>
-                            <h:inputText size="30" id="info3" value="#{MapBean.info3}"/>
+                        <td colspan=2>
+                            <br><br>
+                            <h:dataTable id="locations" value="#{MapBean.mapLocations}" var="address">
+                                <h:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Address Points"/>
+                                    </f:facet>
+                                    <h:inputText id="address" size="60" value="#{address.address}"/>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Information about point"/>
+                                    </f:facet>
+                                    <h:inputText id="city" size="40" value="#{address.info}"/>
+                                </h:column>
+                            </h:dataTable>
                         </td>
                     </tr>
-                    
-                    
-                    
                     <tr>
                         <td align="center" colspan=2>
                             <br>
-                            <h:commandButton action="#{MapBean.findAllAction}" id="find" type="submit" value="Find It"/>
+                            <h:commandButton id="addx" action="#{MapBean.addMapLocation}" value="Add Point"/>&nbsp;&nbsp;&nbsp;
+                            <h:commandButton action="#{MapBean.findAllAction}" id="find" type="submit" value="Find It"/>&nbsp;&nbsp;&nbsp;
+                            <h:commandButton action="#{MapBean.initPage}" id="reset" value="Reset"/>
                             <br><br>
                         </td>
                     </tr>
 
                 </table>
+                <h:messages/>
             </h:form>
         </f:view>
     </body>

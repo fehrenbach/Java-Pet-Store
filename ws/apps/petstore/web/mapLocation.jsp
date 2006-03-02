@@ -40,12 +40,13 @@
                         </td>
                     </tr>
                     <tr>
-                    <td>
-                        Map Center Location: 
-                    </td>
-                    <td colspan=2>
-                        <h:inputText size="100" id="locationx" value="#{MapBean.location}"/>
-                    </td>
+                        <td>
+                            Map Center Location: 
+                        </td>
+                        <td colspan=2>
+                            <h:inputText size="100" id="locationx" value="#{MapBean.location}"/>
+                        </td>
+                    </tr>
                     <tr>
                         <td></td>
                         <td colspan=2>            
