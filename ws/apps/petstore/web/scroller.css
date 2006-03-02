@@ -6,13 +6,21 @@
 }
 
 .tile {
-  position: absolute;
-  top:0px;
-  left:0px;
-  visibility:hidden;
-  z-index:0;
-  background:white;
-  opacity: .99;
+    position: absolute;
+    top:0px;
+    left:0px;
+  	border-width:1px;
+	border-style:solid;
+    border-color:black;  
+    visibility:hidden;
+    z-index:0;
+    background:white;
+    opacity: .99;
+}
+
+.tileImage {
+    width: 94;
+    height: 75;
 }
 
 .nav {

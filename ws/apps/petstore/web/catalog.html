@@ -11,10 +11,12 @@
 <script type="text/javascript">
 window.onload=init;
 var ac;
+var is;
 function init() {
     ac = new AccordionMenu();
     ac.load();
-    loadScroller();
+    is = new ImageScroller();
+    is.load();
 
 }
 </script>
@@ -41,13 +43,13 @@ function init() {
   <td width="500" height="70 align="top">
      <div class="nav" id="right_button">
       <a class="nav" id="right_button" onclick="getNext()"
-                    onMouseOver="roll('nextRoll', 'images/right.gif');getNext();"
-                    onMouseOut="roll('nextRoll', 'images/right.gif');scrollDone();"><img src="images/right.gif" name="nextRoll"  border="0"></a>
+                    onMouseOver="is.roll('nextRoll', 'images/right.gif');is.getNext();"
+                    onMouseOut="is.roll('nextRoll', 'images/right.gif');is.scrollDone();"><img src="images/right.gif" name="nextRoll"  border="0"></a>
      </div>
      <div class="nav" id="left_button">
       <a onclick="getPrevious()"
-                    onMouseOver="roll('prevRoll', 'images/left.gif');getPrevious();"
-                    onMouseOut="roll('prevRoll', 'images/left.gif');scrollDone();"><img src="images/left.gif" name="previousRoll"  border="0"></a>
+                    onMouseOver="is.roll('prevRoll', 'images/left.gif');is.getPrevious();"
+                    onMouseOut="is.roll('prevRoll', 'images/left.gif');is.scrollDone();"><img src="images/left.gif" name="previousRoll"  border="0"></a>
     </div>                  
    </td>                    
   </tr>
