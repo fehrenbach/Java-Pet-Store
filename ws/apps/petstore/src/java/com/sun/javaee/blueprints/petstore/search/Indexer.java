@@ -31,7 +31,12 @@ public class Indexer {
     
     /** Creates a new instance of Indexer */
     public Indexer(String file) throws IOException {
-        writer=new IndexWriter(file, new StandardAnalyzer(), true);
+        this(file, true);
+    }
+
+    /** Creates a new instance of Indexer */
+    public Indexer(String file, boolean create) throws IOException {
+        writer=new IndexWriter(file, new StandardAnalyzer(), create);
         writer.maxFieldLength = 1000000;
     }
     

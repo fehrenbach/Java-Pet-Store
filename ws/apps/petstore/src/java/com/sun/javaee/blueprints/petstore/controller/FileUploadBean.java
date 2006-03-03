@@ -151,7 +151,7 @@ public class FileUploadBean {
         // Add document to index
         Indexer indexer=null;
         try {
-            indexer=new Indexer(PetstoreConstants.PETSTORE_INDEX_DIRECTORY);    
+            indexer=new Indexer(PetstoreConstants.PETSTORE_INDEX_DIRECTORY, false);    
             getLogger().log(Level.FINE, "Adding document to index: " + indexDoc.toString());
             indexer.addDocument(indexDoc);
         } catch (Exception e) {
@@ -165,8 +165,6 @@ public class FileUploadBean {
                 ee.printStackTrace();
             }
         }
-        
-        
     }
     
     /**
