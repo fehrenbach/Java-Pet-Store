@@ -14,6 +14,9 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
 import java.io.IOException;
+import java.util.logging.Logger;
+import java.util.logging.Level;
+import java.util.Date;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
@@ -24,8 +27,13 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
 import javax.servlet.http.HttpServletResponse;
 
+import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
+import com.sun.javaee.blueprints.petstore.util.PetstoreConstants;
 import com.sun.javaee.blueprints.petstore.model.Item;
 import com.sun.javaee.blueprints.components.ui.fileupload.FileUploadStatus;
+import com.sun.javaee.blueprints.petstore.search.IndexDocument;
+import com.sun.javaee.blueprints.petstore.search.Indexer;
+
 /**
  *
  * @author basler
@@ -34,7 +42,8 @@ public class FileUploadBean {
     @PersistenceContext(name="bppu")
     private static EntityManager em;
     @Resource UserTransaction utx;
-    private boolean bDebug=false;
+    private boolean bDebug=true;
+    private Logger _logger=null;
     
     /** Creates a new instance of FileUploadBean */
     public FileUploadBean() {
@@ -80,12 +89,27 @@ public class FileUploadBean {
                 utx.begin();
                 em.persist(item);
                 utx.commit();
-            }catch (Exception ex) {
-                System.out.println("Error persisting seller data: "+ex);
+                getLogger().log(Level.FINE, "Item " + name + " has been persisted");
+
+                // index new item
+                IndexDocument indexDoc=new IndexDocument();
+                indexDoc.setUID(itemId);
+                indexDoc.setPageURL(itemId);
+                indexDoc.setImage(fileName);
+                indexDoc.setPrice(listPrice);
+                indexDoc.setProduct(prodId);
+                indexDoc.setModifiedDate(new Date().toString());
+                indexDoc.setContents(name + " " + desc);
+                indexDoc.setTitle(name);
+                indexDoc.setSummary(desc);
+                indexItem(indexDoc);
+                
+            } catch (Exception ex) {
+                getLogger().log(Level.SEVERE, "fileupload.persist.exception", ex);
                 try {
                     utx.rollback();
                 } catch (Exception exe) {
-                    System.out.println("Persisting seller data, rollback failed: "+exe.getMessage());
+                    getLogger().log(Level.SEVERE, "fileupload.rollback.exception", exe);
                 }
             }
             StringBuffer sb=new StringBuffer();
@@ -121,5 +145,40 @@ public class FileUploadBean {
             System.out.println("FileUploadPhaseListener error writting AJAX response : " + iox);
         }
     }
+    
+    
+    public void indexItem(IndexDocument indexDoc) {
+        // Add document to index
+        Indexer indexer=null;
+        try {
+            indexer=new Indexer(PetstoreConstants.PETSTORE_INDEX_DIRECTORY);    
+            getLogger().log(Level.FINE, "Adding document to index: " + indexDoc.toString());
+            indexer.addDocument(indexDoc);
+        } catch (Exception e) {
+            getLogger().log(Level.WARNING, "index.exception", e);
+            e.printStackTrace();
+        } finally {
+            try {
+                // must close file or will not be able to reindex
+                indexer.close();
+            } catch (Exception ee) {
+                ee.printStackTrace();
+            }
+        }
+        
+        
+    }
+    
+    /**
+    * Method getLogger
+    *
+    * @return Logger - logger for the NodeAgent
+    */
+    public Logger getLogger() {
+        if (_logger == null) {
+            _logger=PetstoreUtil.getBaseLogger();
+        }
+        return _logger;
+    }    
     
 }

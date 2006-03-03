@@ -7,15 +7,38 @@
 <html>
     <head>
         <title>Petstore Seller page</title>
+        
+<script type="text/javascript">
+    
+    function testRetFunction(type, data, evt){
+        // handle successful response here
+        var resultx = data.getElementsByTagName("response")[0];
+        if(resultx) {
+            // resultx is not set for IE, could be some problem in dojo.iframe, node upload
+            alert("Customer AJAX Return Function Call" + '\n' +
+                "Message: " + resultx.getElementsByTagName("message")[0].childNodes[0].nodeValue);
+        } else {
+            alert("Customer AJAX Return Function Call");
+        }
+    }
+
+   function storeCookie() {
+       currentcap = "j_captcha_response="+document.getElementById("captcharesponse").value;
+       document.cookie = currentcap;
+   }     
+    
+</script>        
     </head>
     <body>
         <h1>Petstore Seller Page</h1>
 
         <f:view>
     
-            <ui:FileUploadTag id="TestFileuploadForm" serverLocationDir="../applications/j2ee-modules/petstore/images" enctype="multipart/form-data" 
-                postProcessingMethod="#{FileUploadBean.postProcessingMethod}"
+            <ui:FileUploadTag id="TestFileuploadForm" serverLocationDir="../applications/j2ee-modules/petstore/images" 
+                enctype="multipart/form-data" postProcessingMethod="#{FileUploadBean.postProcessingMethod}"
+                retMimeType="text/xml" retFunction="testRetFunction" 
                 progressBarDivId="progress" progressBarSubmitId="submitx" progressBarSize="40">
+                
                 <br>To sell a pet, please enter all the reqired data.<br> 
                 <table colspacing="5" colpadding="5">
                     <tr>
@@ -82,16 +105,16 @@
                     </tr>
                     
                     <tr>
-                        <td><b>Enter the text as it is shown below:</b></td>
+                        <td><b>Enter the text as it is shown below(case sensitive):</b></td>
                     </tr>
                     <tr>
                         <td><img src="CaptchaServlet"></td>
-                        <td><input type="text" name="j_captcha_response"></td>
+                        <td><input type="text" name="j_captcha_response" id="captcharesponse"></td>
                     </tr>
                     
                     <tr>
                         <td colspan="2">
-                            <input type="submit" id="submitx" name="submitx" value="Submit"/>
+                            <input type="submit" id="submitx" name="submitx" value="Submit" onclick="storeCookie()"/>
                         </td>
                     </tr>
                 </table>

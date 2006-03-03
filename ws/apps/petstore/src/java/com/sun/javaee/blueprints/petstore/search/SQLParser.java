@@ -30,7 +30,7 @@ import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
 public class SQLParser {
 
     private boolean bDebug=false;
-    private static Logger _logger=null;
+    private Logger _logger=null;
 
     /** Creates a new instance of SQLParser */
     public SQLParser() {
