@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CaptchaValidateFilter.java,v 1.4 2006-02-28 01:27:05 yutayoshida Exp $ */
+$Id: CaptchaValidateFilter.java,v 1.5 2006-03-03 02:10:59 yutayoshida Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -38,6 +38,14 @@ public class CaptchaValidateFilter implements Filter {
     private Boolean isCaptchaCorrect(HttpServletRequest request, HttpServletResponse response) {
         String captchaId = request.getSession().getId();
         String captchaString = null;
+        // Using Cookie instead of actual form body
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals(CAPTCHA_FIELD_NAME)) {
+                captchaString = cookie.getValue();
+            }
+        }
+        /* Multi part request
         ServletRequestContext src = new ServletRequestContext(request);
         
         if (ServletFileUpload.isMultipartContent(src)) {
@@ -58,6 +66,7 @@ public class CaptchaValidateFilter implements Filter {
         } else {
             captchaString = request.getParameter(CAPTCHA_FIELD_NAME);
         }
+         */
         Boolean validResponse = Boolean.FALSE;
         if (captchaString == null) {
             return validResponse;

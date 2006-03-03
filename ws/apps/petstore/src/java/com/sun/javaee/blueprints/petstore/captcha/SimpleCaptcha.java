@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: SimpleCaptcha.java,v 1.1 2006-02-23 20:25:38 yutayoshida Exp $ */
+$Id: SimpleCaptcha.java,v 1.2 2006-03-03 02:10:59 yutayoshida Exp $ */
 
 package com.sun.javaee.blueprints.petstore.captcha;
 
@@ -48,7 +48,10 @@ public class SimpleCaptcha {
     }
     
     public Boolean validateResponse(String id, String text) {
-        if (id.equals(this.cid) && text.equals(this.cstring)) {
+        // should be case insensitive
+        String ltext = text.toLowerCase();
+        String lcstring = cstring.toLowerCase();
+        if (id.equals(this.cid) && ltext.equals(lcstring)) {
             return Boolean.TRUE;
         } else {
             return Boolean.FALSE;
