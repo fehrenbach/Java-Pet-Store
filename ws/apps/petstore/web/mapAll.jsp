@@ -41,6 +41,15 @@
                         </td>
                     </tr>
                     <tr>
+                        <td>
+                            Mile Radius
+                        </td>
+                        <td>
+                            <h:inputText size="10" id="radius" value="#{MapBean.radius}"/><br/>
+                            (default data has from 1-49 mile radius)
+                        </td>
+                    </tr>
+                    <tr>
                         <td colspan=2>
                             <br><br>
                             <h:dataTable id="locations" value="#{MapBean.mapLocations}" var="address">
@@ -62,8 +71,8 @@
                     <tr>
                         <td align="center" colspan=2>
                             <br>
-                            <h:commandButton id="addx" action="#{MapBean.addMapLocation}" value="Add Point"/>&nbsp;&nbsp;&nbsp;
                             <h:commandButton action="#{MapBean.findAllAction}" id="find" type="submit" value="Find It"/>&nbsp;&nbsp;&nbsp;
+                            <h:commandButton id="addx" action="#{MapBean.addMapLocation}" value="Add Point"/>&nbsp;&nbsp;&nbsp;
                             <h:commandButton action="#{MapBean.initPage}" id="reset" value="Reset"/>
                             <br><br>
                         </td>
