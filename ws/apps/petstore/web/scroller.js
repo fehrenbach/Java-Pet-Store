@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: scroller.js,v 1.5 2006-03-06 09:45:31 gmurray71 Exp $
+$Id: scroller.js,v 1.6 2006-03-06 17:30:40 gmurray71 Exp $
 */
 
 function ImageScroller() {
@@ -90,7 +90,7 @@ function ImageScroller() {
     
     // detect a resize of the window
     window.onresize=resized;
-    document.addEventListener("DOMContentLoaded", contentLoaded, null);
+    //document.addEventListener("DOMContentLoaded", contentLoaded, null);
     
     function contentLoaded() {
         alert("gotSomething");
@@ -269,7 +269,7 @@ function ImageScroller() {
     function setOpacity(opacity, id) {
         var target = document.getElementById(id);
         if (isIE) {
-            target.style.filter = "alpha(opacity:" + percentage + ")"; 
+            target.style.filter = "alpha(opacity:" + opacity + ")"; 
         } else {
             target.style.opacity = opacity/100;
         }            
