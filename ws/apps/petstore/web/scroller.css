@@ -2,29 +2,67 @@
 	border-width:1px;
 	border-style:solid;
     border-color:black;
-    background:white;
+    background:#404040;
 }
 
 .tile {
     position: absolute;
     top:0px;
     left:0px;
+    cursor:pointer;
   	border-width:1px;
 	border-style:solid;
     border-color:black;  
     visibility:hidden;
-    z-index:0;
+    z-index:1;
     background:white;
     opacity: .99;
 }
 
 .tileImage {
     width: 94;
-    height: 75;
+    height: 70;
 }
 
 .nav {
+  cursor:pointer;
   position: absolute;
+  vertical-align:bottom;
   z-index:11;
   opacity: .85;
 }
+
+.infopane {
+	z-index:0;
+    width:475px;
+	position: absolute;
+	border-width:1px;
+	border-style:solid;
+    border-color:black;
+    background:black;
+    opacity: .65;
+}
+
+.infopaneTable{
+	width:500;
+}
+
+
+.infopaneText {
+	color:white;
+    font-size:12px;
+}
+
+.infopaneDescriptionText {
+	color:white;
+    font-size:14px;
+}
+
+.infopaneTitle {
+	color:white;
+    font-size:16px;
+}
+
+
+
+

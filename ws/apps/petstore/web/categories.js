@@ -1,27 +1,27 @@
 [
   {"id": "0", name:"Birds", "products": 
-  [{"name": "Parrots", "href":"javascript:alert('parrots');"},
-  {"name": "Cockatoos", "href":"javascript:alert('cockatoos')"},
-  {"name": "Exotic", "href":"javascript:alert('exotic')"} ]},
+  [{"name": "Parrots", "href":"javascript:getPhotos('parrots');"},
+  {"name": "Cockatoos", "href":"javascript:getPhotos('cockatoos')"},
+  {"name": "Exotic", "href":"javascript:getPhotos('exotic birds')"} ]},
 
   {"id": "1", "name": "Cats", "products":
-  [{"name": "Bad Cats", "href":"javascript:alert('parrots')"},
-  {"name": "Good Cats", "href":"javascript:alert('cockatoos')"},
-  {"name": "Toy Cats", "href":"javascript:alert('exotic')"} ]},
+  [{"name": "Short Hair", "href":"javascript:getPhotos('shorthair  cat')"},
+  {"name": "Manx", "href":"javascript:getPhotos('manx')"},
+  {"name": "Norwegian Forest Cat", "href":"javascript:getPhotos('Norwegian Forest Cat')"} ]},
   
   {"id": "2", "name": "Dogs", "products":
-  [{"name": "Bad Dogs", "href":"javascript:alert('parrots')"},
-  {"name": "Good Dogs", "href":"javascript:alert('cockatoos')"},
-  {"name": "Toy Dogs", "href":"javascript:alert('exotic')"} ]},
+  [{"name": "Poodles", "href":"javascript:getPhotos('poodle dog')"},
+  {"name": "Retriever", "href":"javascript:getPhotos('retriever dog')"},
+  {"name": "Toy Dogs", "href":"javascript:getPhotos('toy dog')"} ]},
   
   {"id": "3", "name": "Fish", "products":
-  [{"name": "Parrots", "href":"javascript:alert('parrots')"},
-  {"name": "Cockatoos", "href":"javascript:alert('cockatoos')"},
-  {"name": "Exotic", "href":"javascript:alert('exotic')"} ]},
+  [{"name": "Fresh Water", "href":"javascript:getPhotos('fresh water tropical')"},
+  {"name": "Salt Water", "href":"javascript:getPhotos('salt tropical fish')"},
+  {"name": "Exotic", "href":"javascript:getPhotos('tropical fish tank')"} ]},
   
   {"id": "4", "name": "Reptiles", "products":
-  [{"name": "Snakes", "href":"javascript:alert('Snakes')"},
-  {"name": "Lizzards", "href":"javascript:alert('cockatoos')"},
-  {"name": "Turtles", "href":"javascript:alert('exotic')"} ]}
+  [{"name": "Snakes", "href":"javascript:getPhotos('Snakes')"},
+  {"name": "Lizards", "href":"javascript:getPhotos('lizard reptile')"},
+  {"name": "Turtles", "href":"javascript:getPhotos('turtles')"} ]}
 
 ]

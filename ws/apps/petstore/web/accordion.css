@@ -5,7 +5,7 @@
   border-width:1px;
   border-style:solid;
   border-color:black;
-  background:#BDB76B;
+  background:#404040;
 }
 
 .accordionTitle {
@@ -24,7 +24,6 @@
 .accordionRow {
   vertical-align: middle;
   cursor: pointer;
-  cursor: hand;
   padding-top: 5px;
   text-align: center;
   width:150px;
@@ -32,7 +31,7 @@
   color:white;
   font-size:18px;
   font-weight: bold;
-  background:#228B22;
+  background:#104E8B;
   opacity: .99;
 }
 
@@ -41,12 +40,16 @@
   color:white;
   font-size:12px;
   font-weight: bold;
-  background:#228B22;
+  background:#104E8B;
   opacity: .99;
 }
 
 .accordionLink {
   text-decoration: none;
+  color:white;
+}
+.accordionLink:hover {
+  text-decoration: underline;
   color:white;
 }
 

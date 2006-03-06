@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: accordion.js,v 1.8 2006-03-02 07:06:48 gmurray71 Exp $
+$Id: accordion.js,v 1.9 2006-03-06 09:45:31 gmurray71 Exp $
 */
 
 
@@ -74,6 +74,7 @@ function AccordionMenu () {
             createLinks(row.div, categories[l].name, l, "accordionLink");
             divs.push(row);
         }
+        initiateExpansion(0);
     }
     
     function showStatus() {
