@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: scroller.js,v 1.6 2006-03-06 17:30:40 gmurray71 Exp $
+$Id: scroller.js,v 1.7 2006-03-07 08:24:24 gmurray71 Exp $
 */
 
 function ImageScroller() {
@@ -72,30 +72,28 @@ function ImageScroller() {
     var minimizing = false;
     var maximized = false;
 
-    // this is the number of items to fetch at a time
-    var chunkSize = 7;
     // prefetch thresh-hold
     var prefetchThreshold = 3;
+    
     // a growing list of items;
     var items = [];
     var map = new Map();
-    
-    var debug = false;
+
     // used for debugging when debug is true
+    var debug = false;
     var statusDiv;
     var status2Div;
+    
     var showingBuffer = false;
     var imageBuffer;
-
+    var imageReloadTries = 0;
+    var IMG_RELOAD_RETRY_MAX = 30;
+    // used for url book marking
+    var originalURL;
     
     // detect a resize of the window
     window.onresize=resized;
-    //document.addEventListener("DOMContentLoaded", contentLoaded, null);
-    
-    function contentLoaded() {
-        alert("gotSomething");
-        statusDiv.innerHTML = "got something";
-    }
+
     
     /**
      *  Insert a script tag in the head of the document which will inter load the flicker photos
@@ -178,7 +176,7 @@ function ImageScroller() {
             var url;
             if (index == 3 && items.length < 8) url = "catalog-2.xml";
             if (index == 10 && items.length < 15) url = "catalog-3.xml";
-            if (index == 16 && items.length < 22) url = "catalog-4.xml";
+            if (index == 18 && items.length < 22) url = "catalog-4.xml";
             
             if (url) {
                 showProgressIndicator();
@@ -198,10 +196,21 @@ function ImageScroller() {
     }
     
     function postImageLoad(loadIntoBuffer) {
-        var id;
         if (debug) {
-            status2Div.innerHTML = "LOADED " + loadIntoBuffer + " " + url;
+            status2Div.innerHTML = "Try " + imageReloadTries + " " + url + " image.complete=" + imageBuffer.complete;
         }
+        // keep calling this funtion until imageReloadTries < IMG_RELOAD_RETRY_MAX
+	    if (!imageBuffer.complete) {
+            if (imageReloadTries < IMG_RELOAD_RETRY_MAX) {
+                setTimeout(function(){this.loadIntoBuffer = loadIntoBuffer;postImageLoad(loadIntoBuffer);},500);
+            } else {
+                hideProgressIndicator();
+            }
+            imageReloadTries = imageReloadTries + 1;
+            return;
+        }
+        var id;
+
         hideProgressIndicator();
         if (loadIntoBuffer) {
             imageLoadingPane.src = imageBuffer.src;
@@ -209,12 +218,20 @@ function ImageScroller() {
            imagePane.src = imageBuffer.src;
 
         }
-        crossFade(0,loadIntoBuffer );
+        // do a cross fade as long as the images aren't the same
+        if (imageLoadingPane.src != imagePane.src) {
+            crossFade(0,loadIntoBuffer );
+        }
     }
+    
 
     function showImage(itemId) {
+	    window.location.href= originalURL + "#" + itemId;
         setTimeout(showProgressIndicator,0);
         var i = map.get(itemId);
+        if (!i) {
+            return;
+        }
         // create the image pane and append the description nodes
         // asumption is that if the imagePane is not set neigher are the info children
         if (!imagePane) {
@@ -255,6 +272,7 @@ function ImageScroller() {
     }
     
     function loadImage(url, loadIntoBuffer) {
+        imageReloadTries = 0;
         imageBuffer = new Image();
         if (loadIntoBuffer) {
             imageBuffer.src = url;
@@ -263,7 +281,6 @@ function ImageScroller() {
             imageBuffer.src = url;
             imageBuffer.onLoad = setTimeout(function(){this.url = url;this.loadIntoBuffer = loadIntoBuffer;postImageLoad(loadIntoBuffer,url);},0);
         }
-        
     }
     
     function setOpacity(opacity, id) {
@@ -274,17 +291,7 @@ function ImageScroller() {
             target.style.opacity = opacity/100;
         }            
     }
-    
-    function fadeOut(percentage, id) {
-        var opacity = Number(percentage);
-        setOpacity(percentage, id);
-        if (opacity > 10) {
-             statusDiv.innerHTML = "fadeOut percentage=" + opacity;
-            opacity = opacity - 10;
-            setTimeout(function(){this.opacity = opacity;fadeOut(opacity,id);}, 150);
-        }
-    }
-    
+      
     function crossFade(count,loadIntoBuffer) {
        var percentage = Number(count);
         if (loadIntoBuffer) {
@@ -466,7 +473,15 @@ function ImageScroller() {
     }
     
     this.load = function () {
-        
+	    var loadImage;
+        originalURL = window.location.href;
+        if (originalURL.indexOf("#") != -1) {
+	        var start = originalURL.indexOf("#");
+	        loadImage = originalURL.substring(start + 1,originalURL.length);
+	        
+	        originalURL = originalURL.substring(0,start);      
+	    }
+	    
         var targetRow = document.getElementById("targetRow");
         injectionPoint = document.getElementById("injection_point");
         
@@ -478,7 +493,7 @@ function ImageScroller() {
         layout();
         
         // load the first set of images
-        var ajax = new AJAXInteraction("catalog-1.xml", postProcess);
+        var ajax = new AJAXInteraction("catalog-1.xml", postProcess, "text/xml", loadImage);
         ajax.doGet();
     }
     
@@ -502,6 +517,7 @@ function ImageScroller() {
         
         if (ua.indexOf('ie') != -1) {
             isIE = true;
+            tileX = tileX + 5;
         } else if (ua.indexOf('safari') != -1) {
             tileX = tileX + 17;
             //SCROLL_INCREMENT = SCROLL_INCREMENT + 5;
@@ -616,8 +632,6 @@ function ImageScroller() {
             minimizeLink.addEventListener("click",function(e){doMaximize();}, true);
         }
         
-
-        
         var clipMe = 'rect(' + '0px,' + VIEWPORT_WIDTH +  'px,'+  INFOPANE_EXPAND_HEIGHT +'px,' +  0 + 'px)';
         infoPane.style.clip = clipMe;
 
@@ -648,7 +662,7 @@ function ImageScroller() {
         tiles.push(div);
     }
     
-    function postProcess(responseXML) {
+    function postProcess(responseXML,loadImage) {
         var startLength = items.length;
         var count = responseXML.getElementsByTagName("product").length;
         for (var loop=0; loop < count ; loop++) {
@@ -663,25 +677,21 @@ function ImageScroller() {
             items.push(i);
             map.put(itemId, i);
             createTile(i);
-            if (loop == 0) {
+            
+            if (loop == 0 && !loadImage) {
                 showImage(itemId);
-            }
+            }   
+
         }
         drawTiles();
+        if (loadImage) {
+	            showImage(loadImage);
+    	}
         indicatorImage.style.visibility = "hidden";
     }
     
-    
-    this.roll = function(target, imageURL) {
-		if(document.images[target]) document.images[target].src = imageURL;
-    }
-    
-    function AJAXInteraction(url) {
-        AJAXInteraction(url,null);
-    }
-    
-    function AJAXInteraction(url, callback, type) {
-        
+    function AJAXInteraction(url, callback, type, loadImage) {
+        this.loadImage = loadImage;
         var req = init();
         req.onreadystatechange = processRequest;
         
@@ -698,9 +708,9 @@ function ImageScroller() {
                 if (req.status == 200) {
                     if (callback) {
                         if (type && type == 'text') {
-                            callback(req.responseText);
+                            callback(req.responseText,loadImage);
                         } else {
-                            callback(req.responseXML);
+                            callback(req.responseXML,loadImage);
                         }
                     }
                 }
