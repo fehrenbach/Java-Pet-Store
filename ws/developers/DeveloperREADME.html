@@ -39,8 +39,7 @@ for NB support builds(TBD)</li>
 These instructions are useful for the developers on this project or
 anyone else that would like to check out the cvs and build the project
 and play around. This is just another way to use this project, in
-addition to downloading the zip file or browsing the online version or
-using the NetBeans Solutions Catalog project, some folks may want to
+addition to downloading the zip file, some folks may want to
 build their own dist from the latest versions for things. <br>
 
 This is also useful for new developers on the team.<br>
@@ -215,18 +214,18 @@ Go to petstore/ws/apps/petstore and type "ant setup"</li>
 onto the GlassFish, the Java EE 5 SDK app server. Go to the directory
 /apps/petstore/ and type "ant deploy"</li>
 
-  <li>Running go to&nbsp; /apps/petstore/ type "ant launch" or open
-your browser to:http://localhost:8080/petstore/<br>
+  <li>Using the Petstore. Open
+your browser to:http://localhost:8080/petstore/ OR go to petstore/ws/apps/petstore/ type "ant launch" .<br>
 
   </li>
 
-  <li>Clean the workspace, go to&nbsp; /apps/petstore/&nbsp; and
+  <li>To clean the workspace. Go to&nbsp;&nbsp;petstore/ws/apps/petstore/&nbsp; and
 type&nbsp; "ant clean"</li>
 
-  <li>To undeploy go to&nbsp; /apps/petstore/ and type "ant undeploy"</li>
+  <li>To undeploy go to&nbsp;&nbsp;petstore/ws/apps/petstore/ and type "ant undeploy"</li>
 
   <li>To clean up the app server and the database DB and remove all the
-petstore data, go to the directory /apps/petstore/ and type "ant
+petstore data, go to the directory petstore/ws/apps/petstore/ and type "ant
 unsetup"</li>
   <li>To stop the database, go to javaee_home/bin and run "asadmin stop-database"</li>
   <li>To stop the Java EE 5 app server, go
@@ -242,53 +241,7 @@ Here are the steps to build the viewer zip bundle that is made
 available for distribution as a download on the petstore project site.<br>
 
 TBD........<br>
-
-These are the intructions for users of ant based builds. NetBeans users
-will have separate instructions.<br>
-
-<ol>
-
-  <li>Do the steps above for <a href="#project_apps">Building the
-Project Apps</a><br>
-
-  </li>
-
-  <li>build viewer distribution.
-Go to petstore/ws/tools/ and run
-"ant dist". <br>
-
-  </li>
-
-  <li>This will generate a zip file
-in petstore/ws/tools/viewer/dist/ which will
-contain a bpcatalog zip file</li>
-
-  <li>Build is complete. Now test
-it out.<br>
-
-  </li>
-
-  <li>Unzip the zip file in a
-directory you like.</li>
-
-  <li>Look in the unzipped petstore and follow the instructions on
-the
-included README.html which tell you how to deploy and test it.</li>
-
-  <li>copy over *.jar from alleycat/setup/ to the
-petstore/tools/&nbsp;
-directory</li>
-
-  <li>Make sure the property release.version in setup/installer is
-matching the release version that you want</li>
-
-  <li>run ant -buildfile setup/installer.xml to create the viewer
-distribution in dist/bpcatalog-1.0.x.jar <br>
-
-  </li>
-
-</ol>
-
+<br>
 <ol>
 
 </ol>
