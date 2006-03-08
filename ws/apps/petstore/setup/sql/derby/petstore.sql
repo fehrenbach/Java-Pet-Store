@@ -56,6 +56,11 @@ CREATE TABLE lineitem (
  foreign key (orderid) references orders(orderid)
 );
 
+CREATE TABLE id_gen (
+ gen_key VARCHAR(8) NOT NULL,
+ gen_value INTEGER NOT NULL,
+ primary key (gen_key)
+);
 
 INSERT INTO category VALUES('CATS', 'Cats', 'Loving and furry friends', 'cats_icon.gif');
 INSERT INTO category VALUES('DOGS', 'Dogs', 'Loving and furry friends', 'dogs_icon.gif');
@@ -85,3 +90,6 @@ INSERT INTO item VALUES('13', 'canine01', 'Old Dog', 'A great old pet', 'dog2.gi
 INSERT INTO item VALUES('14', 'canine01', 'Young Dog', 'A great young pet', 'dog3.gif', 301, 210);
 INSERT INTO item VALUES('15', 'canine02', 'Scrapper Dog', 'A scapper dog', 'dog4.gif', 410, 210);
 INSERT INTO item VALUES('16', 'canine02', 'Grey Hound', 'A great runner', 'dog5.gif', 200, 210);
+
+
+INSERT INTO id_gen VALUES('ITEM_ID',16);

@@ -67,19 +67,19 @@ public class FileUploadBean {
                         fileNameKey = key;
                 }
                 String absoluteFileName = hmUpload.get(fileNameKey).toString();
+                System.out.println("Abs name: "+ absoluteFileName);
                 String fileName = null;
                 int lastSeparator = absoluteFileName.lastIndexOf("/") + 1;
                 if (lastSeparator != -1) {
                     fileName = absoluteFileName.substring(lastSeparator, absoluteFileName.length());
                 }
+                System.out.println("file name: "+ fileName);
                 Item item = new Item();
-                String itemId = hmUpload.get("item").toString();
                 String prodId = hmUpload.get("product").toString();
                 String name = hmUpload.get("name").toString();
                 String desc = hmUpload.get("description").toString();
                 String unitCost = hmUpload.get("unitCost").toString();
                 String listPrice = hmUpload.get("listPrice").toString();
-                item.setItemID(itemId);
                 item.setProductID(prodId);
                 item.setDescription(desc);
                 item.setName(name);
@@ -92,6 +92,7 @@ public class FileUploadBean {
                 getLogger().log(Level.FINE, "Item " + name + " has been persisted");
 
                 // index new item
+                String itemId = item.getItemID();
                 IndexDocument indexDoc=new IndexDocument();
                 indexDoc.setUID(itemId);
                 indexDoc.setPageURL(itemId);

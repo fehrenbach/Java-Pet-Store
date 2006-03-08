@@ -16,6 +16,13 @@ public class Item implements java.io.Serializable {
       
     public Item() { }
     
+    @TableGenerator(name="ID_GEN",
+            table="ID_GEN",
+            pkColumnName="GEN_KEY",
+            valueColumnName="GEN_VALUE",
+            pkColumnValue="ITEM_ID",
+            allocationSize=1)
+    @GeneratedValue(strategy=GenerationType.TABLE,generator="ID_GEN")
     @Id
     public String getItemID() {
         return itemID;

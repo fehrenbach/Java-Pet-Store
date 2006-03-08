@@ -34,35 +34,13 @@
 
         <f:view>
     
-            <ui:FileUploadTag id="TestFileuploadForm" serverLocationDir="../applications/j2ee-modules/petstore/images" 
+            <ui:FileUploadTag id="TestFileuploadForm"  
                 enctype="multipart/form-data" postProcessingMethod="#{FileUploadBean.postProcessingMethod}"
                 retMimeType="text/xml" retFunction="testRetFunction" 
                 progressBarDivId="progress" progressBarSubmitId="submitx" progressBarSize="40">
                 
                 <br>To sell a pet, please enter all the reqired data.<br> 
-                <table colspacing="5" colpadding="5">
-                    <tr>
-                        <td><b>Item ID :</b></td>
-                        <td><select name="item">
-                            <option> pet-030 </option>
-                            <option> pet-031 </option>
-                            <option> pet-032 </option>
-                            <option> pet-033 </option>
-                            <option> pet-034 </option>
-                            <option> pet-035 </option>
-                            <option> pet-036 </option>
-                            <option> pet-037 </option>
-                            <option> pet-038 </option>
-                            <option> pet-039 </option>
-                            <option> pet-040 </option>
-                            <option> pet-041 </option>
-                            <option> pet-042 </option>
-                            <option> pet-043 </option>
-                            <option> pet-044 </option>
-                            <option> pet-045 </option>                                                              
-                        </select>  
-                        </td>
-                    </tr>
+                <table colspacing="5" colpadding="5">                   
                     <tr>
                         <td><b>Product ID :</b></td>
                         <td> <select name="product">
