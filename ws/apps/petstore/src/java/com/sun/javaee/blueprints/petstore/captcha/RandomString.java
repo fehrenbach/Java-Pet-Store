@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: RandomString.java,v 1.1 2006-02-23 20:25:38 yutayoshida Exp $ */
+$Id: RandomString.java,v 1.2 2006-03-08 20:20:04 yutayoshida Exp $ */
 
 package com.sun.javaee.blueprints.petstore.captcha;
 
@@ -15,6 +15,13 @@ public class RandomString {
     }
     
     public String getString(int count) {
+        return getString(count, null);
+    }
+    
+    public String getString(int count, String exclude) {
+        if (exclude == null) {
+            exclude = "";
+        }
         if (count <= 0) {
             throw new IllegalArgumentException("Character length must be > 0");
         }
@@ -25,7 +32,7 @@ public class RandomString {
         char c;
         while (count-- != 0) {
             c = (char)rd.nextInt(num);
-            if (Character.isLetterOrDigit(c)) {
+            if (Character.isLetterOrDigit(c) && exclude.indexOf((int)c)<0) {
                 buf.append(c);
             } else {
                 count++;

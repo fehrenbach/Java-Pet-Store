@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: SimpleCaptcha.java,v 1.2 2006-03-03 02:10:59 yutayoshida Exp $ */
+$Id: SimpleCaptcha.java,v 1.3 2006-03-08 20:20:04 yutayoshida Exp $ */
 
 package com.sun.javaee.blueprints.petstore.captcha;
 
@@ -61,7 +61,8 @@ public class SimpleCaptcha {
     public BufferedImage getCaptchaImageWithId(String id) {
         this.cid = id;
         RandomString rs = new RandomString();
-        this.cstring = rs.getString(5);
+        // generate string with exclusion of "IiOo0"
+        this.cstring = rs.getString(5, "IiOo0");
         return getCaptchaImage(this.cstring, this.width, this.height);
     }
     public BufferedImage getCaptchaImage(String message) {
@@ -79,7 +80,7 @@ public class SimpleCaptcha {
             g.fillRect(0, 0, w, h);
             g.setFont(new Font("Arial", Font.BOLD | Font.ITALIC, 30));
             g.setColor(Color.GRAY);
-            drawRandomLine(g, 10);
+            drawRandomLine(g, 16);
             drawMessage(g, message);
             //g.drawString(message, 15, 40);
         
