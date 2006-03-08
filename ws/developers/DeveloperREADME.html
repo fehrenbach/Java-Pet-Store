@@ -191,31 +191,31 @@ while installing GlassFish, the Java EE 5 SDK</td>
 
   </li>
 
-  <li>set ANT_HOME and path to use ant version 1.6.5 and put
+  <li>Set ANT_HOME and path to use ant version 1.6.5 and put
 ANT_HOME\bin in PATH</li>
 
-  <li>set JAVA_HOME and JAVA_HOME\bin in PATH</li>
+  <li>Set JAVA_HOME and JAVA_HOME\bin in PATH</li>
 
-  <li>build the petstore app. Go to the directory go to the directory
-petstore/ws/apps/petstore/ and type and
+  <li>Build the petstore application. Go to the directory
+petstore/ws/apps/petstore/&nbsp; and
 run "ant".</li>
 
   <li>Start the database that comes with GlassFish app server, the Java EE 5 SDK app server. Go
 to&nbsp;javaee_home/bin and run "asadmin start-database"</li>
-  <li>Start the GlassFish app server, the Java EE 5 SDK app server. Go
+  <li>Start the GlassFish application server, the Java EE 5 SDK app server. Go
 to javaee_home/bin and run "asadmin start-domain domain1"<br>
 
   </li>
 
   <li>Run setup to set up the data sources and to create and populate the database tables with data.
-Go to petstore/ws/apps/petstore and type "ant setup"</li>
+Go to petstore/ws/apps/petstore and run "ant setup"</li>
 
   <li>Deploy and test the app
 onto the GlassFish, the Java EE 5 SDK app server. Go to the directory
-/apps/petstore/ and type "ant deploy"</li>
+petstore/ws/apps/petstore/ and run "ant deploy"</li>
 
   <li>Using the Petstore. Open
-your browser to:http://localhost:8080/petstore/ OR go to petstore/ws/apps/petstore/ type "ant launch" .<br>
+your browser to:http://localhost:8080/petstore/ OR go to petstore/ws/apps/petstore/ and run "ant launch"&nbsp;<br>
 
   </li>
 
@@ -225,7 +225,7 @@ type&nbsp; "ant clean"</li>
   <li>To undeploy go to&nbsp;&nbsp;petstore/ws/apps/petstore/ and type "ant undeploy"</li>
 
   <li>To clean up the app server and the database DB and remove all the
-petstore data, go to the directory petstore/ws/apps/petstore/ and type "ant
+petstore data, go to the directory petstore/ws/apps/petstore/ and run "ant
 unsetup"</li>
   <li>To stop the database, go to javaee_home/bin and run "asadmin stop-database"</li>
   <li>To stop the Java EE 5 app server, go
