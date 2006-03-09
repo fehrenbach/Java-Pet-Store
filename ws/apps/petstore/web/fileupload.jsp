@@ -83,7 +83,7 @@
                     </tr>
                     
                     <tr>
-                        <td><b>Enter the text as it is shown below(case sensitive):</b></td>
+                        <td><b>Enter the text as it is shown below(case insensitive):</b></td>
                     </tr>
                     <tr>
                         <td><img src="CaptchaServlet"></td>
