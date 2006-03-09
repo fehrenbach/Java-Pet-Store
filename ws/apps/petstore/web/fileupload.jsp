@@ -34,7 +34,7 @@
 
         <f:view>
     
-            <ui:FileUploadTag id="TestFileuploadForm"  
+            <ui:FileUploadTag id="TestFileuploadForm" serverLocationDir="../applications/j2ee-modules/petstore/images" 
                 enctype="multipart/form-data" postProcessingMethod="#{FileUploadBean.postProcessingMethod}"
                 retMimeType="text/xml" retFunction="testRetFunction" 
                 progressBarDivId="progress" progressBarSubmitId="submitx" progressBarSize="40">
