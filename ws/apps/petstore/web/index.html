@@ -37,7 +37,7 @@
  </tr>
   <tr bgcolor="gray">
   <td colspan="3"  align="right">
-   <a class="menuLink" onclick="showAccount2();">Account 2</a> <a class="menuLink" onclick="showAccount();">Account</a> <span class="menuItem">|</span > <a class="menuLink" onclick="cart.show();">Cart</a> <span class="menuItem">|</span > <a class="menuLink" onclick="showMain();">Main</a>
+  <a class="menuLink" href="search.jsp">Search</a> <span class="menuItem">|</span > <a class="menuLink" href="faces/mapAll.jsp">Map</a> <span class="menuItem">|</span > <a class="menuLink" href="catalog.html">Catalog</a> <span class="menuItem">|</span > <a class="menuLink"  onclick="showMain()";>Main</a>
   </td>
  </tr>
  </table>
@@ -48,34 +48,34 @@
   <td valign="top" width="300"><table id="sidebar" border="0" cellpadding="0">
   <div class="outerbar">
 
-<div dojoType="FisheyeList"
-	itemWidth="170" itemHeight="50"
-	itemMaxWidth="340" itemMaxHeight="100"
-	orientation="vertical"
-	effectUnits="2"
-	itemPadding="10"
-	attachEdge="top"
-	labelEdge="bottom"
-	enableCrappySvgSupport="false">
+<div class="dojo-FisheyeList"
+	dojo:itemWidth="170" dojo:itemHeight="50"
+	dojo:itemMaxWidth="340" dojo:itemMaxHeight="100"
+	dojo:orientation="verticle"
+	dojo:effectUnits="2"
+	dojo:itemPadding="10"
+	dojo:attachEdge="top"
+	dojo:labelEdge="bottom"
+	dojo:enableCrappySvgSupport="false">
 
-	<div dojoType="FisheyeListItem" onClick="loadCategory('DOGS');"
-		iconsrc="images/dogs_icon.gif" caption="">
+	<div class="dojo-FisheyeListItem" onClick="browse('dogs');" 
+		dojo:iconsrc="images/dogs_icon.gif">
 	</div>
 
-	<div dojoType="FisheyeListItem" onClick="loadCategory('CATS');"
-		iconsrc="images/cats_icon.gif" caption="">
-	</div>
-    
-    <div dojoType="FisheyeListItem" onClick="loadCategory('BIRDS');"
-		iconsrc="images/birds_icon.gif" caption="">
+	<div class="dojo-FisheyeListItem" onClick="browse('cats');"
+		dojo:iconsrc="images/cats_icon.gif" c>
 	</div>
 
-	<div dojoType="FisheyeListItem" onClick="loadCategory('FISH');"
-		iconsrc="images/fish_icon.gif" caption="">
+	<div class="dojo-FisheyeListItem" onClick="browse('birds');"
+		dojo:iconsrc="images/birds_icon.gif" >
 	</div>
 
-	<div dojoType="FisheyeListItem" onClick="loadCategory('REPTILES');"
-		iconsrc="images/reptiles_icon.gif" caption="" >
+	<div class="dojo-FisheyeListItem" onClick="browse('fish');"
+		dojo:iconsrc="images/fish_icon.gif" >
+	</div>
+
+	<div class="dojo-FisheyeListItem" onClick="browse('reptiles');"
+		dojo:iconsrc="images/reptiles_icon.gif"  >
 	</div>
 </div>
 

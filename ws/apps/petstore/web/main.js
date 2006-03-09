@@ -33,6 +33,10 @@ function handleMouseClick() {
     return true;
 }
 
+function browse(category) {
+    window.location.href="catalog.html?catid=" + category;
+}
+
 function loadPetstore() {
     init();
     showMain();
