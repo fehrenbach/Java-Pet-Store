@@ -18,6 +18,10 @@
 </p>
 
 <p>
+ <a href="faces/calendar-jsf.jsp">Calendar</a>
+</p>
+
+<p>
  <a href="faces/fisheye-jsf.jsp">Fish Eye List</a>
 </p>
 
