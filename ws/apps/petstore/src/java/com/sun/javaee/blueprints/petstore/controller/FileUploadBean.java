@@ -24,8 +24,10 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.UserTransaction;
 
 import javax.faces.context.FacesContext;
-import javax.faces.event.PhaseEvent;
-import javax.servlet.http.HttpServletResponse;
+//import javax.faces.event.PhaseEvent;
+//import javax.servlet.http.HttpServletResponse;
+import javax.faces.context.ResponseWriter;
+import org.apache.shale.remoting.faces.ResponseFactory;
 
 import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
 import com.sun.javaee.blueprints.petstore.util.PetstoreConstants;
@@ -42,21 +44,32 @@ public class FileUploadBean {
     @PersistenceContext(name="bppu")
     private static EntityManager em;
     @Resource UserTransaction utx;
-    private boolean bDebug=true;
+    private boolean bDebug=false;
     private Logger _logger=null;
+
+    /**
+     * <p>Factory for response writers that we can use to construct the
+     * outgoing response.</p>
+     */
+    private static ResponseFactory factory = new ResponseFactory();
+    
     
     /** Creates a new instance of FileUploadBean */
     public FileUploadBean() {
     }
     
-    public void postProcessingMethod(PhaseEvent event, HashMap hmUpload, FileUploadStatus status) {
+    public void postProcessingMethod(FacesContext context, HashMap hmUpload, FileUploadStatus status) {
         if(bDebug) System.out.println("IN Custom Post Processing method");
         try {
             // set custom return enabled so Phaselistener knows not to send default response
             status.enableCustomReturn();
-            FacesContext context=event.getFacesContext();
-            HttpServletResponse response=(HttpServletResponse)context.getExternalContext().getResponse();
-            //persist the data
+            //FacesContext context=event.getFacesContext();
+            //HttpServletResponse response=(HttpServletResponse)context.getExternalContext().getResponse();
+
+            // Acquire a response containing these results
+            ResponseWriter writer = factory.getResponseWriter(context, "text/xml");
+            
+            // persist the data
             try{
                 String fileNameKey = null;
                 Set keySet = hmUpload.keySet();
@@ -73,6 +86,8 @@ public class FileUploadBean {
                 if (lastSeparator != -1) {
                     fileName = absoluteFileName.substring(lastSeparator, absoluteFileName.length());
                 }
+                
+                
                 System.out.println("file name: "+ fileName);
                 Item item = new Item();
                 String prodId = hmUpload.get("product").toString();
@@ -114,8 +129,8 @@ public class FileUploadBean {
                 }
             }
             StringBuffer sb=new StringBuffer();
-            response.setContentType("text/xml;charset=UTF-8");
-            response.setHeader("Cache-Control", "no-cache");
+            //response.setContentType("text/xml;charset=UTF-8");
+            //response.setHeader("Cache-Control", "no-cache");
             sb.append("<response>");
             sb.append("<message>***CUSTOM SERVER-SIDE RETURN *** MESSAGE->");
             sb.append(status.getMessage());
@@ -140,7 +155,9 @@ public class FileUploadBean {
             sb.append("</upload_size>");
             sb.append("</response>");
             if(bDebug) System.out.println("Response:\n" + sb);
-            response.getWriter().write(sb.toString());
+            //response.getWriter().write(sb.toString());
+            writer.write(sb.toString());
+            writer.flush();
             
         } catch (IOException iox) {
             System.out.println("FileUploadPhaseListener error writting AJAX response : " + iox);

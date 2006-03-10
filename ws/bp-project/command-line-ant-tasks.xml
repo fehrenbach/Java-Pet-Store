@@ -2,7 +2,7 @@
 
 <!-- Copyright 2005-2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: command-line-ant-tasks.xml,v 1.6 2006-02-14 00:10:03 inder Exp $ -->
+ $Id: command-line-ant-tasks.xml,v 1.7 2006-03-10 02:59:10 basler Exp $ -->
 
 
 <!-- command-line-ant-tasks.xml: This file defines various targets needed for 
@@ -59,6 +59,7 @@
      <pathelement location="${extra.classpath}"/>
      <pathelement location="${extra1.classpath}"/>
      <pathelement location="${extra2.classpath}"/>
+     <pathelement path="${extrapath.classpath}"/>
      <path refid="javaee.classpath" />
    </path>
     <mkdir dir="${build.classes.dir}"/>

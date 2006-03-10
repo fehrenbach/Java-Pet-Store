@@ -5,20 +5,25 @@
   <property name="is.war.module" value="true"/>
   <property file="./setup/derby.properties" />
 
-  <import file="../../bp-project/main.xml" />
-  <import file="./setup/setup.xml" />
-
   <property name="commons.script" value="../../lib/js/ajax-commons.js" /> 
   <property name="dojo.zip" value="../../lib/dojo/dojo.zip" />
   <property name="bp.ui.14.jar" value="lib/bp-ui-14.jar" />
   <property name="shale.remoting.jar" value="lib/shale-remoting.jar" />
+  <property name="commons.fileupload.jar" value="lib/commons-fileupload-1.1.jar" />
+  <property name="commons.io.jar" value="lib/commons-io-1.1.jar" />
   <property name="bp.ui.5.jar" value="lib/bp-ui-5.jar" />
+  <property name="lucene.jar" value="lib/lucene-1.4.3.jar" />
 
   <!-- add lucene jar to path -->
-  <property name="extra.classpath" value="lib/lucene-1.4.3.jar" />
+  <property name="extra.classpath" value="${lucene.jar}" />
   <property name="extra1.classpath" value="${bp.ui.5.jar}" />
   <property name="extra2.classpath" value="${bp.ui.14.jar}" />
 
+  <property name="extrapath.classpath" value="${shale.remoting.jar}:${commons.fileupload.jar}:${commons.io.jar}" />
+
+  <import file="../../bp-project/main.xml" />
+  <import file="./setup/setup.xml" />
+  
   <target name="-post-compile" depends="package-persistence-jar,dojo">
 
     <!-- copy property files into build directory -->
@@ -28,6 +33,19 @@
         </fileset>
     </copy>
 
+    <mkdir dir="${war.build.dir}/WEB-INF/lib"/>
+    <copy todir="${war.build.dir}/WEB-INF/lib">
+        <fileset file="lib/ajax-wrapper-comp.jar"/>
+        <fileset file="lib/bp-dynamic-text-comp.jar"/>
+        <fileset file="./build/catalog-persistence.jar"/>
+        <fileset file="${lucene.jar}"/>
+        <fileset file="${bp.ui.5.jar}"/>
+        <fileset file="${bp.ui.14.jar}"/>
+        <fileset file="${shale.remoting.jar}"/>
+        <fileset file="${commons.fileupload.jar}"/>
+        <fileset file="${commons.io.jar}"/>
+    </copy>        
+    <!--
     <copy todir="${war.build.dir}/WEB-INF/lib" file="lib/ajax-wrapper-comp.jar"/>
     <copy todir="${war.build.dir}/WEB-INF/lib" file="lib/bp-dynamic-text-comp.jar"/>
     <copy todir="${war.build.dir}/WEB-INF/lib" file="./build/catalog-persistence.jar"/>
@@ -35,7 +53,8 @@
     <copy todir="${war.build.dir}/WEB-INF/lib" file="${bp.ui.5.jar}"/>   
     <copy todir="${war.build.dir}/WEB-INF/lib" file="${bp.ui.14.jar}"/>   
     <copy todir="${war.build.dir}/WEB-INF/lib" file="${shale.remoting.jar}"/>   
-
+    -->
+    
     <!-- Copy in the content -->
     <copy file="${commons.script}" todir="${war.build.dir}" />
 
