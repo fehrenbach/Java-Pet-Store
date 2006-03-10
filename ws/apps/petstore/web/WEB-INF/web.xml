@@ -8,7 +8,7 @@
     </filter>
     <filter-mapping>
         <filter-name>CaptchaValidateFilter</filter-name>
-        <url-pattern>/faces/ProcessFileUpload</url-pattern>
+        <url-pattern>/faces/dynamic/bpui_fileupload_handler/handleFileUpload</url-pattern>
     </filter-mapping>
     <listener>
         <listener-class>com.sun.javaee.blueprints.petstore.model.CatalogFacade</listener-class>
