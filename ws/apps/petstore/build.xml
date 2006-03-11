@@ -3,7 +3,6 @@
     <description>Builds, tests, and runs the project petstore.</description>
 
   <property name="is.war.module" value="true"/>
-  <property file="./setup/derby.properties" />
 
   <property name="commons.script" value="../../lib/js/ajax-commons.js" /> 
   <property name="dojo.zip" value="../../lib/dojo/dojo.zip" />
@@ -18,7 +17,6 @@
   <property name="extra.classpath" value="${lucene.jar}:${bp.ui.5.jar}:${bp.ui.14.jar}:${shale.remoting.jar}:${commons.fileupload.jar}:${commons.io.jar}" />
 
   <import file="../../bp-project/main.xml" />
-  <import file="./setup/setup.xml" />
   
   <target name="-post-compile" depends="package-persistence-jar,dojo">
 
@@ -88,5 +86,9 @@
     <delete file="./build/catalog-persistence.jar"/>
     <jar jarfile="./build/catalog-persistence.jar" basedir="${jar.build.dir}" />
     <delete dir="${jar.build.dir}"/>
+  </target>
+
+  <target name="setup">
+    <ant dir="." antfile="setup/setup.xml" target="setup" inheritAll="false" inheritRefs="false"/>
   </target>
 </project>

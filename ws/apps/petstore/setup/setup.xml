@@ -1,4 +1,8 @@
-<project name="petstore-setup" basedir=".">
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="petstore-setup" default="setup" basedir="..">
+
+  <property file="./setup/derby.properties" />
+  <import file="../../../bp-project/main.xml" />
 
   <!-- Database configuration tasks -->
   <target name="setup" depends="create-resource-local, create-db" />
