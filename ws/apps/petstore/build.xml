@@ -27,8 +27,8 @@
         </fileset>
     </copy>
 
-    <mkdir dir="${war.build.dir}/WEB-INF/lib"/>
-    <copy todir="${war.build.dir}/WEB-INF/lib">
+    <mkdir dir="${build.web.dir}/WEB-INF/lib"/>
+    <copy todir="${build.web.dir}/WEB-INF/lib">
         <fileset file="lib/ajax-wrapper-comp.jar"/>
         <fileset file="lib/bp-dynamic-text-comp.jar"/>
         <fileset file="./build/catalog-persistence.jar"/>
@@ -39,18 +39,9 @@
         <fileset file="${commons.fileupload.jar}"/>
         <fileset file="${commons.io.jar}"/>
     </copy>        
-    <!--
-    <copy todir="${war.build.dir}/WEB-INF/lib" file="lib/ajax-wrapper-comp.jar"/>
-    <copy todir="${war.build.dir}/WEB-INF/lib" file="lib/bp-dynamic-text-comp.jar"/>
-    <copy todir="${war.build.dir}/WEB-INF/lib" file="./build/catalog-persistence.jar"/>
-    <copy todir="${war.build.dir}/WEB-INF/lib" file="lib/lucene-1.4.3.jar"/>
-    <copy todir="${war.build.dir}/WEB-INF/lib" file="${bp.ui.5.jar}"/>   
-    <copy todir="${war.build.dir}/WEB-INF/lib" file="${bp.ui.14.jar}"/>   
-    <copy todir="${war.build.dir}/WEB-INF/lib" file="${shale.remoting.jar}"/>   
-    -->
     
     <!-- Copy in the content -->
-    <copy file="${commons.script}" todir="${war.build.dir}" />
+    <copy file="${commons.script}" todir="${build.web.dir}" />
 
     <!-- unzip lucene indexes into the javaee.home/lib directory, if they don't exist -->
     <available file="${javaee.home}/lib/petstore" type="dir" property="lucene.index.exists"/>
@@ -58,8 +49,8 @@
   </target>
 
   <target name="dojo" description="Unzips the dojo.zip to the right place">
-    <mkdir dir="${war.build.dir}"/>
-    <unzip src="${dojo.zip}" dest="${war.build.dir}" >
+    <mkdir dir="${build.web.dir}"/>
+    <unzip src="${dojo.zip}" dest="${build.web.dir}" >
       <patternset>
         <include name="**/dojo.js"/>
         <include name="**/iframe_history.html"/>
@@ -82,7 +73,7 @@
     <delete file="${jar.build.dir}/com/sun/javaee/blueprints/petstore/model/CatalogFacade.class"/>
     <delete file="${jar.build.dir}/com/sun/javaee/blueprints/petstore/model/Customer.class"/>
     <delete file="${jar.build.dir}/com/sun/javaee/blueprints/petstore/model/Order.class"/>   
-    <copy todir="${jar.build.dir}/META-INF" file="${src.web}/WEB-INF/persistence.xml"/>
+    <copy todir="${jar.build.dir}/META-INF" file="${web.docbase.dir}/WEB-INF/persistence.xml"/>
     <delete file="./build/catalog-persistence.jar"/>
     <jar jarfile="./build/catalog-persistence.jar" basedir="${jar.build.dir}" />
     <delete dir="${jar.build.dir}"/>

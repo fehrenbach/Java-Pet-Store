@@ -2,7 +2,7 @@
 
 <!-- Copyright 2005-2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: app-server-ant.xml,v 1.8 2006-03-11 11:54:04 inder Exp $ -->
+ $Id: app-server-ant.xml,v 1.9 2006-03-11 12:41:02 inder Exp $ -->
 
 <!-- This file defines various Java EE SDK specific tasks. 
      This file is not meant to be included in a project directly. 
@@ -218,7 +218,7 @@
   </target>
 
   <target name="delete-persistence-resource"
-    description="deletes persistence resource">
+    description="deletes persistence resource" depends="tools">
      <exec executable="${asadmin}">
         <arg line="delete-persistence-resource"/>
         <arg line=" --user ${javaee.server.username}" />
@@ -230,7 +230,7 @@
   </target>
 
   <target name="delete-jdbc-resource"
-    description="deletes jdbc resource">
+    description="deletes jdbc resource" depends="tools">
     <fail unless="jdbc.resource.name" message="The property jdbc.resource.name must be set before invoking this target. Otherwise there is no JDBC resource to delete."/>
      <exec executable="${asadmin}">
         <arg line="delete-jdbc-resource"/>
@@ -243,7 +243,7 @@
   </target>
 
   <target name="delete-jdbc-connection-pool"
-    description="deletes jdbc connection pool">
+    description="deletes jdbc connection pool" depends="tools">
     <fail unless="pool.name" message="The property pool.name must be set before invoking this target. Otherwise there is no JDBC pool to delete."/>
      <exec executable="${asadmin}">
         <arg line="delete-jdbc-connection-pool"/>
@@ -256,7 +256,7 @@
   </target>
 
   <target name="delete-jms-resource"
-    description="deletes jms resource">
+    description="deletes jms resource" depends="tools">
      <exec executable="${asadmin}">
         <arg line="delete-jms-resource"/>
         <arg line=" --user ${javaee.server.username}" />

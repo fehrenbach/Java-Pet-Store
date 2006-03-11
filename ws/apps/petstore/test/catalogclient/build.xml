@@ -13,7 +13,7 @@
   <property name="dist.dir" value="dist" />
   <property name="app.module" value="${dist.dir}/bp-catalog-client.war" />
   <property name="build.dir" value="build" />
-  <property name="src.web" value="web" />
+  <property name="web.docbase.dir" value="web" />
   <property name="build.classes.dir" value="${build.dir}/classes" />
   <property name="war.build.dir" value="${build.dir}/war" />
 
@@ -39,7 +39,7 @@
     </copy>  
     <!-- Copy in the content -->
     <copy todir="${war.build.dir}">
-     <fileset dir="${src.web}"/>
+     <fileset dir="${web.docbase.dir}"/>
     </copy>
     <copy todir="${war.build.dir}">
      <fileset dir="${war.build.dir}"/>
