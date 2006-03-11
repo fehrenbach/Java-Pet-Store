@@ -15,11 +15,7 @@
   <property name="lucene.jar" value="lib/lucene-1.4.3.jar" />
 
   <!-- add lucene jar to path -->
-  <property name="extra.classpath" value="${lucene.jar}" />
-  <property name="extra1.classpath" value="${bp.ui.5.jar}" />
-  <property name="extra2.classpath" value="${bp.ui.14.jar}" />
-
-  <property name="extrapath.classpath" value="${shale.remoting.jar}:${commons.fileupload.jar}:${commons.io.jar}" />
+  <property name="extra.classpath" value="${lucene.jar}:${bp.ui.5.jar}:${bp.ui.14.jar}:${shale.remoting.jar}:${commons.fileupload.jar}:${commons.io.jar}" />
 
   <import file="../../bp-project/main.xml" />
   <import file="./setup/setup.xml" />

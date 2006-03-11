@@ -2,7 +2,7 @@
 
 <!-- Copyright 2005-2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: command-line-ant-tasks.xml,v 1.7 2006-03-10 02:59:10 basler Exp $ -->
+ $Id: command-line-ant-tasks.xml,v 1.8 2006-03-11 11:35:33 inder Exp $ -->
 
 
 <!-- command-line-ant-tasks.xml: This file defines various targets needed for 
@@ -11,6 +11,7 @@
 <project name="command-line-ant-tasks" default="default">
 
   <import file="${ant.file.command-line-ant-tasks}/../common-properties.xml"/>
+  <import file="${ant.file.command-line-ant-tasks}/../app-server-ant.xml"/>
 
   <condition property="module-tasks-file" value="${ant.file.command-line-ant-tasks}/../jar-ant.xml">
     <isset property="is.jar.module"/>
@@ -38,30 +39,35 @@
   </condition>
 
   <import file="${module-tasks-file}"/>
-  <import file="${ant.file.command-line-ant-tasks}/../app-server-ant.xml"/>
 
   <import file="${ant.file.command-line-ant-tasks}/../persistence-unit-ant.xml"/>
 
   <!-- Cleans the build directory -->
-  <target name="clean" depends="-pre-clean" description="Removes the build and dist directory">
+  <target name="clean" depends="-pre-clean" 
+    description="removes the generated directories like build and dist">
     <delete dir="${build.dir}" />
     <delete dir="${dist.dir}" />
+    <delete dir="${client.stubs.dir}" />
   </target>
 
  <available property="has-java-sources" file="${src.dir}"/>
 
- <target name="compile" depends="-pre-compile,bpp-actual-compilation,-post-compile" description="compiles the project"/>
+ <target name="compile" depends="-pre-compile,bpp-actual-compilation,-post-compile" 
+    description="compiles the project"/>
+
+ <dirname property="antfile.dir" file="${ant.file}"/>
+ <path id="classpath">
+   <fileset dir="${javaee.home}" includes="lib/javaee.jar, lib/appserv-rt.jar"/>
+   <dirset dir="${antfile.dir}/..">
+     <include name="**/build/classes"/>
+   </dirset>
+   <pathelement location="${build.classes.dir}"/>
+   <pathelement path="${extra.classpath}"/>
+   <path refid="javaee.classpath" />
+ </path>
 
  <target name="bpp-actual-compilation" if="has-java-sources">
     <echo>Compiling ${module.name}</echo>
-   <path id="classpath">
-     <pathelement location="${build.classes.dir}"/>
-     <pathelement location="${extra.classpath}"/>
-     <pathelement location="${extra1.classpath}"/>
-     <pathelement location="${extra2.classpath}"/>
-     <pathelement path="${extrapath.classpath}"/>
-     <path refid="javaee.classpath" />
-   </path>
     <mkdir dir="${build.classes.dir}"/>
     <javac srcdir="${src.dir}"
 	   source="${default.javac.source}"
@@ -73,6 +79,17 @@
            includes="**">
      <classpath refid="classpath"/>
     </javac>
+  </target>
+
+  <target name="javadoc">
+    <javadoc packagenames="${javadoc.packagenames}"
+        sourcepath="src/java"
+        classpathref="classpath"
+        destdir="docs/api"/>
+  </target>
+  
+  <target name="clean-javadoc">
+    <delete dir="docs/api"/>
   </target>
   
   <target name="getBrowser" unless="default.browser">
@@ -111,10 +128,11 @@
   <target name="init"/>
   <target name="-pre-compile"/>
   <target name="-post-compile"/>
-  <target name="-pre-clean"/>
   <target name="-pre-deploy"/>
+  <target name="-pre-setup"/>
 
-  <target name="default" depends="compile,package,bpp-copy-dist"/>
+  <target name="default" depends="compile,package,bpp-copy-dist"
+    description="compiles and packages the archive"/>
   <target name="bpp-copy-dist">
     <mkdir dir="${dist.dir}"/>
     <copy todir="${dist.dir}">

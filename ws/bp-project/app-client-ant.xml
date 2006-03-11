@@ -2,7 +2,7 @@
 
 <!-- Copyright 2005-2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: app-client-ant.xml,v 1.6 2006-02-14 00:10:03 inder Exp $ -->
+ $Id: app-client-ant.xml,v 1.7 2006-03-11 11:35:32 inder Exp $ -->
 
 
 <!-- app-client-ant.xml: contains targets for projects that produce 
@@ -17,14 +17,37 @@
   <property name="app.module" value="${build.dir}/${module.name}.jar"/>
   <property name="app-client.build.dir" value="${build.dir}/app-client"/>
 
-  <target name="package" depends="-post-compile">
-    <mkdir dir="${app-client.build.dir}"/>
+  <dirname property="antfile.dir" file="${ant.file}"/>
+  <available property="client.stubs.in.acc.dir" file="${client.stubs.dir}" type="dir"/>
 
+  <condition property="app.client.jar" value="${antfile.dir}/${client.stubs.dir}/${ac.jar}">
+    <isset property="client.stubs.in.acc.dir"/>
+  </condition>
+
+  <condition property="app.client.jar" value="${antfile.dir}/../${client.stubs.dir}/${ac.jar}">
+    <not>
+        <isset property="client.stubs.in.acc.dir"/>
+    </not>
+  </condition>
+
+  <target name="run-app-client"
+    description="run Application client">
+    <antcall target="bpp-run-app-client">
+        <param name="app-client.jar" 
+        value="${app.client.jar}" />
+    </antcall>
+  </target>
+
+  <target name="-pre-clean">
+  </target>
+
+  <target name="package" depends="-post-compile" 
+    description="packages the archive appropriate to the given module">
+    <mkdir dir="${app-client.build.dir}"/>
     <!-- copy in the compiled classes -->
     <copy todir="${app-client.build.dir}">
       <fileset dir="${build.classes.dir}"/>
     </copy>
-
     <delete file="${app.module}"/>
     <jar jarfile="${app.module}" basedir="${app-client.build.dir}" manifest="${src.conf}/MANIFEST.MF"/>
     <delete dir="${app-client.build.dir}"/>

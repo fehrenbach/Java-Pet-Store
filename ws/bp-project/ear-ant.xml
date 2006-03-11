@@ -2,7 +2,7 @@
 
 <!-- Copyright 2005-2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: ear-ant.xml,v 1.6 2006-02-14 00:10:04 inder Exp $ -->
+ $Id: ear-ant.xml,v 1.7 2006-03-11 11:35:33 inder Exp $ -->
 
 
 <!-- ear-ant.xml: contains targets for projects that produce 
@@ -35,24 +35,23 @@
         </sequential>
     </macrodef>
 
-    <target name="clean-all">
-        <iterate target="clean"/>
-        <antcall target="clean"/>
-    </target>
-
     <target name="ear">
         <iterate target="default"/>
         <antcall target="default"/>
     </target>
 
-    <target name="package" depends="-post-compile">
+    <target name="-pre-clean" depends="undeploy">
+        <iterate target="clean"/>
+    </target>
+
+    <target name="package" depends="-post-compile" description="packages the archive">
         <echo message="building ear package"/>
-        <antcall target="clean"/>
+        <!--antcall target="clean"/-->
         <mkdir dir="${ear.build.dir}"/>
         <mkdir dir="${ear.build.dir}/META-INF"/>
         <copy file="${src.conf}/sun-application.xml" todir="${ear.build.dir}/META-INF/" failonerror="false" />       <copy file="${src.conf}/application.xml" todir="${ear.build.dir}/META-INF/" failonerror="false"/>
         <dirname property="ear.dir" file="${ear.build.dir}/MANIFEST/"/>
-        <subant target="copy-dist" failonerror="false">
+        <subant target="bpp-copy-dist" failonerror="false">
             <property name="dist.dir" value="${ear.dir}"/>
             <buildpath refid="ear-components"/>
         </subant>

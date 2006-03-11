@@ -2,7 +2,7 @@
 
 <!-- Copyright 2005-2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: ejb-jar-ant.xml,v 1.6 2006-02-14 00:10:04 inder Exp $ -->
+ $Id: ejb-jar-ant.xml,v 1.7 2006-03-11 11:35:33 inder Exp $ -->
 
 
 <!-- ejb-jar-ant.xml: contains targets for projects that produce 
@@ -17,7 +17,8 @@
   <property name="app.module" value="${build.dir}/${module.name}.jar"/>
   <property name="jar.build.dir" value="${build.dir}/jar"/>
 
-  <target name="package" depends="-post-compile">
+  <target name="package" depends="-post-compile"
+    description="packages the archive">
     <mkdir dir="${jar.build.dir}"/>
 
     <!-- Copy in the compiled Classes -->
