@@ -33,6 +33,7 @@ import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
 import com.sun.javaee.blueprints.petstore.util.PetstoreConstants;
 import com.sun.javaee.blueprints.petstore.model.Item;
 import com.sun.javaee.blueprints.components.ui.fileupload.FileUploadStatus;
+import com.sun.javaee.blueprints.components.ui.fileupload.FileUploadUtil;
 import com.sun.javaee.blueprints.petstore.search.IndexDocument;
 import com.sun.javaee.blueprints.petstore.search.Indexer;
 
@@ -52,7 +53,6 @@ public class FileUploadBean {
      * outgoing response.</p>
      */
     private static ResponseFactory factory = new ResponseFactory();
-    
     
     /** Creates a new instance of FileUploadBean */
     public FileUploadBean() {
@@ -87,14 +87,14 @@ public class FileUploadBean {
                     fileName = absoluteFileName.substring(lastSeparator, absoluteFileName.length());
                 }
                 
-                
+                String compName = (String)hmUpload.get(FileUploadUtil.COMPONENT_NAME);
                 System.out.println("file name: "+ fileName);
                 Item item = new Item();
-                String prodId = hmUpload.get("product").toString();
-                String name = hmUpload.get("name").toString();
-                String desc = hmUpload.get("description").toString();
-                String unitCost = hmUpload.get("unitCost").toString();
-                String listPrice = hmUpload.get("listPrice").toString();
+                String prodId = hmUpload.get(compName+":product").toString();
+                String name = hmUpload.get(compName+":name").toString();
+                String desc = hmUpload.get(compName+":description").toString();
+                String unitCost = hmUpload.get(compName+":unitCost").toString();
+                String listPrice = hmUpload.get(compName+":listPrice").toString();
                 item.setProductID(prodId);
                 item.setDescription(desc);
                 item.setName(name);

@@ -4,6 +4,8 @@
 <%@taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@taglib prefix="ui" uri="http://java.sun.com/blueprints/ui" %>
+<%@taglib prefix="ui14" uri="http://java.sun.com/blueprints/ui/14" %>
+
 <html>
     <head>
         <title>Petstore Seller page</title>
@@ -23,7 +25,7 @@
     }
 
    function storeCookie() {
-       currentcap = "j_captcha_response="+document.getElementById("captcharesponse").value;
+       currentcap = "j_captcha_response="+document.getElementById("TestFileuploadForm:captcharesponse").value;
        document.cookie = currentcap;
    }     
     
@@ -43,32 +45,33 @@
                 <table colspacing="5" colpadding="5">                   
                     <tr>
                         <td><b>Product ID :</b></td>
-                        <td> <select name="product">
-                            <option> canine01 </option>
-                            <option> canine02 </option>
-                            <option> feline01 </option>
-                            <option> feline02 </option>
-                        </select>  
+                        <td> <h:selectOneMenu id="product">
+                            <f:selectItem itemValue="canine01" itemLabel="canine01"/>
+                            <f:selectItem itemValue="canine02" itemLabel="canine02"/>
+                            <f:selectItem itemValue="feline01" itemLabel="feline01"/>
+                            <f:selectItem itemValue="feline02" itemLabel="feline02"/>
+                        </h:selectOneMenu>  
                         </td>
                     </tr>
                     <tr>
                         <td><b>Name :</b></td>
-                        <td> <input type="text" size="20" name="name" id="nameId"/>
+                        <td> <h:inputText size="20" id="name"></h:inputText>
                         </td>
                     </tr>
                     <tr>
                         <td><b>Description</b></td>
-                        <td><input type="text" size="20" name="description" id="descriptionId"/>
+                        <td>
+                            <ui14:richTextarea id="description" items="textGroup;|;listGroup;|;colorGroup;"></ui14:richTextarea>
                         </td>
                     </tr>
                     <tr>
                         <td><b>Unit Cost :</b></td>
-                        <td><input type="text" size="20" name="unitCost" id="unitCostId"/>
+                        <td><h:inputText size="20" id="unitCost"></h:inputText>
                         </td>
                     </tr>
                     <tr>
                         <td><b>List Price :</b></td>
-                        <td> <input type="text" size="20" name="listPrice" id="listPriceId"/>                       
+                        <td> <h:inputText size="20" id="listPrice"></h:inputText>
                         </td>
                     </tr>
                     <tr>
@@ -78,7 +81,7 @@
                     </tr>
                     <tr>
                         <td><b>Seller Email :</b></td>               
-                        <td><input type="text" size="20" name="email" id="emailId"/>
+                        <td><h:inputText size="20" id="email"></h:inputText>
                         </td>
                     </tr>
                     
@@ -86,8 +89,8 @@
                         <td><b>Enter the text as it is shown below(case insensitive):</b></td>
                     </tr>
                     <tr>
-                        <td><img src="CaptchaServlet"></td>
-                        <td><input type="text" name="j_captcha_response" id="captcharesponse"></td>
+                        <td><h:graphicImage id="captchaImg" url="CaptchaServlet"/></td>
+                        <td><h:inputText id="captcharesponse"></h:inputText></td>
                     </tr>
                     
                     <tr>
