@@ -25,6 +25,8 @@ CREATE TABLE Address (
  city VARCHAR(55) NOT NULL,
  state VARCHAR(25) NOT NULL,
  zip VARCHAR(5) NOT NULL,
+ latitude DECIMAL(14,10) NOT NULL,
+ longitude DECIMAL(14,10) NOT NULL,
  primary key (addressid)
 );
 
@@ -69,22 +71,22 @@ INSERT INTO product VALUES('feline02', 'CATS', 'Short Hair', 'Friendly house cat
 INSERT INTO product VALUES('canine01', 'DOGS', 'Medium Dogs', 'Friendly dog from England', 'dog1.gif');
 INSERT INTO product VALUES('canine02', 'DOGS', 'Small Dogs', 'Great Companion Dog','dog2.gif');
 
-INSERT INTO Address VALUES('1', 'Street1', 'Street2', 'ABC City','ABC State','9999');
-INSERT INTO Address VALUES('2', 'Street1', 'Street2', 'ABC City','ABC State','9999');
-INSERT INTO Address VALUES('3', 'Street1', 'Street2', 'ABC City','ABC State','9999');
-INSERT INTO Address VALUES('4', 'Street1', 'Street2', 'ABC City','ABC State','9999');
-INSERT INTO Address VALUES('5', 'Street1', 'Street2', 'ABC City','ABC State','9999');
-INSERT INTO Address VALUES('6', 'Street1', 'Street2', 'ABC City','ABC State','9999');
-INSERT INTO Address VALUES('7', 'Street1', 'Street2', 'ABC City','ABC State','9999');
-INSERT INTO Address VALUES('8', 'Street1', 'Street2', 'ABC City','ABC State','9999');
-INSERT INTO Address VALUES('9', 'Street1', 'Street2', 'ABC City','ABC State','9999');
-INSERT INTO Address VALUES('10', 'Street1', 'Street2', 'ABC City','ABC State','9999');
-INSERT INTO Address VALUES('11', 'Street1', 'Street2', 'ABC City','ABC State','9999');
-INSERT INTO Address VALUES('12', 'Street1', 'Street2', 'ABC City','ABC State','9999');
-INSERT INTO Address VALUES('13', 'Street1', 'Street2', 'ABC City','ABC State','9999');
-INSERT INTO Address VALUES('14', 'Street1', 'Street2', 'ABC City','ABC State','9999');
-INSERT INTO Address VALUES('15', 'Street1', 'Street2', 'ABC City','ABC State','9999');
-INSERT INTO Address VALUES('16', 'Street1', 'Street2', 'ABC City','ABC State','9999');
+INSERT INTO Address VALUES('1', 'Street1', 'Street2', 'ABC City','ABC State','9999',8.123456,9.123456);
+INSERT INTO Address VALUES('2', 'Street1', 'Street2', 'ABC City','ABC State','9999',8.123456,9.123456);
+INSERT INTO Address VALUES('3', 'Street1', 'Street2', 'ABC City','ABC State','9999',8.123456,9.123456);
+INSERT INTO Address VALUES('4', 'Street1', 'Street2', 'ABC City','ABC State','9999',8.123456,9.123456);
+INSERT INTO Address VALUES('5', 'Street1', 'Street2', 'ABC City','ABC State','9999',8.123456,9.123456);
+INSERT INTO Address VALUES('6', 'Street1', 'Street2', 'ABC City','ABC State','9999',8.123456,9.123456);
+INSERT INTO Address VALUES('7', 'Street1', 'Street2', 'ABC City','ABC State','9999',8.123456,9.123456);
+INSERT INTO Address VALUES('8', 'Street1', 'Street2', 'ABC City','ABC State','9999',8.123456,9.123456);
+INSERT INTO Address VALUES('9', 'Street1', 'Street2', 'ABC City','ABC State','9999',8.123456,9.123456);
+INSERT INTO Address VALUES('10', 'Street1', 'Street2', 'ABC City','ABC State','9999',8.123456,9.123456);
+INSERT INTO Address VALUES('11', 'Street1', 'Street2', 'ABC City','ABC State','9999',8.123456,9.123456);
+INSERT INTO Address VALUES('12', 'Street1', 'Street2', 'ABC City','ABC State','9999',8.123456,9.123456);
+INSERT INTO Address VALUES('13', 'Street1', 'Street2', 'ABC City','ABC State','9999',8.123456,9.123456);
+INSERT INTO Address VALUES('14', 'Street1', 'Street2', 'ABC City','ABC State','9999',8.123456,9.123456);
+INSERT INTO Address VALUES('15', 'Street1', 'Street2', 'ABC City','ABC State','9999',8.123456,9.123456);
+INSERT INTO Address VALUES('16', 'Street1', 'Street2', 'ABC City','ABC State','9999',8.123456,9.123456);
 
 INSERT INTO SellerContactInfo VALUES('1', 'Duke', 'Duke', 'abc@abc.xyz');
 INSERT INTO SellerContactInfo VALUES('2', 'Duke', 'Duke', 'abc@abc.xyz');

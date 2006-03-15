@@ -104,6 +104,8 @@ public class FileUploadBean {
                 addr.setCity("city");
                 addr.setState("state");
                 addr.setZip("9999");
+                addr.setLatitude(-8.343545645);
+                addr.setLongitude(-9.76878787);
                 
                 SellerContactInfo contactInfo = new SellerContactInfo();
                 //TO-DO: Add SellerContactInfo fields to the file upload page and extract data
