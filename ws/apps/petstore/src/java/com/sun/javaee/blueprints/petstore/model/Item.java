@@ -13,16 +13,18 @@ public class Item implements java.io.Serializable {
     private String imageURL;
     private float listPrice;
     private float unitCost;
+    private Address address;
+    private SellerContactInfo contactInfo;
       
     public Item() { }
     
-    @TableGenerator(name="ID_GEN",
+    @TableGenerator(name="ITEM_ID_GEN",
             table="ID_GEN",
             pkColumnName="GEN_KEY",
             valueColumnName="GEN_VALUE",
             pkColumnValue="ITEM_ID",
             allocationSize=1)
-    @GeneratedValue(strategy=GenerationType.TABLE,generator="ID_GEN")
+    @GeneratedValue(strategy=GenerationType.TABLE,generator="ITEM_ID_GEN")
     @Id
     public String getItemID() {
         return itemID;
@@ -52,6 +54,16 @@ public class Item implements java.io.Serializable {
         return imageURL;
     }
     
+    @ManyToOne(cascade={CascadeType.PERSIST})
+    public Address getAddress() {
+        return address;
+    }
+    
+    @ManyToOne(cascade={CascadeType.PERSIST})    
+    public SellerContactInfo getContactInfo() {
+        return contactInfo;
+    }    
+    
     public void setItemID(String itemID) {
         this.itemID = itemID;
     }     
@@ -73,6 +85,12 @@ public class Item implements java.io.Serializable {
     public void setUnitCost(float unitCost) {
         this.unitCost = unitCost;
     }
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+    public void setContactInfo(SellerContactInfo contactInfo) {
+        this.contactInfo = contactInfo;
+    }    
 }
 
 

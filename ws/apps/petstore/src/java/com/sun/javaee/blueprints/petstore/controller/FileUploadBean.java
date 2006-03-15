@@ -32,6 +32,8 @@ import org.apache.shale.remoting.faces.ResponseFactory;
 import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
 import com.sun.javaee.blueprints.petstore.util.PetstoreConstants;
 import com.sun.javaee.blueprints.petstore.model.Item;
+import com.sun.javaee.blueprints.petstore.model.Address;
+import com.sun.javaee.blueprints.petstore.model.SellerContactInfo;
 import com.sun.javaee.blueprints.components.ui.fileupload.FileUploadStatus;
 import com.sun.javaee.blueprints.components.ui.fileupload.FileUploadUtil;
 import com.sun.javaee.blueprints.petstore.search.IndexDocument;
@@ -43,7 +45,7 @@ import com.sun.javaee.blueprints.petstore.search.Indexer;
  */
 public class FileUploadBean {
     @PersistenceContext(name="bppu")
-    private static EntityManager em;
+    private EntityManager em;
     @Resource UserTransaction utx;
     private boolean bDebug=false;
     private Logger _logger=null;
@@ -95,12 +97,27 @@ public class FileUploadBean {
                 String desc = hmUpload.get(compName+":description").toString();
                 String unitCost = hmUpload.get(compName+":unitCost").toString();
                 String listPrice = hmUpload.get(compName+":listPrice").toString();
+                Address addr = new Address();
+                //TO-DO: Add address fields to the file upload page and extract data
+                addr.setStreet1("street1");
+                addr.setStreet2("street2");
+                addr.setCity("city");
+                addr.setState("state");
+                addr.setZip("9999");
+                
+                SellerContactInfo contactInfo = new SellerContactInfo();
+                //TO-DO: Add SellerContactInfo fields to the file upload page and extract data
+                contactInfo.setFirstName("duke");
+                contactInfo.setLastName("duke");
+                contactInfo.setEmail("abc@abc.xyz");
                 item.setProductID(prodId);
                 item.setDescription(desc);
                 item.setName(name);
                 item.setUnitCost(new Float(unitCost));
                 item.setListPrice(new Float(listPrice));
                 item.setImageURL(fileName);
+                item.setAddress(addr);
+                item.setContactInfo(contactInfo);
                 utx.begin();
                 em.persist(item);
                 utx.commit();
