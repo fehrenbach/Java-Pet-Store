@@ -41,64 +41,73 @@
                 retMimeType="text/xml" retFunction="testRetFunction" 
                 progressBarDivId="progress" progressBarSubmitId="submitx" progressBarSize="40">
                 
-                <br>To sell a pet, please enter all the reqired data.<br> 
-                <table colspacing="5" colpadding="5">                   
-                    <tr>
-                        <td><b>Product ID :</b></td>
-                        <td> <h:selectOneMenu id="product">
-                            <f:selectItem itemValue="canine01" itemLabel="canine01"/>
-                            <f:selectItem itemValue="canine02" itemLabel="canine02"/>
-                            <f:selectItem itemValue="feline01" itemLabel="feline01"/>
-                            <f:selectItem itemValue="feline02" itemLabel="feline02"/>
-                        </h:selectOneMenu>  
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><b>Name :</b></td>
-                        <td> <h:inputText size="20" id="name"></h:inputText>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><b>Description</b></td>
-                        <td>
-                            <ui14:richTextarea id="description" items="textGroup;|;listGroup;|;colorGroup;"></ui14:richTextarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><b>Unit Cost :</b></td>
-                        <td><h:inputText size="20" id="unitCost"></h:inputText>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><b>List Price :</b></td>
-                        <td> <h:inputText size="20" id="listPrice"></h:inputText>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><b>Image File :</b></td>                 
-                        <td><input type="file" size="20" name="fileToUpload" id="fileToUploadId"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><b>Seller Email :</b></td>               
-                        <td><h:inputText size="20" id="email"></h:inputText>
-                        </td>
-                    </tr>
-                    
-                    <tr>
-                        <td><b>Enter the text as it is shown below(case insensitive):</b></td>
-                    </tr>
-                    <tr>
-                        <td><h:graphicImage id="captchaImg" url="CaptchaServlet"/></td>
-                        <td><h:inputText id="captcharesponse"></h:inputText></td>
-                    </tr>
-                    
-                    <tr>
-                        <td colspan="2">
+                <script type="text/javascript">
+                    dojo.require("dojo.widget.Wizard");
+                </script>
+                <div id="wizard1" dojoType="Wizard" style="width: 100px; height: 500px;"
+                     nextButtonLabel="next >>" previousButtonLabel="<< previous" >
+                    <div dojoType="WizardPane" label="Pet">
+                        <h:panelGrid columns="2">
+                            <f:facet name="header">
+                                <h:outputText value="Information about your pet"/>
+                            </f:facet>
+                            
+                            <h:outputText value="Category"/>
+                            <h:selectOneMenu id="product">
+                                <f:selectItem itemValue="canine01" itemLabel="canine01"/>
+                                <f:selectItem itemValue="canine02" itemLabel="canine02"/>
+                                <f:selectItem itemValue="feline01" itemLabel="feline01"/>
+                                <f:selectItem itemValue="feline02" itemLabel="feline02"/>
+                            </h:selectOneMenu>
+                            
+                            <h:outputText value="Pet's Name"/>
+                            <h:inputText size="20" id="name"></h:inputText>
+                            
+                            <h:outputText value="Description"/>
+                            <ui14:richTextarea id="description"
+                                           items="textGroup;|;listGroup;|;colorGroup;"></ui14:richTextarea>
+                            
+                            <h:outputText value="Unit Cost"/>
+                            <h:inputText size="20" id="unitCost"></h:inputText>
+                            
+                            <h:outputText value="List Price"/>
+                            <h:inputText size="20" id="listPrice"></h:inputText>
+                            
+                            <h:outputText value="Image File"/>                 
+                            <input type="file" size="20" name="fileToUpload" id="fileToUploadId"/>
+                        </h:panelGrid>
+                    </div>
+                    <div dojoType="WizardPane" label="Your Info" canGoBack="true" doneFunction="done">
+                        <h:panelGrid columns="2">
+                            <f:facet name="header">
+                                <h:outputText value="Information about yourself"/>
+                            </f:facet>
+                            <h:outputText value="First Name"/>
+                            <h:inputText size="20" id="firstName"></h:inputText>
+                            <h:outputText value="Last Name"/>
+                            <h:inputText size="20" id="lastName"></h:inputText>
+                            <h:outputText value="Seller Email"/>
+                            <h:inputText size="20" id="email"></h:inputText>
+                            <h:outputText value="Street 1"/>
+                            <h:inputText size="20" id="street1"></h:inputText>
+                            <h:outputText value="Street 2"/>
+                            <h:inputText size="20" id="street2"></h:inputText>
+                            <h:outputText value="City"/>
+                            <h:inputText size="20" id="city"></h:inputText>
+                            <h:outputText value="State"/>
+                            <h:inputText size="20" id="state"></h:inputText>
+                            <h:outputText value="Zip"/>
+                            <h:inputText size="20" id="zip"></h:inputText>
+
+                            <h:outputText value="Enter the text as it is shown below\n(case insensitive)"/>
+                            <h:outputText />
+                            <h:graphicImage id="captchaImg" url="CaptchaServlet"/>
+                            <h:inputText id="captcharesponse"></h:inputText>
+                          
                             <input type="submit" id="submitx" name="submitx" value="Submit" onclick="storeCookie()"/>
-                        </td>
-                    </tr>
-                </table>
+                        </h:panelGrid>
+                    </div>
+                </div>
                 <br><div id="progress"></div><br/>
             </ui:FileUploadTag>        
         </f:view>
