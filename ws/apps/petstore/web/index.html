@@ -2,95 +2,12 @@
 <html>
  <head>
   <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
-  <title>Petstore</title>
-  <link rel="stylesheet" type="text/css" href="styles.css"></link>
-  <script type="text/javascript" src="dojo.js"></script>
-  <script type="text/javascript" src="engine.js"></script>
-  <script type="text/javascript" src="ajax-commons.js" ></script>
-  <script type="text/javascript" src="main.js"></script>
-  <script type="text/javascript" src="model.js" ></script>
+  <title>Java Petstore Demo 2.0</title>
  </head>
 <body>
-
-<table border="0" bordercolor="gray" cellpadding="0" cellspacing="0" bgcolor="white" width="100%">
- <tr id="injectionPoint">
-  <td width="100"><img src="images/banner_logo.gif" border="0"></td>
-  <td>
-  <div class="banner">Java Petstore</div>
-  </td>
-  <td align="right">
-      <form name="autofillform" action="autocomplete"  onsubmit="return false;">
-        <input type="hidden" name="action" value="lookupbyname"/>
-         <input    type="text"
-                size="15"
-                autocomplete="off"
-                  id="complete-field"
-				name="id"
-             onkeyup="doCompletion();">
-             <input    type="button"
-                  id="search-button"
-				value="Search"
-             onclick="doSearch();">
-    </form>
-  </td>
-  </td>
- </tr>
-  <tr bgcolor="gray">
-  <td colspan="3"  align="right">
-  <a class="menuLink" href="search.jsp">Search</a> <span class="menuItem">|</span > <a class="menuLink" href="faces/mapAll.jsp">Map</a> <span class="menuItem">|</span > <a class="menuLink" href="catalog.html">Catalog</a> <span class="menuItem">|</span > <a class="menuLink"  onclick="showMain()";>Main</a>
-  </td>
- </tr>
- </table>
-
- 
-<table bgcolor="white">
- <tr>
-  <td valign="top" width="300"><table id="sidebar" border="0" cellpadding="0">
-  <div class="outerbar">
-
-<div class="dojo-FisheyeList"
-	dojo:itemWidth="170" dojo:itemHeight="50"
-	dojo:itemMaxWidth="340" dojo:itemMaxHeight="100"
-	dojo:orientation="verticle"
-	dojo:effectUnits="2"
-	dojo:itemPadding="10"
-	dojo:attachEdge="top"
-	dojo:labelEdge="bottom"
-	dojo:enableCrappySvgSupport="false">
-
-	<div class="dojo-FisheyeListItem" onClick="browse('dogs');" 
-		dojo:iconsrc="images/dogs_icon.gif">
-	</div>
-
-	<div class="dojo-FisheyeListItem" onClick="browse('cats');"
-		dojo:iconsrc="images/cats_icon.gif" c>
-	</div>
-
-	<div class="dojo-FisheyeListItem" onClick="browse('birds');"
-		dojo:iconsrc="images/birds_icon.gif" >
-	</div>
-
-	<div class="dojo-FisheyeListItem" onClick="browse('fish');"
-		dojo:iconsrc="images/fish_icon.gif" >
-	</div>
-
-	<div class="dojo-FisheyeListItem" onClick="browse('reptiles');"
-		dojo:iconsrc="images/reptiles_icon.gif"  >
-	</div>
-</div>
-
-</div></table></td>
-  <td valign="top" width="100%">
-   <div id="bodyCenter"><h1>Loading....</h1>
-  </div>
-   </td>
- </td>
- </tr>
-</table>
-
- <div style="position: absolute; visibility: hidden;z-index:5" id="menu-popup">
-  <table id="completeTable" class="popupTable" ></table>
- </div>
+<hr>
+<h1>Java Petstore Demo 2.0</h1>
+<p><a href="index.jsp">Enter the Store</a></p>
 
 </body>
 </html>
