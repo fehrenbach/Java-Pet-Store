@@ -31,6 +31,16 @@ public class CatalogFacade implements ServletContextListener {
         .setParameter(1, "%"+catID+"%").getResultList();
     }
 
+    /**
+     * Value List Hander for items
+    **/
+    public Collection getItemsVLH(String catID, int start, int chunkSize){     
+       //make an EJQql query
+       Query query = em.createQuery("SELECT  i FROM Item i, Product p WHERE i.productID = p.productID AND p.categoryID LIKE :cID");
+       Collection items = query.setParameter("cID",catID).setFirstResult(start).setMaxResults(start + chunkSize).getResultList();
+       return items;
+    }
+
     public Collection getProducts(String catID){
         return em.createNativeQuery("SELECT * FROM Product WHERE categoryID LIKE ?")
         .setParameter(1, "%"+catID+"%").getResultList();
