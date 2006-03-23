@@ -37,7 +37,7 @@ public class CatalogFacade implements ServletContextListener {
     public Collection getItemsVLH(String catID, int start, int chunkSize){     
        //make an EJQql query
        Query query = em.createQuery("SELECT  i FROM Item i, Product p WHERE i.productID = p.productID AND p.categoryID LIKE :cID");
-       Collection items = query.setParameter("cID",catID).setFirstResult(start).setMaxResults(start + chunkSize).getResultList();
+       Collection items = query.setParameter("cID",catID).setFirstResult(start).setMaxResults(chunkSize).getResultList();
        return items;
     }
 
