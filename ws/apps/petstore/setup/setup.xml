@@ -7,7 +7,7 @@
   <!-- Database configuration tasks -->
   <target name="setup" depends="create-resource-local, create-db" />
   <!-- target name="setup" depends="create-resource-local, start-db, create-db" / -->
-  <target name="unsetup" depends="delete-pool-local" />
+  <target name="unsetup" depends="delete-pool-local, delete-resource-local, delete-db" />
   
   <target name="create-db" depends="delete-db"
 	description="Create database tables and populate database." >

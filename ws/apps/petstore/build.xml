@@ -82,4 +82,9 @@
   <target name="setup">
     <ant dir="." antfile="setup/setup.xml" target="setup" inheritAll="false" inheritRefs="false"/>
   </target>
+
+   <target name="unsetup">
+    <ant dir="." antfile="setup/setup.xml" target="unsetup" inheritAll="false" inheritRefs="false"/>
+  </target>
+
 </project>
