@@ -65,13 +65,10 @@
                             
                             <h:outputText value="Description"/>
                             <ui14:richTextarea id="description"
-                                           items="textGroup;|;listGroup;|;colorGroup;"></ui14:richTextarea>
+                                           items="textGroup;|;listGroup;|;colorGroup;"></ui14:richTextarea>                            
                             
-                            <h:outputText value="Unit Cost"/>
-                            <h:inputText size="20" id="unitCost"></h:inputText>
-                            
-                            <h:outputText value="List Price"/>
-                            <h:inputText size="20" id="listPrice"></h:inputText>
+                            <h:outputText value="Price"/>
+                            <h:inputText size="20" id="price"></h:inputText>
                             
                             <h:outputText value="Image File"/>                 
                             <input type="file" size="20" name="fileToUpload" id="fileToUploadId"/>
