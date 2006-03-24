@@ -44,8 +44,7 @@ CREATE TABLE item (
  name VARCHAR(25) NOT NULL,
  description VARCHAR(255) NOT NULL,
  imageurl VARCHAR(55),
- listprice FLOAT NOT NULL,
- unitcost FLOAT NOT NULL,
+ price FLOAT NOT NULL,
  address_addressid VARCHAR(10) NOT NULL,
  contactinfo_contactinfoid VARCHAR(10) NOT NULL,
  primary key (itemid),
@@ -105,22 +104,22 @@ INSERT INTO SellerContactInfo VALUES('14', 'Duke', 'Duke', 'abc@abc.xyz');
 INSERT INTO SellerContactInfo VALUES('15', 'Duke', 'Duke', 'abc@abc.xyz');
 INSERT INTO SellerContactInfo VALUES('16', 'Duke', 'Duke', 'abc@abc.xyz');
 
-INSERT INTO item VALUES('1', 'feline01', 'Lazy cat', 'A great pet', 'cat1.gif', 307, 290,'1','1');
-INSERT INTO item VALUES('2', 'feline01', 'Old Cat', 'A great old pet', 'cat2.gif', 207, 200,'2','2');
-INSERT INTO item VALUES('3', 'feline01', 'Young Cat', 'A great young pet', 'cat3.gif', 407, 350,'3','3');
-INSERT INTO item VALUES('4', 'feline01', 'Scrapper Cat', 'A scapper cat', 'cat4.gif', 417, 370,'4','4');
-INSERT INTO item VALUES('5', 'feline01', 'Alley Cat', 'A great pet', 'cat5.gif', 307, 290,'5','5');
-INSERT INTO item VALUES('6', 'feline02', 'Playful Cat', 'A needy pet', 'cat7.gif', 190, 150,'6','6');
-INSERT INTO item VALUES('7', 'feline02', 'Long Haired Cat', 'A high maintenance cat', 'cat8.gif', 199, 175,'7','7');
-INSERT INTO item VALUES('8', 'feline02', 'Smelly Cat', 'A great pet', 'cat9.gif', 303, 200,'8','8');
-INSERT INTO item VALUES('9', 'feline02', 'Wild Cat', 'A great wild pet', 'cat10.gif', 527, 240,'9','9');
-INSERT INTO item VALUES('10', 'feline02', 'Saber Cat', 'A great watch pet', 'cat11.gif', 237, 200,'10','10');
-INSERT INTO item VALUES('11', 'feline02',' Scrapper Cat', 'A scapper cat', 'cat12.gif', 337, 190,'11','11');
-INSERT INTO item VALUES('12', 'canine01', 'Lazy Dog', 'A great pet', 'dog1.gif', 257, 201,'12','12');
-INSERT INTO item VALUES('13', 'canine01', 'Old Dog', 'A great old pet', 'dog2.gif', 70, 50,'13','13');
-INSERT INTO item VALUES('14', 'canine01', 'Young Dog', 'A great young pet', 'dog3.gif', 301, 210,'14','14');
-INSERT INTO item VALUES('15', 'canine02', 'Scrapper Dog', 'A scapper dog', 'dog4.gif', 410, 210,'15','15');
-INSERT INTO item VALUES('16', 'canine02', 'Grey Hound', 'A great runner', 'dog5.gif', 200, 210,'16','16');
+INSERT INTO item VALUES('1', 'feline01', 'Lazy cat', 'A great pet', 'cat1.gif', 307,'1','1');
+INSERT INTO item VALUES('2', 'feline01', 'Old Cat', 'A great old pet', 'cat2.gif', 200,'2','2');
+INSERT INTO item VALUES('3', 'feline01', 'Young Cat', 'A great young pet', 'cat3.gif', 350,'3','3');
+INSERT INTO item VALUES('4', 'feline01', 'Scrapper Cat', 'A scapper cat', 'cat4.gif', 417,'4','4');
+INSERT INTO item VALUES('5', 'feline01', 'Alley Cat', 'A great pet', 'cat5.gif', 307, '5','5');
+INSERT INTO item VALUES('6', 'feline02', 'Playful Cat', 'A needy pet', 'cat7.gif', 190, '6','6');
+INSERT INTO item VALUES('7', 'feline02', 'Long Haired Cat', 'A high maintenance cat', 'cat8.gif', 199,'7','7');
+INSERT INTO item VALUES('8', 'feline02', 'Smelly Cat', 'A great pet', 'cat9.gif', 303,'8','8');
+INSERT INTO item VALUES('9', 'feline02', 'Wild Cat', 'A great wild pet', 'cat10.gif', 527,'9','9');
+INSERT INTO item VALUES('10', 'feline02', 'Saber Cat', 'A great watch pet', 'cat11.gif', 237,'10','10');
+INSERT INTO item VALUES('11', 'feline02',' Scrapper Cat', 'A scapper cat', 'cat12.gif', 337,'11','11');
+INSERT INTO item VALUES('12', 'canine01', 'Lazy Dog', 'A great pet', 'dog1.gif', 257,'12','12');
+INSERT INTO item VALUES('13', 'canine01', 'Old Dog', 'A great old pet', 'dog2.gif', 70,'13','13');
+INSERT INTO item VALUES('14', 'canine01', 'Young Dog', 'A great young pet', 'dog3.gif', 301,'14','14');
+INSERT INTO item VALUES('15', 'canine02', 'Scrapper Dog', 'A scapper dog', 'dog4.gif', 410,'15','15');
+INSERT INTO item VALUES('16', 'canine02', 'Grey Hound', 'A great runner', 'dog5.gif', 200,'16','16');
 
 INSERT INTO id_gen VALUES('ITEM_ID',16);
 INSERT INTO id_gen VALUES('ADDRESS_ID',16);

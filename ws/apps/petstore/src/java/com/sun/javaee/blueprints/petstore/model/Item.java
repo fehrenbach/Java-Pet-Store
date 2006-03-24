@@ -11,8 +11,7 @@ public class Item implements java.io.Serializable {
     private String name;
     private String description;
     private String imageURL;
-    private float listPrice;
-    private float unitCost;
+    private float price;
     private Address address;
     private SellerContactInfo contactInfo;
       
@@ -42,14 +41,10 @@ public class Item implements java.io.Serializable {
         return description;
     }
 
-    public float getListPrice() {
-       return listPrice;
+    public float getPrice() {
+       return price;
     }
-    
-    public float getUnitCost() {
-       return unitCost;
-    }
-    
+        
     public String getImageURL() {
         return imageURL;
     }
@@ -79,11 +74,8 @@ public class Item implements java.io.Serializable {
     public void setImageURL(String imageURL) {
         this.imageURL = imageURL;
     }
-    public void setListPrice(float listPrice) {
-        this.listPrice = listPrice;
-    }
-    public void setUnitCost(float unitCost) {
-        this.unitCost = unitCost;
+    public void setPrice(float price) {
+        this.price = price;
     }
     public void setAddress(Address address) {
         this.address = address;

@@ -95,8 +95,7 @@ public class FileUploadBean {
                 String prodId = hmUpload.get(compName+":product").toString();
                 String name = hmUpload.get(compName+":name").toString();
                 String desc = hmUpload.get(compName+":description").toString();
-                String unitCost = hmUpload.get(compName+":unitCost").toString();
-                String listPrice = hmUpload.get(compName+":listPrice").toString();
+                String price = hmUpload.get(compName+":price").toString();
                 Address addr = new Address();
                 //TO-DO: Add address fields to the file upload page and extract data
                 addr.setStreet1("street1");
@@ -115,8 +114,7 @@ public class FileUploadBean {
                 item.setProductID(prodId);
                 item.setDescription(desc);
                 item.setName(name);
-                item.setUnitCost(new Float(unitCost));
-                item.setListPrice(new Float(listPrice));
+                item.setPrice(new Float(price));
                 item.setImageURL(fileName);
                 item.setAddress(addr);
                 item.setContactInfo(contactInfo);
@@ -131,7 +129,7 @@ public class FileUploadBean {
                 indexDoc.setUID(itemId);
                 indexDoc.setPageURL(itemId);
                 indexDoc.setImage(fileName);
-                indexDoc.setPrice(listPrice);
+                indexDoc.setPrice(price);
                 indexDoc.setProduct(prodId);
                 indexDoc.setModifiedDate(new Date().toString());
                 indexDoc.setContents(name + " " + desc);

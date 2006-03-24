@@ -127,7 +127,7 @@ public class CatalogServlet extends HttpServlet {
              sb.append(" <name>" + i.getName() + "</name>\n");
              sb.append(" <description>" + i.getDescription() + "</description>\n");
              sb.append(" <image-url>" + i.getImageURL() + "</image-url>\n");
-             sb.append(" <price>" + formatter.format(i.getListPrice())  + "</price>\n");
+             sb.append(" <price>" + formatter.format(i.getPrice())  + "</price>\n");
              sb.append("</item>\n");
              response.setContentType("text/xml;charset=UTF-8");
              PrintWriter out = response.getWriter();
