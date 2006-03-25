@@ -59,6 +59,13 @@ CREATE TABLE id_gen (
  primary key (gen_key)
 );
 
+CREATE TABLE ziplocation (
+ zipcode INTEGER NOT NULL,
+ city VARCHAR(30) NOT NULL,
+ state VARCHAR(2) NOT NULL,
+ primary key (zipcode)
+);
+
 INSERT INTO category VALUES('CATS', 'Cats', 'Loving and furry friends', 'cats_icon.gif');
 INSERT INTO category VALUES('DOGS', 'Dogs', 'Loving and furry friends', 'dogs_icon.gif');
 INSERT INTO category VALUES('BIRDS', 'Birds', 'Loving and furry friends', 'birds_icon.gif');
@@ -124,3 +131,14 @@ INSERT INTO item VALUES('16', 'canine02', 'Grey Hound', 'A great runner', 'dog5.
 INSERT INTO id_gen VALUES('ITEM_ID',16);
 INSERT INTO id_gen VALUES('ADDRESS_ID',16);
 INSERT INTO id_gen VALUES('CONTACT_INFO_ID',16);
+
+INSERT INTO ziplocation VALUES(42601, 'Aaron', 'KY');
+INSERT INTO ziplocation VALUES(16820, 'Aaronsburg', 'PA');
+INSERT INTO ziplocation VALUES(31794, 'Abac', 'GA');
+INSERT INTO ziplocation VALUES(36310, 'Abbeville', 'AL');
+INSERT INTO ziplocation VALUES(31001, 'Abbeville', 'GA');
+INSERT INTO ziplocation VALUES(38601, 'Abbeville', 'MS');
+INSERT INTO ziplocation VALUES(29620, 'Abbeville', 'SC');
+INSERT INTO ziplocation VALUES(04406, 'Abbot Village', 'ME');
+INSERT INTO ziplocation VALUES(54405, 'Abbotsford', 'WI');
+INSERT INTO ziplocation VALUES(76621, 'Abbott', 'TX');

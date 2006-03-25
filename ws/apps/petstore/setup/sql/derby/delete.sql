@@ -4,6 +4,7 @@ DROP TABLE category;
 DROP TABLE Address;
 DROP TABLE SellerContactInfo;
 DROP TABLE id_gen;
+DROP TABLE ziplocation;
 
 
 
