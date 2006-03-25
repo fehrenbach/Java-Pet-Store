@@ -24,10 +24,12 @@
         <servlet-name>CaptchaServlet</servlet-name>
         <servlet-class>com.sun.javaee.blueprints.petstore.captcha.CaptchaServlet</servlet-class>
     </servlet>
-    <servlet-mapping>
-        <servlet-name>CatalogServlet</servlet-name>
-        <url-pattern>/catalog</url-pattern>
-    </servlet-mapping>
+
+    <servlet>
+        <display-name>AccountServlet</display-name>
+        <servlet-name>AccountServlet</servlet-name>
+        <servlet-class>com.sun.javaee.blueprints.petstore.controller.AccountServlet</servlet-class>
+    </servlet>
 
     <servlet>
         <display-name>ControllerServlet</display-name>
@@ -36,15 +38,14 @@
     </servlet>
 
     <servlet-mapping>
+        <servlet-name>CatalogServlet</servlet-name>
+        <url-pattern>/catalog</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
         <servlet-name>ControllerServlet</servlet-name>
         <url-pattern>/controller</url-pattern>
     </servlet-mapping>
-
-    <servlet>
-        <display-name>AccountServlet</display-name>
-        <servlet-name>AccountServlet</servlet-name>
-        <servlet-class>com.sun.javaee.blueprints.petstore.controller.AccountServlet</servlet-class>
-    </servlet>
 
     <servlet-mapping>
         <servlet-name>AccountServlet</servlet-name>
@@ -81,6 +82,17 @@
     <servlet-mapping>
         <servlet-name>ChatServlet</servlet-name>
         <url-pattern>/chat</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <description>Persistence Test Servlet</description>
+        <servlet-name>PersistenceTestServlet</servlet-name>
+        <servlet-class>com.sun.javaee.blueprints.petstore.controller.PersistenceTestServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>PersistenceTestServlet</servlet-name>
+        <url-pattern>/persistencetest/*</url-pattern>
     </servlet-mapping>
 
     <context-param>
