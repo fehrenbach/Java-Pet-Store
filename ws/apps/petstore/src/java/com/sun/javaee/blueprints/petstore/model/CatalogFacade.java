@@ -6,9 +6,16 @@ import javax.servlet.*;
 import javax.ejb.*;
 import javax.persistence.*;
 
-@NamedQuery(
-  name="getItemsPerProductCategory",
-  query="SELECT i FROM Item i WHERE i.productID.categoryID LIKE :cID "
+@NamedQueries(
+ {  @NamedQuery(
+      name="getItemsPerProductCategory",
+      query="SELECT i FROM Item i WHERE i.productID.categoryID LIKE :cID"
+    ), 
+    @NamedQuery(
+      name="getAllZipCityState",
+      query="SELECT  z FROM ZipLocation z"       
+    )
+  }
 ) 
 public class CatalogFacade implements ServletContextListener {
 
@@ -51,6 +58,19 @@ public class CatalogFacade implements ServletContextListener {
        query.setFirstResult(start).setMaxResults(chunkSize);
        List<Item> items = query.getResultList(); 
        return items;
+    }
+    
+    /**
+     * Gets a list of all the zipcode/city/state for autocomplte on user forms
+     * Need to enhance so that returned list is cached for reuse at application scope 
+     * and held as member field of facade.
+     * @returns a List of ZipLocation objects
+     */
+    public List<ZipLocation> getZipCodeLocations(){     
+       //Query query = em.createQuery("SELECT  z FROM ZipLocation z");
+       Query query = em.createNamedQuery("getAllZipCityState");
+       List<ZipLocation>  zipCodeLocations = query.getResultList();    
+       return zipCodeLocations;
     }
 
     public Collection getProducts(String catID){
