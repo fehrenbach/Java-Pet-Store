@@ -3,7 +3,7 @@ package com.sun.javaee.blueprints.petstore.model;
 import javax.persistence.*;
 
 @Entity
-public class Address {
+public class Address implements java.io.Serializable {
 
     private String addressID;
     private String street1;

@@ -5,7 +5,7 @@ import java.util.*;
 import javax.persistence.*;
 
 @Entity
-public class Customer {
+public class Customer implements java.io.Serializable {
 
     @Id private String id;
     private String firstName = null;
