@@ -1,9 +1,9 @@
 
-
+<link rel="stylesheet" type="text/css" href="styles.css"></link>
 
 <table border="0" bordercolor="gray" cellpadding="0" cellspacing="0" bgcolor="white" width="100%">
  <tr id="injectionPoint">
-  <td width="100"><img src="images/banner_logo.gif" border="0"></td>
+  <td width="100"><img src="http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.servletContext.contextPath}/images/banner_logo.gif" border="0"></td>
   <td>
   <div class="banner">Java Petstore</div>
   </td>
@@ -29,7 +29,7 @@
   <a class="menuLink" href="http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.servletContext.contextPath}/faces/fileupload.jsp">Seller</a> <span class="menuItem">|</span>
   <a class="menuLink" href="http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.servletContext.contextPath}/faces/search.jsp">Search</a> <span class="menuItem">|</span>
   <a class="menuLink" href="http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.servletContext.contextPath}/catalog.jsp">Catalog</a> <span class="menuItem">|</span>
-  <a class="menuLink" href="http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.servletContext.contextPath}/faces/search.jsp">Map</a> <span class="menuItem">|</span>
+  <a class="menuLink" href="http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.servletContext.contextPath}/faces/mapAll.jsp">Map</a> <span class="menuItem">|</span>
   <a class="menuLink" href="http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.servletContext.contextPath}/index.jsp">Main</a>
   </td>
  </tr>

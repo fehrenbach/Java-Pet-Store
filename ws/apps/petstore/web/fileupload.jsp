@@ -32,7 +32,7 @@
 </script>        
     </head>
     <body>
-        <h1>Petstore Seller Page</h1>
+        <jsp:include page="banner.jsp" />
 
         <f:view>
     

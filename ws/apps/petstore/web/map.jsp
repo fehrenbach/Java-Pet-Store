@@ -11,7 +11,8 @@
         <title>Map Display</title>
     </head>
     <body>
-        <h1>Map Display</h1>
+        <jsp:include page="banner.jsp" />
+        <br>
         <f:view>
     
             <ui:mapViewer id="mapViewerx" center="#{MapBean.mapPoint}" info="#{MapBean.mapMarker}"

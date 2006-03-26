@@ -3,7 +3,7 @@
  <head>
   <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
   <title>Petstore</title>
-  <link rel="stylesheet" type="text/css" href="styles.css"></link>
+  
   <script type="text/javascript" src="dojo.js"></script>
   <script type="text/javascript" src="engine.js"></script>
   <script type="text/javascript" src="ajax-commons.js" ></script>

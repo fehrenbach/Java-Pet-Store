@@ -5,67 +5,13 @@
 <%@taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@taglib prefix="ui" uri="http://java.sun.com/blueprints/ui/14" %>
 
-<style>
-.banner {
-  height:55;
-  font-size:55;
-  font-weight: bold;
-  font-family: Arial
-}
-
-.menuLink {
-  background: gray;
-  cursor:pointer;
-  color: white;
-  text-decoration: underline;
-  font-size: 1.2em;
-}
-
-.menuItem {
-  background: gray;
-  color: white;
-  text-decoration: none;
-  font-size: 1.4em;
-}
-</style>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Map Viewer Page</title>
     </head>        
     <body>
-<table border="0" bordercolor="gray" cellpadding="0" cellspacing="0" bgcolor="white" width="100%">
- <tr>
-  <td width="100"><img src="../images/banner_logo.gif" border="0"></td>
-  <td>
-   <div class="banner">Java Petstore</div>
-  </td>
-  <td align="right">
-      <form name="autofillform" action="autocomplete"  onsubmit="return false;">
-        <input type="hidden" name="action" value="lookupbyname">
-         <input    type="text"
-                size="15"
-                autocomplete="off"
-                  id="complete-field"
-				name="id"
-             onkeyup="doCompletion();">
-             <input    type="button"
-                  id="search-button"
-				value="Search"
-             onclick="doSearch();">
-    </form>
-  </td>
- </tr>
-
- <tr bgcolor="gray">
-  <td colspan="4"  align="right">
-   <a class="menuLink" href="search.jsp">Search</a> <span class="menuItem">|</span>
-   <a class="menuLink" href="faces/mapAll.jsp">Map</a> <span class="menuItem">|</span>
-   <a class="menuLink" href="../catalog.html">Catalog</a> <span class="menuItem">|</span>
-   <a class="menuLink" href="../index.html">Main</a>
-  </td>
-  </tr>
-</table>
+    <jsp:include page="banner.jsp" />
         <f:view>
 
             <h:form id="form1">

@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: accordion.js,v 1.9 2006-03-06 09:45:31 gmurray71 Exp $
+$Id: accordion.js,v 1.10 2006-03-26 08:12:08 gmurray71 Exp $
 */
 
 
@@ -56,7 +56,7 @@ function AccordionMenu () {
         status = document.getElementById("status");
         accordion = document.getElementById("accordion");
         // load the first set of images
-        var ajax = new AJAXInteraction("categories.js", postProcessAccordion, 'text');
+        var ajax = new AJAXInteraction("catalog?command=categories&format=json", postProcessAccordion, 'text');
         ajax.doGet();
     }
     
@@ -139,7 +139,7 @@ function AccordionMenu () {
                 
                 for (var l= 0; l < categories[nExpandedIndex].products.length; l++) {
                     productContent = productContent +  "<span class='accordionProduct'>" + 
-                    "<a class='accordionLink' href=\"" + categories[nExpandedIndex].products[l].href + "\">"  +
+                    "<a class='accordionLink' href=\"javascript:alert('showing " + categories[nExpandedIndex].products[l].id + "')\">"  +
                     categories[nExpandedIndex].products[l].name + "</a></span>";
                     if (l < categories[nExpandedIndex].products.length - 1) {
                         productContent = productContent + "<p>";
