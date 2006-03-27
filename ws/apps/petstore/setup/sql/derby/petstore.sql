@@ -76,6 +76,8 @@ INSERT INTO product VALUES('feline01', 'CATS', 'Long Hair', 'Great for reducing 
 INSERT INTO product VALUES('feline02', 'CATS', 'Short Hair', 'Friendly house cat', 'cat2.gif');
 INSERT INTO product VALUES('canine01', 'DOGS', 'Medium Dogs', 'Friendly dog from England', 'dog1.gif');
 INSERT INTO product VALUES('canine02', 'DOGS', 'Small Dogs', 'Great Companion Dog','dog2.gif');
+INSERT INTO product VALUES('avian01', 'BIRDS', 'Parrot', 'Friend for a lifetime.', 'bird1.gif');
+INSERT INTO product VALUES('avian02', 'BIRDS', 'Exotic', 'Impress your friends with your feathered friend.','bird2.gif');
 
 INSERT INTO Address VALUES('1', 'Street1', 'Street2', 'ABC City','ABC State','9999',8.123456,9.123456);
 INSERT INTO Address VALUES('2', 'Street1', 'Street2', 'ABC City','ABC State','9999',8.123456,9.123456);
@@ -127,6 +129,17 @@ INSERT INTO item VALUES('13', 'canine01', 'Old Dog', 'A great old pet', 'dog2.gi
 INSERT INTO item VALUES('14', 'canine01', 'Young Dog', 'A great young pet', 'dog3.gif', 301,'14','14');
 INSERT INTO item VALUES('15', 'canine02', 'Scrapper Dog', 'A scapper dog', 'dog4.gif', 410,'15','15');
 INSERT INTO item VALUES('16', 'canine02', 'Grey Hound', 'A great runner', 'dog5.gif', 200,'16','16');
+
+INSERT INTO item VALUES('a001', 'avian01', 'Squaky Bird', 'A great noisey bird', 'CIMG9127.jpg', 303,'8','8');
+INSERT INTO item VALUES('a002', 'avian01', 'Pink Bird', 'A beautiful pink bird', 'CIMG9104.jpg', 3003,'8','8');
+INSERT INTO item VALUES('a003', 'avian02', 'Wild Bird', 'A great wild pet', 'CIMG9109.jpg', 527,'9','9');
+INSERT INTO item VALUES('a004', 'avian02', 'Really Wild Bird', 'A great wild pet', 'CIMG9109.jpg', 527,'9','9');
+INSERT INTO item VALUES('a005', 'avian02', 'Crazy Bird', 'A great crazy pet', 'CIMG9109.jpg', 527,'9','9');
+INSERT INTO item VALUES('a006', 'avian02', 'Smart Bird', 'A great smart pet', 'CIMG9109.jpg', 527,'9','9');
+INSERT INTO item VALUES('a007', 'avian02', 'Funny Bird', 'A great funny pet', 'CIMG9109.jpg', 527,'9','9');
+INSERT INTO item VALUES('a008', 'avian02', 'Active Bird', 'A great active pet', 'CIMG9109.jpg', 527,'9','9');
+INSERT INTO item VALUES('a009', 'avian02', 'Curious Bird', 'A great curious pet', 'CIMG9138.jpg', 1527,'9','9');
+
 
 INSERT INTO id_gen VALUES('ITEM_ID',16);
 INSERT INTO id_gen VALUES('ADDRESS_ID',16);
