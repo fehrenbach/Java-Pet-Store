@@ -37,6 +37,7 @@ public class CatalogServlet extends HttpServlet {
        throws ServletException, IOException {
             request.setCharacterEncoding("UTF-8");
             String command = request.getParameter("command");
+            System.out.println("CatalogServlet: command=" + command);
             if ("category".equals(command)) {
                 String catid = request.getParameter("catid");
                 System.out.println("Request for category with id: " + catid);
@@ -88,14 +89,18 @@ public class CatalogServlet extends HttpServlet {
                         // defaults length to 10
                     }
                 }
-                System.out.println("Request for product with id: " + pid + " start=" + start + " length=" + length);
+                System.out.println("**** Request for items with product id: " + pid + " start=" + start + " length=" + length);
                 // set content-type header before accessing the Writer
                 response.setContentType("text/xml;charset=UTF-8");
+                // leave these headers here for development - remove for deploy
+                response.setHeader("Cache-Control", "no-cache");
+                response.setHeader("Pragma", "no-cache");
                 PrintWriter out = response.getWriter();
                 StringBuffer sb = new StringBuffer();
                 // then write the data of the response
                 sb.append("<items>\n");
                 List items = cf.getItemsVLH(pid, start, length);
+                 System.out.println("**** Items length=" + items.size());
                 Iterator<Item> it = items.iterator();
                 NumberFormat formatter = new DecimalFormat("00.00");
                 while (it.hasNext()) {

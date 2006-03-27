@@ -103,21 +103,22 @@ public class CatalogFacade implements ServletContextListener {
 
      */
 
-    public List<Item> getItemsVLH(String catID, int start, int chunkSize){     
+    public List<Item> getItemsVLH(String pID, int start, int chunkSize){     
 
        //make Java Persistence query
+       System.out.println("CatalogFacade: productId=" + pID + " start=" + start + " chunckSize=" + chunkSize);
 
-       //Query query = em.createQuery("SELECT  i FROM Item i, Product p WHERE i.productID = p.productID AND p.categoryID LIKE :cID")
+       Query query = em.createQuery("SELECT  i FROM Item i, Product p WHERE i.productID = p.productID AND p.productID LIKE :pID");
 
-       //List<Item>  items = query.setParameter("cID",catID).setFirstResult(start).setMaxResults(chunkSize).getResultList();
+       List<Item>  items = query.setParameter("pID",pID).setFirstResult(start).setMaxResults(chunkSize).getResultList();
 
-       Query query = em.createNamedQuery("getItemsPerProductCategory");
+       //Query query = em.createNamedQuery("getItemsPerProductCategory");
 
-       query.setParameter("cID",catID);
+       //query.setParameter("cID",catID);
 
-       query.setFirstResult(start).setMaxResults(chunkSize);
+       //query.setFirstResult(start).setMaxResults(chunkSize);
 
-       List<Item> items = query.getResultList(); 
+       //List<Item> items = query.getResultList(); 
 
        return items;
 
