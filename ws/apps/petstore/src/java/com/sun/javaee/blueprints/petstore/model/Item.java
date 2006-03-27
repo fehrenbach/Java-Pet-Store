@@ -11,6 +11,7 @@ public class Item implements java.io.Serializable {
     private String name;
     private String description;
     private String imageURL;
+    private String imageThumbURL;
     private float price;
     private Address address;
     private SellerContactInfo contactInfo;
@@ -49,6 +50,10 @@ public class Item implements java.io.Serializable {
         return imageURL;
     }
     
+    public String getImageThumbURL() {
+        return imageThumbURL;
+    }
+    
     @ManyToOne(cascade={CascadeType.PERSIST})
     public Address getAddress() {
         return address;
@@ -73,6 +78,9 @@ public class Item implements java.io.Serializable {
     }
     public void setImageURL(String imageURL) {
         this.imageURL = imageURL;
+    }
+    public void setImageThumbURL(String imageThumbURL) {
+        this.imageThumbURL = imageThumbURL;
     }
     public void setPrice(float price) {
         this.price = price;

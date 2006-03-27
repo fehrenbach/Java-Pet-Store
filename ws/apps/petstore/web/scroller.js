@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: scroller.js,v 1.7 2006-03-07 08:24:24 gmurray71 Exp $
+$Id: scroller.js,v 1.8 2006-03-27 23:08:11 gmurray71 Exp $
 */
 
 function ImageScroller() {
@@ -15,6 +15,7 @@ function ImageScroller() {
     var INFOPANE_EXPAND_HEIGHT = 55;
     var THUMB_WIDTH = 100;
     var THUMB_HEIGHT = 75;
+    var CHUNK_SIZE=10;
     
     var IMAGE_PANE_ID = "imagePane";
     var IMAGE_PANE_BUFFER_ID = "imageBufferPane";
@@ -93,7 +94,9 @@ function ImageScroller() {
     
     // detect a resize of the window
     window.onresize=resized;
-
+    
+    // FIXME: default to avian02 for now
+    var pid;
     
     /**
      *  Insert a script tag in the head of the document which will inter load the flicker photos
@@ -103,11 +106,7 @@ function ImageScroller() {
     this.getFlickrPhotos = function(tags) {
         indicatorImage.style.visibility = "visible";
         var tag = "";
-        resetTitles()
-        tiles = [];
-        index = 0;
-        offset = 0;
-        map.clear();
+        reset();
         leftButton.style.visibility="hidden";
         rightButton.style.visibility="visible";
         for (var l=0; l < tags.length; l++) {
@@ -121,6 +120,14 @@ function ImageScroller() {
         script.type = "text/javascript";
         script.src = "http://www.flickr.com/services/feeds/photos_public.gne?tags=" + tag + "&format=json";
         document.getElementsByTagName("head")[0].appendChild(script);
+    }
+    
+    function reset() {
+        resetTitles()
+        tiles = [];
+        index = 0;
+        offset = 0;
+        map.clear();
     }
     
     this.addFlickr = function(obj) {
@@ -167,17 +174,27 @@ function ImageScroller() {
         if (isScrollingRight) scrollRight();
         else if (isScrollingLeft) scrollLeft();
     }
+    
+    this.setProducts = function(pid) {
+        reset();
+        this.pid = pid;
+        var url = "catalog?command=items&pid=" + pid + "&start=" + index + "&length=" + CHUNK_SIZE;
+        showProgressIndicator();
+        var ajax = new AJAXInteraction(url, postProcess);
+        ajax.doGet(); 
+    }
+    
     // do the value list pre-emptive fetching
     function prefetch() {
         if (index >= prefetchThreshold) {
             // find out the batch that is needed
             //   this logic will be generally server based but 
             //   is done here for this example 
-            var url;
-            if (index == 3 && items.length < 8) url = "catalog-2.xml";
-            if (index == 10 && items.length < 15) url = "catalog-3.xml";
-            if (index == 18 && items.length < 22) url = "catalog-4.xml";
-            
+            var url = "catalog?command=items&pid=" + pid + "&start=" + index + "length=" + CHUNK_SIZE;
+            //if (index == 3 && items.length < 8) url = "catalog-2.xml";
+            //if (index == 10 && items.length < 15) url = "catalog-3.xml";
+            //if (index == 18 && items.length < 22) url = "catalog-4.xml";
+            //alert("url=" + url);
             if (url) {
                 showProgressIndicator();
                 var ajax = new AJAXInteraction(url, postProcess);
@@ -493,8 +510,9 @@ function ImageScroller() {
         layout();
         
         // load the first set of images
-        var ajax = new AJAXInteraction("catalog-1.xml", postProcess, "text/xml", loadImage);
-        ajax.doGet();
+        this.setProducts("avian02");
+        //var ajax = new AJAXInteraction("catalog-1.xml", postProcess, "text/xml", loadImage);
+        //ajax.doGet();
     }
     
     function layout() {
@@ -664,13 +682,13 @@ function ImageScroller() {
     
     function postProcess(responseXML,loadImage) {
         var startLength = items.length;
-        var count = responseXML.getElementsByTagName("product").length;
+        var count = responseXML.getElementsByTagName("item").length;
         for (var loop=0; loop < count ; loop++) {
-            var item = responseXML.getElementsByTagName("product")[loop];
+            var item = responseXML.getElementsByTagName("item")[loop];
             var itemId =  getElementText("id", item);
             var name =  getElementText("name", item);
-            var thumbURL =  getElementText("img-tb-url", item);
-            var imageURL =  getElementText("img-url", item);
+            var thumbURL =  getElementText("image-tb-url", item);
+            var imageURL =  getElementText("image-url", item);
             var sDescription =  getElementText("description", item);
             var price = 0;
             var i = new Item(itemId ,name, thumbURL, imageURL,"", sDescription, price);

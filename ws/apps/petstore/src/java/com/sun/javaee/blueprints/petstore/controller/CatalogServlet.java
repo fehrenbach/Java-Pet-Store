@@ -89,7 +89,7 @@ public class CatalogServlet extends HttpServlet {
                         // defaults length to 10
                     }
                 }
-                System.out.println("**** Request for items with product id: " + pid + " start=" + start + " length=" + length);
+                System.err.println("**** Request for items with product id: " + pid + " start=" + start + " length=" + length);
                 // set content-type header before accessing the Writer
                 response.setContentType("text/xml;charset=UTF-8");
                 // leave these headers here for development - remove for deploy
@@ -111,6 +111,7 @@ public class CatalogServlet extends HttpServlet {
                     sb.append(" <name>" + i.getName() + "</name>\n");
                     sb.append(" <description>" + i.getDescription() + "</description>\n");
                     sb.append(" <image-url>" + i.getImageURL() + "</image-url>\n");
+                    sb.append(" <image-tb-url>" + i.getImageThumbURL() + "</image-tb-url>\n");
                     sb.append("</item>\n");
                 }
                 sb.append("</items>");
