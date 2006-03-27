@@ -68,29 +68,47 @@ public class CatalogServlet extends HttpServlet {
                 sb.append("</category>\n");
                 out.println(sb.toString());
                 out.close();
-            } else if ("products".equals(command)) {
-                String catid = request.getParameter("catid");
-                System.out.println("Request for category with id: " + catid);
+            } else if ("items".equals(command)) {
+                String pid = request.getParameter("pid");
+                String startString = request.getParameter("start");
+                int start = 0;
+                if (startString != null) {
+                    try {
+                        start = Integer.parseInt(startString);
+                    } catch (NumberFormatException nfe) {
+                        // defaults start to 0
+                    }
+                }
+                String lengthString = request.getParameter("length");
+                int length = 10;
+                if (lengthString != null) {
+                    try {
+                        length = Integer.parseInt(lengthString);
+                    } catch (NumberFormatException nfe) {
+                        // defaults length to 10
+                    }
+                }
+                System.out.println("Request for product with id: " + pid + " start=" + start + " length=" + length);
                 // set content-type header before accessing the Writer
                 response.setContentType("text/xml;charset=UTF-8");
                 PrintWriter out = response.getWriter();
                 StringBuffer sb = new StringBuffer();
                 // then write the data of the response
-                sb.append("<products>\n");
-                Collection items = cf.getProducts(catid);
-                Iterator it = items.iterator();
+                sb.append("<items>\n");
+                List items = cf.getItemsVLH(pid, start, length);
+                Iterator<Item> it = items.iterator();
                 NumberFormat formatter = new DecimalFormat("00.00");
                 while (it.hasNext()) {
-                    Vector p = (Vector)it.next();
-                    sb.append("<product>\n");
-                    sb.append(" <id>" + p.get(0) + "</id>\n");
-                    sb.append(" <cat-id>" + p.get(1) + "</cat-id>\n");
-                    sb.append(" <name>" + p.get(2) + "</name>\n");
-                    sb.append(" <description>" + p.get(3) + "</description>\n");
-                    sb.append(" <image-url>" + p.get(4) + "</image-url>\n");
-                    sb.append("</product>\n");
+                    Item i = it.next();
+                    sb.append("<item>\n");
+                    sb.append(" <id>" + i.getItemID() + "</id>\n");
+                    sb.append(" <product-id>" + i.getProductID() + "</product-id>\n");
+                    sb.append(" <name>" + i.getName() + "</name>\n");
+                    sb.append(" <description>" + i.getDescription() + "</description>\n");
+                    sb.append(" <image-url>" + i.getImageURL() + "</image-url>\n");
+                    sb.append("</item>\n");
                 }
-                sb.append("</products>");
+                sb.append("</items>");
                 out.println(sb.toString());
                 out.close();
          } else if ("categories".equals(command)) {
