@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: accordion.js,v 1.11 2006-03-27 23:08:11 gmurray71 Exp $
+$Id: accordion.js,v 1.12 2006-03-28 07:31:58 gmurray71 Exp $
 */
 
 
@@ -44,7 +44,6 @@ function AccordionMenu () {
         }
     }
     
-    
     this.load = function() {
         var agent = navigator.userAgent;
         if (agent.indexOf("IE") != -1) {
@@ -65,6 +64,8 @@ function AccordionMenu () {
         // create title row
         titleRow = createRow(0, "accordionTitle",200);
         titleRow.div.innerHTML = "Pets";
+
+        
         if (isIE) {
             titleRow.setHeight(265);
         }
@@ -135,19 +136,31 @@ function AccordionMenu () {
                 titleRow.setHeight(tHeight);	        
             } else {
                 // set the contents of the new menu
-                var productContent =  categories[nExpandedIndex].name + "<br><br>";
-                
-                for (var l= 0; l < categories[nExpandedIndex].products.length; l++) {
-                    productContent = productContent +  "<span class='accordionProduct'>" + 
-                    "<a class='accordionLink' href=\"javascript:is.setProducts('" + categories[nExpandedIndex].products[l].id + "')\">"  +
-                    categories[nExpandedIndex].products[l].name + "</a></span>";
-                    if (l < categories[nExpandedIndex].products.length - 1) {
-                        productContent = productContent + "<p>";
+                var targetDiv = divs[nExpandedIndex].div;
+                if (targetDiv && targetDiv.childNodes) {
+                    for (var l = targetDiv.childNodes.length -1; l >= 0 ; l--) {
+                      targetDiv.removeChild(targetDiv.childNodes[l]);
                     }
                 }
-                productContent = productContent;
-                // detach all events from the div
-                divs[nExpandedIndex].div.innerHTML = productContent;
+                divs[nExpandedIndex].div.appendChild(document.createTextNode(categories[nExpandedIndex].name));
+                divs[nExpandedIndex].div.appendChild(document.createElement("p"));
+                for (var l= 0; l < categories[nExpandedIndex].products.length; l++) {
+                    var span = document.createElement("span");
+                    span.className = "accordionProduct";
+                    var link = document.createElement("a");
+                    link.className = "accordionLink";
+                    var target = categories[nExpandedIndex].products[l].id;
+                    dojo.event.connect(link, "onclick", function(evt){
+                        this.target = target;
+                        dojo.event.topic.publish("/scroller", target);
+                    });
+                    link.appendChild(document.createTextNode(categories[nExpandedIndex].products[l].name));
+                    span.appendChild(link);
+                    divs[nExpandedIndex].div.appendChild(span);
+                    if (l < categories[nExpandedIndex].products.length - 1) {
+                        divs[nExpandedIndex].div.appendChild(document.createElement("p"));
+                    }
+                }
                 expanding = false;
                 oExpandedIndex = nExpandedIndex;
                 nExpandedIndex = -1;

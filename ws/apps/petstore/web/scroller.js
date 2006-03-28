@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: scroller.js,v 1.9 2006-03-28 00:02:42 gmurray71 Exp $
+$Id: scroller.js,v 1.10 2006-03-28 07:31:58 gmurray71 Exp $
 */
 
 function ImageScroller() {
@@ -488,7 +488,12 @@ function ImageScroller() {
         }
     }
     
+    function handleEvent(args) {
+        this.setProducts(args);
+    }
+    
     this.load = function () {
+        dojo.event.topic.subscribe("/scroller", this, handleEvent);
 	    var loadImage;
         originalURL = window.location.href;
         if (originalURL.indexOf("#") != -1) {
