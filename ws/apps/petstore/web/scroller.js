@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: scroller.js,v 1.8 2006-03-27 23:08:11 gmurray71 Exp $
+$Id: scroller.js,v 1.9 2006-03-28 00:02:42 gmurray71 Exp $
 */
 
 function ImageScroller() {
@@ -15,7 +15,7 @@ function ImageScroller() {
     var INFOPANE_EXPAND_HEIGHT = 55;
     var THUMB_WIDTH = 100;
     var THUMB_HEIGHT = 75;
-    var CHUNK_SIZE=10;
+    var CHUNK_SIZE=3;
     
     var IMAGE_PANE_ID = "imagePane";
     var IMAGE_PANE_BUFFER_ID = "imageBufferPane";
@@ -74,7 +74,7 @@ function ImageScroller() {
     var maximized = false;
 
     // prefetch thresh-hold
-    var prefetchThreshold = 3;
+    var prefetchThreshold = 2;
     
     // a growing list of items;
     var items = [];
@@ -95,8 +95,9 @@ function ImageScroller() {
     // detect a resize of the window
     window.onresize=resized;
     
-    // FIXME: default to avian02 for now
+    // FIXME: default set id
     var pid;
+    var currentChunck;
     
     /**
      *  Insert a script tag in the head of the document which will inter load the flicker photos
@@ -127,6 +128,7 @@ function ImageScroller() {
         tiles = [];
         index = 0;
         offset = 0;
+        currentChunck = 0;
         map.clear();
     }
     
@@ -175,9 +177,9 @@ function ImageScroller() {
         else if (isScrollingLeft) scrollLeft();
     }
     
-    this.setProducts = function(pid) {
+    this.setProducts = function(nId) {
         reset();
-        this.pid = pid;
+        pid = nId;
         var url = "catalog?command=items&pid=" + pid + "&start=" + index + "&length=" + CHUNK_SIZE;
         showProgressIndicator();
         var ajax = new AJAXInteraction(url, postProcess);
@@ -186,25 +188,25 @@ function ImageScroller() {
     
     // do the value list pre-emptive fetching
     function prefetch() {
-        if (index >= prefetchThreshold) {
-            // find out the batch that is needed
-            //   this logic will be generally server based but 
-            //   is done here for this example 
-            var url = "catalog?command=items&pid=" + pid + "&start=" + index + "length=" + CHUNK_SIZE;
-            //if (index == 3 && items.length < 8) url = "catalog-2.xml";
-            //if (index == 10 && items.length < 15) url = "catalog-3.xml";
-            //if (index == 18 && items.length < 22) url = "catalog-4.xml";
-            //alert("url=" + url);
-            if (url) {
-                showProgressIndicator();
+        if (isScrollingRight && index % CHUNK_SIZE == 0) {
+            if ((index / CHUNK_SIZE) != currentChunck) {
+                currentChunck = index / CHUNK_SIZE;
+                
+                var url = "catalog?command=items&pid=" + pid+ "&start=" + index + "length=" + CHUNK_SIZE;
+                if (debug) {
+                    status2Div.innerHTML = "getting more images index=" + index + " url=" + url;
+                }
+                showProgressIndicator(); 
                 var ajax = new AJAXInteraction(url, postProcess);
                 ajax.doGet();
-            } 
+            }
         }
     }
     
     function showProgressIndicator() {
-        indicatorImage.style.visibility = "visible";
+        if (indicatorImage) {
+            indicatorImage.style.visibility = "visible";
+        }
     }
     
 
@@ -266,8 +268,6 @@ function ImageScroller() {
             targetElement.appendChild(imagePane);
             targetElement.appendChild(imageLoadingPane);
             imageLoadingPane.style.left = tileX + "px";
-            
-            
             infoTableName.appendChild(document.createTextNode(i.name));
             infoTableShortDescription.appendChild(document.createTextNode(i.shortDescription));
             infoTableDescription.appendChild(document.createTextNode(i.description));
@@ -279,7 +279,6 @@ function ImageScroller() {
              infoTableShortDescription.lastChild.nodeValue = i.shortDescription;
              
              if (showingBuffer) {
-
                  showingBuffer = false;
              } else {
                  showingBuffer = true;
