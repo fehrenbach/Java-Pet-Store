@@ -123,6 +123,18 @@
         <param-name>com.sun.faces.verifyObjects</param-name>
         <param-value>true</param-value>
     </context-param>
+    
+    <!-- proxy host, port for RSS Reader -->
+    <!--
+    <context-param>
+        <param-name>proxyHost</param-name>
+        <param-value>129.158.31.48</param-value>
+    </context-param>
+    <context-param>
+        <param-name>proxyPort</param-name>
+        <param-value>8080</param-value>
+    </context-param>
+    -->
 
     <!-- Faces Servlet -->
     <servlet>
