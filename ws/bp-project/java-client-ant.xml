@@ -2,7 +2,7 @@
 
 <!-- Copyright 2005-2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: java-client-ant.xml,v 1.2 2006-03-11 11:35:33 inder Exp $ -->
+ $Id: java-client-ant.xml,v 1.3 2006-03-30 02:32:15 inder Exp $ -->
 
 
 <!-- java-client-ant.xml: contains targets for projects that produce 

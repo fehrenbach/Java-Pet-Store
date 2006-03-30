@@ -2,7 +2,7 @@
 
 <!-- Copyright 2005-2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: app-server-ant.xml,v 1.9 2006-03-11 12:41:02 inder Exp $ -->
+ $Id: app-server-ant.xml,v 1.10 2006-03-30 02:32:14 inder Exp $ -->
 
 <!-- This file defines various Java EE SDK specific tasks. 
      This file is not meant to be included in a project directly. 
@@ -152,7 +152,7 @@
  </target>
 
   <target name="create-jms-resource"  depends="tools"
-    description="creates jms resource">
+    description="creates jms destination resource">
      <exec executable="${asadmin}">
         <arg line="create-jms-resource"/>
         <arg line=" --user ${javaee.server.username}" />
@@ -176,6 +176,35 @@
         <arg line=" --port ${javaee.adminserver.port}" />
         <arg line=" --restype ${jms.restype}" />
         <arg line=" --enabled=true" />
+        <arg line=" ${jms.resource.name}" />
+    </exec>
+  </target>
+
+  <target name="create-jms-connection-factory"  depends="tools"
+    description="creates jms connection factory">
+     <exec executable="${asadmin}">
+        <arg line="create-jms-resource"/>
+        <arg line=" --user ${javaee.server.username}" />
+        <arg line=" --passwordfile ${javaee.server.passwordfile}" />
+        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --port ${javaee.adminserver.port}" />
+        <arg line=" --restype ${jms.restype}" />
+        <arg line=" --enabled=true" />
+        <arg line=" ${jms.resource.name}" />
+    </exec>
+  </target>
+
+  <target name="create-jms-connection-factory-prop"  depends="tools"
+    description="creates jms connection factory that allows you to set a property on the connection">
+     <exec executable="${asadmin}">
+        <arg line="create-jms-resource"/>
+        <arg line=" --user ${javaee.server.username}" />
+        <arg line=" --passwordfile ${javaee.server.passwordfile}" />
+        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --port ${javaee.adminserver.port}" />
+        <arg line=" --restype ${jms.restype}" />
+        <arg line=" --enabled=true" />
+        <arg line=" --property ${jms.resource.property}" />
         <arg line=" ${jms.resource.name}" />
     </exec>
   </target>
@@ -295,11 +324,12 @@
   <!-- The deployment process is stop the build if there is an error
        in the deployment process. To change this behavior define the
        property failonerror to be false. -->
+  <property name="run.uri" value="${module.name}"/>
   <target name="deploy" depends="tools,-pre-deploy"
     description="deploys the application">
     <fail unless="app.module" message="app.module must be set before invoking this target. Otherwise there is no application to deploy."/>
     <fail unless="module.name" message="app.name must be set before invoking this target. Otherwise there is no application to deploy."/>
-    <condition property="app.url" value="http://${javaee.server.name}:${javaee.server.port}/${module.name}">
+    <condition property="app.url" value="http://${javaee.server.name}:${javaee.server.port}/${run.uri}">
       <not>
         <isset property="app.endpointuri"/>
       </not>
@@ -324,7 +354,7 @@
    <echo message="Application Deployed at: ${app.url}"/>
   </target>
 
-  <target name="client-stubs">
+  <target name="client-jar">
     <exec executable="${asadmin}" failonerror="${failonerror}">
         <arg line=" get-client-stubs "/>
         <arg line=" --user ${javaee.server.username}" />
@@ -332,11 +362,11 @@
         <arg line=" --host ${javaee.server.name}" />
         <arg line=" --port ${javaee.adminserver.port}" />
         <arg line=" --appname ${module.name}"/>
-        <arg line="${client.stubs.dir}" />
+        <arg line="${client.jar.dir}" />
     </exec>
     <copy
-        file="./client-stubs/${module.name}Client.jar"
-        tofile="client-stubs/appClient.jar"
+        file="./client-jar/${module.name}Client.jar"
+        tofile="client-jar/appClient.jar"
         failonerror="false">
     </copy>
   </target>
@@ -356,5 +386,8 @@
       AS_ADMIN_PASSWORD. 
     </fail>    
   </target>
+
+  <!-- Dummy placeholder targets. They can be overridden by application build file -->
+  <target name="-pre-deploy"/>
   
 </project>
