@@ -2,8 +2,18 @@ package com.sun.javaee.blueprints.petstore.model;
 
 import javax.persistence.*;
 
+@NamedQueries(
+ {  @NamedQuery(
+      name="Item.getItemsPerProductCategory",
+      query="SELECT i FROM Item i WHERE i.productID = :pID"
+    ), 
+    @NamedQuery(
+      name="Item.getAllZipCityState",
+      query="SELECT z FROM ZipLocation z"       
+    )
+  }
+) 
 @Entity
-
 public class Item implements java.io.Serializable {
 
     private String itemID;

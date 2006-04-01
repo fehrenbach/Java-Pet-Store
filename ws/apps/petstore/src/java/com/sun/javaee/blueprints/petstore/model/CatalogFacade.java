@@ -9,19 +9,6 @@ import javax.persistence.*;
 import javax.transaction.*;
 import javax.annotation.*;
 
-@NamedQueries(
- {  @NamedQuery(
-      name="getItemsPerProductCategory",
-      query="SELECT i FROM Item i WHERE i.productID.categoryID LIKE :cID"
-    ), 
-
-    @NamedQuery(
-      name="getAllZipCityState",
-      query="SELECT  z FROM ZipLocation z"       
-    )
-  }
-) 
-
 public class CatalogFacade implements ServletContextListener {
 
    @PersistenceContext(name="bppu")
@@ -51,26 +38,29 @@ public class CatalogFacade implements ServletContextListener {
 
     /**
      * Value List Handler for items. Uses the Java Persistence query language.
-     * @param catID is the category id that the item belongs to
+     * @param pID is the product id that the item belongs to
      * @param start position of the first result, numbered from 0
      * @param chunkSize the maximum number of results to retrieve
      * @returns a List of Item objects
      */
     public List<Item> getItemsVLH(String pID, int start, int chunkSize){     
        //make Java Persistence query
-       System.out.println("CatalogFacade: productId=" + pID + " start=" + start + " chunckSize=" + chunkSize);
-       Query query = em.createQuery("SELECT  i FROM Item i, Product p WHERE i.productID = p.productID AND p.productID LIKE :pID");
-       List<Item>  items = query.setParameter("pID",pID).setFirstResult(start).setMaxResults(chunkSize).getResultList();
-
-       //Query query = em.createNamedQuery("getItemsPerProductCategory");
-       //query.setParameter("cID",catID);
-       //query.setFirstResult(start).setMaxResults(chunkSize);
-       //List<Item> items = query.getResultList(); 
+       System.out.println("CatalogFacade: productId=" + pID + " start=" + start + " chunkSize=" + chunkSize);
+       
+       //Query query = em.createNamedQuery("Item.getItemsPerProductCategory");
+       Query query = em.createQuery("SELECT i FROM Item i WHERE i.productID = :pID");
+       List<Item>  items = query.setParameter("pID",pID).setFirstResult(start).setMaxResults(chunkSize).getResultList();      
+       
+       Iterator<Item> it = items.iterator();            
+          while (it.hasNext()) {
+               Item i = it.next();
+              System.out.println("*****CatalogFacade:**" +i.getItemID() + "\n");
+          }
        return items;
     }
     
     /**
-     * Gets a list of all the zipcode/city/state for autocomplte on user forms
+     * Gets a list of all the zipcode/city/state for autocomplete on user forms
      * Need to enhance so that returned list is cached for reuse at application scope 
      * and held as member field of facade.
      * @returns a List of ZipLocation objects
