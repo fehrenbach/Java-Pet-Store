@@ -26,12 +26,6 @@
     </servlet>
 
     <servlet>
-        <display-name>AccountServlet</display-name>
-        <servlet-name>AccountServlet</servlet-name>
-        <servlet-class>com.sun.javaee.blueprints.petstore.controller.AccountServlet</servlet-class>
-    </servlet>
-
-    <servlet>
         <display-name>ControllerServlet</display-name>
         <servlet-name>ControllerServlet</servlet-name>
         <servlet-class>com.sun.javaee.blueprints.petstore.controller.ControllerServlet</servlet-class>
@@ -47,22 +41,6 @@
         <url-pattern>/controller</url-pattern>
     </servlet-mapping>
 
-    <servlet-mapping>
-        <servlet-name>AccountServlet</servlet-name>
-        <url-pattern>/account</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <description>Checkout</description>
-        <servlet-name>CheckoutServlet </servlet-name>
-        <servlet-class>com.sun.javaee.blueprints.petstore.controller.CheckoutServlet</servlet-class>
-    </servlet>
-  
-    <servlet-mapping>
-        <servlet-name>CheckoutServlet</servlet-name>
-        <url-pattern>/checkout</url-pattern>
-    </servlet-mapping>
-
     <servlet>
         <description>AutoCompletes Form Input using XmlHttpRequest Objects</description>
         <servlet-name> AutocompleteServlet </servlet-name>
@@ -74,16 +52,6 @@
         <url-pattern>/autocomplete</url-pattern>
     </servlet-mapping>
   
-    <servlet>
-        <description>Chat Servlet</description>
-        <servlet-name>ChatServlet</servlet-name>
-        <servlet-class>com.sun.javaee.blueprints.petstore.controller.ChatServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>ChatServlet</servlet-name>
-        <url-pattern>/chat</url-pattern>
-    </servlet-mapping>
-
     <servlet>
         <description>Persistence Test Servlet</description>
         <servlet-name>PersistenceTestServlet</servlet-name>
