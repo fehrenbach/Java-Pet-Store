@@ -1,27 +1,3 @@
-.AccordionPanel {
-	border: 0px; 
-	margin: 0px; 
-	padding: 0px;
-}
-
-.AccordionPanelLabel {
-	cursor: pointer;
-	color: white;
-	background-color: #272937;
-	font-family: Verdana, Helvetica, sans-serif;
-	font-size: 1.2em;
-	border: 1px; 
-	margin: 0px; 
-	padding: 0px;
-}
-
-.AccordionPanelInitialContent {
-	cursor: pointer;
-	background-color: #fffed0;
-	border: 0px; 
-	margin: 0px; 
-	padding: 0px;
-}
 
 .dojoHtmlFisheyeListBar {
   cursor:pointer;
@@ -72,189 +48,6 @@
   font-family: Arial
 }
 
-.category {
-  height:55;
-  cursor:pointer;
-  font-size:22px;
-  font-weight: bold;
-  font-family: Arial
-}
-
-.category:hover {
-  background: #7A8AFF;
-  color: #FFFAFA;
-}
-
-.popupItem {
-  background: #FFFAFA;
-  color: #000000;
-  text-decoration: none;
-  font-size: 1.2em;
-}
-
-.item {
-  color: black;
-  text-decoration: none;
-  font-size: 1.0em;
-}
-
-.itemName {
-  color: black;
-  text-decoration: none;
-  font-size: 1.4em;
-}
-
-.cartCheckout {
-  color: white;
-  cursor:pointer;
-  text-decoration: underline;
-  font-size: .8em;
-}
-
-.purchaseItem {
-  color: blue;
-  cursor:pointer;
-  text-decoration: underline;
-  font-size: 1.0em;
-}
-
-.valueListNavigate {
-  color: blue;
-  cursor:pointer;
-  text-decoration: underline;
-  font-size: 1.2em;
-}
-
-
-.cartValueListNavigate {
-  color: blue;
-  cursor:pointer;
-  text-decoration: underline;
-  font-size: .8em;
-}
-
-
-.cartItem {
-  color: black;
-  text-decoration: none;
-  font-size: 1.2em;
-}
-
-.cartItem {
-  background: white;
-  color: black;
-  text-decoration: none;
-  font-size: 1.0em;
-}
-
-.removeItem {
-  color: blue;
-  cursor:pointer;
-  text-decoration: underline;
-  font-size: 1.0em;
-}
-
-.cartTotal {
-  color: white;
-  text-decoration: none;
-  font-size: 1.0em;
-}
-
-.progressItem {
-  color: black;
-  text-decoration: none;
-  font-size: 1.4em;
-}
-
-.cartHeader {
-  color: white;
-  text-decoration: none;
-  font-size: 1.4em;
-}
-
-.accountBody {
-  color: black;
-  text-decoration: none;
-  font-size: 1.4em;
-}
-
-.creditCard {
-  position: absolute;
-  visibility: hidden;
-  z-index:2;
-  top:0px;
-  left:0px;
-  border-width:2px;
-  border-style:solid;
-  border-color:black;
-}
-
-.creditCardTable {
-  background:white;
-  width:500;
-  height:300;
-  padding:0;
-  border-spacing: 0;
-  border-width:1px;
-  border-style:solid;
-  border-color:black;
-}
-
-
-.signin {
-  top:0px;
-  left:0px;
-  z-index:2;
-  position: absolute;
-  visibility: hidden;
-  background:gray;
-  padding:0;
-  border-spacing: 0;
-  border-width:2px;
-  border-style:solid;
-  border-color:black;
-}
-
-.cart {
-  top:0px;
-  left:0px;
-  background:black;
-  width:225;
-  height:200;
-  padding:0;
-  border-spacing: 0;
-  border-width:1px;
-  border-style:solid;
-  border-color:black;
-}
-
-.account {
-  top:0px;
-  left:0px;
-  z-index:2;
-  position: absolute;
-  visibility: hidden;
-  width:500;
-  height:370;
-  padding:0;
-  border-spacing: 0;
-  border-width:2px;
-  border-style:solid;
-  border-color:black;
-}
-
-.accountTable {
-  width:300;
-  height:200;
-  padding:0;
-  border-spacing: 0;
-}
-
-.accountHeader {
-  color: white;
-  text-decoration: none;
-  font-size: 1.4em;
-}
 
 .menuItem {
   background: gray;
@@ -271,8 +64,13 @@
   font-size: 1.2em;
 }
 
-.popupTable {
+.autocomplete {
+  position:absolute;
+}
+
+.autocompleteTable {
   padding:0;
+  visibility: hidden;
   border-spacing: 0;
   border-width:1px;
   border-style:solid;
@@ -297,19 +95,19 @@
   background: #FFFAFA;
 }
 
-.sliderTable {
-  padding:0;
+.popupRowEven {
+  padding-left:3;
+  padding-right:3;
   border-spacing: 0;
   border-width:0px;
-  background: white;
+  background: #FFFADA;
 }
 
-.innerSlider {
-  position:absolute;
-  width:130;
-  height:120;
-  overflow:hidden;
-  background-color:#ffffff
+.popupItem {
+  background: #FFFAFA;
+  color: #000000;
+  text-decoration: none;
+  font-size: 1.2em;
 }
 
 .shadow {
@@ -324,32 +122,3 @@
   opacity: .5;
 }
 
-.slider {
-  position:absolute;
-  left:40;
-  top:450;
-  width:130;
-  height:120;
-  padding-left: 10;
-  border-width:3px;
-  border-style:solid;
-  border-color:black;
-  overflow:hidden;
-  background-color:#ffffff
-}
-
-.progressbar {
-  top:0px;
-  left:0px;
-  padding-left: 10;
-  border-spacing: 0;
-  position: absolute;
-  visibility: hidden;
-  z-index:10;
-  width:422;
-  height:90;
-  background:white;
-  border-width:2px;
-  border-style:solid;
-  border-color:black;
-}

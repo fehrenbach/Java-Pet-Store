@@ -4,16 +4,13 @@
   <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
   <title>Petstore</title>
   
-  <script type="text/javascript" src="dojo.js"></script>
   <script type="text/javascript" src="engine.js"></script>
-  <script type="text/javascript" src="ajax-commons.js" ></script>
-  <script type="text/javascript" src="main.js"></script>
-  <script type="text/javascript" src="model.js" ></script>
  </head>
 <body>
 
 <jsp:include page="banner.jsp" />
- 
+<script type="text/javascript" src="main.js"></script> 
+
 <table bgcolor="white">
  <tr>
   <td valign="top" width="300"><table id="sidebar" border="0" cellpadding="0">
