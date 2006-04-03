@@ -11,7 +11,7 @@ loadPetstore();
 
 
 function browse(category) {
-    window.location.href="catalog.html?catid=" + category;
+    window.location.href="catalog.jsp?catid=" + category;
 }
 
 function loadPetstore() {
