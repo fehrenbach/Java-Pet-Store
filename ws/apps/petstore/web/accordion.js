@@ -1,72 +1,85 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: accordion.js,v 1.12 2006-03-28 07:31:58 gmurray71 Exp $
+$Id: accordion.js,v 1.13 2006-04-04 05:57:07 gmurray71 Exp $
 */
 
 
 function AccordionMenu () {
-    var isIE;
     
     var displayPortWidth = 100;
-    var displayPortHeight=400;
+    var HEIGHT =500;
     
     var EXPANDED_HEIGHT = 135;
-    var ITEM_HEIGHT = 40;
-    var INCREMENT = 8;
+    var ITEM_HEIGHT = 55;
+    var INCREMENT = 10;
     
-    var timeout = 10; // in ms
+    var timeout = 5; // in ms
     
     var accordion;
     var divs;
     var titleRow;
-    var titleSize = 200;
     var oExpandedIndex = -1;
     var nExpandedIndex = -1;
     var oHeight = ITEM_HEIGHT;
     var nHeight = ITEM_HEIGHT;
-    var tHeight = 200;
+    var tHeight = 165;
     var expanding = false;
     var categories;
-    
-    var topX = 100;
-    var topY = 50;
-    
+       
     // while control the inline debug statements
     var debug = false;
     var status;
     
-    function Row(id, div, height) {
+    function Row(id, div, defaultHeight) {
         this.id = id;
         this.div = div;
-        this.height = height;
-        this.setHeight = function (height) {
-            this.height = height;
-            this.div.style.height = height + "px";
+        //this.height = height;
+       this.h = defaultHeight;
+       this.div.style.height = defaultHeight + "px"
+    }
+    
+    Row.prototype.setHeight = function(nH) {
+        this.h = nH;
+        this.div.style.height = nH + "px";
+        // re-adjust for ie in that it does not follow the boxmodel
+        if (this.div.offsetHeight > nH) {
+            this.div.style.height = (nH - (this.div.offsetHeight - nH)) + 'px';
         }
+    }
+    
+    Row.prototype.getTotalHeight = function() {
+        return this.div.offsetHeight;
+    }
+    
+    Row.prototype.getHeight = function() {
+            return this.h;
     }
     
     this.load = function() {
         var agent = navigator.userAgent;
-        if (agent.indexOf("IE") != -1) {
-            isIE = true;
-        } else if (agent.indexOf("Safari") != -1) {
+        if (agent.indexOf("Safari") != -1) {
             timeout = 0;
         }
         divs = [];
         status = document.getElementById("status");
         accordion = document.getElementById("accordion");
-        // load the first set of images
-        var ajax = new AJAXInteraction("catalog?command=categories&format=json", postProcessAccordion, 'text');
-        ajax.doGet();
+        // go out and get the categories
+        // this should be made more geric
+        var bindArgs = {
+            url:  "catalog?command=categories&format=json",
+            mimetype: "text/json",
+            load: function(type,json) {
+               postProcessAccordion(json);
+             }
+        };
+        dojo.io.bind(bindArgs);
     }
     
-    function postProcessAccordion(responseText) {
-        categories = eval(responseText);
+    function postProcessAccordion(lcategories) {
+        categories = lcategories;
         // create title row
-        titleRow = createRow(0, "accordionTitle",200);
-        titleRow.div.innerHTML = "Pets";
-
-        
-        if (isIE) {
+        titleRow = createRow(0, "accordionTitle", 200);
+        titleRow.div.appendChild(document.createTextNode("Pets"));
+        if (titleRow.setHeight) {
             titleRow.setHeight(265);
         }
         // now create all the rows
@@ -80,35 +93,50 @@ function AccordionMenu () {
     
     function showStatus() {
         if (debug) {
-            var stat = "oExpandedIndex=" + oExpandedIndex + " titleRow=" + titleRow.height + " ";
-            
+            var stat = "oExpandedIndex=" + oExpandedIndex + " titleRow=" + titleRow.getHeight() + " ";
             for (var i=0; i < divs.length; i++) {
-                stat = stat + i + "=" + divs[i].height + " ";
+                stat = stat + i + "=" + divs[i].getTotalHeight() + " ";
             }
-            status.innerHTML = stat;
+            status.innerHTML = stat +  " total height=" + accordion.offsetHeight;
+            var totalH = 0;
+            var tH = 0;
+            for (var i=0; i < divs.length; i++) {
+                totalH = totalH + divs[i].getHeight();
+                tH = tH + divs[i].getTotalHeight();
+            }
+            totalH = totalH + titleRow.getHeight();
+            tH = tH + titleRow.getTotalHeight();
+            var s2 = document.getElementById("status_2");
+            s2.innerHTML =  "totalH=" + totalH + " tH=" + tH;   
         }
     }
     
     function initiateExpansion(id) {
+               
         // jump out if we are in progress
         if (!expanding && oExpandedIndex != Number(id)) {
             expanding = true;
             nExpandedIndex = Number(id);
             if (oExpandedIndex != -1) {
-                // remove the listeners
-                divs[oExpandedIndex].div.innerHTML = "";
+                var targetDiv = divs[oExpandedIndex].div;
+                if (targetDiv && targetDiv.childNodes) {
+                    for (var l = targetDiv.childNodes.length -1; l >= 0 ; l--) {
+                      targetDiv.removeChild(targetDiv.childNodes[l]);
+                    }
+                }
                 createLinks(divs[oExpandedIndex].div, categories[oExpandedIndex].name, oExpandedIndex, "accordionLink");
             }
             expandRow(id);
         }
     }
     
-    function expandRow() {   
+    function expandRow() {
         if (expanding) {
+         showStatus();
+            //
             if (nHeight < EXPANDED_HEIGHT) {
                 nHeight = nHeight + INCREMENT;         
-                divs[nExpandedIndex].div.style.height = nHeight + "px";
-                
+                divs[nExpandedIndex].setHeight(nHeight);
                 if (oExpandedIndex != -1) {
                     if (tHeight >= ITEM_HEIGHT)  {
                         oHeight = oHeight - INCREMENT;
@@ -122,18 +150,14 @@ function AccordionMenu () {
                     tHeight = tHeight - INCREMENT;
                     titleRow.setHeight(tHeight);   
                 }
-                // take out of the old and apply to the title
+            // default exapnd here    
+            // take out of the old and apply to the title
             } else if (oExpandedIndex != -1 && oHeight > ITEM_HEIGHT) {
                 oHeight = oHeight - INCREMENT;
-                tHeight = tHeight + INCREMENT;
-                titleRow.setHeight(tHeight);
+                //tHeight = tHeight + INCREMENT;
+                //titleRow.setHeight(tHeight);
                 // take all out of the old expanded
                 divs[oExpandedIndex].setHeight(oHeight);
-                // do this for ie only?
-                
-            } else if (tHeight < 160 && isIE) {
-                tHeight = tHeight + INCREMENT;
-                titleRow.setHeight(tHeight);	        
             } else {
                 // set the contents of the new menu
                 var targetDiv = divs[nExpandedIndex].div;
@@ -168,7 +192,7 @@ function AccordionMenu () {
                 nHeight = ITEM_HEIGHT;
                 return;
             }
-            showStatus();
+
             setTimeout(expandRow, timeout);
         }
     }
@@ -178,9 +202,9 @@ function AccordionMenu () {
         link.className = linkStyle;  
         link.appendChild(document.createTextNode(text));
         link.setAttribute("id", id);
-        if (isIE) {
+        if (link.attachEvent) {
             link.attachEvent('onmouseover',function(e){initiateExpansion(e.srcElement.getAttribute("id"));});
-        } else {
+        } else if (link.addEventListener) {
             link.addEventListener('mouseover',function(e){initiateExpansion(e.currentTarget.getAttribute("id"));}, true);
         }
         tDiv.appendChild(link);
@@ -191,56 +215,20 @@ function AccordionMenu () {
         nDiv.className = rowStyle;
         var row;
         var cell;
-        if (isIE) {
+        if (accordion.insertRow) {
             row = accordion.insertRow(accordion.rows.length);
-            cell = row.insertCell(0);
+            
         } else {
             row = document.createElement("tr");
-            cell = document.createElement("td");
-            row.appendChild(cell);
             accordion.appendChild(row);
+        }
+        if (row.inserCell) {
+            cell = row.insertCell(0);
+        } else {
+            cell = document.createElement("td");
+            row.appendChild(cell);     
         }
         cell.appendChild(nDiv);
         return new Row(id, nDiv, height);
     }
-    function AJAXInteraction(url, callback, type) {
-        
-        var req = init();
-        req.onreadystatechange = processRequest;
-        
-        function init() {
-            if (window.XMLHttpRequest) {
-                return new XMLHttpRequest();
-            } else if (window.ActiveXObject) {
-                isIE = true;
-                return new ActiveXObject("Microsoft.XMLHTTP");
-            }
-        }
-        
-        function processRequest () {
-            if (req.readyState == 4) {
-                if (req.status == 200) {
-                    if (callback) {
-                        if (type && type == 'text') {
-                            callback(req.responseText);
-                        } else {
-                            callback(req.responseXML);
-                        }
-                    }
-                }
-            }
-        }
-        
-        this.doGet = function() {
-            req.open("GET", url, true);
-            req.send(null);
-        }
-        
-        this.doPost = function(body) {
-            req.open("POST", url, true);
-            req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-            req.send(body);
-        }
-    }
-    
 }

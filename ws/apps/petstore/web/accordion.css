@@ -1,7 +1,8 @@
 .accordion {
   width:150px;
   height:500px;
-  border-spacing:5px;
+  border-right:5px;
+  border-left:5px;
   border-width:1px;
   border-style:solid;
   border-color:black;
@@ -10,7 +11,8 @@
 
 .accordionTitle {
   vertical-align: top;
-  padding-top: 15px;
+  position:relative;
+  padding-top: 10px;
   text-align: center;
   width:150px;
   height:200px;
