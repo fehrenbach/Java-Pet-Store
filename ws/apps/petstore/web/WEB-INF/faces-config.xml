@@ -2,7 +2,7 @@
 
 <!--  Copyright 2005 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: faces-config.xml,v 1.5 2006-02-27 16:49:16 basler Exp $ -->
+ $Id: faces-config.xml,v 1.6 2006-04-10 16:42:38 basler Exp $ -->
 
 <faces-config xmlns="http://java.sun.com/xml/ns/javaee"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -11,6 +11,18 @@
     <!-- ========== Application Wide Features ================================ -->
 
     <!-- ========== Managed Beans ============================================ -->
+    <managed-bean>
+        <managed-bean-name>RatingBean</managed-bean-name>
+        <managed-bean-class>com.sun.javaee.blueprints.petstore.model.RatingBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>PayPalBean</managed-bean-name>
+        <managed-bean-class>com.sun.javaee.blueprints.petstore.model.PayPalBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    
     <managed-bean>
         <managed-bean-name>FileUploadBean</managed-bean-name>
         <managed-bean-class>com.sun.javaee.blueprints.petstore.controller.FileUploadBean</managed-bean-class>
