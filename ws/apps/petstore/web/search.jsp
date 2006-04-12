@@ -11,6 +11,38 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
    "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Search Page</title>
+<script type="text/javascript" src="../dojo.js"></script>
+<script type="text/javascript">
+
+    function checkAll() {
+        var elems=dojo.byId("resultsForm").elements;
+        for(ii=0; ii < elems.length; ii++) {
+            if(elems[ii].name.indexOf("map:") >= 0) {
+                elems[ii].checked=true;
+            }
+        }
+        return false;
+    }
+    
+    function uncheckAll() {
+        var elems=dojo.byId("resultsForm").elements;
+        for(ii=0; ii < elems.length; ii++) {
+            if(elems[ii].name.indexOf("map:") >= 0) {
+                elems[ii].checked=false;
+            }
+        }
+        return false;
+    }
+
+</script>        
+        
+    </head>
+    <body>   
+   
  <jsp:include page="banner.jsp" />
   
 <%
@@ -46,12 +78,7 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
 
 %>
 
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Search Page</title>
-    </head>
-    <body>
+
 
         <h1>Search Page</h1>
     
@@ -77,35 +104,40 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
     
         <c:if test="${!empty requestScope.hitsx}">
             <b>${numberOfHits} hits returned for search string:</b> "${searchStringx}"<br>
-            <table border="1" cellpadding="5" cellspacing="5" style="border-style:double; border-color:darkgreen">
-                <tr>
-                    <th>Map</th>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Price</th>
-                    <th>Current Tag(s)</th>
-                    <th>Add Tag Keyword(s)</th>
-                </tr>
-                <c:forEach items="${requestScope.hitsx}" var="docxx">
+            <form id="resultsForm">
+                <table border="1" cellpadding="5" cellspacing="5" style="border-style:double; border-color:darkgreen">
                     <tr>
-                        <td>
-                            <input name="map:${docxx.UID}" type="checkbox"/>
-                        </td>
-                        <td>${docxx.title}</td>
-                        <td>${docxx.summary}</td>
-                        <td>${docxx.price}</td>
-                        <td>${docxx.tag}</td>
-                        <td>
-                            <form action="./search.jsp" method="post">
-                                <input name="tagKeywords" type="text" size="30"/>
-                                <input type="hidden" name="docId" value="${docxx.UID}"/>
-                                <input type="submit" name="submitTag" value="Submit"/>
-                            </form>
-                        </td>
+                        <th>
+                            Map<br/>
+                            <a href="" onclick="return checkAll()"><img border="0" src="../images/check_all.gif"/></a>
+                            <a href="" onclick="return uncheckAll()"><img border="0" src="../images/uncheck_all.gif"/></a>
+                        </th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Price</th>
+                        <th>Current Tag(s)</th>
                     </tr>
-                </c:forEach>
-            </table>
+                    <c:forEach items="${requestScope.hitsx}" var="docxx">
+                        <tr>
+                            <td>
+                                <input id="map:${docxx.UID}" name="map:${docxx.UID}" type="checkbox"/>
+                            </td>
+                            <td>${docxx.title}</td>
+                            <td>${docxx.summary}</td>
+                            <td>${docxx.price}</td>
+                            <td>${docxx.tag}</td>
+                        </tr>
+                    </c:forEach>
+                    <tr>
+                        <td colspan="6">
+                            <input id="mapSubmit" type="submit" value="Map Checked Item(s)"/>
+                            <input id="itemIDs" type="hidden" value=""/>
+                         </td>
+                    </tr>
+                </table>
+            </form>
         </c:if>
+        <br/><br/><br/>
     </body>
 </html>
 <%

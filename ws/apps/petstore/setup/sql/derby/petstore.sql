@@ -80,22 +80,22 @@ INSERT INTO product VALUES('canine02', 'DOGS', 'Small Dogs', 'Great Companion Do
 INSERT INTO product VALUES('avian01', 'BIRDS', 'Parrot', 'Friend for a lifetime.', 'bird1.gif');
 INSERT INTO product VALUES('avian02', 'BIRDS', 'Exotic', 'Impress your friends with your feathered friend.','bird2.gif');
 
-INSERT INTO Address VALUES('1', 'Street1', 'Street2', 'ABC City','ABC State','9999',8.123456,9.123456);
-INSERT INTO Address VALUES('2', 'Street1', 'Street2', 'ABC City','ABC State','9999',8.123456,9.123456);
-INSERT INTO Address VALUES('3', 'Street1', 'Street2', 'ABC City','ABC State','9999',8.123456,9.123456);
-INSERT INTO Address VALUES('4', 'Street1', 'Street2', 'ABC City','ABC State','9999',8.123456,9.123456);
-INSERT INTO Address VALUES('5', 'Street1', 'Street2', 'ABC City','ABC State','9999',8.123456,9.123456);
-INSERT INTO Address VALUES('6', 'Street1', 'Street2', 'ABC City','ABC State','9999',8.123456,9.123456);
-INSERT INTO Address VALUES('7', 'Street1', 'Street2', 'ABC City','ABC State','9999',8.123456,9.123456);
-INSERT INTO Address VALUES('8', 'Street1', 'Street2', 'ABC City','ABC State','9999',8.123456,9.123456);
-INSERT INTO Address VALUES('9', 'Street1', 'Street2', 'ABC City','ABC State','9999',8.123456,9.123456);
-INSERT INTO Address VALUES('10', 'Street1', 'Street2', 'ABC City','ABC State','9999',8.123456,9.123456);
-INSERT INTO Address VALUES('11', 'Street1', 'Street2', 'ABC City','ABC State','9999',8.123456,9.123456);
-INSERT INTO Address VALUES('12', 'Street1', 'Street2', 'ABC City','ABC State','9999',8.123456,9.123456);
-INSERT INTO Address VALUES('13', 'Street1', 'Street2', 'ABC City','ABC State','9999',8.123456,9.123456);
-INSERT INTO Address VALUES('14', 'Street1', 'Street2', 'ABC City','ABC State','9999',8.123456,9.123456);
-INSERT INTO Address VALUES('15', 'Street1', 'Street2', 'ABC City','ABC State','9999',8.123456,9.123456);
-INSERT INTO Address VALUES('16', 'Street1', 'Street2', 'ABC City','ABC State','9999',8.123456,9.123456);
+INSERT INTO Address VALUES('1', '11 Main Steet', '', 'Milpitas','CA','95035',37.431194,-121.907096);
+INSERT INTO Address VALUES('2', '22 Main Steet', '', 'Santa Clara','CA','95054',37.34578,-121.9438);
+INSERT INTO Address VALUES('3', '33 Main Steet', '', 'Freemont','CA','94536',37.53398,-121.95448);
+INSERT INTO Address VALUES('4', '44 Main Steet', '', 'Palo Alto','CA','94301',37.442051,-122.141434);
+INSERT INTO Address VALUES('5', '55 Main Steet', '', 'Mountain View','CA','94035',37.385349,-122.081451);
+INSERT INTO Address VALUES('6', '66 Main Steet', '', 'Sunnyvale','CA','94085',37.369019,-122.035019);
+INSERT INTO Address VALUES('7', '77 Main Steet', '', 'Hayward','CA','94540',37.68002,-122.09016);
+INSERT INTO Address VALUES('8', '88 Main Steet', '', 'Capitola','CA','95010',36.975739,-121.952797);
+    INSERT INTO Address VALUES('9', '99 Main Steet', '', 'San Francisco','CA','94101',37.792097,-122.394991);
+INSERT INTO Address VALUES('10', '1010 Main Steet', '', 'Los Altos','CA','94022',37.37754,-122.11824);
+INSERT INTO Address VALUES('11', '1111 Main Steet', '', 'Cambell','CA','95008',37.287109,-121.948647);
+INSERT INTO Address VALUES('12', '200 Main Steet', '', 'Foster City','CA','94404',37.566407,-122.322727);
+INSERT INTO Address VALUES('13', '1313 Main Steet', '', 'Redwood City','CA','94061',37.480764,-122.22432);
+INSERT INTO Address VALUES('14', '1414 Main Steet', '', 'Cupertino','CA','95014',37.32304,-122.032303);
+INSERT INTO Address VALUES('15', '1515 Main Steet', '', 'Gilroy','CA','95020',37.005829,-121.567291);
+INSERT INTO Address VALUES('16', '1616 Main Steet', '', 'San Leandro','CA','94577',37.724979,-122.155762);
 
 INSERT INTO SellerContactInfo VALUES('1', 'Duke', 'Duke', 'abc@abc.xyz');
 INSERT INTO SellerContactInfo VALUES('2', 'Duke', 'Duke', 'abc@abc.xyz');
