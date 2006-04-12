@@ -52,7 +52,7 @@ public class FileUploadBean {
     private boolean bDebug=false;
     private Logger _logger=null;
     private static final String comma=", ";
-
+    
     /**
      * <p>Factory for response writers that we can use to construct the
      * outgoing response.</p>
@@ -73,7 +73,7 @@ public class FileUploadBean {
             // get proxy host and port from servlet context
             String proxyHost=context.getExternalContext().getInitParameter("proxyHost");
             String proxyPort=context.getExternalContext().getInitParameter("proxyPort");
-
+            
             // Acquire a response containing these results
             ResponseWriter writer = factory.getResponseWriter(context, "text/xml");
             
@@ -89,7 +89,7 @@ public class FileUploadBean {
                         break;
                     }
                 }
-                String absoluteFileName=getStringValue(hmUpload, fileNameKey);                
+                String absoluteFileName=getStringValue(hmUpload, fileNameKey);
                 System.out.println("Abs name: "+ absoluteFileName);
                 String fileName = null;
                 if(absoluteFileName != null) {
@@ -119,28 +119,28 @@ public class FileUploadBean {
                     addressx.append(tmpx);
                 }
                 
-                tmpx=getStringValue(hmUpload, compName+":street2");                
+                tmpx=getStringValue(hmUpload, compName+":street2");
                 addr.setStreet2(tmpx);
                 if(tmpx.length() > 0) {
                     addressx.append(" ");
                     addressx.append(tmpx);
                 }
                 
-                tmpx=getStringValue(hmUpload, compName+":city");                
+                tmpx=getStringValue(hmUpload, compName+":city");
                 addr.setCity(tmpx);
                 if(tmpx.length() > 0) {
                     addressx.append(comma);
                     addressx.append(tmpx);
                 }
                 
-                tmpx=getStringValue(hmUpload, compName+":state");                
+                tmpx=getStringValue(hmUpload, compName+":state");
                 addr.setState(tmpx);
                 if(tmpx.length() > 0) {
                     addressx.append(comma);
                     addressx.append(tmpx);
                 }
                 
-                tmpx=getStringValue(hmUpload, compName+":zip");                
+                tmpx=getStringValue(hmUpload, compName+":zip");
                 addr.setZip(tmpx);
                 if(tmpx.length() > 0) {
                     addressx.append(comma);
@@ -151,7 +151,7 @@ public class FileUploadBean {
                 GeoCoder geoCoder=new GeoCoder();
                 if(proxyHost != null && proxyPort != null) {
                     // set proxy host and port if it exists
-                    // NOTE: This requires write permissions for java.util.PropertyPermission to be granted
+                    // NOTE: This may require write permissions for java.util.PropertyPermission to be granted
                     getLogger().log(Level.INFO, "Setting proxy to " + proxyHost + ":" + proxyPort + ".  Make sure server.policy is updated to allow setting System Properties");
                     geoCoder.setProxyHost(proxyHost);
                     try {
@@ -172,7 +172,7 @@ public class FileUploadBean {
                             getLogger().log(Level.INFO, "No addresses for location - " + totAddr);
                         } else if(points.length > 1) {
                             getLogger().log(Level.INFO, "Matched " + points.length + " locations, taking the first one");
-                        }    
+                        }
                         
                         if(points.length > 0) {
                             // set values to used for map location
@@ -183,7 +183,7 @@ public class FileUploadBean {
                         getLogger().log(Level.WARNING, "geocoder.lookup.exception", ee);
                     }
                 }
-                    
+                
                 SellerContactInfo contactInfo = new SellerContactInfo();
                 //TO-DO: Add SellerContactInfo fields to the file upload page and extract data
                 contactInfo.setFirstName("duke");
@@ -207,7 +207,7 @@ public class FileUploadBean {
                 em.persist(item);
                 utx.commit();
                 getLogger().log(Level.FINE, "Item " + name + " has been persisted");
-
+                
                 // index new item
                 String itemId = item.getItemID();
                 IndexDocument indexDoc=new IndexDocument();
@@ -234,7 +234,7 @@ public class FileUploadBean {
             response.setContentType("text/xml;charset=UTF-8");
             response.setHeader("Pragma", "No-Cache");
             response.setHeader("Cache-Control", "no-cache,no-store,max-age=0");
-            response.setDateHeader("Expires", 1);            
+            response.setDateHeader("Expires", 1);
             sb.append("<response>");
             sb.append("<message>***CUSTOM SERVER-SIDE RETURN *** MESSAGE->");
             sb.append(status.getMessage());
@@ -273,7 +273,7 @@ public class FileUploadBean {
         // Add document to index
         Indexer indexer=null;
         try {
-            indexer=new Indexer(PetstoreConstants.PETSTORE_INDEX_DIRECTORY, false);    
+            indexer=new Indexer(PetstoreConstants.PETSTORE_INDEX_DIRECTORY, false);
             getLogger().log(Level.FINE, "Adding document to index: " + indexDoc.toString());
             indexer.addDocument(indexDoc);
         } catch (Exception e) {
@@ -300,15 +300,15 @@ public class FileUploadBean {
     
     
     /**
-    * Method getLogger
-    *
-    * @return Logger - logger for the NodeAgent
-    */
+     * Method getLogger
+     *
+     * @return Logger - logger for the NodeAgent
+     */
     public Logger getLogger() {
         if (_logger == null) {
             _logger=PetstoreUtil.getBaseLogger();
         }
         return _logger;
-    }    
+    }
     
 }
