@@ -16,13 +16,12 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
 <%
     try {
         String searchString=request.getParameter("searchString");
-        String indexDirectory=request.getParameter("indexDirectory");
         if(searchString == null) searchString="cat";
-        String submit=request.getParameter("submit");
+        String submit=request.getParameter("submitx");
         String submitTag=request.getParameter("submitTag");
         String searchTags=request.getParameter("searchTags");
         String tagKeywords=request.getParameter("tagKeywords");
-        
+
         // perform search
         if(submit != null && searchString != null) {
             // string to search
@@ -32,19 +31,19 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
             if(searchTags != null && searchTags.equals("true") && searchString.indexOf(":") < 0) {
                 searchxx="contents:" + searchString + " OR tag:" + searchString;
             }
-            Vector vtHits=si.query(indexDirectory, searchxx);
+            Vector vtHits=si.query(PetstoreConstants.PETSTORE_INDEX_DIRECTORY, searchxx);
             request.setAttribute("searchStringx", searchxx);
             request.setAttribute("numberOfHits", vtHits.size());
             request.setAttribute("hitsx", vtHits);
         }
-        
+
         // perform tagging
         if(submitTag != null && tagKeywords != null) {
             String docId=request.getParameter("docId");
             UpdateIndex update=new UpdateIndex();
-            update.updateDocTag(indexDirectory, "tag" , tagKeywords, docId);
+            update.updateDocTag(PetstoreConstants.PETSTORE_INDEX_DIRECTORY, "tag" , tagKeywords, docId);
         }
-        
+
 %>
 
 <html>
@@ -54,63 +53,63 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
     </head>
     <body>
 
-    <h1>Search Page</h1>
+        <h1>Search Page</h1>
     
     
-    <form action="./search.jsp" method="post">
-        <table>
-            <tr>
-                <th align="left">Index File Location:</th>
-                <td align="left"><input type="text" size="50" name="indexDirectory" value="<%= PetstoreConstants.PETSTORE_INDEX_DIRECTORY %>"/></td>
-            </tr>
-            <tr>
-                <th>Search String</th>
-                <td>
-                    <input type="text" size="30" name="searchString" value="<%= searchString %>"/> 
-                        Also Search Tags:<input type="checkbox" name="searchTags" value="true" CHECKED/>
-                </td>
-            </tr>
-            <tr>
-                <td align="center" colspan="2">
-                    <input type="submit" name="submit" value="Submit"/>
-                </td>
-            </tr>
-        </table>
-    </form>
-    
-    <c:if test="${!empty requestScope.hitsx}">
-        <b>${numberOfHits} hits returned for search string:</b> "${searchStringx}"<br>
-        <table border="1">
-            <c:forEach items="${requestScope.hitsx}" var="docxx">
+        <form action="./search.jsp" method="post">
+            <table border="1" style="border-style:double; border-color:darkgreen">
                 <tr>
+                    <th>Search String</th>
                     <td>
-                        <form action="./search.jsp" method="post">
-                            <b>URL:</b>${docxx.pageURL}<br>
-                            <b>Title:</b>${docxx.title}<br>
-                            <b>Summary:</b>${docxx.summary}<br>
-                            <b>Image:</b>${docxx.image}<br>
-                            <b>Price:</b>${docxx.price}<br>
-                            <b>UID:</b>${docxx.UID}<br>
-                            <b>Contents:</b>${docxx.contents}<br>
-                            <b>Tag:</b>${docxx.tag}<br>
-                            <b>Modified Date:</b>${docxx.modifiedDate}<br><br>
-                            Add Tag Keyword(s) <input name="tagKeywords" type="text" size="30"/><br>
-                            <input type="hidden" name="docId" value="${docxx.UID}"/><br>
-                            <input type="hidden" name="indexDirectory" value="<%= PetstoreConstants.PETSTORE_INDEX_DIRECTORY %>"/>
-                            <input type="submit" name="submitTag" value="Submit"/><br><br>
-                        </form>
+                        <input type="text" size="50" name="searchString" value="<%= searchString %>"/> 
+                        Also Search Tags:<input type="checkbox" name="searchTags" value="true" CHECKED/>
                     </td>
                 </tr>
-            </c:forEach>
-        </table>
+                <tr>
+                    <td align="center" colspan="2">
+                        <input type="submit" name="submitx" value="Submit"/>
+                        <input type="reset" name="resetx" value="Reset"/>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <br/><br/><br/>
     
-    </c:if>
-    
-    
+        <c:if test="${!empty requestScope.hitsx}">
+            <b>${numberOfHits} hits returned for search string:</b> "${searchStringx}"<br>
+            <table border="1" cellpadding="5" cellspacing="5" style="border-style:double; border-color:darkgreen">
+                <tr>
+                    <th>Map</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Current Tag(s)</th>
+                    <th>Add Tag Keyword(s)</th>
+                </tr>
+                <c:forEach items="${requestScope.hitsx}" var="docxx">
+                    <tr>
+                        <td>
+                            <input name="map:${docxx.UID}" type="checkbox"/>
+                        </td>
+                        <td>${docxx.title}</td>
+                        <td>${docxx.summary}</td>
+                        <td>${docxx.price}</td>
+                        <td>${docxx.tag}</td>
+                        <td>
+                            <form action="./search.jsp" method="post">
+                                <input name="tagKeywords" type="text" size="30"/>
+                                <input type="hidden" name="docId" value="${docxx.UID}"/>
+                                <input type="submit" name="submitTag" value="Submit"/>
+                            </form>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </table>
+        </c:if>
     </body>
 </html>
 <%
-    } catch(Exception e) {
-        e.printStackTrace();
-    }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
 %>

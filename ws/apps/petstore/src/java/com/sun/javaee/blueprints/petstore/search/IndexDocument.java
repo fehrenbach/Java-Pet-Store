@@ -15,8 +15,8 @@ package com.sun.javaee.blueprints.petstore.search;
  */
 public class IndexDocument {
     
-    public String uid=null, pageURL=null, title=null, summary=null, image=null;
-    public String modifiedDate=null, contents=null, price=null, product=null, tag=null;
+    public String uid="", pageURL="", title="", summary="", image="";
+    public String modifiedDate="", contents="", price="0", product="", tag="";
     
     /** Creates a new instance of indexDocuments */
     public IndexDocument() {
