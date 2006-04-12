@@ -84,7 +84,7 @@ public class FileUploadBean {
                 Iterator iter = keySet.iterator();
                 while(iter.hasNext()){
                     String key = iter.next().toString();
-                    if(key.startsWith("fileLocation")) {
+                    if(key.startsWith("fileLocation_")) {
                         fileNameKey = key;
                         break;
                     }
@@ -166,16 +166,22 @@ public class FileUploadBean {
                 // use component to get points based on location (this uses Yahoo's map service
                 String totAddr=addressx.toString();
                 if(totAddr.length() > 0) {
-                    GeoPoint points[]=geoCoder.geoCode(totAddr);
-                    if ((points == null) || (points.length < 1)) {
-                        getLogger().log(Level.INFO, "No addresses for location - " + totAddr);
-                    } else if (points.length > 1) {
-                        getLogger().log(Level.INFO, "Matched " + points.length + " locations, taking the first one");
+                    try {
+                        GeoPoint points[]=geoCoder.geoCode(totAddr);
+                        if ((points == null) || (points.length < 1)) {
+                            getLogger().log(Level.INFO, "No addresses for location - " + totAddr);
+                        } else if(points.length > 1) {
+                            getLogger().log(Level.INFO, "Matched " + points.length + " locations, taking the first one");
+                        }    
+                        
+                        if(points.length > 0) {
+                            // set values to used for map location
+                            addr.setLatitude(points[0].getLatitude());
+                            addr.setLongitude(points[0].getLongitude());
+                        }
+                    } catch (Exception ee) {
+                        getLogger().log(Level.WARNING, "geocoder.lookup.exception", ee);
                     }
-
-                    // set values to used for map location
-                    addr.setLatitude(points[0].getLatitude());
-                    addr.setLongitude(points[0].getLongitude());
                 }
                     
                 SellerContactInfo contactInfo = new SellerContactInfo();
