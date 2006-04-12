@@ -16,13 +16,11 @@ public class CatalogFacade implements ServletContextListener {
     @PersistenceUnit(unitName="bppu") private EntityManagerFactory emf;
     @Resource UserTransaction utx;
 
-    public CatalogFacade(){
-        System.out.println("Created Catalog Facade...Entity manager factory =" + emf);
-    }
+    public CatalogFacade(){ }
 
     public void contextDestroyed(ServletContextEvent sce) {
-       //close the factory and all entity managers associtaed with it
-       emf.close();
+       //close the factory and all entity managers associated with it
+       if (emf.isOpen()) emf.close();
     }
     
     public void contextInitialized(ServletContextEvent sce) {
@@ -61,12 +59,39 @@ public class CatalogFacade implements ServletContextListener {
        //Query query = em.createNamedQuery("Item.getItemsPerProductCategory");
        Query query = em.createQuery("SELECT i FROM Item i WHERE i.productID = :pID");
        List<Item>  items = query.setParameter("pID",pID).setFirstResult(start).setMaxResults(chunkSize).getResultList();      
-       
+       /*
        Iterator<Item> it = items.iterator();            
           while (it.hasNext()) {
                Item i = it.next();
               System.out.println("*****CatalogFacade:**" +i.getItemID() + "\n");
           }
+        **/
+       em.close();
+       return items;
+    }
+    /**
+     * Value List Handler for items. Found by location radius for google map
+     * Uses the Java Persistence query language.
+     * @param categoryID is the product id that the item belongs to
+     * @param start position of the first result, numbered from 0
+     * @param chunkSize the maximum number of results to retrieve
+     * @returns a List of Item objects
+     */
+    public List<Item> getItemsByRadius(String categoryID, int start, int chunkSize){    
+       EntityManager em = emf.createEntityManager();
+    
+       System.out.println("CatalogFacade.getItemsByRadius: categoryID=" + categoryID + " start=" + start + " chunkSize=" + chunkSize);
+       //select i.itemID from item i , product p where i.productID= p.productID  AND p.categoryID = 'CATS'
+       Query query = em.createQuery("SELECT i FROM Item i, Product p WHERE i.productID=p.productID AND p.categoryID = :categoryID");
+       List<Item>  items = query.setParameter("categoryID",categoryID).setFirstResult(start).setMaxResults(chunkSize).getResultList();      
+       
+        /*Iterator<Item> it = items.iterator();            
+          while (it.hasNext()) {
+               Item i = it.next();
+              System.out.println("*****CatalogFacade:**" +i.getItemID() + "\n");
+          }
+         **/
+       
        em.close();
        return items;
     }
