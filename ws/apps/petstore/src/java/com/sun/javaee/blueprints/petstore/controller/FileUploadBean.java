@@ -95,7 +95,8 @@ public class FileUploadBean {
                 if(absoluteFileName != null) {
                     int lastSeparator = absoluteFileName.lastIndexOf("/") + 1;
                     if (lastSeparator != -1) {
-                        fileName = absoluteFileName.substring(lastSeparator, absoluteFileName.length());
+                        // set to proper location so image can be read
+                        fileName = "images/" + absoluteFileName.substring(lastSeparator, absoluteFileName.length());
                     }
                 }
                 
@@ -113,47 +114,37 @@ public class FileUploadBean {
                 // Add address fields to the file upload page and extract data
                 StringBuffer addressx=new StringBuffer();
                 String tmpx=getStringValue(hmUpload, compName+":street1");
+                addr.setStreet1(tmpx);
                 if(tmpx.length() > 0) {
                     addressx.append(tmpx);
-                    addr.setStreet1(tmpx);
-                } else {
-                    addr.setStreet1("");
                 }
                 
                 tmpx=getStringValue(hmUpload, compName+":street2");                
-                if(tmpx != null && tmpx.length() > 0) {
+                addr.setStreet2(tmpx);
+                if(tmpx.length() > 0) {
                     addressx.append(" ");
                     addressx.append(tmpx);
-                    addr.setStreet2(tmpx);
-                } else {
-                    addr.setStreet2("");
                 }
                 
                 tmpx=getStringValue(hmUpload, compName+":city");                
-                if(tmpx != null && tmpx.length() > 0) {
+                addr.setCity(tmpx);
+                if(tmpx.length() > 0) {
                     addressx.append(comma);
                     addressx.append(tmpx);
-                    addr.setCity(tmpx);
-                } else {
-                    addr.setCity("");
                 }
                 
                 tmpx=getStringValue(hmUpload, compName+":state");                
-                if(tmpx != null && tmpx.length() > 0) {
+                addr.setState(tmpx);
+                if(tmpx.length() > 0) {
                     addressx.append(comma);
                     addressx.append(tmpx);
-                    addr.setState(tmpx);
-                } else {
-                    addr.setState("");
                 }
                 
                 tmpx=getStringValue(hmUpload, compName+":zip");                
-                if(tmpx != null && tmpx.length() > 0) {
+                addr.setZip(tmpx);
+                if(tmpx.length() > 0) {
                     addressx.append(comma);
                     addressx.append(tmpx);
-                    addr.setZip(tmpx);
-                } else {
-                    addr.setZip("");
                 }
                 
                 // get latitude & longitude
