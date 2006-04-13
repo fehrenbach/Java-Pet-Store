@@ -44,30 +44,10 @@ public class CatalogServlet extends HttpServlet {
                 // set content-type header before accessing the Writer
                 response.setContentType("text/xml;charset=UTF-8");
                 PrintWriter out = response.getWriter();
-                StringBuffer sb = new StringBuffer();
-                // then write the data of the response
-                sb.append("<category>\n");
-                sb.append("<cat-id>" + catid + "</cat-id>\n");
-                sb.append("<cat-name>" + cf.getCategory(catid).getName()  + "</cat-name>\n");
-                sb.append("<items>\n");
-                Collection items = cf.getAllItemsFromCategory(catid);
-                Iterator it = items.iterator();
-                NumberFormat formatter = new DecimalFormat("00.00");
-                while (it.hasNext()) {
-                    Vector i = (Vector)it.next();
-                    sb.append("<item>\n");
-                    sb.append(" <id>" + i.get(0) + "</id>\n");
-                    sb.append(" <prod-id>" + i.get(1) + "</prod-id>\n");
-                    sb.append(" <cat-id>" + catid + "</cat-id>\n");
-                    sb.append(" <name>" + i.get(2) + "</name>\n");
-                    sb.append(" <price>" + formatter.format(i.get(5)) + "</price>\n");
-                    sb.append(" <description>" + i.get(3) + "</description>\n");
-                    sb.append(" <image-url>" + i.get(4) + "</image-url>\n");
-                    sb.append("</item>\n");
-                }
-                sb.append("</items>");
-                sb.append("</category>\n");
-                out.println(sb.toString());
+             
+                String str = handleCategory(catid);
+                
+                out.println(str);
                 out.close();
             } else if ("items".equals(command)) {
                 String pid = request.getParameter("pid");
@@ -181,9 +161,45 @@ public class CatalogServlet extends HttpServlet {
                 out.println(sb.toString());
                 out.close();         
          } else if ("item".equals(command)) {
-             String targetId = request.getParameter("id");
-             NumberFormat formatter = new DecimalFormat("00.00");
+             String targetId = request.getParameter("id");          
              System.out.println("CatalogServlet: Request for item with id: " + targetId);
+             String str = handleItem(targetId);
+             response.setContentType("text/xml;charset=UTF-8");
+             PrintWriter out = response.getWriter();
+             out.println(str);
+             out.close();  
+         }
+     }
+   
+   private String handleCategory(String categoryId) {
+        StringBuffer sb = new StringBuffer();
+        // then write the data of the response
+        sb.append("<category>\n");
+        sb.append("<cat-id>" + categoryId + "</cat-id>\n");
+        sb.append("<cat-name>" + cf.getCategory(categoryId).getName()  + "</cat-name>\n");
+        sb.append("<items>\n");
+        Collection items = cf.getAllItemsFromCategory(categoryId);
+        Iterator it = items.iterator();
+        NumberFormat formatter = new DecimalFormat("00.00");
+        while (it.hasNext()) {
+                    Vector i = (Vector)it.next();
+                    sb.append("<item>\n");
+                    sb.append(" <id>" + i.get(0) + "</id>\n");
+                    sb.append(" <prod-id>" + i.get(1) + "</prod-id>\n");
+                    sb.append(" <cat-id>" + categoryId + "</cat-id>\n");
+                    sb.append(" <name>" + i.get(2) + "</name>\n");
+                    sb.append(" <price>" + formatter.format(i.get(5)) + "</price>\n");
+                    sb.append(" <description>" + i.get(3) + "</description>\n");
+                    sb.append(" <image-url>" + i.get(4) + "</image-url>\n");
+                    sb.append("</item>\n");
+        }
+        sb.append("</items>");
+        sb.append("</category>\n");
+        return sb.toString();
+   }
+   
+   private String handleItem(String targetId){
+             NumberFormat formatter = new DecimalFormat("00.00");
              Item i = cf.getItem(targetId);
              StringBuffer sb = new StringBuffer();
              sb.append("<item>\n");
@@ -194,10 +210,6 @@ public class CatalogServlet extends HttpServlet {
              sb.append(" <image-url>" + i.getImageURL() + "</image-url>\n");
              sb.append(" <price>" + formatter.format(i.getPrice())  + "</price>\n");
              sb.append("</item>\n");
-             response.setContentType("text/xml;charset=UTF-8");
-             PrintWriter out = response.getWriter();
-             out.println(sb.toString());
-             out.close();  
-         }
-     }
+             return sb.toString();
+   }
 }
