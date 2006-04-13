@@ -43,10 +43,8 @@ public class CatalogServlet extends HttpServlet {
                 System.out.println("Request for category with id: " + catid);
                 // set content-type header before accessing the Writer
                 response.setContentType("text/xml;charset=UTF-8");
-                PrintWriter out = response.getWriter();
-             
-                String str = handleCategory(catid);
-                
+                PrintWriter out = response.getWriter();             
+                String str = handleCategory(catid);                
                 out.println(str);
                 out.close();
             } else if ("items".equals(command)) {
@@ -75,27 +73,10 @@ public class CatalogServlet extends HttpServlet {
                 // leave these headers here for development - remove for deploy
                 response.setHeader("Cache-Control", "no-cache");
                 response.setHeader("Pragma", "no-cache");
-                PrintWriter out = response.getWriter();
-                StringBuffer sb = new StringBuffer();
-                // then write the data of the response
-                sb.append("<items>\n");
-                List items = cf.getItemsVLH(pid, start, length);
-                 System.out.println("**** Items length=" + items.size());
-                Iterator<Item> it = items.iterator();
-                NumberFormat formatter = new DecimalFormat("00.00");
-                while (it.hasNext()) {
-                    Item i = it.next();
-                    sb.append("<item>\n");
-                    sb.append(" <id>" + i.getItemID() + "</id>\n");
-                    sb.append(" <product-id>" + i.getProductID() + "</product-id>\n");
-                    sb.append(" <name>" + i.getName() + "</name>\n");
-                    sb.append(" <description>" + i.getDescription() + "</description>\n");
-                    sb.append(" <image-url>" + i.getImageURL() + "</image-url>\n");
-                    sb.append(" <image-tb-url>" + i.getImageThumbURL() + "</image-tb-url>\n");
-                    sb.append("</item>\n");
-                }
-                sb.append("</items>");
-                out.println(sb.toString());
+                PrintWriter out = response.getWriter();            
+                //get response data
+                String str = handleItems(pid, start, length);               
+                out.println(str);
                 out.close();
          } else if ("categories".equals(command)) {
                 System.out.println("Request for categories.");
@@ -170,6 +151,29 @@ public class CatalogServlet extends HttpServlet {
              out.close();  
          }
      }
+   
+   private String handleItems(String pid, int start, int length) {
+       StringBuffer sb = new StringBuffer();
+       // then write the data of the response
+       sb.append("<items>\n");
+       List items = cf.getItemsVLH(pid, start, length);
+       System.out.println("**** Items length=" + items.size());
+       Iterator<Item> it = items.iterator();
+       NumberFormat formatter = new DecimalFormat("00.00");
+       while (it.hasNext()) {
+                    Item i = it.next();
+                    sb.append("<item>\n");
+                    sb.append(" <id>" + i.getItemID() + "</id>\n");
+                    sb.append(" <product-id>" + i.getProductID() + "</product-id>\n");
+                    sb.append(" <name>" + i.getName() + "</name>\n");
+                    sb.append(" <description>" + i.getDescription() + "</description>\n");
+                    sb.append(" <image-url>" + i.getImageURL() + "</image-url>\n");
+                    sb.append(" <image-tb-url>" + i.getImageThumbURL() + "</image-tb-url>\n");
+                    sb.append("</item>\n");
+       }
+       sb.append("</items>");
+       return sb.toString();      
+   }
    
    private String handleCategory(String categoryId) {
         StringBuffer sb = new StringBuffer();
