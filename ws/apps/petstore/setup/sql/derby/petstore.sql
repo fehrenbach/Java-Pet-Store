@@ -82,7 +82,7 @@ INSERT INTO product VALUES('avian02', 'BIRDS', 'Exotic', 'Impress your friends w
 
 INSERT INTO Address VALUES('1', '11 Main Steet', '', 'Milpitas','CA','95035',37.431194,-121.907096);
 INSERT INTO Address VALUES('2', '22 Main Steet', '', 'Santa Clara','CA','95054',37.34578,-121.9438);
-INSERT INTO Address VALUES('3', '33 Main Steet', '', 'Freemont','CA','94536',37.53398,-121.95448);
+INSERT INTO Address VALUES('3', '33 Main Steet', '', 'Fremont','CA','94536',37.53398,-121.95448);
 INSERT INTO Address VALUES('4', '44 Main Steet', '', 'Palo Alto','CA','94301',37.442051,-122.141434);
 INSERT INTO Address VALUES('5', '55 Main Steet', '', 'Mountain View','CA','94035',37.385349,-122.081451);
 INSERT INTO Address VALUES('6', '66 Main Steet', '', 'Sunnyvale','CA','94085',37.369019,-122.035019);
