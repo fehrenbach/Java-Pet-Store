@@ -28,7 +28,7 @@ public class CatalogServlet extends HttpServlet {
    }
 
    public void destroy() {
-   	  cf = null;
+       cf = null;
    }   
    
    
@@ -81,65 +81,17 @@ public class CatalogServlet extends HttpServlet {
          } else if ("categories".equals(command)) {
                 System.out.println("Request for categories.");
                 String format = request.getParameter("format");
-                StringBuffer sb = new StringBuffer();
+                
+                //get response data in proper format
+                String str = handleCategories(format);
+                
                 if ((format != null) && format.toLowerCase().equals("json")) {
-                    sb.append("[\n");
-                    Collection items = cf.getCategories();
-                    Iterator it = items.iterator();
-                    while (it.hasNext()) {
-                        Vector c = (Vector)it.next();
-                        String catid = c.get(0) + "";
-                        sb.append("{");
-                        sb.append("\"id\":\"" + c.get(0) + "\",");
-                        sb.append("\"catid\":\"" + catid + "\",");
-                        sb.append("\"name\":\"" + c.get(1) + "\",");
-                        sb.append("\"description\":\"" + c.get(2) + "\",");
-                        sb.append("\"imageURL\":\"" + c.get(3) + "\",");
-                        sb.append("\"products\": [");
-                        // get the products in that category
-                        Collection products = cf.getProducts(catid);
-                        Iterator pit = products.iterator();
-                        while (pit.hasNext()) {
-                            Vector p = (Vector)pit.next();
-                            sb.append("{");
-                            sb.append("\"id\":\"" + p.get(0) + "\",");
-                            sb.append("\"catid\":\"" + catid + "\",");
-                            sb.append("\"name\":\"" + p.get(2) + "\",");
-                            sb.append("\"description\":\"" + p.get(3) + "\",");
-                            sb.append("\"imageURL\":\"" + p.get(4) + "\"");
-                            sb.append("}");
-                            if (pit.hasNext()) {
-                                sb.append(",");
-                            }
-                        }
-                        sb.append("]");
-                        sb.append("}");
-                        if (it.hasNext()) {
-                            sb.append(",\n");
-                        }
-                    }
-                    sb.append("\n]");
                     response.setContentType("text/javascript;charset=UTF-8");
                 } else {
-                    sb.append("<categories>\n");
-                    Collection items = cf.getCategories();
-                    Iterator it = items.iterator();
-                    while (it.hasNext()) {
-                        Vector c = (Vector)it.next();
-                        sb.append("<category>\n");
-                        sb.append(" <id>" + c.get(0) + "</id>\n");
-                        sb.append(" <cat-id>" + c.get(0) + "</cat-id>\n");
-                        sb.append(" <name>" + c.get(1) + "</name>\n");
-                        sb.append(" <description>" + c.get(2) + "</description>\n");
-                        sb.append(" <image-url>" + c.get(3) + "</image-url>\n");
-                        sb.append("</category>\n");
-                    }
-                    sb.append("</categories>\n");
                     response.setContentType("text/xml;charset=UTF-8");
-                }
-
-                PrintWriter out = response.getWriter();
-                out.println(sb.toString());
+                }               
+                PrintWriter out = response.getWriter();             
+                out.println(str);
                 out.close();         
          } else if ("item".equals(command)) {
              String targetId = request.getParameter("id");          
@@ -215,5 +167,63 @@ public class CatalogServlet extends HttpServlet {
              sb.append(" <price>" + formatter.format(i.getPrice())  + "</price>\n");
              sb.append("</item>\n");
              return sb.toString();
+   }
+   
+   private String handleCategories(String format){
+       StringBuffer sb = new StringBuffer();
+       if ((format != null) && format.toLowerCase().equals("json")) {
+           sb.append("[\n");
+           Collection items = cf.getCategories();
+           Iterator it = items.iterator();
+           while (it.hasNext()) {
+                        Vector c = (Vector)it.next();
+                        String catid = c.get(0) + "";
+                        sb.append("{");
+                        sb.append("\"id\":\"" + c.get(0) + "\",");
+                        sb.append("\"catid\":\"" + catid + "\",");
+                        sb.append("\"name\":\"" + c.get(1) + "\",");
+                        sb.append("\"description\":\"" + c.get(2) + "\",");
+                        sb.append("\"imageURL\":\"" + c.get(3) + "\",");
+                        sb.append("\"products\": [");
+                        // get the products in that category
+                        Collection products = cf.getProducts(catid);
+                        Iterator pit = products.iterator();
+                        while (pit.hasNext()) {
+                            Vector p = (Vector)pit.next();
+                            sb.append("{");
+                            sb.append("\"id\":\"" + p.get(0) + "\",");
+                            sb.append("\"catid\":\"" + catid + "\",");
+                            sb.append("\"name\":\"" + p.get(2) + "\",");
+                            sb.append("\"description\":\"" + p.get(3) + "\",");
+                            sb.append("\"imageURL\":\"" + p.get(4) + "\"");
+                            sb.append("}");
+                            if (pit.hasNext()) {
+                                sb.append(",");
+                            }
+                        }
+                        sb.append("]");
+                        sb.append("}");
+                        if (it.hasNext()) {
+                            sb.append(",\n");
+                        }
+           }//end while loop
+           sb.append("\n]");
+       } else {
+           sb.append("<categories>\n");
+           Collection items = cf.getCategories();
+           Iterator it = items.iterator();
+           while (it.hasNext()) {
+                        Vector c = (Vector)it.next();
+                        sb.append("<category>\n");
+                        sb.append(" <id>" + c.get(0) + "</id>\n");
+                        sb.append(" <cat-id>" + c.get(0) + "</cat-id>\n");
+                        sb.append(" <name>" + c.get(1) + "</name>\n");
+                        sb.append(" <description>" + c.get(2) + "</description>\n");
+                        sb.append(" <image-url>" + c.get(3) + "</image-url>\n");
+                        sb.append("</category>\n");
+            }
+            sb.append("</categories>\n");         
+       }
+       return sb.toString();
    }
 }
