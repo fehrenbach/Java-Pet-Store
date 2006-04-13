@@ -13,7 +13,8 @@ public class Address implements java.io.Serializable {
     private String zip;
     private double latitude;
     private double longitude;    
-
+    private static final String COMMA=", ";
+    
      public Address() { }
     
     @TableGenerator(name="ADDRESS_ID_GEN",
@@ -76,7 +77,18 @@ public class Address implements java.io.Serializable {
     } 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
-    }     
+    }
+    
+    public String getAddressAsString() {
+        StringBuffer sb=new StringBuffer();
+        if(street1 != null) sb.append(street1);
+        if(street2 != null) sb.append(" " + street2);
+        if(city != null) sb.append(COMMA + city);
+        if(state != null) sb.append(COMMA + state);
+        if(zip != null) sb.append(COMMA + zip);
+        return sb.toString();
+    }
+    
 }
 
 

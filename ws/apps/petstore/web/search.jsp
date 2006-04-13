@@ -1,6 +1,10 @@
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
 <%@page import="java.util.*, com.sun.javaee.blueprints.petstore.search.SearchIndex, com.sun.javaee.blueprints.petstore.search.IndexDocument, com.sun.javaee.blueprints.petstore.search.UpdateIndex, com.sun.javaee.blueprints.petstore.util.PetstoreConstants"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
+<%@taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
+<%@taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
+<%@taglib prefix="ui" uri="http://java.sun.com/blueprints/ui/14" %>
 
 <%--
 The taglib directive below imports the JSTL library. If you uncomment it,
@@ -79,7 +83,7 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
 %>
 
 
-
+        <f:view>
         <h1>Search Page</h1>
     
     
@@ -104,7 +108,7 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
     
         <c:if test="${!empty requestScope.hitsx}">
             <b>${numberOfHits} hits returned for search string:</b> "${searchStringx}"<br>
-            <form id="resultsForm">
+            <h:form id="resultsForm">            
                 <table border="1" cellpadding="5" cellspacing="5" style="border-style:double; border-color:darkgreen">
                     <tr>
                         <th>
@@ -120,7 +124,7 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
                     <c:forEach items="${requestScope.hitsx}" var="docxx">
                         <tr>
                             <td>
-                                <input id="map:${docxx.UID}" name="map:${docxx.UID}" type="checkbox"/>
+                                <input id="map_${docxx.UID}" name="map:${docxx.UID}" type="checkbox"/>
                             </td>
                             <td>${docxx.title}</td>
                             <td>${docxx.summary}</td>
@@ -130,14 +134,14 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
                     </c:forEach>
                     <tr>
                         <td colspan="6">
-                            <input id="mapSubmit" type="submit" value="Map Checked Item(s)"/>
-                            <input id="itemIDs" type="hidden" value=""/>
+                            <h:commandButton action="#{MapBean.findAllAction}" id="mapSubmit" type="submit" value="Map Checked Item(s)"/>&nbsp;&nbsp;&nbsp;
                          </td>
                     </tr>
                 </table>
-            </form>
+            </h:form>
         </c:if>
         <br/><br/><br/>
+        </f:view>
     </body>
 </html>
 <%

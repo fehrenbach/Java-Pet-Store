@@ -2,7 +2,7 @@
 
 <!--  Copyright 2005 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: faces-config.xml,v 1.6 2006-04-10 16:42:38 basler Exp $ -->
+ $Id: faces-config.xml,v 1.7 2006-04-13 23:55:36 basler Exp $ -->
 
 <faces-config xmlns="http://java.sun.com/xml/ns/javaee"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -103,6 +103,13 @@
     </managed-bean>
   
     <!-- ========== Navigation Rules ========================================= -->
+    <navigation-rule>
+        <from-view-id>/search.jsp</from-view-id>
+        <navigation-case>
+            <from-outcome>map</from-outcome>
+            <to-view-id>/map.jsp</to-view-id>
+        </navigation-case>
+    </navigation-rule>    
     <navigation-rule>
         <from-view-id>/mapLocation.jsp</from-view-id>
         <navigation-case>
