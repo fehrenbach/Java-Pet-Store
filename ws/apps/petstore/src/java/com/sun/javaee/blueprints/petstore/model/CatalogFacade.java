@@ -77,10 +77,11 @@ public class CatalogFacade implements ServletContextListener {
      * @param chunkSize the maximum number of results to retrieve
      * @returns a List of Item objects
      */
-    public List<Item> getItemsByRadius(String categoryID, int start, int chunkSize){    
+    public List<Item> getItemsByRadius(String categoryID, int start, int chunkSize, 
+                        double fromLatitude, double toLatitude, double fromLongitude, double toLongitude){    
        EntityManager em = emf.createEntityManager();
     
-       System.out.println("CatalogFacade.getItemsByRadius: categoryID=" + categoryID + " start=" + start + " chunkSize=" + chunkSize);
+       //System.out.println("CatalogFacade.getItemsByRadius: categoryID=" + categoryID + " start=" + start + " chunkSize=" + chunkSize);
        //select i.itemID from item i , product p where i.productID= p.productID  AND p.categoryID = 'CATS'
        Query query = em.createQuery("SELECT i FROM Item i, Product p WHERE i.productID=p.productID AND p.categoryID = :categoryID");
        List<Item>  items = query.setParameter("categoryID",categoryID).setFirstResult(start).setMaxResults(chunkSize).getResultList();      
