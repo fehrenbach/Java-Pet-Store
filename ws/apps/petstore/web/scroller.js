@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: scroller.js,v 1.10 2006-03-28 07:31:58 gmurray71 Exp $
+$Id: scroller.js,v 1.11 2006-04-17 08:30:35 gmurray71 Exp $
 */
 
 function ImageScroller() {
@@ -15,7 +15,7 @@ function ImageScroller() {
     var INFOPANE_EXPAND_HEIGHT = 55;
     var THUMB_WIDTH = 100;
     var THUMB_HEIGHT = 75;
-    var CHUNK_SIZE=3;
+    var CHUNK_SIZE=6;
     
     var IMAGE_PANE_ID = "imagePane";
     var IMAGE_PANE_BUFFER_ID = "imageBufferPane";
@@ -93,36 +93,13 @@ function ImageScroller() {
     var originalURL;
     
     // detect a resize of the window
-    window.onresize=resized;
+    //window.onresize=resized;
+
     
     // FIXME: default set id
     var pid;
     var currentChunck;
-    
-    /**
-     *  Insert a script tag in the head of the document which will inter load the flicker photos
-     *  and call jsonFlickrFeed(obj) with the corresponding object.
-     *
-    */
-    this.getFlickrPhotos = function(tags) {
-        indicatorImage.style.visibility = "visible";
-        var tag = "";
-        reset();
-        leftButton.style.visibility="hidden";
-        rightButton.style.visibility="visible";
-        for (var l=0; l < tags.length; l++) {
-
-            tag = tag + tags[l];
-            if (l < (tags.length -1)) {
-                tag = tag + ",";
-            }
-        }
-        var script = document.createElement("script");
-        script.type = "text/javascript";
-        script.src = "http://www.flickr.com/services/feeds/photos_public.gne?tags=" + tag + "&format=json";
-        document.getElementsByTagName("head")[0].appendChild(script);
-    }
-    
+      
     function reset() {
         resetTitles()
         tiles = [];
@@ -130,33 +107,6 @@ function ImageScroller() {
         offset = 0;
         currentChunck = 0;
         map.clear();
-    }
-    
-    this.addFlickr = function(obj) {
-        var flickrPhotos = obj;
-        // get info from the JSON object
-        for (var l=0; l < flickrPhotos.items.length; l++) {
-            var itemId = "flickr_" + l;
-            var description = flickrPhotos.items[l].description;            
-            var start = description.indexOf("src=") + 10;
-            var stop =  description.indexOf("_m.jpg");
-            var imageBase = description.substring(start,stop);
-            var thumbURL = imageBase + "_m.jpg";
-            var imageURL = imageBase + ".jpg";
-            description = flickrPhotos.items[l].tags;
-            var shortDescription = flickrPhotos.items[l].author;
-            var price = 0;
-            var name = flickrPhotos.items[l].title;
-            var i = new Item(itemId ,name, thumbURL, imageURL, description, shortDescription,price);
-            items.push(i);
-            map.put(itemId, i);
-            createTile(i);
-            if (l == 0) {
-                showImage(itemId);
-            }
-        }
-        drawTiles();
-        indicatorImage.style.visibility = "hidden";
     }
     
     function resetTitles() {
@@ -192,7 +142,7 @@ function ImageScroller() {
             if ((index / CHUNK_SIZE) != currentChunck) {
                 currentChunck = index / CHUNK_SIZE;
                 
-                var url = "catalog?command=items&pid=" + pid+ "&start=" + index + "length=" + CHUNK_SIZE;
+                var url = "catalog?command=items&pid=" + pid+ "&start=" + index + "&length=" + CHUNK_SIZE;
                 if (debug) {
                     status2Div.innerHTML = "getting more images index=" + index + " url=" + url;
                 }
@@ -489,17 +439,21 @@ function ImageScroller() {
     }
     
     function handleEvent(args) {
-        this.setProducts(args);
+        if (args) {
+            if (args.type = "showProducts") {
+                this.setProducts(args.productId);
+            }
+        }
     }
     
     this.load = function () {
+        dojo.event.connect(window, "onresize", layout);
         dojo.event.topic.subscribe("/scroller", this, handleEvent);
 	    var loadImage;
         originalURL = window.location.href;
         if (originalURL.indexOf("#") != -1) {
 	        var start = originalURL.indexOf("#");
 	        loadImage = originalURL.substring(start + 1,originalURL.length);
-	        
 	        originalURL = originalURL.substring(0,start);      
 	    }
 	    
@@ -510,13 +464,25 @@ function ImageScroller() {
         statusDiv = document.getElementById("status");
         status2Div = document.getElementById("status_2");
 
-
+        initLayout();
+    }
+    
+    function initLayout() {
         layout();
+
+        if (isIE) {
+                rightButton.attachEvent('onmouseover',function(e){scrollDone();getNext();});
+                rightButton.attachEvent('onmouseout',function(e){scrollDone();});
+                leftButton.attachEvent('onmouseover',function(e){scrollDone();getPrevious();});
+                leftButton.attachEvent('onmouseout',function(e){scrollDone();});
+            } else {
+                rightButton.addEventListener('mouseover',function(e){scrollDone();getNext();}, false);
+                rightButton.addEventListener('mouseout',function(e){scrollDone();}, false);
+                leftButton.addEventListener('mouseover',function(e){scrollDone();getPrevious();}, false);
+                leftButton.addEventListener('mouseout',function(e){scrollDone();}, false);
+            }
         
-        // load the first set of images
-        this.setProducts("avian02");
-        //var ajax = new AJAXInteraction("catalog-1.xml", postProcess, "text/xml", loadImage);
-        //ajax.doGet();
+        createInfoPane();
     }
     
     function layout() {
@@ -541,27 +507,18 @@ function ImageScroller() {
             isIE = true;
             tileX = tileX + 5;
         } else if (ua.indexOf('safari') != -1) {
-            tileX = tileX + 17;
+            tileX = tileX + 10;
             //SCROLL_INCREMENT = SCROLL_INCREMENT + 5;
             timeout = 20;
         } else if (ua.indexOf('firefox')) {
-            tileX = tileX + 7;
+            tileX = tileX + 0;
         }
-
-        if (isIE) {
-                rightButton.attachEvent('onmouseover',function(e){scrollDone();getNext();});
-                rightButton.attachEvent('onmouseout',function(e){scrollDone();});
-                leftButton.attachEvent('onmouseover',function(e){scrollDone();getPrevious();});
-                leftButton.attachEvent('onmouseout',function(e){scrollDone();});
-            } else {
-                rightButton.addEventListener('mouseover',function(e){scrollDone();getNext();}, false);
-                rightButton.addEventListener('mouseout',function(e){scrollDone();}, false);
-                leftButton.addEventListener('mouseover',function(e){scrollDone();getPrevious();}, false);
-                leftButton.addEventListener('mouseout',function(e){scrollDone();}, false);
-            }
-        drawTiles();
-        createInfoPane();
+         drawTiles();
+         if (infoPane) {
+            infoPane.style.left = tileX + "px";
+         }
     }
+    
     
     function createInfoPane() {
 	    infoPane = document.createElement("div");
@@ -797,11 +754,7 @@ function ImageScroller() {
             l += element.x;
         return l;
     }
-    
-    function resized() {
-        layout();
-    }
-    
+     
     
     
     function Map() {

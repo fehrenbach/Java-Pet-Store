@@ -26,23 +26,23 @@
 	dojo:labelEdge="bottom"
 	dojo:enableCrappySvgSupport="false">
 
-	<div class="dojo-FisheyeListItem" onClick="browse('dogs');" 
+	<div class="dojo-FisheyeListItem" onClick="browse('Dogs');" 
 		dojo:iconsrc="images/dogs_icon.gif">
 	</div>
 
-	<div class="dojo-FisheyeListItem" onClick="browse('cats');"
+	<div class="dojo-FisheyeListItem" onClick="browse('Cats');"
 		dojo:iconsrc="images/cats_icon.gif" c>
 	</div>
 
-	<div class="dojo-FisheyeListItem" onClick="browse('birds');"
+	<div class="dojo-FisheyeListItem" onClick="browse('Birds');"
 		dojo:iconsrc="images/birds_icon.gif" >
 	</div>
 
-	<div class="dojo-FisheyeListItem" onClick="browse('fish');"
+	<div class="dojo-FisheyeListItem" onClick="browse('Fish');"
 		dojo:iconsrc="images/fish_icon.gif" >
 	</div>
 
-	<div class="dojo-FisheyeListItem" onClick="browse('reptiles');"
+	<div class="dojo-FisheyeListItem" onClick="browse('Reptiles');"
 		dojo:iconsrc="images/reptiles_icon.gif"  >
 	</div>
 </div>
