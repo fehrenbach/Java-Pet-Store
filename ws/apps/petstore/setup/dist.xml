@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<!-- Copyright 2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
+ http://developer.sun.com/berkeley_license.html
+ $Id: dist.xml,v 1.1 2006-04-18 13:25:32 inder Exp $ -->
+
+<project name="bpcatalog" default="dist" basedir="..">
+  <target name="dist">
+    <property file="setup/dist.properties"/>
+    <property name="tmpdist" value="dist/${release.dirname}"/>
+    <antcall target="clean"/>
+    <antcall target="assemble-dist"/>
+    <fixcrlf srcdir="${tmpdist}" tab="remove" tablength="2" eol="unix" includes="**/*.properties,**/*.jsp,**/*.html,**/*.sh,**/*.java,**/*.xml" excludes="**/ja/**" />
+    <antcall target="create-zip"/>
+  </target>
+
+  <target name="clean">
+    <delete dir="dist"/>
+    <ant target="clean" inheritAll="false" inheritRefs="false"/>
+  </target>
+
+  <target name="assemble-dist">
+    <echo message="Creating ${release.fullname} distribution..."/>
+    <mkdir dir="${tmpdist}"/>
+    <copy file="lib/3RD-PARTY-LICENSE.txt" todir="${tmpdist}"/>
+  
+    <copy todir="${tmpdist}">
+      <fileset dir=".">
+        <exclude name="dist/**"/>
+        <exclude name="**/build/**"/>
+        <exclude name="**/dist/**"/>
+        <exclude name="**/nbproject/private/**"/>
+        <exclude name="**/nbproject/build-impl.xml"/>
+        <exclude name="**/nbproject/private.properties"/>
+        <exclude name="**/nbproject/genfiles.properties"/>
+        <exclude name="developers/**"/>
+        <exclude name="setup/**"/>
+      </fileset>
+    </copy>
+    <copy todir="${tmpdist}">
+      <fileset dir="../..">
+        <include name="bp-project/**"/>
+      </fileset>
+    </copy>
+    <delete file="${tmpdist}/bp-project.xml"/>
+    <copy file="setup/dist-bp-project.xml" tofile="${tmpdist}/bp-project.xml"/>
+    <copy tofile="${tmpdist}/bp-project/build.properties" file="${tmpdist}/bp-project/build.properties.sample"/>
+    <delete file="${tmpdist}/bp-project/build.properties.sample"/>
+  </target>
+
+   <target name="fix-permissions">
+    <!-- Change permissions for executables -->
+    <chmod perm="ugo+rx">
+      <fileset dir="${tmpdist}">
+        <include name="**/*.sh"/>
+        <include name="**/*.exe"/>
+      </fileset>
+    </chmod>
+   </target>
+
+   <target name="create-zip" depends="fix-permissions">
+    <zip zipfile="${release.zipfile}" basedir="dist"
+       includes="${release.dirname}/**" update="true" />
+  </target>    
+</project>
