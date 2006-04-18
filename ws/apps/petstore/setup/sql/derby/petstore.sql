@@ -136,7 +136,7 @@ INSERT INTO item VALUES('113', 'canine01', 'Old Dog', 'This old geezer just want
 INSERT INTO item VALUES('114', 'canine01', 'Young Dog', 'A great young pet in need of training. ', 'images/dog3.gif','images/dog3.gif', 301,'14','14');
 INSERT INTO item VALUES('115', 'canine02', 'Scrapper Dog', 'This scapy woofer needs some clean up and some lessons. Help him out and take him home.', 'images/dog4.gif','images/dog4.gif', 410,'15','15');
 INSERT INTO item VALUES('116', 'canine02', 'Grey Hound', 'A great runner for a fast owner. This is the fastest dog I have ever seen. Its naturally fast and does not take steroids to improve its performance.', 'images/dog5.gif', 'images/dog5.gif', 200,'16','16');
-INSERT INTO item VALUES('126', 'canine02', 'Beach Dog', 'A great dog to lay in the Sun with, chases a frisbee like a champ, and can swim like a shark. Heck, he can ride a surfboard if you dont mind sharing.', 'images/dog6.gif', 'images/dog6.gif', 200,'16','16');
+INSERT INTO item VALUES('117', 'canine02', 'Beach Dog', 'A great dog to lay in the Sun with, chases a frisbee like a champ, and can swim like a shark. Heck, he can ride a surfboard if you dont mind sharing.', 'images/dog6.gif', 'images/dog6.gif', 200,'16','16');
 
 INSERT INTO item VALUES('217', 'avian01', 'Squaky Bird', 'A great noisy bird to drive your parents crazy. If you think playing a stereo loud will test your parents patience, wait till you try this screeching bird. It will fly around and cause a commotion that will have you laughing for days. This is a sure-fire way to get your parents to get you your own apartment.', 'images/CIMG9127.jpg', 'images/CIMG9127-s.jpg', 303,'8','8');
 INSERT INTO item VALUES('218', 'avian01', 'Pink Bird', 'A beautiful pink bird. Its not white. Its not red. Its pink.', 'images/CIMG9104.jpg', 'images/CIMG9104-s.jpg', 3003,'8','8');
@@ -147,8 +147,19 @@ INSERT INTO item VALUES('222', 'avian02', 'Smart Bird', 'A great smart pet. Perf
 INSERT INTO item VALUES('223', 'avian02', 'Funny Bird', 'A great funny pet. Ever hear the joke about a bird, a hacker, and Java book? Well, this bird can tell it to you. It will make you laugh until you cry. Plus, it can teach you jokes which you can use at parties to impress your friends. That is right sir, this bird will make even you funny!', 'images/CIMG9109.jpg','images/CIMG9109-s.jpg', 527,'9','9');
 INSERT INTO item VALUES('224', 'avian02', 'Active Bird', 'A great active pet. This bird once flew a marathon with me and did not get tired. It can fly along while you jog on the trails. Just make sure the hawks do not swoop down and eat it.', 'images/CIMG9088.jpg','images/CIMG9088-s.jpg', 527,'9','9');
 INSERT INTO item VALUES('225', 'avian02', 'Curious Bird', 'A great curious birdy. Everything will pique this birds interest. It will investigate every new thing it sees.', 'images/CIMG9138.jpg','images/CIMG9109-s.jpg', 1527,'9','9');
+INSERT INTO item VALUES('226', 'avian02', 'Itchy Bird', 'This bird needs some attention. I think he has dandruff in his feathers. He is always scratching so I knick-named him "Itchy". I wish I had claws like that to scratch MY head. Maybe if you are a good trainer, you can teach him to scratch your back nicely with those talons.', 'images/CIMG9129.jpg', 'images/CIMG9129-s.jpg', 200,'8','8');
 
-INSERT INTO id_gen VALUES('ITEM_ID',225);
+INSERT INTO item VALUES('301', 'fish01', 'Gold Fish', 'Perfect for a first fish for a child. This fish is not good in the same tank as some bigger fish as they see this little gold fish as a snack.', 'images/fish2.gif','images/fish2.gif', 2,'9','9');
+INSERT INTO item VALUES('302', 'fish01', 'Angel Fish', 'I love this fish. But my new roommate has a cat, and the cat just so does not seem to get along with the  fish. At first, I thought the cat was trying to just play with the fish, or maybe learn to swim. And then I remembered that show where they explained that Tuna is the chicken of the sea, but that does not mean its chicken. Not, its fish. And cats love tuna, so then I got scared and realized my fish is in danger. Help me! Buy my little chicken of the sea.', 'images/fish3.gif','images/fish3.gif', 100,'9','9');
+INSERT INTO item VALUES('303', 'fish02', 'Striped Tropical', 'This large fish needs plenty of room to swim. Either a big aquarium or your bath tub.', 'images/fish4.gif','images/fish4.gif', 20,'9','9');
+
+INSERT INTO item VALUES('401', 'reptile01', 'Green slider', 'This snake looks like a lizard! It must be rare since I have never seen one like it.', 'images/lizard3.gif','images/lizard3.gif', 1000,'9','9');
+INSERT INTO item VALUES('402', 'reptile02', 'Green Iguana', 'This is one proud and tough lizard. He holds his head high in any circumstance.', 'images/lizard1.gif','images/lizard1.gif', 1000,'9','9');
+INSERT INTO item VALUES('403', 'reptile02', 'Iguana', 'My iguana needs a home. His tail is really long. He is very nice.', 'images/lizard2.gif','images/lizard2.gif', 500,'9','9');
+INSERT INTO item VALUES('404', 'reptile02', 'Frog', 'This little green frog was rescued from the chef in the kitchen of a french restaurant. If I had not acted quickly, his legs would have been appetizers. Now for just a small fee you can buy him as your pet.', 'images/frog1.gif','images/frog1.gif', 500,'9','9');
+
+
+INSERT INTO id_gen VALUES('ITEM_ID',404);
 INSERT INTO id_gen VALUES('ADDRESS_ID',16);
 INSERT INTO id_gen VALUES('CONTACT_INFO_ID',16);
 
