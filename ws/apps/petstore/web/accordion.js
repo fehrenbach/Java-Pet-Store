@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: accordion.js,v 1.14 2006-04-17 08:30:35 gmurray71 Exp $
+$Id: accordion.js,v 1.15 2006-04-18 00:37:32 gmurray71 Exp $
 */
 
 
@@ -115,6 +115,9 @@ function AccordionMenu () {
             }
         } else {
             initiateExpansion(0);
+            if (categories[0].products[0]) {
+                dojo.event.topic.publish("/scroller", {type:"showProducts", productId:categories[0].products[0].id});
+            } 
         }
     }
     
