@@ -2,7 +2,7 @@
 
 <!-- Copyright 2005-2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: app-server-ant.xml,v 1.10 2006-03-30 02:32:14 inder Exp $ -->
+ $Id: app-server-ant.xml,v 1.11 2006-04-18 13:03:22 inder Exp $ -->
 
 <!-- This file defines various Java EE SDK specific tasks. 
      This file is not meant to be included in a project directly. 
@@ -49,7 +49,7 @@
     <pathelement location="${javaee.home}/bin"/>
   </path>
 
-  <!-- Construct path to be used for Derby database -->
+  <!-- Construct path to be used for Java DB -->
   <path id="db.classpath">
     <fileset dir="${db.root}/lib">
       <include name="*.jar"/>
@@ -63,21 +63,73 @@
    </exec>
   </target>
 
-  <target name="keygen_common" depends="tools"
+  <target name="bpp-run-secure-app-client" depends="tools">
+    <echo message="running application client container."/>
+    <exec executable="${appclient}">
+        <arg line=" -client ${app-client.jar}"/>
+	<arg line="-name ${app-client.name}"/>
+	<arg line="-textauth"/>
+	<arg line="-user ${file.realm.user.id}"/>
+	<arg line="-password ${file.realm.user.password}"/>
+	<arg line="-xml ${javaee.domaindir}/config/sun-acc.xml"/>
+	<arg line="${appclient.application.args}"/>
+   </exec>
+  </target>
+
+  <target name="start-domain" depends="tools"
+    description="starts application server default domain">
+    <echo message="Starting default domain for ${javaee.home}"/>
+    <exec executable="${asadmin}" failonerror="true">
+        <arg line=" start-domain"/>
+   </exec>
+   <waitfor>
+        <http url="http://${javaee.server.name}:${javaee.server.port}"/>
+   </waitfor>
+  </target>
+
+  <target name="stop-domain" depends="tools"
+    description="stops application server default domain">
+    <echo message="Stopping default domain for ${javaee.home}"/>
+    <exec executable="${asadmin}" failonerror="true">
+        <arg line=" stop-domain"/>
+   </exec>
+  </target>
+
+
+  <target name="keygen-common" depends="tools"
     description="create file-realm user">
+
     <echo message="Generating key for user ${app.user} in server."/>
+
+    <!-- generate temporary password file -->
+    <property name="user.password.file" value="asadminuserpassword.txt"/>
+    <delete file="${user.password.file}" failonerror="false"/>
+    <loadproperties srcFile="${javaee.server.passwordfile}"/>
+
+    <condition property="app.password" value="${app.user}">
+        <not>
+            <isset property="app.password"/>
+        </not>
+    </condition>
+
+    <!-- do not format the following echo which is intentional -->
+    <echo file="${user.password.file}" append="false">AS_ADMIN_USERPASSWORD=${app.password}
+AS_ADMIN_PASSWORD=${AS_ADMIN_PASSWORD}</echo>
+
     <exec executable="${asadmin}">
         <arg line=" create-file-user"/>
         <arg line=" --user ${javaee.server.username}" />
-        <arg line=" --passwordfile ${javaee.server.passwordfile}" />
+        <arg line=" --passwordfile ${user.password.file}" />
         <arg line=" --host ${javaee.server.name}" />
         <arg line=" --port ${javaee.adminserver.port}" />
         <arg line=" --groups ${app.groups}"/>
         <arg line=" ${app.user}"/>
    </exec>
+   <delete file="${user.password.file}" failonerror="false"/>
   </target>
 
-  <target name="keydel_common" depends="tools"
+
+  <target name="keydel-common" depends="tools"
     description="delete file-realm user">
     <echo message="Deleting key for user ${app.user} in server."/>
     <exec executable="${asadmin}">
@@ -316,6 +368,7 @@
         <arg line="undeploy"/>
         <arg line=" --user ${javaee.server.username}" />
         <arg line=" --passwordfile ${javaee.server.passwordfile}" />
+        <arg line=" --host ${javaee.server.name}" />
         <arg line=" ${module.name} " />
     </exec> 
   </target>
@@ -373,16 +426,14 @@
     
   <target name="check" description="verify the build setup which is common for all modules">
     <fail unless="javaee.home">
-      Property javaee.home not specified.  Please
-      copy 'build.properties.sample' to 'YOUR_HOME_DIRECTORY/build.properties'
-      and specify the javaee.home property.
+      Property javaee.home not specified.  
+      Please specify the javaee.home property in 'bp-project/build.properties'.
     </fail>
     
     <fail unless="javaee.server.passwordfile">
       Property javaee.server.passwordfile not specified. Please
-      copy 'build.properties.sample' to 'YOUR_HOME_DIRECTORY/build.properties'
-      and specify the javaee.server.passwordfile property. You will also
-      need to ensure that the passwordfile is present and contains
+      specify the javaee.server.passwordfile property in 'bp-project/build.properties'. 
+      You will also need to ensure that the passwordfile is present and contains
       AS_ADMIN_PASSWORD. 
     </fail>    
   </target>
