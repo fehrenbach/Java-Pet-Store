@@ -114,7 +114,7 @@ INSERT INTO SellerContactInfo VALUES('14', 'Duke', 'Duke', 'abc@abc.xyz');
 INSERT INTO SellerContactInfo VALUES('15', 'Duke', 'Duke', 'abc@abc.xyz');
 INSERT INTO SellerContactInfo VALUES('16', 'Duke', 'Duke', 'abc@abc.xyz');
 
-INSERT INTO item VALUES('1', 'feline01', 'Lazy cat', 'A great pet to lounge with. If you want a friend to watch TV with, this is the cat for you. Plus, he wont even ask for the remote!', 'images/cat1.gif','images/cat1.gif', 307,'1','1');
+INSERT INTO item VALUES('1', 'feline01', 'Lazy cat', 'A great pet to lounge on the sofa with. If you want a friend to watch TV with, this is the cat for you. Plus, he wont even ask for the remote!', 'images/cat1.gif','images/cat1.gif', 307,'1','1');
 INSERT INTO item VALUES('2', 'feline01', 'Old Cat', 'A great old pet retired from duty in the circus. This fully-trained tiger is looking for a place to retire. Loves to roam free and loves to eat other animals.', 'images/cat2.gif','images/cat2.gif', 200,'2','2');
 INSERT INTO item VALUES('3', 'feline01', 'Young Cat', 'A great young pet to chase around. Loves to play with a ball of string.', 'images/cat3.gif','images/cat3.gif', 350,'3','3');
 INSERT INTO item VALUES('4', 'feline01', 'Scrapper Cat', 'A scappy cat that likes to cause trouble. If you are looking for a challenge to your cat training skills, this scapper is the test!', 'images/cat4.gif','images/cat4.gif', 417,'4','4');
@@ -130,15 +130,15 @@ INSERT INTO item VALUES('13', 'canine01', 'Old Dog', 'A great old pet', 'images/
 INSERT INTO item VALUES('14', 'canine01', 'Young Dog', 'A great young pet', 'images/dog3.gif','images/dog3.gif', 301,'14','14');
 INSERT INTO item VALUES('15', 'canine02', 'Scrapper Dog', 'A scapper dog', 'images/dog4.gif','images/dog4.gif', 410,'15','15');
 INSERT INTO item VALUES('16', 'canine02', 'Grey Hound', 'A great runner', 'images/dog5.gif', 'images/dog5.gif', 200,'16','16');
-INSERT INTO item VALUES('17', 'avian01', 'Squaky Bird', 'A great noisey bird to drive your parents crazy. If you think playing a stereo loud will test your parents patience, wait till you try this screeching bird. It will fly around and cause a commotion that will have you laughing for days. This is a sure-fire way to get your parents to get you your own apartment.', 'images/CIMG9127.jpg', 'images/CIMG9127-s.jpg', 303,'8','8');
-INSERT INTO item VALUES('18', 'avian01', 'Pink Bird', 'A beautiful pink bird.', 'images/CIMG9104.jpg', 'images/CIMG9104-s.jpg', 3003,'8','8');
-INSERT INTO item VALUES('19', 'avian02', 'Wild Bird', 'A great wild pet', 'images/CIMG9109.jpg', 'images/CIMG9109-s.jpg', 527,'9','9');
+INSERT INTO item VALUES('17', 'avian01', 'Squaky Bird', 'A great noisy bird to drive your parents crazy. If you think playing a stereo loud will test your parents patience, wait till you try this screeching bird. It will fly around and cause a commotion that will have you laughing for days. This is a sure-fire way to get your parents to get you your own apartment.', 'images/CIMG9127.jpg', 'images/CIMG9127-s.jpg', 303,'8','8');
+INSERT INTO item VALUES('18', 'avian01', 'Pink Bird', 'A beautiful pink bird. Its not white. Its not red. Its pink.', 'images/CIMG9104.jpg', 'images/CIMG9104-s.jpg', 3003,'8','8');
+INSERT INTO item VALUES('19', 'avian02', 'Wild Bird', 'A wild bird.his little rebel thinks its not a house pet, but really it is as tame as a lap dog. It just looks so wild and impresses your friends. Owning this wild bird is cooler than getting a tatoo and hurts less!', 'images/CIMG9109.jpg', 'images/CIMG9109-s.jpg', 527,'9','9');
 INSERT INTO item VALUES('20', 'avian02', 'Really Wild Bird', 'A really wild pet. This thing is like a zombie in a horror movie it is so wild. I tried for 2 years to tame this beast and all that happened was I got peck marks all over my hands. Maybe you are a former circus trainer looking for a challenge? If so this birdy needs a home.', 'images/CIMG9109.jpg', 'images/CIMG9109-s.jpg', 527,'9','9');
-INSERT INTO item VALUES('21', 'avian02', 'Crazy Bird', 'A great crazy pet', 'images/CIMG9109.jpg', 'images/CIMG9109-s.jpg', 527,'9','9');
+INSERT INTO item VALUES('21', 'avian02', 'Crazy Bird', 'This crazy bird once flew over the cukoos nest. Some people say that I am crazy. Well, you should meet my bird if you want to meet crazy. This bird is plain looney.', 'images/CIMG9109.jpg', 'images/CIMG9109-s.jpg', 527,'9','9');
 INSERT INTO item VALUES('22', 'avian02', 'Smart Bird', 'A great smart pet. Perfect for an engineer. This pet is so smart it can do your coding for you. Just dont tell your boss!', 'images/CIMG9084.jpg','images/CIMG9084-s.jpg', 527,'9','9');
 INSERT INTO item VALUES('23', 'avian02', 'Funny Bird', 'A great funny pet. Ever hear the joke about a bird, a hacker, and Java book? Well, this bird can tell it to you. It will make you laugh until you cry. Plus, it can teach you jokes which you can use at parties to impress your friends. That is right sir, this bird will make even you funny!', 'images/CIMG9109.jpg','images/CIMG9109-s.jpg', 527,'9','9');
-INSERT INTO item VALUES('24', 'avian02', 'Active Bird', 'A great active pet', 'images/CIMG9088.jpg','images/CIMG9088-s.jpg', 527,'9','9');
-INSERT INTO item VALUES('25', 'avian02', 'Curious Bird', 'A great curious pet', 'images/CIMG9138.jpg','images/CIMG9109-s.jpg', 1527,'9','9');
+INSERT INTO item VALUES('24', 'avian02', 'Active Bird', 'A great active pet. This bird once flew a marathon with me and did not get tired. It can fly along while you jog on the trails. Just make sure the hawks do not swoop down and eat it.', 'images/CIMG9088.jpg','images/CIMG9088-s.jpg', 527,'9','9');
+INSERT INTO item VALUES('25', 'avian02', 'Curious Bird', 'A great curious birdy. Everything will pique this birds interest. It will investigate every new thing it sees.', 'images/CIMG9138.jpg','images/CIMG9109-s.jpg', 1527,'9','9');
 
 INSERT INTO id_gen VALUES('ITEM_ID',25);
 INSERT INTO id_gen VALUES('ADDRESS_ID',16);
