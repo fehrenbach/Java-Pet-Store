@@ -79,6 +79,11 @@ INSERT INTO product VALUES('canine01', 'DOGS', 'Medium Dogs', 'Friendly dog from
 INSERT INTO product VALUES('canine02', 'DOGS', 'Small Dogs', 'Great companion dog to sit on your lap','dog2.gif');
 INSERT INTO product VALUES('avian01', 'BIRDS', 'Parrot', 'Friend for a lifetime.', 'bird1.gif');
 INSERT INTO product VALUES('avian02', 'BIRDS', 'Exotic', 'Impress your friends with your colorful friend.','bird2.gif');
+INSERT INTO product VALUES('fish01', 'FISH', 'Small Fish', 'Fits nicely in a small aquarium.','fish2.gif');
+INSERT INTO product VALUES('fish02', 'FISH', 'Large Fish', 'Need a large aquarium.','fish3.gif');
+INSERT INTO product VALUES('reptile01', 'REPTILES', 'Slithering Reptiles', 'Slides across the floor.','lizard1.gif');
+INSERT INTO product VALUES('reptile02', 'REPTILES', 'Crawling Reptiles', 'Uses legs to move fast.','lizard2.gif');
+
 
 INSERT INTO Address VALUES('1', '11 Main Steet', '', 'Milpitas','CA','95035',37.431194,-121.907096);
 INSERT INTO Address VALUES('2', '22 Main Steet', '', 'Santa Clara','CA','95054',37.34578,-121.9438);
@@ -140,7 +145,9 @@ INSERT INTO item VALUES('23', 'avian02', 'Funny Bird', 'A great funny pet. Ever 
 INSERT INTO item VALUES('24', 'avian02', 'Active Bird', 'A great active pet. This bird once flew a marathon with me and did not get tired. It can fly along while you jog on the trails. Just make sure the hawks do not swoop down and eat it.', 'images/CIMG9088.jpg','images/CIMG9088-s.jpg', 527,'9','9');
 INSERT INTO item VALUES('25', 'avian02', 'Curious Bird', 'A great curious birdy. Everything will pique this birds interest. It will investigate every new thing it sees.', 'images/CIMG9138.jpg','images/CIMG9109-s.jpg', 1527,'9','9');
 
-INSERT INTO id_gen VALUES('ITEM_ID',25);
+INSERT INTO item VALUES('26', 'canine02', 'Beach Dog', 'A great dog to lay in the Sun with. And can swim like a shark.', 'images/dog6.gif', 'images/dog6.gif', 200,'16','16');
+
+INSERT INTO id_gen VALUES('ITEM_ID',26);
 INSERT INTO id_gen VALUES('ADDRESS_ID',16);
 INSERT INTO id_gen VALUES('CONTACT_INFO_ID',16);
 
