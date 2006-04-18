@@ -2,7 +2,7 @@
 <project name="petstore-setup" default="setup" basedir="..">
 
   <property file="./setup/derby.properties" />
-  <import file="../../../bp-project/main.xml" />
+  <import file="../bp-project.xml" />
 
   <!-- Database configuration tasks -->
   <target name="setup" depends="create-resource-local, create-db" />
@@ -10,7 +10,7 @@
   <target name="unsetup" depends="delete-pool-local, delete-resource-local, delete-db" />
   
   <target name="create-db" depends="delete-db"
-	description="Create database tables and populate database." >
+  description="Create database tables and populate database." >
     <sql driver="${db.driver}"
          encoding="utf-8"
          url="${db.url}"
@@ -20,7 +20,7 @@
          delimiter="${db.delimiter}"
          autocommit="true"
          onerror="abort" >
-    	<transaction src="${db.create.src}"/>
+      <transaction src="${db.create.src}"/>
     </sql>
   </target>
   
@@ -38,7 +38,7 @@
          delimiter="${db.delimiter}"
          autocommit="true"
          onerror="continue" >       
-    	<transaction src="${db.delete.src}"/>
+      <transaction src="${db.delete.src}"/>
     </sql>
   </target>
   
