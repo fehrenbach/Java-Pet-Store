@@ -13,18 +13,15 @@ import java.util.HashMap;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.Map;
 import java.io.IOException;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.util.Date;
 
-import javax.annotation.Resource;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.transaction.UserTransaction;
-
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletContext;
 import javax.faces.context.ResponseWriter;
 import org.apache.shale.remoting.faces.ResponseFactory;
 
@@ -32,6 +29,7 @@ import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
 import com.sun.javaee.blueprints.petstore.util.PetstoreConstants;
 import com.sun.javaee.blueprints.petstore.model.Item;
 import com.sun.javaee.blueprints.petstore.model.Address;
+import com.sun.javaee.blueprints.petstore.model.CatalogFacade;
 import com.sun.javaee.blueprints.petstore.model.SellerContactInfo;
 import com.sun.javaee.blueprints.components.ui.fileupload.FileUploadStatus;
 import com.sun.javaee.blueprints.components.ui.fileupload.FileUploadUtil;
@@ -46,9 +44,6 @@ import com.sun.j2ee.blueprints.ui.geocoder.GeoPoint;
  * @author basler
  */
 public class FileUploadBean {
-    @PersistenceContext(name="bppu")
-    private EntityManager em;
-    @Resource UserTransaction utx;
     private boolean bDebug=false;
     private Logger _logger=null;
     private static final String comma=", ";
@@ -69,6 +64,10 @@ public class FileUploadBean {
             // set custom return enabled so Phaselistener knows not to send default response
             status.enableCustomReturn();
             HttpServletResponse response=(HttpServletResponse)context.getExternalContext().getResponse();
+            
+            //get the catalog facade
+            Map contextMap = context.getExternalContext().getApplicationMap();
+            CatalogFacade cf = (CatalogFacade)contextMap.get("CatalogFacade");
             
             // get proxy host and port from servlet context
             String proxyHost=context.getExternalContext().getInitParameter("proxyHost");
@@ -203,9 +202,7 @@ public class FileUploadBean {
                 item.setImageURL(fileName);
                 item.setAddress(addr);
                 item.setContactInfo(contactInfo);
-                utx.begin();
-                em.persist(item);
-                utx.commit();
+                String itemID = cf.addItem(item);
                 getLogger().log(Level.FINE, "Item " + name + " has been persisted");
                 
                 // index new item
@@ -224,11 +221,6 @@ public class FileUploadBean {
                 
             } catch (Exception ex) {
                 getLogger().log(Level.SEVERE, "fileupload.persist.exception", ex);
-                try {
-                    utx.rollback();
-                } catch (Exception exe) {
-                    getLogger().log(Level.SEVERE, "fileupload.rollback.exception", exe);
-                }
             }
             StringBuffer sb=new StringBuffer();
             response.setContentType("text/xml;charset=UTF-8");
