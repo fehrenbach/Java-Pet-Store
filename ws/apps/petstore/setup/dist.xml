@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- Copyright 2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: dist.xml,v 1.1 2006-04-18 13:25:32 inder Exp $ -->
+ $Id: dist.xml,v 1.2 2006-04-18 13:41:34 inder Exp $ -->
 
 <project name="bpcatalog" default="dist" basedir="..">
   <target name="dist">
@@ -33,7 +33,14 @@
         <exclude name="**/nbproject/private.properties"/>
         <exclude name="**/nbproject/genfiles.properties"/>
         <exclude name="developers/**"/>
-        <exclude name="setup/**"/>
+        <exclude name="setup/dist*"/>
+        <exclude name="setup/installer.*"/>
+      </fileset>
+    </copy>
+    <copy todir="${tmpdist}/lib">
+      <fileset dir="../../lib">
+        <include name="dojo/**"/>
+        <include name="js/**"/>
       </fileset>
     </copy>
     <copy todir="${tmpdist}">
