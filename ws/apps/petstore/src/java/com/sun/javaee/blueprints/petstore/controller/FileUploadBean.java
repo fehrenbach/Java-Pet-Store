@@ -117,29 +117,27 @@ public class FileUploadBean {
                 if(tmpx.length() > 0) {
                     addressx.append(tmpx);
                 }
-                
                 tmpx=getStringValue(hmUpload, compName+":street2");
                 addr.setStreet2(tmpx);
                 if(tmpx.length() > 0) {
-                    addressx.append(" ");
                     addressx.append(tmpx);
                 }
                 
-                tmpx=getStringValue(hmUpload, compName+":city");
+                tmpx=getStringValue(hmUpload, compName+":cityField");
                 addr.setCity(tmpx);
                 if(tmpx.length() > 0) {
                     addressx.append(comma);
                     addressx.append(tmpx);
                 }
                 
-                tmpx=getStringValue(hmUpload, compName+":state");
+                tmpx=getStringValue(hmUpload, compName+":stateField");
                 addr.setState(tmpx);
                 if(tmpx.length() > 0) {
                     addressx.append(comma);
                     addressx.append(tmpx);
                 }
                 
-                tmpx=getStringValue(hmUpload, compName+":zip");
+                tmpx=getStringValue(hmUpload, compName+":zipField");
                 addr.setZip(tmpx);
                 if(tmpx.length() > 0) {
                     addressx.append(comma);
