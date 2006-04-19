@@ -1,5 +1,5 @@
 <%-- Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: rssbar.jsp,v 1.1 2006-04-15 01:30:53 yutayoshida Exp $ --%>
+$Id: rssbar.jsp,v 1.2 2006-04-19 19:16:21 yutayoshida Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -14,11 +14,9 @@ $Id: rssbar.jsp,v 1.1 2006-04-15 01:30:53 yutayoshida Exp $ --%>
         <title>JSP Page</title>
     </head>
     <body>
-
-    <h1>RSS BAR test</h1>
     
     <f:view>
-        <ui:rssBar url="http://blogs.sun.com/roller/rss/theaquarium" itemNumber="4"></ui:rssBar>
+        <ui:rssBar url="https://blueprints.dev.java.net/servlets/ProjectRSS?type=news" itemNumber="4"></ui:rssBar>
     </f:view>
        
     
