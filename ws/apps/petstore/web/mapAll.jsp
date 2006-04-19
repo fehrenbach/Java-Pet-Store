@@ -14,23 +14,34 @@
     </head>        
     <body>
         <jsp:include page="banner.jsp" />
+        <center>
         <f:view>
 
             <h:form id="form1">
-                <table>
+                <table border="1" cellpadding="5" cellspacing="5" style="border-style:double; width:600px; border-color:darkgreen; padding:5px">
                     <tr>
+                        <th align="right">Select Category to Map:</th>
                         <td align="center" colspan=2>
-                            <b>Select Category to Map</b><br/>
-                            <h:selectOneRadio value="#{MapBean.category}" required="yes">
-                                <f:selectItem itemLabel="Birds" itemValue="BIRDS"/>
-                                <f:selectItem itemLabel="Cats" itemValue="CATS"/>
-                                <f:selectItem itemLabel="Dogs" itemValue="DOGS"/>
+                            <h:selectOneRadio value="#{MapBean.category}" required="true">
+                                <f:selectItems value="#{MapBean.categories}"/>
                             </h:selectOneRadio>
                         </td>
                     </tr>
                     <tr>
+                        <th align="right">Center Point Address:</th>
                         <td>
-                            <h:commandButton action="#{MapBean.findAllAction}" id="submitCat" type="submit" value="Map Category"/>
+                            <h:inputText id="centerAddress" value="#{MapBean.centerAddress}" size="50"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th align="right">Radius (in Miles):</th>
+                        <td>
+                            <h:inputText id="radius" value="#{MapBean.radius}" size="5"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td  colspan="2" align="center">
+                            <h:commandButton action="#{MapBean.findAllByCategory}" id="submitCat" type="submit" value="Map Category"/>
                         </td>
                     </tr>
 
@@ -38,6 +49,7 @@
                 <h:messages/>
             </h:form>
         </f:view>
-        &nbsp;&nbsp;&nbsp;        
+        &nbsp;&nbsp;&nbsp;  
+        </center>
     </body>
 </html>

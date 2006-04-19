@@ -2,7 +2,7 @@
 
 <!--  Copyright 2005 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: faces-config.xml,v 1.8 2006-04-19 04:54:07 yutayoshida Exp $ -->
+ $Id: faces-config.xml,v 1.9 2006-04-19 23:06:50 basler Exp $ -->
 
 <faces-config xmlns="http://java.sun.com/xml/ns/javaee"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -11,6 +11,12 @@
     <!-- ========== Application Wide Features ================================ -->
 
     <!-- ========== Managed Beans ============================================ -->
+    <managed-bean>
+        <managed-bean-name>SearchBean</managed-bean-name>
+        <managed-bean-class>com.sun.javaee.blueprints.petstore.search.SearchBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+
     <managed-bean>
         <managed-bean-name>RatingBean</managed-bean-name>
         <managed-bean-class>com.sun.javaee.blueprints.petstore.model.RatingBean</managed-bean-class>
@@ -32,7 +38,11 @@
     <managed-bean>
         <managed-bean-name>MapBean</managed-bean-name>
         <managed-bean-class>com.sun.javaee.blueprints.petstore.mapviewer.MapBean</managed-bean-class>
-        <managed-bean-scope>session</managed-bean-scope>
+        <managed-bean-scope>request</managed-bean-scope>
+        <managed-property>
+            <property-name>items</property-name>
+            <value>#{paramValues.mapSelectedItems}</value>
+        </managed-property>             
     </managed-bean>
     
     <managed-bean>
@@ -48,13 +58,6 @@
     </managed-bean>
   
     <!-- ========== Navigation Rules ========================================= -->
-    <navigation-rule>
-        <from-view-id>/search.jsp</from-view-id>
-        <navigation-case>
-            <from-outcome>map</from-outcome>
-            <to-view-id>/map.jsp</to-view-id>
-        </navigation-case>
-    </navigation-rule>    
     <navigation-rule>
         <from-view-id>/mapLocation.jsp</from-view-id>
         <navigation-case>
@@ -75,5 +78,17 @@
             <to-view-id>/mapLocation.jsp</to-view-id>
         </navigation-case>
     </navigation-rule>    
+    <navigation-rule>
+        <from-view-id>/search.jsp</from-view-id>
+        <navigation-case>
+            <from-outcome>displayResults</from-outcome>
+            <to-view-id>/search.jsp</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>map</from-outcome>
+            <to-view-id>/map.jsp</to-view-id>
+        </navigation-case>
+    </navigation-rule>    
+    
 </faces-config>
 

@@ -13,22 +13,20 @@
     <body>
         <jsp:include page="banner.jsp" />
         <br>
-        <f:view>
-    
-            <ui:mapViewer id="mapViewerx" center="#{MapBean.mapPoint}" info="#{MapBean.mapMarker}"
-            markers="#{MapBean.locations}" zoomLevel="#{MapBean.zoomLevel}" style="height: 500px; width: 700px"/>
+        <center>
+            <f:view>
 
-        </f:view>
-        
-        
+                <ui:mapViewer id="mapViewerx" center="#{MapBean.mapPoint}" info="#{MapBean.mapMarker}"
+                markers="#{MapBean.locations}" zoomLevel="#{MapBean.zoomLevel}" style="height: 500px; width: 700px"/>
+
+            </f:view>
+
+
+
 <script type="text/javascript">
-    
-bpui.mapviewer.createMapControl = function() {
-
-  return new GLargeMapControl();
-
-}    
-
+    bpui.mapviewer.createMapControl = function() {
+      return new GLargeMapControl();
+    }    
    
 </script>           
 <br/><br/>
@@ -41,6 +39,6 @@ bpui.mapviewer.createMapControl = function() {
     Select Fremont
 </span>
 -->
-
+        </center>
     </body>
 </html>

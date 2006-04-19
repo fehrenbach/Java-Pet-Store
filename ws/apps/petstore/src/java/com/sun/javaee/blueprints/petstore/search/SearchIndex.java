@@ -33,7 +33,7 @@ import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
 public class SearchIndex {
     
     private boolean bDebug=false;
-    private Vector vtHits=new Vector();
+    private Vector<IndexDocument> vtHits=new Vector();
     private Hits hits=null;
     private static Logger _logger=null;
     
@@ -42,11 +42,11 @@ public class SearchIndex {
     public SearchIndex() {
     }
     
-    public Vector query(String indexFile, String searchString) {
+    public Vector<IndexDocument> query(String indexFile, String searchString) {
         return query(indexFile, searchString, "contents");
     }
         
-    public Vector query(String indexFile, String searchString, String searchField) {
+    public Vector<IndexDocument> query(String indexFile, String searchString, String searchField) {
         
         Searcher searcher=null;
         try {
@@ -154,7 +154,7 @@ public class SearchIndex {
         return vtHits;
     }
     
-    public Vector getHits() {
+    public Vector<IndexDocument> getHits() {
             return vtHits;
     }
     

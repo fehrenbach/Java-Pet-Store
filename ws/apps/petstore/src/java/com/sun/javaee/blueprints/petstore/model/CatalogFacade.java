@@ -67,6 +67,39 @@ public class CatalogFacade implements ServletContextListener {
         em.close();
         return items;
     }
+    
+    /**
+     * Value List Handler for items. Found by category
+     * @param IDs is an array of item ids for specific items that need to be returned
+     * @returns a List of Item objects
+     */
+    public List<Item> getItemsByIDs(String[] IDs){
+        // TO DO ???
+        return getItemsByRadius("CAT", 0, 50, -200d, 200d, -200d, 200d);
+    }
+    
+    /**
+     * Value List Handler for items. Found by category
+     * @param IDs is an array of item ids for specific items that need to be returned
+     * @returns a List of Item objects
+     */
+    public List<Item> getItemsByIDsByRadius(String[] IDs, double fromLatitude, double toLatitude, double fromLongitude, double toLongitude){
+        // TO DO ???
+        return getItemsByRadius("CAT", 0, 50, fromLatitude, toLatitude, fromLongitude, toLongitude);
+    }
+        
+    /**
+     * Value List Handler for items. Found by category
+     * @param categoryID is the product id that the item belongs to
+     * @param start position of the first result, numbered from 0
+     * @param chunkSize the maximum number of results to retrieve
+     * @returns a List of Item objects
+     */
+    public List<Item> getItemsByCategory(String categoryID, int start, int chunkSize){
+        // TO DO ???
+        return getItemsByRadius(categoryID, start, chunkSize, -200d, 200d, -200d, 200d);
+    }
+    
     /**
      * Value List Handler for items. Found by location radius for google map
      * Uses the Java Persistence query language.

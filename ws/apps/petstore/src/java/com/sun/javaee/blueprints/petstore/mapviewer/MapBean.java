@@ -17,12 +17,15 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.util.List;
+import java.util.Map;
+import java.util.Collection;
 
 import javax.faces.component.UICommand;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIForm;
 import javax.servlet.ServletContext;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 
 import com.sun.j2ee.blueprints.ui.geocoder.GeoCoder;
 import com.sun.j2ee.blueprints.ui.geocoder.GeoPoint;
@@ -33,6 +36,7 @@ import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
 import com.sun.javaee.blueprints.petstore.util.PetstoreConstants;
 import com.sun.javaee.blueprints.petstore.model.CatalogFacade;
 import com.sun.javaee.blueprints.petstore.model.Item;
+import com.sun.javaee.blueprints.petstore.model.Category;
 
 /**
  *
@@ -40,12 +44,13 @@ import com.sun.javaee.blueprints.petstore.model.Item;
  */
 public class MapBean {
     
-    private ArrayList<MapMarker> alMapMarkers=new ArrayList();
+    private ArrayList<MapMarker> alMapMarkers=new ArrayList<MapMarker>();
     private MapMarker mapMarker=new MapMarker();
     private MapPoint mapPoint=new MapPoint();
     private int zoomLevel=5, radius=30;
     private Logger _logger=null;
-    private String category=null;
+    private String category=null, centerAddress=null;
+    private String[] items=new String[0];
     
     /** Creates a new instance of MapBean */
     public MapBean() {
@@ -57,6 +62,34 @@ public class MapBean {
     }
     
     // search.jsp
+    public void setItems(String[] items) {
+        this.items=items;
+    }
+    
+    public String[] getItems() {
+        return items;
+    }
+    
+    
+    // mapAll.jsp
+    public List<SelectItem> getCategories() {
+        // return categories for a JSF radio button
+        ArrayList<SelectItem> arCats=new ArrayList<SelectItem>();
+        
+        // get the CatalogFacade for the app
+        FacesContext context=FacesContext.getCurrentInstance();
+        Map<String,Object> contextMap=context.getExternalContext().getApplicationMap();        
+        CatalogFacade cf=(CatalogFacade)contextMap.get("CatalogFacade");
+        
+        // get the categories from the database
+        List<Category> catsx=cf.getCategories();
+        for(Category catx : catsx) {
+            // add categories to be displayed in a radio button
+            arCats.add(new SelectItem(catx.getCategoryID(), catx.getName()));
+        }
+        return arCats;
+    }
+
     public void setCategory(String category) {
         this.category=category;
     }
@@ -64,6 +97,15 @@ public class MapBean {
         return category;
     }
     
+    public void setCenterAddress(String centerAddress) {
+        this.centerAddress=centerAddress;
+    }
+    public String getCenterAddress() {
+        return centerAddress;
+    }
+    
+    
+
     // map.jsp fields
     public void setMapMarker(MapMarker mapMarker) {
         this.mapMarker=mapMarker;
@@ -104,33 +146,110 @@ public class MapBean {
     }
     
     
-    public String findAllAction() {
+    public String findAllByCategory() {
+        
+        System.out.println("*** In findAllAction - ");
         
         // get items from catalog
         FacesContext context=FacesContext.getCurrentInstance();
-        
-        CatalogFacade cf=(CatalogFacade)((ServletContext)context.getExternalContext().getContext()).getAttribute("CatalogFacade");
+        Map<String,Object> contextMap=context.getExternalContext().getApplicationMap();        
+        CatalogFacade cf=(CatalogFacade)contextMap.get("CatalogFacade");
+        // should always have a value
         if(category == null) category="CATS";
-        List<Item> items=cf.getItemsByRadius(category, 0, 25, -200d, -200d, 200d, 200d);
+        List<Item> items=cf.getItemsByCategory(category, 0, 25);
         System.out.println("Have items - " + items.size());
+        
+        return mapItems(context, items);
+    }
+    
+    
+    public String findAllByIDs() {
+        
+        System.out.println("*** In findAllAction - ");
+        
+        // get items from catalog
+        FacesContext context=FacesContext.getCurrentInstance();
+        Map<String,Object> contextMap=context.getExternalContext().getApplicationMap();        
+        CatalogFacade cf=(CatalogFacade)contextMap.get("CatalogFacade");
+        // should always have a value
+        if(category == null) category="CATS";
+        List<Item> items=cf.getItemsByCategory(category, 0, 25);
+        System.out.println("Have items - " + items.size());
+        
+        return mapItems(context, items);
+    }
+    
+    
+    public String mapItems(FacesContext context, List<Item> items) {
+        
         if(items.size() > 0) {
-            Item centerItem=items.get(0);
 
-            // getLogger().log(Level.FINE, "in findAction - " + getLocation());
             // Set up markers for the center and information window
-            double dLatitude=centerItem.getAddress().getLatitude();
-            double dLongitude=centerItem.getAddress().getLongitude();
-            mapMarker.setLatitude(dLatitude);
-            mapMarker.setLongitude(dLongitude);
-            mapMarker.setMarkup(changeSpaces(centerItem.getName()) + "<br>" + changeSpaces(centerItem.getAddress().getAddressAsString()) );
+            double dLatitude=0;
+            double dLongitude=0;
+            String infoBalloon="";
 
             // clear old locations
             alMapMarkers.clear();
-            addMapMarker(mapMarker) ;
 
-            // set center point for map
-            mapPoint.setLatitude(centerItem.getAddress().getLatitude());
-            mapPoint.setLongitude(centerItem.getAddress().getLongitude());
+            String centerx=getCenterAddress();
+            if(centerx == null || centerx.length() < 1) {
+                // need center so set first point as center
+                Item centerItem=items.get(0);
+                dLatitude=centerItem.getAddress().getLatitude();
+                dLongitude=centerItem.getAddress().getLongitude();
+                infoBalloon=centerItem.getName() + "<br>" + centerItem.getAddress().getAddressAsString();
+
+            } else {
+                // look up lat and long of center point
+                // get proxy host and port from servlet context
+                String proxyHost=context.getExternalContext().getInitParameter("proxyHost");
+                String proxyPort=context.getExternalContext().getInitParameter("proxyPort");
+                
+                // get latitude & longitude
+                GeoCoder geoCoder=new GeoCoder();
+                if(proxyHost != null && proxyPort != null) {
+                    // set proxy host and port if it exists
+                    getLogger().log(Level.INFO, "Setting proxy to " + proxyHost + ":" + proxyPort + ".  Make sure server.policy is updated to allow setting System Properties");
+                    geoCoder.setProxyHost(proxyHost);
+                    try {
+                        geoCoder.setProxyPort(Integer.parseInt(proxyPort));
+                    } catch (Exception ee) {
+                        ee.printStackTrace();
+                    }
+                } else {
+                    getLogger().log(Level.INFO, "A \"proxyHost\" and \"proxyPort\" isn't set as a web.xml context-param. A proxy server may be necessary to reach the open internet.");
+                }
+                
+                // use component to get points based on location (this uses Yahoo's map service
+                try {
+                    GeoPoint points[]=geoCoder.geoCode(centerx);
+                    if ((points == null) || (points.length < 1)) {
+                        getLogger().log(Level.INFO, "No addresses for location - " + centerx);
+                    } else if(points.length > 1) {
+                        getLogger().log(Level.INFO, "Matched " + points.length + " locations, taking the first one");
+                    }
+
+                    if(points.length > 0) {
+                        // set values to used for map location
+                        dLatitude=points[0].getLatitude();
+                        dLongitude=points[0].getLongitude();
+                        infoBalloon="Center Point<br>" + centerx;
+                    }
+                } catch (Exception ee) {
+                    getLogger().log(Level.WARNING, "geocoder.lookup.exception", ee);
+                }
+            }
+            
+            // lat and long of the center point
+            mapPoint.setLatitude(dLatitude);
+            mapPoint.setLongitude(dLongitude);
+            
+            // add center point in the marker points so it will show
+            mapMarker.setLatitude(dLatitude);
+            mapMarker.setLongitude(dLongitude);
+            mapMarker.setMarkup(changeSpaces(infoBalloon));
+            addMapMarker(mapMarker) ;
 
             // check radius to zoom level
             if(radius < 5) {

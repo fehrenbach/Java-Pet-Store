@@ -57,7 +57,7 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
     <h1>Search Page</h1>
     
     
-    <form action="./search.jsp" method="post">
+    <form action="./searchTest.jsp" method="post">
         <table>
             <tr>
                 <th align="left">Index File Location:</th>

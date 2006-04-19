@@ -6,12 +6,6 @@
 <%@taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@taglib prefix="ui" uri="http://java.sun.com/blueprints/ui/14" %>
 
-<%--
-The taglib directive below imports the JSTL library. If you uncomment it,
-you must also add the JSTL library to the project. The Add Library... action
-on Libraries node in Projects view can be used to add the JSTL 1.1 library.
---%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%> 
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
    "http://www.w3.org/TR/html4/loose.dtd">
@@ -19,133 +13,133 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Search Page</title>
-<script type="text/javascript" src="../dojo.js"></script>
-<script type="text/javascript">
-
-    function checkAll() {
-        var elems=dojo.byId("resultsForm").elements;
-        for(ii=0; ii < elems.length; ii++) {
-            if(elems[ii].name.indexOf("map:") >= 0) {
-                elems[ii].checked=true;
-            }
-        }
-        return false;
-    }
-    
-    function uncheckAll() {
-        var elems=dojo.byId("resultsForm").elements;
-        for(ii=0; ii < elems.length; ii++) {
-            if(elems[ii].name.indexOf("map:") >= 0) {
-                elems[ii].checked=false;
-            }
-        }
-        return false;
-    }
-
-</script>        
-        
     </head>
     <body>   
-   
- <jsp:include page="banner.jsp" />
-  
-<%
-    try {
-        String searchString=request.getParameter("searchString");
-        if(searchString == null) searchString="cat";
-        String submit=request.getParameter("submitx");
-        String submitTag=request.getParameter("submitTag");
-        String searchTags=request.getParameter("searchTags");
-        String tagKeywords=request.getParameter("tagKeywords");
+        <jsp:include page="banner.jsp" />
+        <center>
 
-        // perform search
-        if(submit != null && searchString != null) {
-            // string to search
-            SearchIndex si=new SearchIndex();
-            // alter search string if tagged
-            String searchxx=searchString;
-            if(searchTags != null && searchTags.equals("true") && searchString.indexOf(":") < 0) {
-                searchxx="contents:" + searchString + " OR tag:" + searchString;
+        <script type="text/javascript">
+            function checkAll() {
+                var elems=dojo.byId("resultsForm").elements;
+                for(ii=0; ii < elems.length; ii++) {
+                    if(elems[ii].name.indexOf("mapSelectedItems") >= 0) {
+                        elems[ii].checked=true;
+                    }
+                }
+                return false;
             }
-            Vector vtHits=si.query(PetstoreConstants.PETSTORE_INDEX_DIRECTORY, searchxx);
-            request.setAttribute("searchStringx", searchxx);
-            request.setAttribute("numberOfHits", vtHits.size());
-            request.setAttribute("hitsx", vtHits);
-        }
-
-        // perform tagging
-        if(submitTag != null && tagKeywords != null) {
-            String docId=request.getParameter("docId");
-            UpdateIndex update=new UpdateIndex();
-            update.updateDocTag(PetstoreConstants.PETSTORE_INDEX_DIRECTORY, "tag" , tagKeywords, docId);
-        }
-
-%>
-
-
+    
+            function uncheckAll() {
+                var elems=dojo.byId("resultsForm").elements;
+                for(ii=0; ii < elems.length; ii++) {
+                    if(elems[ii].name.indexOf("mapSelectedItems") >= 0) {
+                        elems[ii].checked=false;
+                    }
+                }
+                return false;
+            }
+        </script>        
+  
         <f:view>
-        <h1>Search Page</h1>
-    
-    
-        <form action="./search.jsp" method="post">
-            <table border="1" style="border-style:double; border-color:darkgreen">
-                <tr>
-                    <th>Search String</th>
-                    <td>
-                        <input type="text" size="50" name="searchString" value="<%= searchString %>"/> 
-                        Also Search Tags:<input type="checkbox" name="searchTags" value="true" CHECKED/>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="center" colspan="2">
-                        <input type="submit" name="submitx" value="Submit"/>
-                        <input type="reset" name="resetx" value="Reset"/>
-                    </td>
-                </tr>
-            </table>
-        </form>
-        <br/><br/><br/>
-    
-        <c:if test="${!empty requestScope.hitsx}">
-            <b>${numberOfHits} hits returned for search string:</b> "${searchStringx}"<br>
-            <h:form id="resultsForm">            
-                <table border="1" cellpadding="5" cellspacing="5" style="border-style:double; border-color:darkgreen">
+            <h1>Search Page</h1>
+            <h:form id="searchForm">
+                <table border="1" cellpadding="5" cellspacing="5" style="border-style:double; width:600px; border-color:darkgreen; padding:5px">
                     <tr>
-                        <th>
-                            Map<br/>
-                            <a href="" onclick="return checkAll()"><img border="0" src="../images/check_all.gif"/></a>
-                            <a href="" onclick="return uncheckAll()"><img border="0" src="../images/uncheck_all.gif"/></a>
-                        </th>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Price</th>
-                        <th>Current Tag(s)</th>
+                        <th>Search String</th>
+                        <td>
+                            <h:inputText size="50" id="searchString" value="#{SearchBean.searchString}"/> 
+                            Also Search Tags:<h:selectBooleanCheckbox id="searchTags" value="#{SearchBean.searchTags}"/>
+                        </td>
                     </tr>
-                    <c:forEach items="${requestScope.hitsx}" var="docxx">
-                        <tr>
-                            <td>
-                                <input id="map_${docxx.UID}" name="map:${docxx.UID}" type="checkbox"/>
-                            </td>
-                            <td>${docxx.title}</td>
-                            <td>${docxx.summary}</td>
-                            <td>${docxx.price}</td>
-                            <td>${docxx.tag}</td>
-                        </tr>
-                    </c:forEach>
                     <tr>
-                        <td colspan="6">
-                            <h:commandButton action="#{MapBean.findAllAction}" id="mapSubmit" type="submit" value="Map Checked Item(s)"/>&nbsp;&nbsp;&nbsp;
-                         </td>
+                        <td align="center" colspan="2">
+                            <h:commandButton action="#{SearchBean.searchAction}" id="searchSubmit" type="submit" value="Submit"/>
+                            <h:commandButton id="searchReset" type="reset" value="Reset"/>
+                        </td>
                     </tr>
                 </table>
+                <h:messages/>
             </h:form>
-        </c:if>
-        <br/><br/><br/>
+            <br/>
+            
+            <h:form id="resultsForm">
+                <h:dataTable id="results" border="1" 
+                    value="#{SearchBean.hits}" var="item" rendered="#{SearchBean.showResults}"
+                    style="border-style:double; width:600px; border-color:darkgreen; padding:5px"
+                    cellpadding="5" cellspacing="5" >
+                
+                    <h:column >
+                        <f:facet name="header">
+                            <h:panelGroup>
+                                <h:outputText value="Map"/><br/>
+                                <h:commandButton image="../images/check_all.gif" onclick="return checkAll()"/>
+                                <h:commandButton image="../images/uncheck_all.gif" onclick="return uncheckAll()"/>
+                            </h:panelGroup>
+                        </f:facet>
+                        
+                        <input type="checkbox" name="mapSelectedItems" value="<h:outputText value='#{item.UID}'/>"/>                        
+                        
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Name"/>
+                        </f:facet>
+                        <h:outputText value="#{item.title}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Description"/>
+                        </f:facet>
+                        <h:outputText value="#{item.summary}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Price"/>
+                        </f:facet>
+                        <h:outputText value="#{item.price}">
+                            <f:convertNumber type="currency"/>
+                        </h:outputText>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Tag(s)"/>
+                        </f:facet>
+                        <h:outputText value="#{item.tag}"/>
+                    </h:column>
+                    <f:facet name="footer">
+                        <h:panelGroup>
+                            <br/>
+                            <center>
+                                <table border=1 cellpadding="5" cellspacing="5">
+                                    <tr>
+                                        <th align="right">Center Point Address:</th>
+                                        <td>
+                                            <h:inputText id="centerAddress" value="#{MapBean.centerAddress}" size="50"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th align="right">Radius (in Miles):</th>
+                                        <td>
+                                            <h:inputText id="radius" value="#{MapBean.radius}" size="5"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center" colspan="2">
+                                            <h:commandButton action="#{MapBean.findAllByIDs}" id="mapSubmit" type="submit" 
+                                            value="Map Checked Item(s)" rendered="#{SearchBean.showResults}"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </center>
+                            <br/>
+                        </h:panelGroup>
+                    </f:facet>
+                </h:dataTable>
+                
+                <h:messages/>
+            </h:form>
+            <br/><br/><br/>
         </f:view>
+        </center>
     </body>
 </html>
-<%
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-%>
