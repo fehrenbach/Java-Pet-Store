@@ -39,7 +39,8 @@ function Engine () {
                     injectionPoint.innerHTML = data;
                     document.firstChild.appendChild(injectionPoint);
                } else {
-                    p.injectionPoint.innerHTML = data;
+                    var nData = includeEmbeddedResources(data);
+                    p.injectionPoint.innerHTML = nData;
                }
                if (p.script) {
                   // now load the associated JavaScript
@@ -60,7 +61,137 @@ function Engine () {
         };
         dojo.io.bind(templateArgs);
   }
+  
+  /**
+   * If were returning an text document remove any script in the
+   * the document and add it to the global scope using a time out.
+   */
+  function includeEmbeddedResources(target) {
+    var bodyText = "";
+    var embeddedScripts = [];
+    var embeddedStyles = [];
+    var scriptReferences = [];
+    var styleReferences = [];
+    var styles = [];
+    // recursively go through and weed out the scripts
+    // TODO: Use some better REGEX processing
+    // TODO: Also support single quotes
+    while (target.indexOf("<script") != -1) {
+            var realStart = target.indexOf("<script");
+            var scriptSourceStart = target.indexOf("src=", (realStart));
+            var scriptElementEnd = target.indexOf(">", realStart);
+            var end = target.indexOf("</script>", (realStart)) + "</script>".length;
+            if (realStart != -1 && scriptSourceStart != -1) {
+                var scriptSourceName;
+                var scriptSourceLinkStart= scriptSourceStart + 5;
+                var scriptSourceLinkEnd= target.indexOf("\"", (scriptSourceLinkStart + 1));
+                if (scriptSourceStart < scriptElementEnd) {
+                    scriptSourceName = target.substring(scriptSourceLinkStart, scriptSourceLinkEnd);
+                    scriptReferences.push(scriptSourceName);
+                }
+                // now remove the script body
+                var scriptBodyStart =  scriptElementEnd + 1;
+                var sBody = target.substring(scriptBodyStart, end - "</script>".length);
+                if (sBody.length > 0) {
+                    embeddedScripts.push(sBody);
+                }
+                //remove script
+                target = target.substring(0, realStart) + target.substring(end, target.length);
+            }
+        }
+   
+      while (target.indexOf("<style") != -1) {
+            var realStart = target.indexOf("<style");
+            var styleElementEnd = target.indexOf(">", realStart);
+            var end = target.indexOf("</style>", (realStart)) + "</style>".length;
+             // now remove the style body
+             var styleBodyStart =  stylelementEnd + 1;
+             var sBody = target.substring(styleBodyStart, end - "</style>".length);
+             //remove sytle
+             target = target.substring(0, realStart) + target.substring(end, target.length);
+        }
+        
+        // get the links    
+        while (target.indexOf("<link") != -1) {
+            var realStart = target.indexOf("<link");
+            var styleSourceStart = target.indexOf("href=", (realStart));
+            var styleElementEnd = target.indexOf(">", realStart) +1;
+            if (realStart != -1 && styleSourceStart != -1) {
+                var styletSourceName;
+                var styleSourceLinkStart= styleSourceStart + 6;
+                var styleSourceLinkEnd= target.indexOf("\"", (styleSourceLinkStart + 1));
+                if (styleSourceStart < styleElementEnd) {
+                    styleSourceName = target.substring(styleSourceLinkStart, styleSourceLinkEnd);
+                    styleReferences.push(styleSourceName);
+                }
+                //remove style
+                target = target.substring(0, realStart) + target.substring(styleElementEnd, target.length);
+            }
+        }
+        
+        var head = document.getElementsByTagName("head")[0];
+        
+        // inject the links
+        for(var loop = 0; loop < styleReferences.length; loop++) {
+            var link = document.createElement("link");
+            link.href = styleReferences[loop];
+            link.type = "text/css";
+            link.rel = "stylesheet";
+            head.appendChild(link);
+        }
+        
+        var stylesElement;
+        if (embeddedStyles.length > 0) {
+            stylesElement = document.createElement("styles");
+            head.appendChild(stylesElement);
+            var stylesText;
+            for(var loop = 0; loop < embeddedStyles.length; loop++) {
+                stylesText = stylesText + embeddedStyles[loop];
+            }
+            stylesElement.appendChild(document.createTextNode(stylesText));
+        }
+                
+        scriptLoader(scriptReferences, 0, function() {
+            this.embeddedScripts = embeddedScripts;
+            // evaluate the embedded javascripts in the order they were added
+            // consider using an onload handler
+            for(var loop = 0; loop < embeddedScripts.length; loop++) {
+                setTimeout(embeddedScripts[loop],0);
+            }
+        });        
+        return target;
+    }
+    
+    /**
+     * Load the scripts in order and load them one after on another
+     */
+    function scriptLoader(scripts, index, callbackFunction) {
+        var head = document.getElementsByTagName("head").item(0);
+        var scriptElement = document.createElement("script");
+        scriptElement.id = "c_script_" + index;
+        scriptElement.type = "text/JavaScript";
+        head.appendChild(scriptElement);
+        var loadHandler = function () {
+            if (index != scripts.length -1) {
+                scriptLoader(scripts, ++index, callbackFunction);
+            } else {
+                callbackFunction();
+            }
+        }
+        
+        scriptElement.onreadystatechange = function () {
+		    if (this.readyState == 'loaded') {
+                alert("read state " + index);
+		    	loadHandler();
+	    	}
+		 }; 
 
+        setTimeout("document.getElementById('c_script_" + index + "').src ='" + scripts[index] + "'", 0);
+        scriptElement.onload = loadHandler;
+        scriptElement = null;
+        head = null;
+    }
+         
   /**
    * If were returning an XML document remove any script in the
    * the document and add it to the global scope using a time out.

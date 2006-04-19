@@ -1,11 +1,11 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: scroller.js,v 1.11 2006-04-17 08:30:35 gmurray71 Exp $
+$Id: scroller.js,v 1.12 2006-04-19 08:55:44 gmurray71 Exp $
 */
 
 function ImageScroller() {
     
     var isIE;
-    
+    var initialized = false;
     // default sizes
     
     var VIEWPORT_WIDTH = 500;
@@ -195,6 +195,7 @@ function ImageScroller() {
     
 
     function showImage(itemId) {
+
 	    window.location.href= originalURL + "#" + itemId;
         setTimeout(showProgressIndicator,0);
         var i = map.get(itemId);
@@ -465,6 +466,7 @@ function ImageScroller() {
         status2Div = document.getElementById("status_2");
 
         initLayout();
+        initialized = true;
     }
     
     function initLayout() {
@@ -505,7 +507,7 @@ function ImageScroller() {
         
         if (ua.indexOf('ie') != -1) {
             isIE = true;
-            tileX = tileX + 5;
+            //tileX = tileX + 5;
         } else if (ua.indexOf('safari') != -1) {
             tileX = tileX + 10;
             //SCROLL_INCREMENT = SCROLL_INCREMENT + 5;
@@ -537,38 +539,38 @@ function ImageScroller() {
 
         if (isIE) {
             row = infoTable.insertRow(0);
-            row2 = infoTable.insertRow(1);
-            var blankRow = infoTable.insertRow(2);
-            blankRow.style.height = "20px";
+            var blankRow = infoTable.insertRow(1);
+            row2 = infoTable.insertRow(2);
+            blankRow.style.height = "30px";
             row3 = infoTable.insertRow(3);
             var blankCell = blankRow.insertCell(0);
             blankCell.appendChild(document.createTextNode(""));
             infoTableName = row.insertCell(0);
             row.insertCell(1);
-            infoTableMinimize = row.insertCell(2);
+            infoTablePrice = row.insertCell(1);
+            infoTableMinimize = row.insertCell(3);
             infoTableShortDescription = row2.insertCell(0);
-            infoTablePrice = row2.insertCell(1);
-            indicatorCell = row2.insertCell(2);
+
+            indicatorCell = row.insertCell(3);
             infoTableDescription = row3.insertCell(0);
+            infoTableShortDescription.colSpan = "3";
         } else {
             row = document.createElement("tr");
             row2 = document.createElement("tr");
-            
             var blankRow = document.createElement("tr");
-            //blankRow.setAttribute("colspan", "2");
             var blankCell = document.createElement("td");
             blankCell.appendChild(document.createTextNode(""));
             blankRow.appendChild(blankCell);
-            blankRow.style.height = "20px";
+            blankRow.style.height = "30px";
             row3 = document.createElement("tr");
             infoTableName = document.createElement("td");
             row.appendChild(infoTableName);
+            infoTablePrice = document.createElement("td");
+            row.appendChild(infoTablePrice);
             infoTableMinimize =  document.createElement("td");
             row.appendChild(infoTableMinimize);
             infoTableShortDescription = document.createElement("td");
             row2.appendChild(infoTableShortDescription);
-            infoTablePrice = document.createElement("td");
-            row2.appendChild(infoTablePrice);
             
             indicatorCell = document.createElement("td");
             infoTableMinimize.style.paddingLeft = "6px";
@@ -578,16 +580,17 @@ function ImageScroller() {
             row3.appendChild(infoTableDescription);
             
             infoTable.appendChild(row);
-            infoTable.appendChild(row2);
             infoTable.appendChild(blankRow);
+            infoTable.appendChild(row2);
+   
             infoTable.appendChild(row3);
         }
-        
+        infoTableShortDescription.setAttribute("colspan", "3");
         infoTableName.className = "infopaneTitle";
         infoTableName.style.width = (VIEWPORT_WIDTH - 25) + "px";
         infoTableShortDescription.className = "infopaneText";
         infoTableDescription.className = "infopaneDescriptionText";
-        infoTablePrice.className = "infopaneText";
+        infoTablePrice.id = "infopaneRating";
         infoTableMinimize.setAttribute("colspan", "2");
 
         indicatorCell.style.width = (10) + "px";
