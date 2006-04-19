@@ -11,8 +11,6 @@ import javax.annotation.*;
 
 public class CatalogFacade implements ServletContextListener {
     
-    //@PersistenceContext(name="bppu")
-    //private EntityManager em;
     @PersistenceUnit(unitName="bppu") private EntityManagerFactory emf;
     @Resource UserTransaction utx;
     
@@ -26,13 +24,13 @@ public class CatalogFacade implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         ServletContext context = sce.getServletContext();
         context.setAttribute("CatalogFacade", this);
-    }
+    }    
     
-    public Collection getCategories(){
+    public List<Category> getCategories(){
         EntityManager em = emf.createEntityManager();
-        Collection results = em.createNativeQuery("SELECT * FROM Category").getResultList();
+        List<Category> categories = em.createQuery("SELECT c FROM Category c").getResultList();
         em.close();
-        return results;
+        return categories;
     }
     
     public Collection getAllItemsFromCategory(String catID){

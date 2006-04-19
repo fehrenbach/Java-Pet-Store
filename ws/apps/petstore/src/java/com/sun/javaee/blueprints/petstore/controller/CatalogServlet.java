@@ -173,17 +173,18 @@ public class CatalogServlet extends HttpServlet {
        StringBuffer sb = new StringBuffer();
        if ((format != null) && format.toLowerCase().equals("json")) {
            sb.append("[\n");
-           Collection items = cf.getCategories();
-           Iterator it = items.iterator();
+           List categories = cf.getCategories();
+           Iterator<Category> it = categories.iterator();
            while (it.hasNext()) {
-                        Vector c = (Vector)it.next();
-                        String catid = c.get(0) + "";
+                        Category c = it.next();
+                        System.out.println("hey returned "+c.getName());
+                        String catid = c.getCategoryID() + "";
                         sb.append("{");
-                        sb.append("\"id\":\"" + c.get(0) + "\",");
+                        sb.append("\"id\":\"" + c.getCategoryID() + "\",");
                         sb.append("\"catid\":\"" + catid + "\",");
-                        sb.append("\"name\":\"" + c.get(1) + "\",");
-                        sb.append("\"description\":\"" + c.get(2) + "\",");
-                        sb.append("\"imageURL\":\"" + c.get(3) + "\",");
+                        sb.append("\"name\":\"" + c.getName() + "\",");
+                        sb.append("\"description\":\"" + c.getDescription() + "\",");
+                        sb.append("\"imageURL\":\"" + c.getImageURL() + "\",");
                         sb.append("\"products\": [");
                         // get the products in that category
                         Collection products = cf.getProducts(catid);
