@@ -89,28 +89,29 @@ function Engine () {
                     scriptSourceName = target.substring(scriptSourceLinkStart, scriptSourceLinkEnd);
                     scriptReferences.push(scriptSourceName);
                 }
-                // now remove the script body
-                var scriptBodyStart =  scriptElementEnd + 1;
-                var sBody = target.substring(scriptBodyStart, end - "</script>".length);
-                if (sBody.length > 0) {
-                    embeddedScripts.push(sBody);
-                }
-                //remove script
-                target = target.substring(0, realStart) + target.substring(end, target.length);
             }
-        }
-   
+            // now remove the script body
+           var scriptBodyStart =  scriptElementEnd + 1;
+           var sBody = target.substring(scriptBodyStart, end - "</script>".length);
+           if (sBody.length > 0) {
+              embeddedScripts.push(sBody);
+           }
+           //remove script
+           target = target.substring(0, realStart) + target.substring(end, target.length);
+      }
+
       while (target.indexOf("<style") != -1) {
             var realStart = target.indexOf("<style");
             var styleElementEnd = target.indexOf(">", realStart);
-            var end = target.indexOf("</style>", (realStart)) + "</style>".length;
-             // now remove the style body
-             var styleBodyStart =  stylelementEnd + 1;
-             var sBody = target.substring(styleBodyStart, end - "</style>".length);
-             //remove sytle
-             target = target.substring(0, realStart) + target.substring(end, target.length);
+            var end = target.indexOf("</style>", (realStart)) ;
+             var styleBodyStart =  styleElementEnd + 1;
+             var sBody = target.substring(styleBodyStart, end);
+           if (sBody.length > 0) {
+              embeddedStyles.push(sBody);
+           }
+           //remove style
+           target = target.substring(0, realStart) + target.substring(end + "</style>".length, target.length);
         }
-        
         // get the links    
         while (target.indexOf("<link") != -1) {
             var realStart = target.indexOf("<link");
@@ -142,7 +143,8 @@ function Engine () {
         
         var stylesElement;
         if (embeddedStyles.length > 0) {
-            stylesElement = document.createElement("styles");
+            stylesElement = document.createElement("style");
+            stylesElement.type="text/css";
             head.appendChild(stylesElement);
             var stylesText;
             for(var loop = 0; loop < embeddedStyles.length; loop++) {
