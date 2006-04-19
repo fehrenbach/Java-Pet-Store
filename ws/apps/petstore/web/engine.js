@@ -181,7 +181,6 @@ function Engine () {
         
         scriptElement.onreadystatechange = function () {
 		    if (this.readyState == 'loaded') {
-                alert("read state " + index);
 		    	loadHandler();
 	    	}
 		 }; 
