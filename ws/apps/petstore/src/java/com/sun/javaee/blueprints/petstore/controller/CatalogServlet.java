@@ -177,7 +177,6 @@ public class CatalogServlet extends HttpServlet {
            Iterator<Category> it = categories.iterator();
            while (it.hasNext()) {
                         Category c = it.next();
-                        System.out.println("hey returned "+c.getName());
                         String catid = c.getCategoryID() + "";
                         sb.append("{");
                         sb.append("\"id\":\"" + c.getCategoryID() + "\",");
