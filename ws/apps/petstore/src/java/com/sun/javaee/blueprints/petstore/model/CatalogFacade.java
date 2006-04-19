@@ -106,7 +106,7 @@ public class CatalogFacade implements ServletContextListener {
     public List<ZipLocation> getZipCodeLocations(){
         EntityManager em = emf.createEntityManager();
         //Query query = em.createQuery("SELECT  z FROM ZipLocation z");
-        Query query = em.createNamedQuery("getAllZipCityState");
+        Query query = em.createNamedQuery("Item.getAllZipCityState");
         List<ZipLocation>  zipCodeLocations = query.getResultList();
         em.close();
         return zipCodeLocations;
