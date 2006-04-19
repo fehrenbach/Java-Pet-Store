@@ -134,19 +134,19 @@ public class CatalogServlet extends HttpServlet {
         sb.append("<cat-id>" + categoryId + "</cat-id>\n");
         sb.append("<cat-name>" + cf.getCategory(categoryId).getName()  + "</cat-name>\n");
         sb.append("<items>\n");
-        Collection items = cf.getAllItemsFromCategory(categoryId);
-        Iterator it = items.iterator();
+        List items = cf.getAllItemsFromCategory(categoryId);
+        Iterator<Item> it = items.iterator();
         NumberFormat formatter = new DecimalFormat("00.00");
         while (it.hasNext()) {
-                    Vector i = (Vector)it.next();
+                    Item i = it.next();
                     sb.append("<item>\n");
-                    sb.append(" <id>" + i.get(0) + "</id>\n");
-                    sb.append(" <prod-id>" + i.get(1) + "</prod-id>\n");
+                    sb.append(" <id>" + i.getItemID() + "</id>\n");
+                    sb.append(" <prod-id>" + i.getProductID() + "</prod-id>\n");
                     sb.append(" <cat-id>" + categoryId + "</cat-id>\n");
-                    sb.append(" <name>" + i.get(2) + "</name>\n");
-                    sb.append(" <price>" + formatter.format(i.get(5)) + "</price>\n");
-                    sb.append(" <description>" + i.get(3) + "</description>\n");
-                    sb.append(" <image-url>" + i.get(4) + "</image-url>\n");
+                    sb.append(" <name>" + i.getName() + "</name>\n");
+                    sb.append(" <price>" + formatter.format(i.getPrice()) + "</price>\n");
+                    sb.append(" <description>" + i.getDescription() + "</description>\n");
+                    sb.append(" <image-url>" + i.getImageURL() + "</image-url>\n");
                     sb.append("</item>\n");
         }
         sb.append("</items>");
@@ -186,16 +186,16 @@ public class CatalogServlet extends HttpServlet {
                         sb.append("\"imageURL\":\"" + c.getImageURL() + "\",");
                         sb.append("\"products\": [");
                         // get the products in that category
-                        Collection products = cf.getProducts(catid);
-                        Iterator pit = products.iterator();
+                        List products = cf.getProducts(catid);
+                        Iterator<Product> pit = products.iterator();
                         while (pit.hasNext()) {
-                            Vector p = (Vector)pit.next();
+                            Product p = pit.next();
                             sb.append("{");
-                            sb.append("\"id\":\"" + p.get(0) + "\",");
+                            sb.append("\"id\":\"" + p.getProductID() + "\",");
                             sb.append("\"catid\":\"" + catid + "\",");
-                            sb.append("\"name\":\"" + p.get(2) + "\",");
-                            sb.append("\"description\":\"" + p.get(3) + "\",");
-                            sb.append("\"imageURL\":\"" + p.get(4) + "\"");
+                            sb.append("\"name\":\"" + p.getName()+ "\",");
+                            sb.append("\"description\":\"" + p.getDescription() + "\",");
+                            sb.append("\"imageURL\":\"" + p.getImageURL() + "\"");
                             sb.append("}");
                             if (pit.hasNext()) {
                                 sb.append(",");
@@ -210,16 +210,16 @@ public class CatalogServlet extends HttpServlet {
            sb.append("\n]");
        } else {
            sb.append("<categories>\n");
-           Collection items = cf.getCategories();
-           Iterator it = items.iterator();
+           List categories = cf.getCategories();
+           Iterator<Category> it = categories.iterator();
            while (it.hasNext()) {
-                        Vector c = (Vector)it.next();
+                        Category c = it.next();
                         sb.append("<category>\n");
-                        sb.append(" <id>" + c.get(0) + "</id>\n");
-                        sb.append(" <cat-id>" + c.get(0) + "</cat-id>\n");
-                        sb.append(" <name>" + c.get(1) + "</name>\n");
-                        sb.append(" <description>" + c.get(2) + "</description>\n");
-                        sb.append(" <image-url>" + c.get(3) + "</image-url>\n");
+                        sb.append(" <id>" + c.getCategoryID() + "</id>\n");
+                        sb.append(" <cat-id>" + c.getCategoryID()+ "</cat-id>\n");
+                        sb.append(" <name>" + c.getName() + "</name>\n");
+                        sb.append(" <description>" +c.getDescription() + "</description>\n");
+                        sb.append(" <image-url>" + c.getImageURL() + "</image-url>\n");
                         sb.append("</category>\n");
             }
             sb.append("</categories>\n");         
