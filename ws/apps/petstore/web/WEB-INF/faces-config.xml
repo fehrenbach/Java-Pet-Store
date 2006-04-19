@@ -2,7 +2,7 @@
 
 <!--  Copyright 2005 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: faces-config.xml,v 1.7 2006-04-13 23:55:36 basler Exp $ -->
+ $Id: faces-config.xml,v 1.8 2006-04-19 04:54:07 yutayoshida Exp $ -->
 
 <faces-config xmlns="http://java.sun.com/xml/ns/javaee"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -34,72 +34,17 @@
         <managed-bean-class>com.sun.javaee.blueprints.petstore.mapviewer.MapBean</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>AutocompleteBean</managed-bean-name>
+        <managed-bean-class>com.sun.javaee.blueprints.petstore.controller.AutocompleteBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
        
     <managed-bean>
-        <managed-bean-name>CreditCardBean</managed-bean-name>
-        <managed-bean-class>com.sun.javaee.blueprints.petstore.CreditCardBean</managed-bean-class>
-        <managed-bean-scope>session</managed-bean-scope>
-        <managed-property>
-            <property-name>number</property-name>
-            <property-class>java.lang.String</property-class>
-            <value>111-2222-3333-111</value>
-        </managed-property>
-        <managed-property>
-            <property-name>name</property-name>
-            <property-class>java.lang.String</property-class>
-            <value>Duke</value>
-        </managed-property>
-        <managed-property>
-            <property-name>street</property-name>
-            <property-class>java.lang.String</property-class>
-            <value>121 Main Street</value>
-        </managed-property>
-        <managed-property>
-            <property-name>city</property-name>
-            <property-class>java.lang.String</property-class>
-            <value>Santa Clara</value>
-        </managed-property>
-        <managed-property>
-            <property-name>state</property-name>
-            <property-class>java.lang.String</property-class>
-            <value>CA</value>
-        </managed-property>
-        <managed-property>
-            <property-name>zip</property-name>
-            <property-class>java.lang.String</property-class>
-            <value>95054</value>
-        </managed-property>
-    </managed-bean>
-  
-    <managed-bean>
         <managed-bean-name>AddressBean</managed-bean-name>
-        <managed-bean-class>com.sun.javaee.blueprints.petstore.AddressBean</managed-bean-class>
+        <managed-bean-class>com.sun.javaee.blueprints.petstore.controller.AddressBean</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
-        <managed-property>
-            <property-name>name</property-name>
-            <property-class>java.lang.String</property-class>
-            <value>Duke</value>
-        </managed-property>
-        <managed-property>
-            <property-name>street</property-name>
-            <property-class>java.lang.String</property-class>
-            <value>121 Main Street</value>
-        </managed-property>
-        <managed-property>
-            <property-name>city</property-name>
-            <property-class>java.lang.String</property-class>
-            <value>Santa Clara</value>
-        </managed-property>
-        <managed-property>
-            <property-name>state</property-name>
-            <property-class>java.lang.String</property-class>
-            <value>CA</value>
-        </managed-property>
-        <managed-property>
-            <property-name>zip</property-name>
-            <property-class>java.lang.String</property-class>
-            <value>95054</value>
-        </managed-property>
     </managed-bean>
   
     <!-- ========== Navigation Rules ========================================= -->

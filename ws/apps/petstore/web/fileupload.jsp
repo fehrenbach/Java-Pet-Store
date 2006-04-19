@@ -27,12 +27,28 @@
    function storeCookie() {
        currentcap = "j_captcha_response="+document.getElementById("TestFileuploadForm:captcharesponse").value;
        document.cookie = currentcap;
-   }     
+   }
+   
+   function extractCity(citystatezip) {
+       var index = citystatezip.indexOf(',');
+       var nextcity = citystatezip.substring(0, index+4);
+       return nextcity; 
+   }
+
+   function chooseCity(city) {
+       var index = city.indexOf(',');
+       var state = city.substring(index+2, index+4);
+       var zip = city.substring(index+5);
+       city = city.substring(0, index);
+       
+       document.getElementById('TestFileuploadForm:cityField').value = city;
+       document.getElementById('TestFileuploadForm:stateField').value = state;
+       document.getElementById('TestFileuploadForm:zipField').value = zip;
+   }
     
 </script>        
     </head>
     <body>
-        <jsp:include page="banner.jsp" />
 
         <f:view>
     
@@ -90,11 +106,17 @@
                             <h:outputText value="Street 2"/>
                             <h:inputText size="20" id="street2"></h:inputText>
                             <h:outputText value="City"/>
-                            <h:inputText size="20" id="city"></h:inputText>
+                            <ui14:autoComplete size="20" maxlength="100" id="cityField"
+                            completionMethod="#{AutocompleteBean.completeCity}"
+                            value="#{AddressBean.city}" required="true"
+                            ondisplay="function(item) { return extractCity(item); }"
+                            onchoose="function(item) { return chooseCity(item); }" />
                             <h:outputText value="State"/>
-                            <h:inputText size="20" id="state"></h:inputText>
+                            <ui14:autoComplete size="2"  maxlength="100" id="stateField" 
+                            completionMethod="#{AutocompleteBean.completeState}" 
+                            value="#{AddressBean.state}" required="true" />
                             <h:outputText value="Zip"/>
-                            <h:inputText size="20" id="zip"></h:inputText>
+                            <h:inputText size="5" id="zipField" value="#{AddressBean.zip}" required="true" />
 
                             <h:outputText value="Enter the text as it is shown below\n(case insensitive)"/>
                             <h:outputText />
