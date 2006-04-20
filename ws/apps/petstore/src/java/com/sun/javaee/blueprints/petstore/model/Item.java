@@ -25,6 +25,8 @@ public class Item implements java.io.Serializable {
     private float price;
     private Address address;
     private SellerContactInfo contactInfo;
+    private int totalScore;
+    private int numberOfVotes;
       
     public Item() { }
     
@@ -72,7 +74,14 @@ public class Item implements java.io.Serializable {
     @ManyToOne(cascade={CascadeType.PERSIST})    
     public SellerContactInfo getContactInfo() {
         return contactInfo;
-    }    
+    }
+    
+    public int getTotalScore(){
+        return totalScore;
+    }
+    public int getNumberOfVotes() {
+        return numberOfVotes;
+    } 
     
     public void setItemID(String itemID) {
         this.itemID = itemID;
@@ -101,6 +110,19 @@ public class Item implements java.io.Serializable {
     public void setContactInfo(SellerContactInfo contactInfo) {
         this.contactInfo = contactInfo;
     }    
+    public void setTotalScore(int totalScore) {
+        this.totalScore = totalScore;
+    }
+    public void setNumberOfVotes(int numberOfVotes) {
+        this.numberOfVotes = numberOfVotes;
+    }
+    
+    /*Business Methods
+     **/
+    public void addRating(int score){
+        setTotalScore(getTotalScore() + score);
+        setNumberOfVotes(getNumberOfVotes()+ 1);
+    }
 }
 
 

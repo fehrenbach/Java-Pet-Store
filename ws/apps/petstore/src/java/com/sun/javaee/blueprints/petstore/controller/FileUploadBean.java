@@ -103,6 +103,8 @@ public class FileUploadBean {
                 
                 System.out.println("file name: "+ fileName);
                 Item item = new Item();
+                item.setNumberOfVotes(0);//for rating component
+                item.setTotalScore(0);
                 String prodId=getStringValue(hmUpload, compName+":product");
                 String name=getStringValue(hmUpload, compName+":name");
                 String desc=getStringValue(hmUpload, compName+":description");
