@@ -95,7 +95,7 @@ INSERT INTO Address VALUES('5', '55 Main Steet', '', 'Mountain View','CA','94035
 INSERT INTO Address VALUES('6', '66 Main Steet', '', 'Sunnyvale','CA','94085',37.369019,-122.035019);
 INSERT INTO Address VALUES('7', '77 Main Steet', '', 'Hayward','CA','94540',37.68002,-122.09016);
 INSERT INTO Address VALUES('8', '88 Main Steet', '', 'Capitola','CA','95010',36.975739,-121.952797);
-    INSERT INTO Address VALUES('9', '99 Main Steet', '', 'San Francisco','CA','94101',37.792097,-122.394991);
+INSERT INTO Address VALUES('9', '99 Main Steet', '', 'San Francisco','CA','94101',37.792097,-122.394991);
 INSERT INTO Address VALUES('10', '1010 Main Steet', '', 'Los Altos','CA','94022',37.37754,-122.11824);
 INSERT INTO Address VALUES('11', '1111 Main Steet', '', 'Cambell','CA','95008',37.287109,-121.948647);
 INSERT INTO Address VALUES('12', '200 Main Steet', '', 'Foster City','CA','94404',37.566407,-122.322727);
@@ -103,6 +103,12 @@ INSERT INTO Address VALUES('13', '1313 Main Steet', '', 'Redwood City','CA','940
 INSERT INTO Address VALUES('14', '1414 Main Steet', '', 'Cupertino','CA','95014',37.32304,-122.032303);
 INSERT INTO Address VALUES('15', '1515 Main Steet', '', 'Gilroy','CA','95020',37.005829,-121.567291);
 INSERT INTO Address VALUES('16', '1616 Main Steet', '', 'San Leandro','CA','94577',37.724979,-122.155762);
+INSERT INTO Address VALUES('17', 'River Oaks Pky & Village Center Dr', '', 'San Jose','CA','95134',37.398259,-121.922367);
+INSERT INTO Address VALUES('18', 'S 1st St & W Santa Clara St', '', 'San Jose','CA','95113',37.336141,-121.890666);
+INSERT INTO Address VALUES('19', '1st St & Market St ', '', 'San Francisco','CA','94105',37.791028,-122.399082);
+INSERT INTO Address VALUES('20', 'Paseo Padre Pky & Fremont Blvd', '', 'Fremont','CA','94555',37.575035,-122.041273);
+INSERT INTO Address VALUES('21', 'W el Camino Real & S Mary Ave', '', 'Sunnyvale','CA','94087',37.371641,-122.048772);
+INSERT INTO Address VALUES('22', 'Grant Rd & South Dr ', '', 'Mountain view','CA','94040',37.366941,-122.078073);
 
 INSERT INTO SellerContactInfo VALUES('1', 'Brydon', 'Sean', 'abc@abc.xyz');
 INSERT INTO SellerContactInfo VALUES('2', 'Singh', 'Inderjeet', 'abc@abc.xyz');
