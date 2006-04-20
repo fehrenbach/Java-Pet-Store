@@ -168,7 +168,7 @@ INSERT INTO item VALUES('404', 'reptile02', 'Frog', 'This little green frog was 
 
 
 INSERT INTO id_gen VALUES('ITEM_ID',404);
-INSERT INTO id_gen VALUES('ADDRESS_ID',16);
+INSERT INTO id_gen VALUES('ADDRESS_ID',22);
 INSERT INTO id_gen VALUES('CONTACT_INFO_ID',16);
 
 INSERT INTO ziplocation VALUES(42601, 'Aaron', 'KY');
