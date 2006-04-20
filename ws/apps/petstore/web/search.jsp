@@ -96,9 +96,9 @@
                         <f:facet name="header">
                             <h:outputText value="Price"/>
                         </f:facet>
-                        <h:outputText value="#{item.price}">
+			<h:outputText id="price" value="#{item.price}">
                             <f:convertNumber type="currency"/>
-                        </h:outputText>
+			</h:outputText>                        
                     </h:column>
                     <h:column>
                         <f:facet name="header">

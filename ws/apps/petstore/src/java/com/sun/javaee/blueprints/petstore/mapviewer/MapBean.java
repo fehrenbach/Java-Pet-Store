@@ -148,7 +148,7 @@ public class MapBean {
     
     public String findAllByCategory() {
         
-        System.out.println("*** In findAllAction - ");
+        System.out.println("*** In findAllByCategory - ");
         
         // get items from catalog
         FacesContext context=FacesContext.getCurrentInstance();
@@ -157,7 +157,7 @@ public class MapBean {
         // should always have a value
         if(category == null) category="CATS";
         List<Item> items=cf.getItemsByCategory(category, 0, 25);
-        System.out.println("Have items - " + items.size());
+        System.out.println("Have Database items - " + items.size());
         
         return mapItems(context, items);
     }
@@ -165,16 +165,15 @@ public class MapBean {
     
     public String findAllByIDs() {
         
-        System.out.println("*** In findAllAction - ");
-        
+        System.out.println("*** In findAllByIDs - ");
         // get items from catalog
         FacesContext context=FacesContext.getCurrentInstance();
         Map<String,Object> contextMap=context.getExternalContext().getApplicationMap();        
         CatalogFacade cf=(CatalogFacade)contextMap.get("CatalogFacade");
         // should always have a value
-        if(category == null) category="CATS";
-        List<Item> items=cf.getItemsByCategory(category, 0, 25);
-        System.out.println("Have items - " + items.size());
+        String[] itemIds=getItems();
+        List<Item> items=cf.getItemsByIDs(itemIds);
+        System.out.println("Have Database items - " + items.size());
         
         return mapItems(context, items);
     }

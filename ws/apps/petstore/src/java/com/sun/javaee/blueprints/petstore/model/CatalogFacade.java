@@ -75,7 +75,7 @@ public class CatalogFacade implements ServletContextListener {
      */
     public List<Item> getItemsByIDs(String[] IDs){
         // TO DO ???
-        return getItemsByRadius("CAT", 0, 50, -200d, 200d, -200d, 200d);
+        return getItemsByRadius("CATS", 0, 50, -200d, 200d, -200d, 200d);
     }
     
     /**
@@ -85,7 +85,7 @@ public class CatalogFacade implements ServletContextListener {
      */
     public List<Item> getItemsByIDsByRadius(String[] IDs, double fromLatitude, double toLatitude, double fromLongitude, double toLongitude){
         // TO DO ???
-        return getItemsByRadius("CAT", 0, 50, fromLatitude, toLatitude, fromLongitude, toLongitude);
+        return getItemsByRadius("CATS", 0, 50, fromLatitude, toLatitude, fromLongitude, toLongitude);
     }
         
     /**
