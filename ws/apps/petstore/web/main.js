@@ -2,13 +2,7 @@ var isIE;
 var bodyRowText;
 
 dojo.require("dojo.widget.FisheyeList");
-
-dojo.hostenv.writeIncludes();
-dojo.addOnLoad(function () {
-loadPetstore();
-});
-
-
+init();
 
 function browse(category) {
     window.location.href="catalog.jsp?catid=" + category;
@@ -20,23 +14,5 @@ function loadPetstore() {
 }
 
 function init() {
-    
     if (navigator.userAgent.indexOf("IE") != -1) isIE = true;
-}
-
-
-function showMain() {
-    var engine = new Engine();
-    engine.inject({template: "main.htmf", injectionPoint: $("bodyCenter")});
-}
-
-function resetBody() {
-    var body = $("bodyCenter");
-    body.innerHTML = "";
-}
-
-
-function clearNodes(id) {
-    var target = document.getElementById(id);
-    if (target) target.innerHTML = "";
 }

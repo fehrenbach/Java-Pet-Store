@@ -1,5 +1,8 @@
+
+
 <script type="text/javascript" src="engine.js"></script>
 <script type="text/javascript" src="dojo.js"></script>
+
 <script type="text/javascript" src="rss.js"></script>
 <link rel="stylesheet" type="text/css" href="styles.css"></link>
 <script type="text/javascript" src="http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.servletContext.contextPath}/autocomplete.js"></script>
@@ -11,25 +14,12 @@
   <td align="left">
   <div class="banner">Java Petstore</div>
   </td>
-  <td align="right">
-      <form name="autofillform" action="autocomplete"  onsubmit="return false;">
-        <input type="hidden" name="action" value="lookupbyname"/>
-         <input    type="text"
-                size="15"
-                autocomplete="off"
-                  id="complete-field"
-				name="id"
-             onkeyup="doCompletion();">
-             <input    type="button"
-                  id="search-button"
-				value="Search"
-             onclick="doSearch();">
-    </form>
+  <td id="bannerRight">
   </td>
   </td>
  </tr>
   <tr bgcolor="gray">
-  <td id="menubar" align="left" width="450" height="15" colspan="2" ></td>
+  <td id="menubar" align="left" width="600" height="30" colspan="2" ></td>
   <td  align="right">
   <a class="menuLink" href="http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.servletContext.contextPath}/faces/fileupload.jsp">Seller</a> <span class="menuItem">|</span>
   <a class="menuLink" href="http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.servletContext.contextPath}/faces/search.jsp">Search</a> <span class="menuItem">|</span>
@@ -41,8 +31,6 @@
  </table>
 
 <div id="autocomplete" class="autocomplete"><table id="autocompleteTable" class="autocompleteTable"></table></div>
-
-
 
 <script type="text/javascript">
 dojo.event.connect("before", window, "onload", this, "init");

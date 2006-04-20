@@ -87,7 +87,11 @@ function Engine () {
                 var scriptSourceLinkEnd= target.indexOf("\"", (scriptSourceLinkStart + 1));
                 if (scriptSourceStart < scriptElementEnd) {
                     scriptSourceName = target.substring(scriptSourceLinkStart, scriptSourceLinkEnd);
-                    scriptReferences.push(scriptSourceName);
+                    // prevent multiple inclusions of dojo.js. 
+                    // there is no way you would get to this point without dojo being included
+                    if (scriptSourceName.indexOf("dojo.js") == -1) {
+                        scriptReferences.push(scriptSourceName);
+                    }
                 }
             }
             // now remove the script body
@@ -145,12 +149,16 @@ function Engine () {
         if (embeddedStyles.length > 0) {
             stylesElement = document.createElement("style");
             stylesElement.type="text/css";
-            head.appendChild(stylesElement);
             var stylesText;
             for(var loop = 0; loop < embeddedStyles.length; loop++) {
                 stylesText = stylesText + embeddedStyles[loop];
             }
-            stylesElement.appendChild(document.createTextNode(stylesText));
+            if (document.styleSheets[0].cssText) {
+               document.styleSheets[0].cssText = document.styleSheets[0].cssText + stylesText;
+            } else {
+                stylesElement.appendChild(document.createTextNode(stylesText));
+                head.appendChild(stylesElement);
+            }
         }
                 
         scriptLoader(scriptReferences, 0, function() {
@@ -168,19 +176,20 @@ function Engine () {
      * Load the scripts in order and load them one after on another
      */
     function scriptLoader(scripts, index, callbackFunction) {
+        //alert("Script loader start index=" + index);
         var head = document.getElementsByTagName("head").item(0);
         var scriptElement = document.createElement("script");
         scriptElement.id = "c_script_" + index;
         scriptElement.type = "text/JavaScript";
         head.appendChild(scriptElement);
         var loadHandler = function () {
-            if (index != scripts.length -1) {
+            if (index < scripts.length &&  index != scripts.length -1) {
                 scriptLoader(scripts, ++index, callbackFunction);
             } else {
                 callbackFunction();
             }
         }
-        
+        //alert("Script onready=" + (scriptElement.onreadystatechange = "undefined"));
         scriptElement.onreadystatechange = function () {
 		    if (this.readyState == 'loaded') {
 		    	loadHandler();

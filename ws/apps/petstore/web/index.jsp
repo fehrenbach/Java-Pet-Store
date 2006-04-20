@@ -3,13 +3,10 @@
  <head>
   <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
   <title>Petstore</title>
-  
-  <script type="text/javascript" src="engine.js"></script>
  </head>
 <body>
 
 <jsp:include page="banner.jsp" />
-<script type="text/javascript" src="main.js"></script> 
 
 <table bgcolor="white">
  <tr>
@@ -49,7 +46,41 @@
 
 </div></table></td>
   <td valign="top" width="100%">
-   <div id="bodyCenter"><h1>Loading....</h1>
+   <div id="bodyCenter">
+      <table valign="top" id="bodyTable" border="0">
+     <tr>
+      <td>
+        <map name="petmap">
+        <area onmouseover="javascript:this.style.cursor='pointer';" onclick="loadCategory('BIRDS')" 
+            alt="Birds" 
+            coords="72,2,280,250">
+        <area onmouseover="javascript:this.style.cursor='pointer';" onclick="loadCategory('FISH')" 
+            alt="Fish" 
+            coords="2,180,72,250">
+        <area onmouseover="javascript:this.style.cursor='pointer';" onclick="loadCategory('DOGS')" 
+            alt="Dogs" 
+            coords="60,250,130,320">
+       <area onmouseover="javascript:this.style.cursor='pointer';" onclick="loadCategory('REPTILES')" 
+            alt="Reptiles" 
+            coords="140,270,210,340">
+        <area onmouseover="javascript:this.style.cursor='pointer';" onclick="loadCategory('CATS')" 
+            alt="Cats" 
+            coords="225,240,295,310">
+        <area onmouseover="javascript:this.style.cursor='pointer';" onclick="loadCategory('BIRDS')" 
+            alt="Birds" 
+            coords="280,180,350,250">
+        </map>
+
+        <img src="images/splash.gif" 
+            alt="Pet Selection Map"
+            usemap="#petmap" 
+            width="350" 
+            height="355" 
+        border="0">
+     </td>
+    </tr>
+   </table>
+   
   </div>
    </td>
  </td>
