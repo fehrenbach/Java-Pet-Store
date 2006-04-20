@@ -102,48 +102,40 @@ public class FileUploadBean {
                 String compName=getStringValue(hmUpload, FileUploadUtil.COMPONENT_NAME);
                 
                 System.out.println("file name: "+ fileName);
-                Item item = new Item();
-                item.setNumberOfVotes(0);//for rating component
-                item.setTotalScore(0);
                 String prodId=getStringValue(hmUpload, compName+":product");
                 String name=getStringValue(hmUpload, compName+":name");
                 String desc=getStringValue(hmUpload, compName+":description");
                 String price=getStringValue(hmUpload, compName+":price");
+                if(desc.length() == 0) desc="No description available";
                 if(price.length() == 0) price="0";
-                Address addr = new Address();
                 
                 // Add address fields to the file upload page and extract data
                 StringBuffer addressx=new StringBuffer();
-                String tmpx=getStringValue(hmUpload, compName+":street1");
-                addr.setStreet1(tmpx);
-                if(tmpx.length() > 0) {
-                    addressx.append(tmpx);
+                String street1=getStringValue(hmUpload, compName+":street1");
+                if(street1.length() > 0) {
+                    addressx.append(street1);
                 }
-                tmpx=getStringValue(hmUpload, compName+":street2");
-                addr.setStreet2(tmpx);
-                if(tmpx.length() > 0) {
-                    addressx.append(tmpx);
+                String street2=getStringValue(hmUpload, compName+":street2");
+                if(street2.length() > 0) {
+                    addressx.append(street2);
                 }
                 
-                tmpx=getStringValue(hmUpload, compName+":cityField");
-                addr.setCity(tmpx);
-                if(tmpx.length() > 0) {
+                String city=getStringValue(hmUpload, compName+":cityField");
+                if(city.length() > 0) {
                     addressx.append(comma);
-                    addressx.append(tmpx);
+                    addressx.append(city);
                 }
                 
-                tmpx=getStringValue(hmUpload, compName+":stateField");
-                addr.setState(tmpx);
-                if(tmpx.length() > 0) {
+                String state=getStringValue(hmUpload, compName+":stateField");
+                if(state.length() > 0) {
                     addressx.append(comma);
-                    addressx.append(tmpx);
+                    addressx.append(state);
                 }
                 
-                tmpx=getStringValue(hmUpload, compName+":zipField");
-                addr.setZip(tmpx);
-                if(tmpx.length() > 0) {
+                String zip=getStringValue(hmUpload, compName+":zipField");
+                if(zip.length() > 0) {
                     addressx.append(comma);
-                    addressx.append(tmpx);
+                    addressx.append(zip);
                 }
                 
                 // get latitude & longitude
@@ -164,6 +156,8 @@ public class FileUploadBean {
                 
                 // use component to get points based on location (this uses Yahoo's map service
                 String totAddr=addressx.toString();
+                double latitude=0;
+                double longitude=0;
                 if(totAddr.length() > 0) {
                     try {
                         GeoPoint points[]=geoCoder.geoCode(totAddr);
@@ -175,22 +169,13 @@ public class FileUploadBean {
                         
                         if(points.length > 0) {
                             // set values to used for map location
-                            addr.setLatitude(points[0].getLatitude());
-                            addr.setLongitude(points[0].getLongitude());
+                            latitude = points[0].getLatitude();
+                            longitude = points[0].getLongitude();
                         }
                     } catch (Exception ee) {
                         getLogger().log(Level.WARNING, "geocoder.lookup.exception", ee);
                     }
                 }
-                
-                SellerContactInfo contactInfo = new SellerContactInfo();
-                //TO-DO: Add SellerContactInfo fields to the file upload page and extract data
-                contactInfo.setFirstName("duke");
-                contactInfo.setLastName("duke");
-                contactInfo.setEmail("abc@abc.xyz");
-                item.setProductID(prodId);
-                item.setDescription(desc);
-                item.setName(name);
                 Float priceF;
                 try {
                     priceF=new Float(price);
@@ -198,10 +183,12 @@ public class FileUploadBean {
                     priceF=new Float(0);
                     getLogger().log(Level.INFO, "Price isn't in a proper number - " + price);
                 }
-                item.setPrice(priceF);
-                item.setImageURL(fileName);
-                item.setAddress(addr);
-                item.setContactInfo(contactInfo);
+                Address addr = new Address(street1,street2,city,state,zip,
+                        latitude,longitude);
+                SellerContactInfo contactInfo = new SellerContactInfo("duke","duke",
+                        "abc@abc.xyz");
+                Item item = new Item(prodId,name,desc,fileName,fileName, priceF,
+                        addr,contactInfo,0,0);
                 String itemID = cf.addItem(item);
                 getLogger().log(Level.FINE, "Item " + name + " has been persisted");
                 
