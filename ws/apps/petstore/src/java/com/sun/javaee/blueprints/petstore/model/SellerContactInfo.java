@@ -12,6 +12,12 @@ public class SellerContactInfo implements java.io.Serializable {
     private String email;
     
     public SellerContactInfo() { }
+    public SellerContactInfo(String firstName, String lastName,
+            String email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+    }
     
     @TableGenerator(name="CONTACTINFO_ID_GEN",
             table="ID_GEN",
@@ -19,9 +25,9 @@ public class SellerContactInfo implements java.io.Serializable {
             valueColumnName="GEN_VALUE",
             pkColumnValue="CONTACT_INFO_ID",
             allocationSize=1)
-            @GeneratedValue(strategy=GenerationType.TABLE,generator="CONTACTINFO_ID_GEN")            
-    @Id
-    public String getContactInfoID() {
+            @GeneratedValue(strategy=GenerationType.TABLE,generator="CONTACTINFO_ID_GEN")
+            @Id
+            public String getContactInfoID() {
         return contactInfoID;
     }
     

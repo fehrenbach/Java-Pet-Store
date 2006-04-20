@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 public class Address implements java.io.Serializable {
-
+    
     private String addressID;
     private String street1;
     private String street2;
@@ -12,10 +12,21 @@ public class Address implements java.io.Serializable {
     private String state;
     private String zip;
     private double latitude;
-    private double longitude;    
+    private double longitude;
     private static final String COMMA=", ";
     
-     public Address() { }
+    public Address() { }
+    public Address(String street1, String street2, String city,
+            String state, String zip, double latitude,
+            double longitude){
+        this.street1 = street1;
+        this.street2 = street2;
+        this.city = city;
+        this.state = state;
+        this.zip = zip;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
     
     @TableGenerator(name="ADDRESS_ID_GEN",
             table="ID_GEN",
@@ -23,9 +34,9 @@ public class Address implements java.io.Serializable {
             valueColumnName="GEN_VALUE",
             pkColumnValue="ADDRESS_ID",
             allocationSize=1)
-    @GeneratedValue(strategy=GenerationType.TABLE,generator="ADDRESS_ID_GEN")
-    @Id
-    public String getAddressID() {
+            @GeneratedValue(strategy=GenerationType.TABLE,generator="ADDRESS_ID_GEN")
+            @Id
+            public String getAddressID() {
         return addressID;
     }
     
@@ -52,7 +63,7 @@ public class Address implements java.io.Serializable {
     }
     public double getLongitude() {
         return longitude;
-    }    
+    }
     
     public void setStreet1(String street1) {
         this.street1 = street1;
@@ -74,7 +85,7 @@ public class Address implements java.io.Serializable {
     }
     public void setLatitude(double latitude) {
         this.latitude = latitude;
-    } 
+    }
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }

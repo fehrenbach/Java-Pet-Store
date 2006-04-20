@@ -29,6 +29,21 @@ public class Item implements java.io.Serializable {
     private int numberOfVotes;
       
     public Item() { }
+    public Item(String productID, String name, String description,
+            String imageURL, String imageThumbURL, float price,
+            Address address, SellerContactInfo contactInfo,
+            int totalScore, int numberOfVotes ) {
+        this.productID = productID;
+        this.name = name;
+        this.description = description;
+        this.imageURL = imageURL;
+        this.imageThumbURL = imageThumbURL;
+        this.price = price;
+        this.address = address;
+        this.contactInfo = contactInfo;
+        this.totalScore = totalScore;
+        this.numberOfVotes = numberOfVotes;                    
+    }
     
     @TableGenerator(name="ITEM_ID_GEN",
             table="ID_GEN",
