@@ -55,7 +55,7 @@
 </script>   
      <style type="text/css">
          p#Wait { position:absolute; top:0; left:0;
-                  z-index;100; width:100%; height:100%;
+                  z-index:100; width:100%; height:100%;
                   margin:0; padding:50px; color:#333333; background:#dddddd; font-size:120%; }
      </style>
     </head>
