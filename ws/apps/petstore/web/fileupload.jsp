@@ -123,7 +123,7 @@
                             <h:outputText value="Zip"/>
                             <h:inputText size="5" id="zipField" value="#{AddressBean.zip}" required="true" />
 
-                            <h:outputText value="Enter the text as it is shown below\n(case insensitive)"/>
+                            <h:outputText value="Enter the text as it is shown below (case insensitive)"/>
                             <h:outputText />
                             <h:graphicImage id="captchaImg" url="CaptchaServlet"/>
                             <h:inputText id="captcharesponse"></h:inputText>
