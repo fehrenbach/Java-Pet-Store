@@ -138,6 +138,15 @@ public class Item implements java.io.Serializable {
         setTotalScore(getTotalScore() + score);
         setNumberOfVotes(getNumberOfVotes()+ 1);
     }
+    public int checkAverageRating(){
+        int average;
+        if (getTotalScore() > 0) {
+          average = getTotalScore()/getNumberOfVotes();
+        } else {
+          average = 0;
+        }    
+        return average;
+    }
 }
 
 

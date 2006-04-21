@@ -190,6 +190,23 @@ public class CatalogFacade implements ServletContextListener {
         }
         return item.getItemID();
     }
+        public String addRating(Item item){
+        EntityManager em = emf.createEntityManager();
+        try{
+            utx.begin();
+            em.joinTransaction();
+            em.persist(item);
+            utx.commit();
+        } catch(Exception exe){
+            System.out.println("Error persisting item: "+exe);
+            try {
+                utx.rollback();
+            } catch (Exception e) {}
+        } finally {
+            em.close();
+        }
+        return item.getItemID();
+    }
     
     public Collection doSearch(String querryString){
         EntityManager em = emf.createEntityManager();
