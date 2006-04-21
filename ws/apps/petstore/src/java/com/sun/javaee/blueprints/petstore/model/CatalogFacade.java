@@ -111,7 +111,7 @@ public class CatalogFacade implements ServletContextListener {
         EntityManager em = emf.createEntityManager();
         Query query = em.createQuery("SELECT i FROM Item i, Product p WHERE " +
                 "i.productID=p.productID AND p.categoryID = :categoryID" +
-                " GROUP BY i.name");
+                " ORDER BY i.name");
         List<Item>  items = query.setParameter("categoryID",catID).setFirstResult(start).setMaxResults(chunkSize).getResultList();
         em.close();
         return items;
@@ -131,7 +131,7 @@ public class CatalogFacade implements ServletContextListener {
                 "i.productID=p.productID AND p.categoryID = :categoryID " +
                 "AND i.address IN (SELECT a FROM Address a where (a.latitude BETWEEN" +
                 ":fromLatitude AND :toLatitude) AND (a.longitude BETWEEN" +
-                ":fromLongitude AND :toLongitude )) GROUP BY i.name");
+                ":fromLongitude AND :toLongitude )) ORDER BY i.name");
         query.setParameter("categoryID",catID);
         query.setParameter("fromLatitude",fromLat);
         query.setParameter("toLatitude",toLat);
