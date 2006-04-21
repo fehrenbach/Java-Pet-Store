@@ -52,9 +52,17 @@
        document.forms['TestFileuploadForm'].onsubmit();
    }
     
-</script>        
+</script>   
+     <style type="text/css">
+         p#Wait { position:absolute; top:0; left:0;
+                  z-index;100; width:100%; height:100%;
+                  margin:0; padding:50px; color:#333333; background:#dddddd; font-size:120%; }
+     </style>
     </head>
-    <body>
+    <body onload="Wait.style.visibility='hidden'">
+        <center><p id="Wait">Now Loading...<br/><br/><br/>
+                <img src="${pageContext.servletContext.contextPath}/images/runningDog.gif"></p>
+        </center>
 
         <f:view>
     
