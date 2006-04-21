@@ -41,7 +41,7 @@ CREATE TABLE SellerContactInfo (
 CREATE TABLE item (
  itemid VARCHAR(10) NOT NULL,
  productid VARCHAR(10) NOT NULL,
- name VARCHAR(25) NOT NULL,
+ name VARCHAR(30) NOT NULL,
  description VARCHAR(500) NOT NULL,
  imageurl VARCHAR(55),
  imagethumburl VARCHAR(55),
@@ -160,14 +160,26 @@ INSERT INTO item VALUES('226', 'avian02', 'Itchy Bird', 'This bird needs some at
 INSERT INTO item VALUES('301', 'fish01', 'Gold Fish', 'Perfect for a first fish for a child. This fish is not good in the same tank as some bigger fish as they see this little gold fish as a snack.', 'images/fish2.gif','images/fish2.gif', 2,'9','9', 15, 5);
 INSERT INTO item VALUES('302', 'fish01', 'Angel Fish', 'I love this fish. But my new roommate has a cat, and the cat just so does not seem to get along with the  fish. At first, I thought the cat was trying to just play with the fish, or maybe learn to swim. And then I remembered that show where they explained that Tuna is the chicken of the sea, but that does not mean its chicken. Not, its fish. And cats love tuna, so then I got scared and realized my fish is in danger. Help me! Buy my little chicken of the sea.', 'images/fish3.gif','images/fish3.gif', 100,'9','9', 15, 5);
 INSERT INTO item VALUES('303', 'fish02', 'Striped Tropical', 'This large fish needs plenty of room to swim. Either a big aquarium or your bath tub.', 'images/fish4.gif','images/fish4.gif', 20,'9','9', 15, 5);
+INSERT INTO item VALUES('304', 'fish02', 'Spotted JellyFish', 'Buy Me.', 'images/spotted-jellyfish-med.jpg','images/spotted-jellyfish-thumb.jpg', 55,'9','9', 15, 5);
+INSERT INTO item VALUES('305', 'fish01', 'Small Sea Nettle JellyFish', 'Buy Me.', 'images/sea-nettle-jellyfish-med.jpg','images/sea-nettle-jellyfish-thumb.jpg', 75,'9','9', 15, 5);
+INSERT INTO item VALUES('306', 'fish02', 'RockFish', 'Buy Me.', 'images/rockfish-med.jpg','images/rockfish-thumb.jpg', 125,'9','9', 15, 5);
+INSERT INTO item VALUES('307', 'fish02', 'Purple JellyFish', 'Buy Me.', 'images/purple-jellyfish-med.jpg','images/purple-jellyfish-thumb.jpg', 225,'9','9', 15, 5);
+INSERT INTO item VALUES('308', 'fish02', 'White Octopus', 'Buy Me.', 'images/octopus-white-med.jpg','images/octopus-white-thumb.jpg', 2000,'9','9', 15, 5);
+INSERT INTO item VALUES('309', 'fish02', 'Red Octopus', 'Buy Me.', 'images/octopus-red-med.jpg','images/octopus-red-thumb.jpg', 2000,'9','9', 15, 5);
+INSERT INTO item VALUES('310', 'fish02', 'Koi', 'Buy Me.', 'images/koi-med.jpg','images/koi-thumb.jpg', 150,'9','9', 15, 5);
+INSERT INTO item VALUES('311', 'fish02', 'GlassFish', 'FREE! And open source!', 'images/glassfish-colored-med.jpg','images/glassfish-colored-thumb.jpg', 0,'9','9', 15, 5);
+INSERT INTO item VALUES('312', 'fish01', 'CuttleFish', 'This rare and spooky looking fish is the talk of town where I live!', 'images/cuttlefish-med.jpg','images/cuttlefish-thumb.jpg', 900,'9','9', 15, 5);
+INSERT INTO item VALUES('313', 'fish01', 'Silver Carp Car', 'You will never believe the fish I caught! This is the ultimate fishing stories... seriously! I pulled this baby out of the forbidden lake behind the nuclear power plant.', 'images/carp-car-med.jpg','images/carp-car-thumb.jpg', 500,'9','9', 15, 5);
+INSERT INTO item VALUES('314', 'fish02', 'Moon JellyFish', 'Buy Me.', 'images/moon-jelly-med.jpg','images/moon-jelly-thumb.jpg', 1225,'9','9', 15, 5);
 
 INSERT INTO item VALUES('401', 'reptile01', 'Green slider', 'This snake looks like a lizard! It must be rare since I have never seen one like it.', 'images/lizard3.gif','images/lizard3.gif', 1000,'9','9', 15, 5);
 INSERT INTO item VALUES('402', 'reptile02', 'Green Iguana', 'This is one proud and tough lizard. He holds his head high in any circumstance.', 'images/lizard1.gif','images/lizard1.gif', 1000,'9','9', 15, 5);
 INSERT INTO item VALUES('403', 'reptile02', 'Iguana', 'My iguana needs a home. His tail is really long. He is very nice.', 'images/lizard2.gif','images/lizard2.gif', 500,'9','9', 15, 5);
 INSERT INTO item VALUES('404', 'reptile02', 'Frog', 'This little green frog was rescued from the chef in the kitchen of a french restaurant. If I had not acted quickly, his legs would have been appetizers. Now for just a small fee you can buy him as your pet.', 'images/frog1.gif','images/frog1.gif', 500,'9','9', 15, 5);
+INSERT INTO item VALUES('405', 'reptile01', 'Iron Dragon', 'Buy me', 'images/dragon-iron-med.jpg','images/dragon-iron-thumb.jpg', 5000,'9','9', 15, 5);
+INSERT INTO item VALUES('406', 'reptile02', 'Hawaiian Green Lizard', 'Buy me', 'images/hawaiian-lizard-med.jpg','images/hawaiian-lizard-thumb.jpg', 110,'9','9', 15, 5);
 
-
-INSERT INTO id_gen VALUES('ITEM_ID',404);
+INSERT INTO id_gen VALUES('ITEM_ID',406);
 INSERT INTO id_gen VALUES('ADDRESS_ID',22);
 INSERT INTO id_gen VALUES('CONTACT_INFO_ID',16);
 
