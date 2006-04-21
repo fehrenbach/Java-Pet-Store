@@ -7,7 +7,12 @@
 <body>
 
 <jsp:include page="banner.jsp" />
-
+<script>
+dojo.require("dojo.widget.FisheyeList");
+function browse(category) {
+    window.location.href="catalog.jsp?catid=" + category;
+}
+</script>
 <table bgcolor="white">
  <tr>
   <td valign="top" width="300"><table id="sidebar" border="0" cellpadding="0">
