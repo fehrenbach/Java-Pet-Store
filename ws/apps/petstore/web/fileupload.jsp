@@ -45,6 +45,11 @@
        document.getElementById('TestFileuploadForm:stateField').value = state;
        document.getElementById('TestFileuploadForm:zipField').value = zip;
    }
+   
+   function fileuploadOnsubmit() {
+       storeCookie()
+       document.forms['TestFileuploadForm'].onsubmit();
+   }
     
 </script>        
     </head>
@@ -61,8 +66,9 @@
                     dojo.require("dojo.widget.Wizard");
                 </script>
                 <div id="wizard1" dojoType="Wizard" style="width: 100px; height: 500px;"
-                     nextButtonLabel="next >>" previousButtonLabel="<< previous" >
-                    <div dojoType="WizardPane" label="Pet">
+                     hideDisabledButtons="true" doneButtonLabel="Submit"
+                     nextButtonLabel="Next >>" previousButtonLabel="<< Previous" >
+                    <div dojoType="WizardPane">
                         <h:panelGrid columns="2">
                             <f:facet name="header">
                                 <h:outputText value="Information about your pet"/>
@@ -90,7 +96,7 @@
                             <input type="file" size="20" name="fileToUpload" id="fileToUploadId"/>
                         </h:panelGrid>
                     </div>
-                    <div dojoType="WizardPane" label="Your Info" canGoBack="true" doneFunction="done">
+                    <div dojoType="WizardPane" canGoBack="true" doneFunction="fileuploadOnsubmit">
                         <h:panelGrid columns="2">
                             <f:facet name="header">
                                 <h:outputText value="Information about yourself"/>
@@ -101,10 +107,8 @@
                             <h:inputText size="20" id="lastName"></h:inputText>
                             <h:outputText value="Seller Email"/>
                             <h:inputText size="20" id="email"></h:inputText>
-                            <h:outputText value="Street 1"/>
+                            <h:outputText value="Street"/>
                             <h:inputText size="20" id="street1"></h:inputText>
-                            <h:outputText value="Street 2"/>
-                            <h:inputText size="20" id="street2"></h:inputText>
                             <h:outputText value="City"/>
                             <ui14:autoComplete size="20" maxlength="100" id="cityField"
                             completionMethod="#{AutocompleteBean.completeCity}"
@@ -123,7 +127,6 @@
                             <h:graphicImage id="captchaImg" url="CaptchaServlet"/>
                             <h:inputText id="captcharesponse"></h:inputText>
                           
-                            <input type="submit" id="submitx" name="submitx" value="Submit" onclick="storeCookie()"/>
                         </h:panelGrid>
                     </div>
                 </div>
