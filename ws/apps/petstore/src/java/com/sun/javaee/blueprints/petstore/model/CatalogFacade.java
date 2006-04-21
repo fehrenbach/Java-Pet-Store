@@ -77,7 +77,7 @@ public class CatalogFacade implements ServletContextListener {
         EntityManager em = emf.createEntityManager();
         List<Item> items = new ArrayList<Item>();
         for(int i=0;i<itemIDs.length;++i){
-            Item item = em.find(Item.class,itemIDs[i]); 
+            Item item = em.find(Item.class,itemIDs[i]);
             items.add(item);
         }
         em.close();
@@ -91,10 +91,12 @@ public class CatalogFacade implements ServletContextListener {
      */
     public List<Item> getItemsByItemIDByRadius(String[] IDs, double fromLatitude,
             double toLatitude, double fromLongitude, double toLongitude){
-            EntityManager em = emf.createEntityManager();
-       /* List<Item> items = new List<Item>();
+        EntityManager em = emf.createEntityManager();
+        //to-do implement this
+        
         em.close();
-        return items;*/
+        return null;
+        
     }
     
     /**
@@ -139,7 +141,7 @@ public class CatalogFacade implements ServletContextListener {
         em.close();
         return items;
     }
-
+    
     /**
      * Gets a list of all the zipcode/city/state for autocomplete on user forms
      * Need to enhance so that returned list is cached for reuse at application scope
