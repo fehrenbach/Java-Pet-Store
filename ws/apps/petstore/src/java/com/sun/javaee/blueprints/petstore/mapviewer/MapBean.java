@@ -160,7 +160,7 @@ public class MapBean {
         String centerx=getCenterAddress();
         List<Item> items=null;
         GeoPoint[] geoCenterPoint=null;
-        if(centerx != null && centerx.length() > 0 && radius > 0) {
+        if(centerx != null && centerx.length() > 0) {
             // set center so use to/from lat & long to retrieve data
             geoCenterPoint=lookUpAddress(context);
             if(geoCenterPoint != null) {
@@ -169,6 +169,7 @@ public class MapBean {
                 double dLatitude=geoCenterPoint[0].getLatitude();
                 double dLongRadius=calculateLongitudeRadius(radius);
                 double dLongitude=geoCenterPoint[0].getLongitude();
+                System.out.println("\n *** cat radius" + dLatitude + " - " + dLongitude);
                 items=cf.getItemsByCategoryByRadiusVLH(category, 0, 25, dLatitude - dLatRadius,  
                     dLatitude + dLatRadius, dLongitude - dLongRadius, dLongitude + dLongRadius);
             }
@@ -178,7 +179,12 @@ public class MapBean {
             // no center point so look up whole category
             items=cf.getItemsByCategoryVLH(category, 0, 25);
         }
-        System.out.println("Have Database items - " + items.size());
+        if(items != null) {
+            System.out.println("\nHave Database items - " + items.size());
+        } else {
+            System.out.println("\nHave NULL items from the database");
+        }
+    
         return mapItems(context, items, geoCenterPoint, centerx);
     }
     
@@ -203,7 +209,7 @@ public class MapBean {
         String centerx=getCenterAddress();
         List<Item> items=null;
         GeoPoint[] geoCenterPoint=null;
-        if(centerx != null && centerx.length() > 0 && radius > 0) {
+        if(centerx != null && centerx.length() > 0) {
             // set center so use to/from lat & long to retrieve data
             geoCenterPoint=lookUpAddress(context);
             if(geoCenterPoint != null) {
@@ -212,6 +218,7 @@ public class MapBean {
                 double dLatitude=geoCenterPoint[0].getLatitude();
                 double dLongRadius=calculateLongitudeRadius(radius);
                 double dLongitude=geoCenterPoint[0].getLongitude();
+                System.out.println("\n *** id radius" + dLatitude + " - " + dLongitude);
                 items=cf.getItemsByItemIDByRadius(itemIds, dLatitude - dLatRadius,  
                     dLatitude + dLatRadius, dLongitude - dLongRadius, dLongitude + dLongRadius);
             }
@@ -222,13 +229,17 @@ public class MapBean {
             items=cf.getItemsByItemID(itemIds);
         }
 
-        System.out.println("Have Database items - " + items.size());
+        if(items != null) {
+            System.out.println("\nHave Database items - " + items.size());
+        } else {
+            System.out.println("\nHave NULL items from the database");
+        }
         return mapItems(context, items, geoCenterPoint, centerx);
     }
     
     
     public String mapItems(FacesContext context, List<Item> items, GeoPoint[] geoCenterPoint, String centerx) {
-        if(items.size() > 0) {
+        if(items != null && items.size() > 0) {
             // Set up markers for the center and information window
             double dLatitude=0;
             double dLongitude=0;
@@ -287,22 +298,6 @@ public class MapBean {
                 loc=items.get(ii);
                 if(loc.getAddress() != null && !loc.getAddress().equals("")) {
                     mm=new MapMarker();
-                    /*
-                    if ((points != null) && (points.length > 0)) {
-                        // check to see if in radius
-                        if(points[0].getLatitude() >= (dLatitude - dLat) && 
-                           points[0].getLatitude() <= (dLatitude + dLat) &&
-                           points[0].getLongitude() >= (dLongitude - dLong) &&
-                           points[0].getLongitude() <= (dLongitude + dLong)) {
-
-                            mm.setLatitude(points[0].getLatitude());
-                            mm.setLongitude(points[0].getLongitude());
-                            mm.setMarkup(changeSpaces(loc.getInfo()) + "<br>" + changeSpaces(loc.getAddress()));
-                            addMapMarker(mm) ;
-                            outputx +="\n" + points[0].getLatitude() + " - " + points[0].getLongitude();
-                        }
-                    }
-                    */
                     mm.setLatitude(loc.getAddress().getLatitude());
                     mm.setLongitude(loc.getAddress().getLongitude());
                     mm.setMarkup("<b>" + changeSpaces(loc.getName()) + "</b><br/>" + 
