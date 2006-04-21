@@ -18,11 +18,11 @@
             style="border-style:double; border-color:darkgreen; padding:5px">
             <tr>
                 <td valign="top" align="center" width="200px">
-                    <table border="1">
+                    <table border="0">
                         <c:if test="${!empty sessionScope.MapBean.locations}">
                             <tr>
                                 <th>
-                                    ${sessionScope.MapBean.locationCount} Items Displayed
+                                    <u>${sessionScope.MapBean.locationCount} Items Displayed</u>
                                  </th>
                              </tr>
                                 <tr>
