@@ -109,15 +109,15 @@ public class FileUploadBean {
                 if(desc.length() == 0) desc="No description available";
                 if(price.length() == 0) price="0";
                 
+                // Contact info
+                String firstName = getStringValue(hmUpload, compName+":firstName");
+                String lastName = getStringValue(hmUpload, compName+":lastName");
+                String email = getStringValue(hmUpload, compName+":email");
                 // Add address fields to the file upload page and extract data
                 StringBuffer addressx=new StringBuffer();
                 String street1=getStringValue(hmUpload, compName+":street1");
                 if(street1.length() > 0) {
                     addressx.append(street1);
-                }
-                String street2=getStringValue(hmUpload, compName+":street2");
-                if(street2.length() > 0) {
-                    addressx.append(street2);
                 }
                 
                 String city=getStringValue(hmUpload, compName+":cityField");
@@ -183,10 +183,9 @@ public class FileUploadBean {
                     priceF=new Float(0);
                     getLogger().log(Level.INFO, "Price isn't in a proper number - " + price);
                 }
-                Address addr = new Address(street1,street2,city,state,zip,
+                Address addr = new Address(street1,null,city,state,zip,
                         latitude,longitude);
-                SellerContactInfo contactInfo = new SellerContactInfo("duke","duke",
-                        "abc@abc.xyz");
+                SellerContactInfo contactInfo = new SellerContactInfo(firstName, lastName, email);
                 Item item = new Item(prodId,name,desc,fileName,fileName, priceF,
                         addr,contactInfo,0,0);
                 String itemID = cf.addItem(item);
