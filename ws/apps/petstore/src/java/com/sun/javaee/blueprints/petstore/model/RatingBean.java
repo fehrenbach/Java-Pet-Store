@@ -1,5 +1,8 @@
 package com.sun.javaee.blueprints.petstore.model;
 import java.util.logging.Logger;
+import javax.servlet.ServletContext;
+import javax.faces.context.FacesContext;
+import java.util.Map;
 /*
  * RatingBean.java
  *
@@ -17,9 +20,13 @@ public class RatingBean {
     
     private String itemId=null;
     private int grade=0;
+    private CatalogFacade cf;
     
     /** Creates a new instance of RatingBean */
     public RatingBean() {
+        FacesContext context=FacesContext.getCurrentInstance();
+        Map<String,Object> contextMap=context.getExternalContext().getApplicationMap();        
+        cf=(CatalogFacade)contextMap.get("CatalogFacade");
     }
     
     public String[] getRatingText() {
@@ -32,14 +39,16 @@ public class RatingBean {
         String itemId=getItemId();
         if(itemId != null) {
             // persistant code goes here !!!!
+            Item item = cf.getItem(itemId);
+            item.addRating(grade);
+            cf.addRating(item);
         }
         
     }
 
     public int getGrade() {
         return grade;
-    }
-    
+    }  
 
     public void setItemId(String itemId) {
         this.itemId=itemId;
