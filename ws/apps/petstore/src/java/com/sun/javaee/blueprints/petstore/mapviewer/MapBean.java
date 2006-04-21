@@ -18,12 +18,6 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.util.List;
 import java.util.Map;
-import java.util.Collection;
-
-import javax.faces.component.UICommand;
-import javax.faces.component.UIInput;
-import javax.faces.component.UIForm;
-import javax.servlet.ServletContext;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
@@ -33,10 +27,10 @@ import com.sun.j2ee.blueprints.ui.mapviewer.MapMarker;
 import com.sun.j2ee.blueprints.ui.mapviewer.MapPoint;
 
 import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
-import com.sun.javaee.blueprints.petstore.util.PetstoreConstants;
 import com.sun.javaee.blueprints.petstore.model.CatalogFacade;
 import com.sun.javaee.blueprints.petstore.model.Item;
 import com.sun.javaee.blueprints.petstore.model.Category;
+import javax.el.ValueExpression;
 
 /**
  *
@@ -49,8 +43,8 @@ public class MapBean {
     private MapPoint mapPoint=new MapPoint();
     private int zoomLevel=5, radius=30;
     private Logger _logger=null;
-    private String category=null, centerAddress=null;
-    private String[] items=new String[0];
+    private String category="CATS", centerAddress=null;
+    private String[] itemIds=new String[0];
     
     /** Creates a new instance of MapBean */
     public MapBean() {
@@ -62,12 +56,12 @@ public class MapBean {
     }
     
     // search.jsp
-    public void setItems(String[] items) {
-        this.items=items;
+    public void setItemIds(String[] items) {
+        this.itemIds=items;
     }
     
-    public String[] getItems() {
-        return items;
+    public String[] getItemIds() {
+        return itemIds;
     }
     
     
@@ -127,6 +121,11 @@ public class MapBean {
         return mm;
     }
     
+    public int getLocationCount() {
+        return alMapMarkers.size();
+    }
+    
+    
     public void addMapMarker(MapMarker mm) {
         alMapMarkers.add(mm);
     }
@@ -171,7 +170,15 @@ public class MapBean {
         Map<String,Object> contextMap=context.getExternalContext().getApplicationMap();        
         CatalogFacade cf=(CatalogFacade)contextMap.get("CatalogFacade");
         // should always have a value
-        String[] itemIds=getItems();
+        ValueExpression vex=context.getApplication().getExpressionFactory().createValueExpression(context.getELContext(), "#{paramValues.mapSelectedItems}", String[].class);
+        String[] itemx=(String[])vex.getValue(context.getELContext());
+        // since looking up values from request, make sure the values exist before replacing old values
+        if(itemx != null) {
+            itemIds=itemx;
+        }
+        System.out.println("\n *** GET TYPE - " + vex.getType(context.getELContext()) + " - " + itemIds);
+        System.out.println("Have number of selected items - " + itemIds.length);
+        
         List<Item> items=cf.getItemsByIDs(itemIds);
         System.out.println("Have Database items - " + items.size());
         
@@ -197,7 +204,7 @@ public class MapBean {
                 Item centerItem=items.get(0);
                 dLatitude=centerItem.getAddress().getLatitude();
                 dLongitude=centerItem.getAddress().getLongitude();
-                infoBalloon=centerItem.getName() + "<br>" + centerItem.getAddress().getAddressAsString();
+                infoBalloon="<b>" + centerItem.getName() + "</b><br/>" + centerItem.getAddress().getAddressAsString();
 
             } else {
                 // look up lat and long of center point
@@ -233,7 +240,7 @@ public class MapBean {
                         // set values to used for map location
                         dLatitude=points[0].getLatitude();
                         dLongitude=points[0].getLongitude();
-                        infoBalloon="Center Point<br>" + centerx;
+                        infoBalloon="<b>Center Point</b><br/>" + centerx;
                     }
                 } catch (Exception ee) {
                     getLogger().log(Level.WARNING, "geocoder.lookup.exception", ee);
@@ -296,7 +303,7 @@ public class MapBean {
                     */
                     mm.setLatitude(loc.getAddress().getLatitude());
                     mm.setLongitude(loc.getAddress().getLongitude());
-                    mm.setMarkup(changeSpaces(loc.getName()) + "<br>" + 
+                    mm.setMarkup("<b>" + changeSpaces(loc.getName()) + "</b><br/>" + 
                         changeSpaces(loc.getAddress().getAddressAsString()));
 
                     addMapMarker(mm) ;
@@ -306,6 +313,10 @@ public class MapBean {
         //System.out.println("Lat - Long " + outputx);
         // return null so navigation will stay on main lookup page
         return "map";
+    }
+    
+    public String getAddressPoint() {
+        return "this is a test";
     }
     
         

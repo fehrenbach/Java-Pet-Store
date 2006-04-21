@@ -66,7 +66,7 @@
                 <h:dataTable id="results" border="1" 
                     value="#{SearchBean.hits}" var="item" rendered="#{SearchBean.showResults}"
                     style="border-style:double; width:600px; border-color:darkgreen; padding:5px"
-                    cellpadding="5" cellspacing="5" >
+                    cellpadding="5px" cellspacing="5px" >
                 
                     <h:column >
                         <f:facet name="header">

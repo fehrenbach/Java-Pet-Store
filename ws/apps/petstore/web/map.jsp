@@ -14,15 +14,45 @@
         <jsp:include page="banner.jsp" />
         <br>
         <center>
-            <f:view>
+        <table border="1" cellspacing="5px" cellpadding="5px"
+            style="border-style:double; border-color:darkgreen; padding:5px">
+            <tr>
+                <td valign="top" align="center" width="200px">
+                    <table border="1">
+                        <c:if test="${!empty sessionScope.MapBean.locations}">
+                            <tr>
+                                <th>
+                                    ${sessionScope.MapBean.locationCount} Items Displayed
+                                 </th>
+                             </tr>
+                                <tr>
+                                    <td>
+                                    <ul>
+                                        <c:forEach items="${sessionScope.MapBean.locations}" var="addresses">
+                                            <!-- problems with banner, so use google api directly
+                                            <li><a href="javascript:bpui.mapviewer.openInfoWindowHtml(mapViewerx, ${addresses.latitude}, ${addresses.longitude}, '${addresses.markup}')">${addresses.markup}</a></li>
+                                            -->
+                                            <li><a href="javascript:mapViewerx.openInfoWindowHtml(new GPoint(${addresses.longitude}, ${addresses.latitude}), '${addresses.markup}');">${addresses.markup}</a></li>
 
-                <ui:mapViewer id="mapViewerx" center="#{MapBean.mapPoint}" info="#{MapBean.mapMarker}"
-                markers="#{MapBean.locations}" zoomLevel="#{MapBean.zoomLevel}" style="height: 500px; width: 700px"/>
+                                        </c:forEach>
+                                    </ul>
+                                    <td>
+                                </tr>
+                        </c:if>
+                    </table>
+                </td>
+                <td>
+                    <f:view>
+        
+                        <ui:mapViewer id="mapViewerx" center="#{MapBean.mapPoint}" info="#{MapBean.mapMarker}"
+                        markers="#{MapBean.locations}" zoomLevel="#{MapBean.zoomLevel}" style="height: 500px; width: 700px"/>
+        
+                    </f:view>
+                </td>
+            </tr>
+        </table>
 
-            </f:view>
-
-
-
+        
 <script type="text/javascript">
     bpui.mapviewer.createMapControl = function() {
       return new GLargeMapControl();
@@ -30,15 +60,6 @@
    
 </script>           
 <br/><br/>
-<!--
-<span onclick="bpui.mapviewer.openInfoWindowHtml(mapViewerx, 37.642467, -122.052758, 'Hayward&nbsp;Hills&nbsp;Equestrian&nbsp;Center<br>1275&nbsp;Calhoun,&nbsp;Hayward,&nbsp;CA');">
-    Select Hayward
-</span>
-<br/><br/>
-<span onclick="bpui.mapviewer.openInfoWindowHtml(mapViewerx, 37.571037, -121.969899, 'Mission&nbsp;Valley&nbsp;Veterinary&nbsp;Clinic<br>55&nbsp;Mowry&nbsp;Ave,&nbsp;Fremont,&nbsp;CA');">
-    Select Fremont
-</span>
--->
         </center>
     </body>
 </html>

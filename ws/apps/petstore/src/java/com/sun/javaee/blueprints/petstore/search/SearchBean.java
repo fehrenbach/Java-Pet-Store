@@ -29,7 +29,7 @@ import javax.el.ValueExpression;
  */
 public class SearchBean {
     
-    private String searchString="dog";
+    private String searchString="cat";
     private boolean searchTags=true, showResults=false;
     private Vector<IndexDocument> vtHits=null;
     
