@@ -14,7 +14,9 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.Map;
+import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.util.Date;
@@ -27,6 +29,7 @@ import org.apache.shale.remoting.faces.ResponseFactory;
 
 import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
 import com.sun.javaee.blueprints.petstore.util.PetstoreConstants;
+import com.sun.javaee.blueprints.petstore.util.ImageScaler;
 import com.sun.javaee.blueprints.petstore.model.Item;
 import com.sun.javaee.blueprints.petstore.model.Address;
 import com.sun.javaee.blueprints.petstore.model.CatalogFacade;
@@ -44,7 +47,7 @@ import com.sun.j2ee.blueprints.ui.geocoder.GeoPoint;
  * @author basler
  */
 public class FileUploadBean {
-    private boolean bDebug=false;
+    private boolean bDebug=true;
     private Logger _logger=null;
     private static final String comma=", ";
     
@@ -89,7 +92,7 @@ public class FileUploadBean {
                     }
                 }
                 String absoluteFileName=getStringValue(hmUpload, fileNameKey);
-                System.out.println("Abs name: "+ absoluteFileName);
+                if(bDebug) System.out.println("Abs name: "+ absoluteFileName);
                 String fileName = null;
                 if(absoluteFileName != null) {
                     int lastSeparator = absoluteFileName.lastIndexOf("/") + 1;
@@ -101,7 +104,14 @@ public class FileUploadBean {
                 
                 String compName=getStringValue(hmUpload, FileUploadUtil.COMPONENT_NAME);
                 
-                System.out.println("file name: "+ fileName);
+                if(bDebug) System.out.println("file name: "+ fileName);
+                String spath = constructThumbnail(absoluteFileName);
+                String thumbPath = null;
+                if (spath != null) {
+                    // recreate "images/FILENAME"
+                    int idx = spath.lastIndexOf(System.getProperty("file.separator"));
+                    thumbPath = "images/"+spath.substring(idx+1, spath.length());
+                }
                 String prodId=getStringValue(hmUpload, compName+":product");
                 String name=getStringValue(hmUpload, compName+":name");
                 String desc=getStringValue(hmUpload, compName+":description");
@@ -186,7 +196,7 @@ public class FileUploadBean {
                 Address addr = new Address(street1,null,city,state,zip,
                         latitude,longitude);
                 SellerContactInfo contactInfo = new SellerContactInfo(firstName, lastName, email);
-                Item item = new Item(prodId,name,desc,fileName,fileName, priceF,
+                Item item = new Item(prodId,name,desc,fileName, thumbPath, priceF,
                         addr,contactInfo,0,0);
                 String itemID = cf.addItem(item);
                 getLogger().log(Level.FINE, "Item " + name + " has been persisted");
@@ -246,6 +256,26 @@ public class FileUploadBean {
         }
     }
     
+    private String constructThumbnail(String path) {
+        String thumbPath = null;
+        File file = new File(path);
+        String aPath = file.getAbsolutePath();
+        
+        // first, construct the file name for thumbnail
+        if (file.exists()) {
+            int idx = aPath.lastIndexOf(".");
+            if (idx > 0) {
+                thumbPath = aPath.substring(0, idx)+"_thumb"+aPath.substring(idx, aPath.length());
+            }
+        }
+        ImageScaler imgScaler = new ImageScaler();
+        try {
+            imgScaler.resizeWithGraphics(aPath, thumbPath);
+        } catch (Exception e) {
+            System.out.print("ERROR in generating thumbnail");
+        }
+        return thumbPath;
+    }
     
     private void indexItem(IndexDocument indexDoc) {
         // Add document to index
