@@ -155,15 +155,35 @@ public class MapBean {
         CatalogFacade cf=(CatalogFacade)contextMap.get("CatalogFacade");
         // should always have a value
         if(category == null) category="CATS";
-        List<Item> items=cf.getItemsByCategory(category, 0, 25);
+
+        // check to see if radius set with centerpoint
+        String centerx=getCenterAddress();
+        List<Item> items=null;
+        GeoPoint[] geoCenterPoint=null;
+        if(centerx != null && centerx.length() > 0 && radius > 0) {
+            // set center so use to/from lat & long to retrieve data
+            geoCenterPoint=lookUpAddress(context);
+            if(geoCenterPoint != null) {
+                // have center point
+                double dLatRadius=calculateLatitudeRadius(radius);
+                double dLatitude=geoCenterPoint[0].getLatitude();
+                double dLongRadius=calculateLongitudeRadius(radius);
+                double dLongitude=geoCenterPoint[0].getLongitude();
+                items=cf.getItemsByCategoryByRadiusVLH(category, 0, 25, dLatitude - dLatRadius,  
+                    dLatitude + dLatRadius, dLongitude - dLongRadius, dLongitude + dLongRadius);
+            }
+        }
+
+        if(geoCenterPoint == null) {
+            // no center point so look up whole category
+            items=cf.getItemsByCategoryVLH(category, 0, 25);
+        }
         System.out.println("Have Database items - " + items.size());
-        
-        return mapItems(context, items);
+        return mapItems(context, items, geoCenterPoint, centerx);
     }
     
     
     public String findAllByIDs() {
-        
         System.out.println("*** In findAllByIDs - ");
         // get items from catalog
         FacesContext context=FacesContext.getCurrentInstance();
@@ -179,17 +199,36 @@ public class MapBean {
         System.out.println("\n *** GET TYPE - " + vex.getType(context.getELContext()) + " - " + itemIds);
         System.out.println("Have number of selected items - " + itemIds.length);
         
-        List<Item> items=cf.getItemsByIDs(itemIds);
+        // check to see if radius set with centerpoint
+        String centerx=getCenterAddress();
+        List<Item> items=null;
+        GeoPoint[] geoCenterPoint=null;
+        if(centerx != null && centerx.length() > 0 && radius > 0) {
+            // set center so use to/from lat & long to retrieve data
+            geoCenterPoint=lookUpAddress(context);
+            if(geoCenterPoint != null) {
+                // have center point
+                double dLatRadius=calculateLatitudeRadius(radius);
+                double dLatitude=geoCenterPoint[0].getLatitude();
+                double dLongRadius=calculateLongitudeRadius(radius);
+                double dLongitude=geoCenterPoint[0].getLongitude();
+                items=cf.getItemsByItemIDByRadius(itemIds, dLatitude - dLatRadius,  
+                    dLatitude + dLatRadius, dLongitude - dLongRadius, dLongitude + dLongRadius);
+            }
+        }
+
+        if(geoCenterPoint == null) {
+            // no center point so look up just ids
+            items=cf.getItemsByItemID(itemIds);
+        }
+
         System.out.println("Have Database items - " + items.size());
-        
-        return mapItems(context, items);
+        return mapItems(context, items, geoCenterPoint, centerx);
     }
     
     
-    public String mapItems(FacesContext context, List<Item> items) {
-        
+    public String mapItems(FacesContext context, List<Item> items, GeoPoint[] geoCenterPoint, String centerx) {
         if(items.size() > 0) {
-
             // Set up markers for the center and information window
             double dLatitude=0;
             double dLongitude=0;
@@ -197,56 +236,19 @@ public class MapBean {
 
             // clear old locations
             alMapMarkers.clear();
-
-            String centerx=getCenterAddress();
-            if(centerx == null || centerx.length() < 1) {
-                // need center so set first point as center
+            if(geoCenterPoint != null) {
+                // set values to used from centerAddress lookup
+                dLatitude=geoCenterPoint[0].getLatitude();
+                dLongitude=geoCenterPoint[0].getLongitude();
+                infoBalloon="<b>Center Point</b><br/>" + centerx;
+            } else {
+                // use first item that as center point
                 Item centerItem=items.get(0);
                 dLatitude=centerItem.getAddress().getLatitude();
                 dLongitude=centerItem.getAddress().getLongitude();
                 infoBalloon="<b>" + centerItem.getName() + "</b><br/>" + centerItem.getAddress().getAddressAsString();
-
-            } else {
-                // look up lat and long of center point
-                // get proxy host and port from servlet context
-                String proxyHost=context.getExternalContext().getInitParameter("proxyHost");
-                String proxyPort=context.getExternalContext().getInitParameter("proxyPort");
-                
-                // get latitude & longitude
-                GeoCoder geoCoder=new GeoCoder();
-                if(proxyHost != null && proxyPort != null) {
-                    // set proxy host and port if it exists
-                    getLogger().log(Level.INFO, "Setting proxy to " + proxyHost + ":" + proxyPort + ".  Make sure server.policy is updated to allow setting System Properties");
-                    geoCoder.setProxyHost(proxyHost);
-                    try {
-                        geoCoder.setProxyPort(Integer.parseInt(proxyPort));
-                    } catch (Exception ee) {
-                        ee.printStackTrace();
-                    }
-                } else {
-                    getLogger().log(Level.INFO, "A \"proxyHost\" and \"proxyPort\" isn't set as a web.xml context-param. A proxy server may be necessary to reach the open internet.");
-                }
-                
-                // use component to get points based on location (this uses Yahoo's map service
-                try {
-                    GeoPoint points[]=geoCoder.geoCode(centerx);
-                    if ((points == null) || (points.length < 1)) {
-                        getLogger().log(Level.INFO, "No addresses for location - " + centerx);
-                    } else if(points.length > 1) {
-                        getLogger().log(Level.INFO, "Matched " + points.length + " locations, taking the first one");
-                    }
-
-                    if(points.length > 0) {
-                        // set values to used for map location
-                        dLatitude=points[0].getLatitude();
-                        dLongitude=points[0].getLongitude();
-                        infoBalloon="<b>Center Point</b><br/>" + centerx;
-                    }
-                } catch (Exception ee) {
-                    getLogger().log(Level.WARNING, "geocoder.lookup.exception", ee);
-                }
             }
-            
+
             // lat and long of the center point
             mapPoint.setLatitude(dLatitude);
             mapPoint.setLongitude(dLongitude);
@@ -257,7 +259,7 @@ public class MapBean {
             mapMarker.setMarkup(changeSpaces(infoBalloon));
             addMapMarker(mapMarker) ;
 
-            // check radius to zoom level
+            // check radius and set initial zoom level
             if(radius < 5) {
                 zoomLevel=4;
             } else if(radius < 21) {
@@ -315,8 +317,43 @@ public class MapBean {
         return "map";
     }
     
-    public String getAddressPoint() {
-        return "this is a test";
+
+    public GeoPoint[] lookUpAddress(FacesContext context) {
+        // look up lat and long of center point
+        // get proxy host and port from servlet context
+        String proxyHost=context.getExternalContext().getInitParameter("proxyHost");
+        String proxyPort=context.getExternalContext().getInitParameter("proxyPort");
+
+        // get latitude & longitude
+        GeoCoder geoCoder=new GeoCoder();
+        if(proxyHost != null && proxyPort != null) {
+            // set proxy host and port if it exists
+            getLogger().log(Level.INFO, "Setting proxy to " + proxyHost + ":" + proxyPort + ".  Make sure server.policy is updated to allow setting System Properties");
+            geoCoder.setProxyHost(proxyHost);
+            try {
+                geoCoder.setProxyPort(Integer.parseInt(proxyPort));
+            } catch (Exception ee) {
+                ee.printStackTrace();
+            }
+        } else {
+            getLogger().log(Level.INFO, "A \"proxyHost\" and \"proxyPort\" isn't set as a web.xml context-param. A proxy server may be necessary to reach the open internet.");
+        }
+
+        // use component to get points based on location (this uses Yahoo's map service
+        GeoPoint points[]=null;
+        try {
+            String centerx=getCenterAddress();
+            points=geoCoder.geoCode(centerx);
+            if ((points == null) || (points.length < 1)) {
+                getLogger().log(Level.INFO, "No addresses for location - " + centerx);
+            } else if(points.length > 1) {
+                getLogger().log(Level.INFO, "Matched " + points.length + " locations, taking the first one");
+            }
+
+        } catch (Exception ee) {
+            getLogger().log(Level.WARNING, "geocoder.lookup.exception", ee);
+        }
+        return points;
     }
     
         
