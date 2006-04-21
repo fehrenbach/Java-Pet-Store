@@ -37,6 +37,7 @@ public class RatingBean {
         // "itemId" is the primarykey for the product...
         // "grade" is the grade to be store
         String itemId=getItemId();
+        System.out.println("\n *** have rating - " + itemId + " - " + grade);
         if(itemId != null) {
             // persistant code goes here !!!!
             Item item = cf.getItem(itemId);
