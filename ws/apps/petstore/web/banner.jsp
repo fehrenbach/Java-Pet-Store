@@ -3,7 +3,6 @@
 <script type="text/javascript" src="engine.js"></script>
 <script type="text/javascript" src="dojo.js"></script>
 
-<script type="text/javascript" src="rss.js"></script>
 <link rel="stylesheet" type="text/css" href="styles.css"></link>
 <script type="text/javascript" src="http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.servletContext.contextPath}/autocomplete.js"></script>
 <script type="text/javascript" src="http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.servletContext.contextPath}/ajax-commons.js"></script>
@@ -36,14 +35,14 @@
 dojo.event.connect("before", window, "onload", this, "init");
 
 function init() {
-    var rss = new bpui.RSS();
+    //var rss = new bpui.RSS();
     var engine = new Engine();
-    if (document.getElementById("menubar")) {
+    if (document.getElementById("menubarTODO")) {
         engine.inject({url:"/petstore/faces/rssbar.jsp",
                        injectionPoint: document.getElementById("menubar"),
                        initFunction : function() {
                             var handler = function() {
-                                rss.getRssInJson('https://blueprints.dev.java.net/servlets/ProjectRSS?type=news', '4');
+                                //rss.getRssInJson('https://blueprints.dev.java.net/servlets/ProjectRSS?type=news', '4');
                             }
                             setTimeout(handler, 1000);
                        }

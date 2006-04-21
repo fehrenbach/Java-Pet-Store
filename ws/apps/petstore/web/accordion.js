@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: accordion.js,v 1.15 2006-04-18 00:37:32 gmurray71 Exp $
+$Id: accordion.js,v 1.16 2006-04-21 20:28:48 gmurray71 Exp $
 */
 
 
@@ -190,11 +190,16 @@ function AccordionMenu () {
                     var span = document.createElement("span");
                     span.className = "accordionProduct";
                     var link = document.createElement("a");
-                    link.className = "accordionLink";
                     var target = categories[nExpandedIndex].products[l].id;
-                    dojo.event.connect(link, "onclick", function(evt){
-                        this.target = target;
-                        dojo.event.topic.publish("/scroller", {type:"showProducts", productId:target});
+                    link.id = target;
+                    link.className = "accordionLink";
+                    dojo.event.connect(link, "onclick", function(evt) {
+                        this._target = target
+                        var src;
+                    	if (evt.target) src = evt.target;
+                        else if (evt.srcElement) src = evt.srcElement
+    
+                        dojo.event.topic.publish("/scroller", {type:"showProducts", productId:src.id});
                     });
                     link.appendChild(document.createTextNode(categories[nExpandedIndex].products[l].name));
                     span.appendChild(link);
@@ -202,6 +207,7 @@ function AccordionMenu () {
                     if (l < categories[nExpandedIndex].products.length - 1) {
                         divs[nExpandedIndex].div.appendChild(document.createElement("p"));
                     }
+                    link = null;
                 }
                 expanding = false;
                 oExpandedIndex = nExpandedIndex;

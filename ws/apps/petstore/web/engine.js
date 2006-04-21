@@ -34,19 +34,17 @@ function Engine () {
             mimetype: "text/html",
             load: function(type, data) {
                //if no parent is given append to the document root
+               var nData = includeEmbeddedResources(data, p.initFunction );
                if (!p.injectionPoint) {
                     var injectionPoint = document.createElement("div");
-                    injectionPoint.innerHTML = data;
+                    injectionPoint.innerHTML = nData;
                     document.firstChild.appendChild(injectionPoint);
                } else {
-                    var nData = includeEmbeddedResources(data);
                     p.injectionPoint.innerHTML = nData;
                }
                if (p.script) {
                   // now load the associated JavaScript
                   loadScript(p.script,p.initFunction);
-               } else {
-                  if ( p.initFunction) p.initFunction();
                }
             }
         };
@@ -66,7 +64,7 @@ function Engine () {
    * If were returning an text document remove any script in the
    * the document and add it to the global scope using a time out.
    */
-  function includeEmbeddedResources(target) {
+  function includeEmbeddedResources(target,  initFunction) {
     var bodyText = "";
     var embeddedScripts = [];
     var embeddedStyles = [];
@@ -162,14 +160,26 @@ function Engine () {
         }
                 
         scriptLoader(scriptReferences, 0, function() {
-            this.embeddedScripts = embeddedScripts;
+           this.embeddedScripts = embeddedScripts;
             // evaluate the embedded javascripts in the order they were added
             // consider using an onload handler
             for(var loop = 0; loop < embeddedScripts.length; loop++) {
-                setTimeout(embeddedScripts[loop],0);
+                var script = embeddedScripts[loop];
+                // append to the script a method to call the scriptLoaderCallback
+                if (loop == (embeddedScripts.length -1)) {
+                    script = script + "scriptLoaderCallback(initFunction);"
+                }
+                eval(script);
             }
-        });        
+        });
+   
         return target;
+    }
+    
+    function scriptLoaderCallback(initFunction) {
+        if (typeof initFunction == "function") {
+            setTimeout(initFunction, 0);
+        }  
     }
     
     /**

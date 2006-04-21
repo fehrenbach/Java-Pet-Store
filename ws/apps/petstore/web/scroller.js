@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: scroller.js,v 1.12 2006-04-19 08:55:44 gmurray71 Exp $
+$Id: scroller.js,v 1.13 2006-04-21 20:28:49 gmurray71 Exp $
 */
 
 function ImageScroller() {
@@ -195,13 +195,14 @@ function ImageScroller() {
     
 
     function showImage(itemId) {
-
 	    window.location.href= originalURL + "#" + itemId;
         setTimeout(showProgressIndicator,0);
         var i = map.get(itemId);
+        
         if (!i) {
             return;
         }
+        dojo.event.topic.publish("/scroller", {type:"showingItem", id: itemId, rating: i.rating});
         // create the image pane and append the description nodes
         // asumption is that if the imagePane is not set neigher are the info children
         if (!imagePane) {
@@ -269,7 +270,6 @@ function ImageScroller() {
             setOpacity(percentage, IMAGE_PANE_ID);
 
         }
-       // statusDiv.innerHTML = "crossfade percentage=" + percentage;
        if (percentage < 100) {
             percentage = percentage + 10;
             setTimeout(function(){this.loadIntoBuffer = loadIntoBuffer;this.percentage = percentage;crossFade(percentage,loadIntoBuffer);}, 25);
@@ -441,7 +441,7 @@ function ImageScroller() {
     
     function handleEvent(args) {
         if (args) {
-            if (args.type = "showProducts") {
+            if (args.type == "showProducts") {
                 this.setProducts(args.productId);
             }
         }
@@ -495,7 +495,6 @@ function ImageScroller() {
         // this will need to be generic based on the right and left button image width
         var rightX = findX(rightButton) + VIEWPORT_WIDTH - 20;
         rightButton.style.left = rightX  +  "px";
-
 
         // this will need to be made generic depending on the thumb height
         tileY = findY(leftButton)  - 37;
@@ -655,7 +654,8 @@ function ImageScroller() {
             var imageURL =  getElementText("image-url", item);
             var sDescription =  getElementText("description", item);
             var price = 0;
-            var i = new Item(itemId ,name, thumbURL, imageURL,"", sDescription, price);
+            var rating = getElementText("rating", item);
+            var i = new Item(itemId ,name, thumbURL, imageURL,"", sDescription, price,rating);
             items.push(i);
             map.put(itemId, i);
             createTile(i);
@@ -795,7 +795,7 @@ function ImageScroller() {
         }
     }
     
-    function Item(id,name,thumbnail,image,description,shortDescription,price){
+    function Item(id,name,thumbnail,image,description,shortDescription,price,rating){
         this.id = id;
         this.name= name;
         this.image = image;
@@ -804,6 +804,7 @@ function ImageScroller() {
         this.description = description;
         this.shortDescription = shortDescription;
         this.price = price;
+        this.rating = rating;
     }
     
 }
