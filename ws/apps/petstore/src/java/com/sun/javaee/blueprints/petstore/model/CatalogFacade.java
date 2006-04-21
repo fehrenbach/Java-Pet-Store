@@ -69,65 +69,77 @@ public class CatalogFacade implements ServletContextListener {
     }
     
     /**
-     * Value List Handler for items. Found by category
+     * Value List Handler for items. Found by item ID
      * @param IDs is an array of item ids for specific items that need to be returned
      * @returns a List of Item objects
      */
-    public List<Item> getItemsByIDs(String[] IDs){
-        // TO DO ???
-        return getItemsByRadius("CATS", 0, 50, -200d, 200d, -200d, 200d);
-    }
-    
-    /**
-     * Value List Handler for items. Found by category
-     * @param IDs is an array of item ids for specific items that need to be returned
-     * @returns a List of Item objects
-     */
-    public List<Item> getItemsByIDsByRadius(String[] IDs, double fromLatitude, double toLatitude, double fromLongitude, double toLongitude){
-        // TO DO ???
-        return getItemsByRadius("CATS", 0, 50, fromLatitude, toLatitude, fromLongitude, toLongitude);
-    }
-        
-    /**
-     * Value List Handler for items. Found by category
-     * @param categoryID is the product id that the item belongs to
-     * @param start position of the first result, numbered from 0
-     * @param chunkSize the maximum number of results to retrieve
-     * @returns a List of Item objects
-     */
-    public List<Item> getItemsByCategory(String categoryID, int start, int chunkSize){
-        // TO DO ???
-        return getItemsByRadius(categoryID, start, chunkSize, -200d, 200d, -200d, 200d);
-    }
-    
-    /**
-     * Value List Handler for items. Found by location radius for google map
-     * Uses the Java Persistence query language.
-     * @param categoryID is the product id that the item belongs to
-     * @param start position of the first result, numbered from 0
-     * @param chunkSize the maximum number of results to retrieve
-     * @returns a List of Item objects
-     */
-    public List<Item> getItemsByRadius(String categoryID, int start, int chunkSize,
-            double fromLatitude, double toLatitude, double fromLongitude, double toLongitude){
+    public List<Item> getItemsByItemID(String[] itemIDs){
         EntityManager em = emf.createEntityManager();
-        
-        //System.out.println("CatalogFacade.getItemsByRadius: categoryID=" + categoryID + " start=" + start + " chunkSize=" + chunkSize);
-        //select i.itemID from item i , product p where i.productID= p.productID  AND p.categoryID = 'CATS'
-        Query query = em.createQuery("SELECT i FROM Item i, Product p WHERE i.productID=p.productID AND p.categoryID = :categoryID");
-        List<Item>  items = query.setParameter("categoryID",categoryID).setFirstResult(start).setMaxResults(chunkSize).getResultList();
-        
-        /*Iterator<Item> it = items.iterator();
-          while (it.hasNext()) {
-               Item i = it.next();
-              System.out.println("*****CatalogFacade:**" +i.getItemID() + "\n");
-          }
-         **/
-        
+        List<Item> items = new ArrayList<Item>();
+        for(int i=0;i<itemIDs.length;++i){
+            Item item = em.find(Item.class,itemIDs[i]); 
+            items.add(item);
+        }
         em.close();
         return items;
     }
     
+    /**
+     * Value List Handler for items. Found by item ID and radius
+     * @param IDs is an array of item ids for specific items that need to be returned
+     * @returns a List of Item objects
+     */
+    public List<Item> getItemsByItemIDByRadius(String[] IDs, double fromLatitude,
+            double toLatitude, double fromLongitude, double toLongitude){
+            EntityManager em = emf.createEntityManager();
+       /* List<Item> items = new List<Item>();
+        em.close();
+        return items;*/
+    }
+    
+    /**
+     * Value List Handler for items. Found by category
+     * @param categoryID is the category id that the item belongs to
+     * @param start position of the first result, numbered from 0
+     * @param chunkSize the maximum number of results to retrieve
+     * @returns a List of Item objects
+     */
+    public List<Item> getItemsByCategoryVLH(String catID, int start,
+            int chunkSize){
+        EntityManager em = emf.createEntityManager();
+        Query query = em.createQuery("SELECT i FROM Item i, Product p WHERE " +
+                "i.productID=p.productID AND p.categoryID = :categoryID" +
+                " GROUP BY i.name");
+        List<Item>  items = query.setParameter("categoryID",catID).setFirstResult(start).setMaxResults(chunkSize).getResultList();
+        em.close();
+        return items;
+    }
+    /**
+     * Value List Handler for items. Found by category and location radius
+     * @param categoryID is the category id that the item belongs to
+     * @param start position of the first result, numbered from 0
+     * @param chunkSize the maximum number of results to retrieve
+     * @returns a List of Item objects
+     */
+    public List<Item> getItemsByCategoryByRadiusVLH(String catID, int start,
+            int chunkSize,double fromLat,double toLat,double fromLong,
+            double toLong){
+        EntityManager em = emf.createEntityManager();
+        Query query = em.createQuery("SELECT i FROM Item i, Product p WHERE " +
+                "i.productID=p.productID AND p.categoryID = :categoryID " +
+                "AND i.address IN (SELECT a FROM Address a where (a.latitude BETWEEN" +
+                ":fromLatitude AND :toLatitude) AND (a.longitude BETWEEN" +
+                ":fromLongitude AND :toLongitude )) GROUP BY i.name");
+        query.setParameter("categoryID",catID);
+        query.setParameter("fromLatitude",fromLat);
+        query.setParameter("toLatitude",toLat);
+        query.setParameter("fromLongitude",fromLong);
+        query.setParameter("toLongitude",toLong);
+        List<Item>  items = query.setFirstResult(start).setMaxResults(chunkSize).getResultList();
+        em.close();
+        return items;
+    }
+
     /**
      * Gets a list of all the zipcode/city/state for autocomplete on user forms
      * Need to enhance so that returned list is cached for reuse at application scope
@@ -190,7 +202,7 @@ public class CatalogFacade implements ServletContextListener {
         }
         return item.getItemID();
     }
-        public String addRating(Item item){
+    public String addRating(Item item){
         EntityManager em = emf.createEntityManager();
         try{
             utx.begin();
