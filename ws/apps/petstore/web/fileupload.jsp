@@ -47,6 +47,7 @@
    }
    
    function fileuploadOnsubmit() {
+       this.parent.doneButton.disabled = true;
        storeCookie()
        document.forms['TestFileuploadForm'].onsubmit();
    }
@@ -60,7 +61,7 @@
             <ui:fileUploadTag id="TestFileuploadForm" serverLocationDir="../applications/j2ee-modules/petstore/images" 
                 postProcessingMethod="#{FileUploadBean.postProcessingMethod}"
                 retMimeType="text/xml" retFunction="testRetFunction" 
-                progressBarDivId="progress" progressBarSubmitId="submitx" progressBarSize="40">
+                progressBarDivId="progress" progressBarSize="40">
                 
                 <script type="text/javascript">
                     dojo.require("dojo.widget.Wizard");
