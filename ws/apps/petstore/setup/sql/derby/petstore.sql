@@ -21,7 +21,7 @@ CREATE TABLE product (
 CREATE TABLE Address (
  addressid VARCHAR(10) NOT NULL,
  street1 VARCHAR(55) NOT NULL,
- street2 VARCHAR(55) NOT NULL,
+ street2 VARCHAR(55),
  city VARCHAR(55) NOT NULL,
  state VARCHAR(25) NOT NULL,
  zip VARCHAR(5) NOT NULL,
