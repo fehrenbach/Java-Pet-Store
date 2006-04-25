@@ -75,11 +75,15 @@ public class CatalogFacade implements ServletContextListener {
      */
     public List<Item> getItemsByItemID(String[] itemIDs){
         EntityManager em = emf.createEntityManager();
-        List<Item> items = new ArrayList<Item>();
+        String idString  = "";
         for(int i=0;i<itemIDs.length;++i){
-            Item item = em.find(Item.class,itemIDs[i]);
-            items.add(item);
-        }
+            if(idString.length()!=0) idString+=",";
+            idString=idString+"'"+itemIDs[i]+"'";
+        }        
+        String queryString = "SELECT i FROM Item i WHERE " +
+                "i.itemID IN (" +idString+")";      
+        Query query = em.createQuery(queryString + " ORDER BY i.name");
+        List<Item>  items = query.getResultList();
         em.close();
         return items;
     }
@@ -89,11 +93,25 @@ public class CatalogFacade implements ServletContextListener {
      * @param IDs is an array of item ids for specific items that need to be returned
      * @returns a List of Item objects
      */
-    public List<Item> getItemsByItemIDByRadius(String[] IDs, double fromLatitude,
-            double toLatitude, double fromLongitude, double toLongitude){
+    public List<Item> getItemsByItemIDByRadius(String[] itemIDs, double fromLat,
+            double toLat, double fromLong, double toLong){
         EntityManager em = emf.createEntityManager();
-        //to-do implement this
-        
+        String idString  = "";
+        for(int i=0;i<itemIDs.length;++i){
+            if(idString.length()!=0) idString+=",";
+            idString=idString+"'"+itemIDs[i]+"'";
+        }        
+        String queryString = "SELECT i FROM Item i WHERE " +
+                "i.itemID IN (" +idString+")";      
+        Query query = em.createQuery(queryString + "AND" +
+                " ((i.address.latitude BETWEEN :fromLatitude AND :toLatitude) AND " +
+                "(i.address.longitude BETWEEN :fromLongitude AND :toLongitude ))" +
+                "  ORDER BY i.name");
+        query.setParameter("fromLatitude",fromLat);
+        query.setParameter("toLatitude",toLat);
+        query.setParameter("fromLongitude",fromLong);
+        query.setParameter("toLongitude",toLong);
+        List<Item>  items = query.getResultList();                
         em.close();
         return null;
         
@@ -129,9 +147,9 @@ public class CatalogFacade implements ServletContextListener {
         EntityManager em = emf.createEntityManager();
         Query query = em.createQuery("SELECT i FROM Item i, Product p WHERE " +
                 "i.productID=p.productID AND p.categoryID = :categoryID " +
-                "AND i.address IN (SELECT a FROM Address a where (a.latitude BETWEEN" +
-                ":fromLatitude AND :toLatitude) AND (a.longitude BETWEEN" +
-                ":fromLongitude AND :toLongitude )) ORDER BY i.name");
+                "AND((i.address.latitude BETWEEN :fromLatitude AND :toLatitude) AND " +
+                "(i.address.longitude BETWEEN :fromLongitude AND :toLongitude ))" +
+                "  ORDER BY i.name");
         query.setParameter("categoryID",catID);
         query.setParameter("fromLatitude",fromLat);
         query.setParameter("toLatitude",toLat);
