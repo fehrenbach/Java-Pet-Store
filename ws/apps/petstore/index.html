@@ -1,0 +1,281 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head>
+
+  <meta content="text/html;charset=ISO-8859-1" http-equiv="Content-Type">
+  <title>Java BluePrints</title>
+
+
+  <style type="text/css">
+body,th,td,p,div,span,a,ul,ul li, ol, ol li, ol li b, dl,h1,h2,h3,h4,h5,h6,li
+{font-family:geneva,helvetica,arial,"lucida sans",sans-serif; font-size:10pt}
+h1 {font-size:18pt}
+h2 {font-size:14pt}
+h3 {font-size:12pt}
+code,kbd,tt,pre {font-family:monaco,courier,"courier new";font-size:10pt;color:#666}
+li {padding-bottom: 8px}
+p.copy, p.copy a {font-family:geneva,helvetica,arial,"lucida sans",sans-serif; font-size:8pt}
+p.copy {text-align: center}
+  </style>
+</head>
+
+
+<body style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);" alink="#333366" link="#594fbf" marginwidth="10" vlink="#1005fb">
+
+<table border="0" cellpadding="2" cellspacing="4" width="100%">
+
+  <tbody>
+
+    <tr>
+
+      <td align="right" bgcolor="#587993" valign="top">
+      <font color="#ffffff" size="-1"><b>Java
+BluePrints</b></font>&nbsp; </td>
+
+    </tr>
+
+  </tbody>
+</table>
+
+<!---- Don't modify anything above this line, except for the title tag -------->
+<h1>Java Pet Store Reference Application<span style="font-style: italic;"></span></h1>
+
+The Java Pet Store Reference application is created by the Java
+BluePrints team at Sun Microsystems to illustrate how AJAX-enabled Web
+2.0 applications can be written with Java EE 5 platform. The Java
+BluePrints program defines the application programming model for
+end-to-end
+solutions using Java technology. It publishes guidelines, patterns,
+and code for real-world application scenarios, enabling you to build
+robust, scalable, and portable solutions.&nbsp; <br>
+
+<br>
+
+Some other popular projects from Java BluePrints are <a href="http://blueprints.dev.java.net/bpcatalog/">Java
+BluePrints Solutions Catalog</a>,&nbsp; <a target="_blank" href="https://blueprints.dev.java.net/adventurebuilder/">Java
+Adventure Builder Reference</a> application,&nbsp;<a target="_blank" href="http://java.sun.com/blueprints/guidelines/designing_webservices/">Designing
+Web Services with the J2EE(TM) 1.4 Platform : JAX-RPC, SOAP, and XML
+Technologies</a> book, and the <a target="_blank" href="http://java.sun.com/blueprints/guidelines/designing_enterprise_applications_2e/index.html"><span class="body"><span class="title">Designing
+Enterprise Applications with the J2EE Platform, Second Edition</span></span></a>
+book. You can access these projects and other content from Java
+BluePrints by visiting the <a target="_blank" href="http://java.sun.com/reference/blueprints/index.html">Java
+BluePrints website</a>. <br>
+
+<br>
+
+The rest of this document describes how to setup and use the Java Pet
+Store Reference application with the Java EE 5 SDK. <span style="font-style: italic;"></span><br>
+
+<h2><a name="building-deploying-running"></a>Building,
+Deploying, and Running</h2>
+
+<ol>
+
+  <li><a href="http://java.sun.com/javaee/5/downloads/">Download</a>
+and install the Java EE 5 SDK at a convenient location on your
+computer. We will refer to this location as <code>&lt;javaeesdk.home&gt;</code>
+hereafter in this document.&nbsp;</li>
+
+  <li>Download and install the Java Pet Store Reference
+application at a convenient location on your computer. We will refer to
+this location&nbsp;as <code>&lt;petstore.home&gt;</code>
+hereafter in this document.&nbsp;&nbsp;</li>
+
+  <li>Ensure that&nbsp;<code>ant</code> is
+available in your path. You can use <code>&lt;javaeesdk.home&gt;/lib/ant/bin/ant</code>
+or any other version of Ant later than 1.6.5.</li>
+
+  <li>Edit
+    <code>&lt;petstore.home&gt;/bp-project/build.properties</code> and ensure
+that the following properties match your Java EE 5 SDK
+installation.&nbsp;<br>
+
+    <table border="1" cellpadding="5" cellspacing="0" width="80%">
+
+      <tbody>
+
+        <tr>
+
+          <td style="text-align: center; font-weight: bold;" valign="top" width="20%">Property
+Name</td>
+
+          <td style="font-weight: bold;" align="center" valign="top" width="50%">Description</td>
+
+          <td style="font-weight: bold; text-align: center;" valign="top" width="30%">Examples</td>
+
+        </tr>
+
+        <tr>
+
+          <td style="text-align: center;"><code>javaee.home</code></td>
+
+          <td>The installation
+directory of the Java EE 5 SDK</td>
+
+          <td style="text-align: center;"><code>c:/Sun/AppServer</code></td>
+
+        </tr>
+
+        <tr align="left">
+
+          <td style="text-align: center;" valign="top"><code>javaee.server.name</code></td>
+
+          <td valign="top">Host
+name of the server where the Java EE 5 SDK
+is installed</td>
+
+          <td style="text-align: center;" valign="top"><code>localhost</code></td>
+
+        </tr>
+
+        <tr align="left">
+
+          <td style="text-align: center;" valign="top"><code>javaee.server.port</code></td>
+
+          <td valign="top">The
+port number for the server you chose
+while
+installing Java EE 5 SDK</td>
+
+          <td style="text-align: center;" valign="top"><code>8080</code></td>
+
+        </tr>
+
+        <tr align="left">
+
+          <td style="text-align: center;" valign="top"><code>javaee.server.username</code></td>
+
+          <td valign="top">The
+administrator username specified for the serve while installing Java EE
+5 SDK</td>
+
+          <td style="text-align: center;" valign="top"><code>admin</code></td>
+
+        </tr>
+
+        <tr align="left">
+
+          <td style="text-align: center;" valign="top"><code>javaee.server.passwordfile</code></td>
+
+          <td valign="top">The
+path to a file containing the admin
+password for the Java EE 5 SDK. The password file needs to be in the
+following format:
+          <p><code>AS_ADMIN_PASSWORD=&lt;javaeesdk-admin-password&gt;</code>
+          </p>
+
+          <p>Where you will
+replace &lt;javaeesdk-admin-password&gt; with
+the admin password for the Java EE 5 SDK.</p>
+
+          </td>
+
+          <td style="text-align: center;" valign="top"><code>/path/to/passwordfile</code></td>
+
+        </tr>
+
+        <tr valign="top">
+
+          <td style="text-align: center;" valign="top"><code>javaee.adminserver.port</code></td>
+
+          <td valign="top">The
+port number for admin server you chose
+while installing the Java EE 5 SDK</td>
+
+          <td style="text-align: center;" valign="top"><code>4848</code></td>
+
+        </tr>
+
+      </tbody>
+    </table>
+
+  </li>
+
+  <li>Start the Sun Java System Application Server and the JavaDB
+database. To do so, open a command prompt&nbsp;and change
+directory to <code>&lt;javaeesdk.home&gt;/bin</code>
+and issue the following
+commands:<br>
+
+    <code>asadmin start-domain<br>
+
+asadmin start-database</code><br>
+
+  </li>
+
+  <li>Change directory to &lt;petstore.home&gt; and enter
+the following commands<code></code><br>
+
+    <code>ant setup</code><br>
+
+    <code>ant run</code><br>
+
+This will build and deploy the petstore on the application
+server, and then launch the application homepage in your default
+browser. <br>
+
+  </li>
+
+</ol>
+
+<h2>Uninstalling&nbsp;</h2>
+
+To uninstall the Java Pet Store Reference application from the application
+server, follow these steps: <br>
+
+<ol>
+
+  <li>Start the Sun Java System Application Server and the JavaDB
+database. To do so, open a command prompt&nbsp;and change
+directory to <code>&lt;javaeesdk.home&gt;/bin</code>
+and issue the following
+commands:<br>
+
+    <code>asadmin start-domain<br>
+
+asadmin start-database</code><br>
+
+  </li>
+
+  <li>Change directory to&nbsp;<span style="font-style: italic;"></span><code>&lt;petstore.home&gt;
+    </code>and enter the command:<br>
+
+    <code>ant unsetup</code><br>
+
+This will uninstall the petstore application
+from the application server and remove all the database tables from the
+JavaDB database.</li>
+
+</ol>
+
+<h2>Troubleshooting</h2>
+
+<p>If you have problems when running the application, try the
+following:
+</p>
+
+<ul>
+
+  <li>Make sure the application server and the database are
+running</li>
+
+  <li>Make sure the build environment under the bp-project/
+directory is correctly
+setup&nbsp;</li>
+
+  <li>Review the output produced by the <code>ant run</code>
+command. Often an error here contains the clue for what went wrong</li>
+
+  <li>Review the application server log files for any errors </li>
+
+</ul>
+
+<br>
+
+<hr noshade="noshade" size="1">
+<p class="copy"> Copyright &copy; 2006 <a href="http://sun.com">Sun
+Microsystems, Inc.</a>
+All rights reserved. </p>
+
+</body>
+</html>
