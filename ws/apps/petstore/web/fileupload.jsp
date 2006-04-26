@@ -59,10 +59,10 @@
      </style>
     </head>
     <body onload="Wait.style.visibility='hidden'">
-        <center><p id="Wait">Now Loading...<br/><br/><br/>
-                <img src="${pageContext.servletContext.contextPath}/images/runningDog.gif"></p>
-        </center>
-
+        <jsp:include page="banner.jsp" />
+        <br/>
+        <center><p id="Wait">Now Loading...<br/></p></center>
+        
         <f:view>
     
             <ui:fileUploadTag id="TestFileuploadForm" serverLocationDir="../applications/j2ee-modules/petstore/images" 
