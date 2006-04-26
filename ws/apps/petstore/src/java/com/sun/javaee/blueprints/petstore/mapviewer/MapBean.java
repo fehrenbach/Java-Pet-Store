@@ -169,7 +169,10 @@ public class MapBean {
                 double dLatitude=geoCenterPoint[0].getLatitude();
                 double dLongRadius=calculateLongitudeRadius(radius);
                 double dLongitude=geoCenterPoint[0].getLongitude();
-                System.out.println("\n *** cat radius" + dLatitude + " - " + dLongitude);
+                
+                System.out.println("\n *** cat radius" + dLatitude + " - " + dLongitude +
+                        "\n lat=" + (dLatitude - dLatRadius) + " to " + (dLatitude + dLatRadius) + 
+                        "\n long=" + (dLongitude - dLongRadius) + " to " + (dLongitude + dLongRadius));
                 items=cf.getItemsByCategoryByRadiusVLH(category, 0, 25, dLatitude - dLatRadius,  
                     dLatitude + dLatRadius, dLongitude - dLongRadius, dLongitude + dLongRadius);
             }
@@ -218,7 +221,12 @@ public class MapBean {
                 double dLatitude=geoCenterPoint[0].getLatitude();
                 double dLongRadius=calculateLongitudeRadius(radius);
                 double dLongitude=geoCenterPoint[0].getLongitude();
-                System.out.println("\n *** id radius" + dLatitude + " - " + dLongitude);
+                
+                System.out.println("\n *** id radius" + dLatitude + " - " + dLongitude +
+                        "\n lat=" + (dLatitude - dLatRadius) + " to " + (dLatitude + dLatRadius) + 
+                        "\n long=" + (dLongitude - dLongRadius) + " to " + (dLongitude + dLongRadius));
+                
+                
                 items=cf.getItemsByItemIDByRadius(itemIds, dLatitude - dLatRadius,  
                     dLatitude + dLatRadius, dLongitude - dLongRadius, dLongitude + dLongRadius);
             }
@@ -270,7 +278,7 @@ public class MapBean {
             mapMarker.setMarkup(changeSpaces(infoBalloon));
             addMapMarker(mapMarker) ;
 
-            // check radius and set initial zoom level
+            // check area and set initial zoom level
             if(radius < 5) {
                 zoomLevel=4;
             } else if(radius < 21) {
@@ -307,7 +315,15 @@ public class MapBean {
                 }
             }
         }
-        //System.out.println("Lat - Long " + outputx);
+        
+        //Haversine formula: for distance
+        //R = earth’s radius (mean radius = 6,371km)
+        //?lat = lat2 ? lat1
+        //?long = long2 ? long1
+        //a = sin²(?lat/2) + cos(lat1).cos(lat2).sin²(?long/2)
+        //c = 2.atan2(?a, ?(1?a))
+        //d = R.c 
+        
         // return null so navigation will stay on main lookup page
         return "map";
     }

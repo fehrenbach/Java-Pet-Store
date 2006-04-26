@@ -97,7 +97,8 @@
                             <h:outputText value="Price"/>
                         </f:facet>
 			<h:outputText id="price" value="#{item.price}">
-                            <f:convertNumber type="currency"/>
+                            <f:convertNumber type="currency" pattern="$####.00"/>
+                            <h:message for="price"/>
 			</h:outputText>                        
                     </h:column>
                     <h:column>
