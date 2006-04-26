@@ -141,7 +141,42 @@
                 <br><div id="progress"></div><br/>
             </ui:fileUploadTag>        
         </f:view>
+<script type="text/javascript">        
+    /**
+     * Start the autocompletion process, and begin asynchronous communication
+     * with the host on each keystroke.
+     */
+    TestFileuploadForm_cityField.start = function() {
+
+        // Calculate size and position of the menu <div> we will use
+        this.menu.style.left = this._x() + "px";
+        this.menu.style.top = this._y() + this.target.offsetHeight + 2 + "px";
+        var width = this._width();
+        if (width > 0) {
+          this.menu.style.width = width + "px";
+        }
         
+        this.started = true;
+        this._callback();
+
+    }        
+    
+    TestFileuploadForm_stateField.start = function() {
+
+        // Calculate size and position of the menu <div> we will use
+        this.menu.style.left = this._x() + "px";
+        this.menu.style.top = this._y() + this.target.offsetHeight + 2 + "px";
+        var width = this._width();
+        if (width > 0) {
+          this.menu.style.width = width + "px";
+        }
+        
+        this.started = true;
+        this._callback();
+
+    }        
+    
+</script>        
     </body>
 </html>
 
