@@ -11,7 +11,7 @@
  <tr id="injectionPoint">
   <td width="100"><img src="http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.servletContext.contextPath}/images/banner_logo.gif" border="0" width="70" height="70"></td>
   <td align="left">
-  <div class="banner">Java Petstore</div>
+  <div class="banner">Java Pet Store Reference Application, Ver 2.0</div>
   </td>
   <td id="bannerRight">
   </td>

@@ -2,7 +2,7 @@
 <html>
  <head>
   <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
-  <title>Petstore</title>
+  <title>Java Pet Store Reference Application, Ver 2.0</title>
  </head>
 <body>
 
