@@ -100,12 +100,12 @@ public class CatalogFacade implements ServletContextListener {
         for(int i=0;i<itemIDs.length;++i){
             if(idString.length()!=0) idString+=",";
             idString=idString+"'"+itemIDs[i]+"'";
-        }        
-        String queryString = "SELECT i FROM Item i WHERE " +
-                "i.itemID IN (" +idString+")";      
-        Query query = em.createQuery(queryString + "AND" +
+        }       
+        String queryString = "SELECT i FROM Item i WHERE ((" +
+                "i.itemID IN (" +idString+"))"; 
+        Query query = em.createQuery(queryString + " AND " +
                 " ((i.address.latitude BETWEEN :fromLatitude AND :toLatitude) AND " +
-                "(i.address.longitude BETWEEN :fromLongitude AND :toLongitude ))" +
+                "(i.address.longitude BETWEEN :fromLongitude AND :toLongitude )))" +
                 "  ORDER BY i.name");
         query.setParameter("fromLatitude",fromLat);
         query.setParameter("toLatitude",toLat);
@@ -113,8 +113,7 @@ public class CatalogFacade implements ServletContextListener {
         query.setParameter("toLongitude",toLong);
         List<Item>  items = query.getResultList();                
         em.close();
-        return null;
-        
+        return items;        
     }
     
     /**
