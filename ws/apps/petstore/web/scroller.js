@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: scroller.js,v 1.14 2006-04-27 18:53:46 gmurray71 Exp $
+$Id: scroller.js,v 1.15 2006-04-27 23:30:14 gmurray71 Exp $
 */
 
 /**
@@ -86,9 +86,6 @@ function ImageScroller() {
     // a growing list of items;
     var items = [];
     
-    // this map contains all the items
-    var map = new Map();
-
     // used for debugging when debug is true
     var debug = false;
     var statusDiv;
@@ -101,24 +98,21 @@ function ImageScroller() {
     // used for url book marking
     var originalURL;
     
-   
-    // FIXME: default set id
     var pid;
     var currentChunck;
-      
-    this.attributes = function() {
-        return map;map
-    }
+     // this map contains all the items 
+    var map;
     
+    this.getItems = function() {
+        return map;
+    }
+        
     function reset() {
         resetTitles()
         tiles = [];
         index = 0;
         offset = 0;
         currentChunck = 0;
-        if (typeof map != 'undefined') {
-            map.clear();
-        }
     }
     
     function resetTitles() {
@@ -460,6 +454,7 @@ function ImageScroller() {
     }
     
     this.load = function () {
+        map = new Map();
         dojo.event.connect(window, "onresize", layout);
         dojo.event.topic.subscribe("/scroller", this, handleEvent);
 	    var loadImage;
@@ -778,11 +773,11 @@ function ImageScroller() {
         var keys = [];
         var values = [];
         
-        this.put = function(key,value) {
+        this.put = function(key,value, replace) {
             if (this.get(key) == null) {
                 keys[size] = key; values[size] = value;
                 size++;
-            } else {
+            } else if (replace) {
                 for (i=0; i < size; i++) {
                     if (keys[i] == key) {
                         values[i] = value;
