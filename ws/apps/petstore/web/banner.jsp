@@ -10,8 +10,8 @@
 <table border="0" bordercolor="gray" cellpadding="0" cellspacing="0" bgcolor="white" width="100%">
  <tr id="injectionPoint">
   <td width="100"><img src="http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.servletContext.contextPath}/images/banner_logo.gif" border="0" width="70" height="70"></td>
-  <td align="left" colspan="2">
-  <div class="banner">Java Pet Store Reference Application, Ver 2.0</div>
+  <td align="left" colspan="1">
+  <div class="banner">Java Pet Store</div>
   </td>
   <td id="bannerRight">
   </td>
