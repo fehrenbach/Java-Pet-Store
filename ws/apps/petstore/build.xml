@@ -12,9 +12,6 @@
     <property name="lucene.jar" value="lib/lucene-1.4.3.jar" />
 
     <property name="extra.classpath" value="${lucene.jar}:${bp.ui.5.jar}:${bp.ui.14.jar}:${shale.remoting.jar}:${commons.fileupload.jar}:${commons.io.jar}:${commons.logging.jar}" />
-    <property file="nbproject/private/private.properties"/>
-    <property file="${deploy.ant.properties.file}" />
-    <property name="javaee.home" value="${sjsas.root}"/>
     <import file="bp-project.xml" />
     <property name="commons.script" value="${commons.script.home}/ajax-commons.js" /> 
     <property name="dojo.zip" value="${dojo.home}/dojo.zip" />

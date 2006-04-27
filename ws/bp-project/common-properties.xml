@@ -2,7 +2,7 @@
 
 <!-- Copyright 2005-2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: common-properties.xml,v 1.9 2006-04-18 13:03:23 inder Exp $ -->
+ $Id: common-properties.xml,v 1.10 2006-04-27 06:29:14 inder Exp $ -->
 
 
 <!-- common-properties.xml: Handling of various properties for the project. 
@@ -19,14 +19,32 @@
   <!-- include common properties -->
   <property file="${ant.file.common-properties}/../build.properties"/>
 
+  <property file="build.properties"/>
+
   <!-- include netbeans properties -->
   <property file="nbproject/project.properties"/>
+  <property file="nbproject/private/private.properties"/>
+  <property file="${deploy.ant.properties.file}" />
 
   <!-- include user specific build properties -->
   <property file="${user.home}/build.properties"/>
 
   <!-- include common properties -->
   <property file="${ant.file.common-properties}/../common.properties"/>
-  
+
+  <!-- Look for a suitable value for javaee.home if it is not already set -->
+  <condition property="javaee.home" value="${sjsas.root}">
+    <and>
+      <not><isset property="javaee.home"/></not>
+      <isset property="sjsas.root"/>
+    </and>
+  </condition>  
+  <condition property="javaee.home" value="${com.sun.aas.InstallRoot}">
+    <and>
+      <not><isset property="javaee.home"/></not>
+      <isset property="com.sun.aas.InstallRoot"/>
+    </and>
+  </condition>  
+
   <target name="dummy-default"/>
 </project>
