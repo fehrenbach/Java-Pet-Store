@@ -2,17 +2,8 @@
 <project name="petstore" default="default" basedir=".">
     <description>Builds, tests, and runs the project petstore.</description>
     <property name="is.war.module" value="true"/>
-    <property name="bp.ui.14.jar" value="lib/bp-ui-14.jar" />
-    <property name="shale.remoting.jar" value="lib/shale-remoting.jar" />
-    <property name="commons.fileupload.jar" value="lib/commons-fileupload-1.1.jar" />
-    <property name="commons.io.jar" value="lib/commons-io-1.1.jar" />
-    <property name="commons.logging.jar" value="lib/commons-logging.jar"/>
-  
-    <property name="bp.ui.5.jar" value="lib/bp-ui-5.jar" />
-    <property name="lucene.jar" value="lib/lucene-1.4.3.jar" />
-
-    <property name="extra.classpath" value="${lucene.jar}:${bp.ui.5.jar}:${bp.ui.14.jar}:${shale.remoting.jar}:${commons.fileupload.jar}:${commons.io.jar}:${commons.logging.jar}" />
     <import file="bp-project.xml" />
+
     <property name="commons.script" value="${commons.script.home}/ajax-commons.js" /> 
     <property name="dojo.zip" value="${dojo.home}/dojo.zip" />
   
@@ -28,13 +19,13 @@
             <fileset file="lib/ajax-wrapper-comp.jar"/>
             <fileset file="lib/bp-dynamic-text-comp.jar"/>
             <fileset file="./build/catalog-persistence.jar"/>
-            <fileset file="${lucene.jar}"/>
-            <fileset file="${bp.ui.5.jar}"/>
-            <fileset file="${bp.ui.14.jar}"/>
-            <fileset file="${shale.remoting.jar}"/>
-            <fileset file="${commons.fileupload.jar}"/>
-            <fileset file="${commons.io.jar}"/>
-            <fileset file="${commons.logging.jar}"/>
+            <fileset file="${file.reference.lucene-1.4.3.jar}"/>
+            <fileset file="${file.reference.bp-ui-5.jar}"/>
+            <fileset file="${file.reference.bp-ui-14.jar}"/>
+            <fileset file="${file.reference.shale-remoting.jar}"/>
+            <fileset file="${file.reference.commons-fileupload-1.1.jar}"/>
+            <fileset file="${file.reference.commons-io-1.1.jar}"/>
+            <fileset file="${file.reference.commons-logging.jar}"/>
         </copy>        
     
         <!-- Copy in the content -->
