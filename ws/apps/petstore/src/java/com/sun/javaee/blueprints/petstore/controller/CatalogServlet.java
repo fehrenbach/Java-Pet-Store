@@ -117,6 +117,7 @@ public class CatalogServlet extends HttpServlet {
                     sb.append("<item>\n");
                     sb.append(" <id>" + i.getItemID() + "</id>\n");
                     sb.append(" <product-id>" + i.getProductID() + "</product-id>\n");
+                    sb.append(" <rating>" + i.checkAverageRating() + "</rating>\n");
                     sb.append(" <name>" + i.getName() + "</name>\n");
                     sb.append(" <description>" + i.getDescription() + "</description>\n");
                     sb.append(" <image-url>" + i.getImageURL() + "</image-url>\n");

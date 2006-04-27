@@ -1,6 +1,13 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: scroller.js,v 1.13 2006-04-21 20:28:49 gmurray71 Exp $
+$Id: scroller.js,v 1.14 2006-04-27 18:53:46 gmurray71 Exp $
 */
+
+/**
+* ImageScroller - A multipurpose item brower
+* @ Author: Greg Murray
+*
+*/
+
 
 function ImageScroller() {
     
@@ -12,7 +19,7 @@ function ImageScroller() {
     var IMAGEPANE_WIDTH = 500;
     var IMAGEPANE_HEIGHT = 360;
     var INFOPANE_DEFAULT_HEIGHT = 50;
-    var INFOPANE_EXPAND_HEIGHT = 55;
+    var INFOPANE_EXPAND_HEIGHT = 155;
     var THUMB_WIDTH = 100;
     var THUMB_HEIGHT = 75;
     var CHUNK_SIZE=6;
@@ -78,6 +85,8 @@ function ImageScroller() {
     
     // a growing list of items;
     var items = [];
+    
+    // this map contains all the items
     var map = new Map();
 
     // used for debugging when debug is true
@@ -92,21 +101,24 @@ function ImageScroller() {
     // used for url book marking
     var originalURL;
     
-    // detect a resize of the window
-    //window.onresize=resized;
-
-    
+   
     // FIXME: default set id
     var pid;
     var currentChunck;
       
+    this.attributes = function() {
+        return map;map
+    }
+    
     function reset() {
         resetTitles()
         tiles = [];
         index = 0;
         offset = 0;
         currentChunck = 0;
-        map.clear();
+        if (typeof map != 'undefined') {
+            map.clear();
+        }
     }
     
     function resetTitles() {
@@ -536,7 +548,7 @@ function ImageScroller() {
         var row2
         var row3;
 
-        if (isIE) {
+        if (typeof infoTable.insertRow != 'undefined') {
             row = infoTable.insertRow(0);
             var blankRow = infoTable.insertRow(1);
             row2 = infoTable.insertRow(2);
@@ -607,7 +619,7 @@ function ImageScroller() {
         minimizeLink.appendChild(minimizeImage);
         infoTableMinimize.appendChild(minimizeLink);
         
-        if (isIE) {
+        if (typeof minimizeLink.attachEvent != 'undefined') {
             minimizeLink.attachEvent("onclick",function(e){doMaximize();});
         } else {
             minimizeLink.addEventListener("click",function(e){doMaximize();}, true);
@@ -632,7 +644,7 @@ function ImageScroller() {
         img.className = "tileImage";
         link.appendChild(img);
         link.setAttribute("id", i.id);
-        if (isIE) {
+        if (typeof div.attachEvent != 'undefined') {
             div.attachEvent('onclick',function(e){this.id = div.id; showImage(this.id, false);});
         } else {
             link.addEventListener('click',function(e){this.id = div.id; showImage(this.id, false);}, true);
