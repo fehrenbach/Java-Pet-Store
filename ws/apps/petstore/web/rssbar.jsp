@@ -1,5 +1,5 @@
 <%-- Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: rssbar.jsp,v 1.3 2006-04-19 22:35:16 gmurray71 Exp $ --%>
+$Id: rssbar.jsp,v 1.4 2006-04-28 21:16:20 yutayoshida Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -11,5 +11,8 @@ $Id: rssbar.jsp,v 1.3 2006-04-19 22:35:16 gmurray71 Exp $ --%>
 
     
     <f:view>
-        <ui:rssBar url="https://blueprints.dev.java.net/servlets/ProjectRSS?type=news" itemNumber="4"></ui:rssBar>
+        <ui:rssBar url="https://blueprints.dev.java.net/servlets/ProjectRSS?type=news"
+                  itemCount="4"
+                  backgroundImage="no"
+                  color="#00ffff" hoverColor="#ff00ff"></ui:rssBar>
     </f:view>
