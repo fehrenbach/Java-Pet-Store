@@ -17,7 +17,7 @@
   </td>
  </tr>
   <tr bgcolor="gray">
-  <td id="menubar" align="left" width="600" height="30" colspan="2" ></td>
+  <td id="menubar" align="left" width="600" height="70" colspan="2" ></td>
   <td  align="right">
   <a class="menuLink" href="http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.servletContext.contextPath}/faces/fileupload.jsp">Seller</a> <span class="menuItem">|</span>
   <a class="menuLink" href="http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.servletContext.contextPath}/faces/search.jsp">Search</a> <span class="menuItem">|</span>
