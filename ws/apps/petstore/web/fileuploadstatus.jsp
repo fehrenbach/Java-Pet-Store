@@ -12,8 +12,7 @@
                     }
         </style>
         <script type="text/javascript">
-            function initMessage() {
-                var message = "${param.message}";
+            window.onload = function() {
                 var thumbfile = "${param.thumb}";
                 if (thumbfile == "") {
                     thumbfile = "${sessionScope['fileuploadResponse'].thumbnail}";
@@ -28,7 +27,8 @@
             
         </script>
     </head>
-    <body onload="initMessage()">
+    <body>
+    <jsp:include page="banner.jsp"/>
     <center>
     <div id="status">
         <h4>${param.message}</h4>

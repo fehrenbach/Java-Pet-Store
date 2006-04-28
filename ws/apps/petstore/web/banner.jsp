@@ -1,7 +1,6 @@
 
 
 <script type="text/javascript" src="engine.js"></script>
-<script type="text/javascript" src="dojo.js"></script>
 
 <link rel="stylesheet" type="text/css" href="styles.css"></link>
 <script type="text/javascript" src="http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.servletContext.contextPath}/autocomplete.js"></script>

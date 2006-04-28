@@ -65,6 +65,7 @@
      </style>
     </head>
     <body onload="Wait.style.visibility='hidden'">
+        <jsp:include page="banner.jsp"/>
         <br/>
         <center><p id="Wait">Now Loading...<br/></p></center>
         
