@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: scroller.js,v 1.15 2006-04-27 23:30:14 gmurray71 Exp $
+$Id: scroller.js,v 1.16 2006-04-28 08:20:07 gmurray71 Exp $
 */
 
 /**
@@ -19,7 +19,7 @@ function ImageScroller() {
     var IMAGEPANE_WIDTH = 500;
     var IMAGEPANE_HEIGHT = 360;
     var INFOPANE_DEFAULT_HEIGHT = 50;
-    var INFOPANE_EXPAND_HEIGHT = 155;
+    var INFOPANE_EXPAND_HEIGHT = 175;
     var THUMB_WIDTH = 100;
     var THUMB_HEIGHT = 75;
     var CHUNK_SIZE=6;
@@ -57,6 +57,7 @@ function ImageScroller() {
     
     // large image pane
     var imagePane;
+    var imageLoadingPane;
     var loadingPane;
     // images 
     var minimizeImage;
@@ -163,8 +164,7 @@ function ImageScroller() {
         if (indicatorImage) {
             indicatorImage.style.visibility = "visible";
         }
-    }
-    
+    }  
 
     function hideProgressIndicator() {
         indicatorImage.style.visibility = "hidden";
@@ -211,7 +211,7 @@ function ImageScroller() {
         dojo.event.topic.publish("/scroller", {type:"showingItem", id: itemId, rating: i.rating});
         // create the image pane and append the description nodes
         // asumption is that if the imagePane is not set neigher are the info children
-        if (!imagePane) {
+        if (typeof imagePane == 'undefined') {
             imagePane = document.createElement("img");
             imagePane.style.width = IMAGEPANE_WIDTH + "px";
             imagePane.style.height = IMAGEPANE_HEIGHT  + "px";
@@ -287,6 +287,7 @@ function ImageScroller() {
     // if the pane is maximized it will asume the event want to minimize
     function doMaximize() {
         if (!maximizing && !minimizing && !maximized) {
+            infoPaneLoop = INFOPANE_DEFAULT_HEIGHT;
             maximizing = true;
             minimizing = false;
         } else if (!maximizing && !minimizing) {
@@ -310,11 +311,10 @@ function ImageScroller() {
     function maxmizeInfoPane() {
         if (infoPaneLoop < INFOPANE_EXPAND_HEIGHT) {
             infoPaneLoop = infoPaneLoop + INFOPANE_INCREMENT;
-            var vHeight = (INFOPANE_EXPAND_HEIGHT + infoPaneLoop);
-            var clipMe = 'rect(' + '0px,' + VIEWPORT_WIDTH +  'px,'+  vHeight +'px,' +  0 + 'px)';
+            var clipMe = 'rect(' + '0px,' + VIEWPORT_WIDTH +  'px,'+  infoPaneLoop +'px,' +  0 + 'px)';
             infoPane.style.clip = clipMe;
-            infoPane.style.height = vHeight;
-            infoPane.style.top = (tileY - PADDING) - vHeight;
+            infoPane.style.height = infoPaneLoop;
+            infoPane.style.top = (tileY - PADDING) - infoPaneLoop;
             setTimeout(changeInfoPane, 5);
         } else {
             minimizeImage.src= MINIMIZE_IMG_URI;
@@ -326,13 +326,15 @@ function ImageScroller() {
     }
     
     function minimizeInfoPane() {
-       if (infoPaneLoop > (0 - INFOPANE_INCREMENT)) {
+       if (infoPaneLoop > INFOPANE_DEFAULT_HEIGHT) {
             infoPaneLoop = infoPaneLoop - INFOPANE_INCREMENT;
-            var vHeight = (INFOPANE_EXPAND_HEIGHT + infoPaneLoop);
-            var clipMe = 'rect(' + '0px,' + VIEWPORT_WIDTH +  'px,'+  vHeight +'px,' +  0 + 'px)';
+            var clipMe = 'rect(' + '0px,' + VIEWPORT_WIDTH +  'px,'+  infoPaneLoop +'px,' +  0 + 'px)';
             infoPane.style.clip = clipMe;
-            infoPane.style.height = vHeight;
-            infoPane.style.top = (tileY - PADDING) - vHeight;
+            infoPane.style.height = infoPaneLoop;
+            infoPane.style.top = (tileY - PADDING) - infoPaneLoop;
+            if (debug) {
+                status2Div.innerHTML = "minimize infoPaneLoop =" + infoPaneLoop +  " infopane.top=" + infoPane.style.top;
+            }
             setTimeout(changeInfoPane, 5);
         } else {
             minimizeImage.src= MAXIMIZE_IMG_URI;
@@ -477,14 +479,17 @@ function ImageScroller() {
     }
     
     function initLayout() {
+        
+        rightButton = document.getElementById("right_button");
+        leftButton = document.getElementById("left_button");
         layout();
-
-        if (isIE) {
+        leftButton.style.visibility="hidden";
+        if (typeof rightButton.attachEvent != 'undefined') {
                 rightButton.attachEvent('onmouseover',function(e){scrollDone();getNext();});
                 rightButton.attachEvent('onmouseout',function(e){scrollDone();});
                 leftButton.attachEvent('onmouseover',function(e){scrollDone();getPrevious();});
                 leftButton.attachEvent('onmouseout',function(e){scrollDone();});
-            } else {
+            } else if (typeof rightButton.addEventListener != 'undefined') {
                 rightButton.addEventListener('mouseover',function(e){scrollDone();getNext();}, false);
                 rightButton.addEventListener('mouseout',function(e){scrollDone();}, false);
                 leftButton.addEventListener('mouseover',function(e){scrollDone();getPrevious();}, false);
@@ -496,34 +501,37 @@ function ImageScroller() {
     
     function layout() {
         var ua = navigator.userAgent.toLowerCase();
-        rightButton = document.getElementById("right_button");
-        leftButton = document.getElementById("left_button");
-        leftButton.style.visibility="hidden";
-        // this will need to be generic based on the right and left button image width
-        var rightX = findX(rightButton) + VIEWPORT_WIDTH - 20;
-        rightButton.style.left = rightX  +  "px";
 
         // this will need to be made generic depending on the thumb height
-        tileY = findY(leftButton)  - 37;
+        tileY = findY(targetRow);
         tileX = findX(targetRow) + 1;
-        
-        var  buttonY = findY(rightButton) + 12
+        var rightX = findX(targetRow) + VIEWPORT_WIDTH - 20;
+        rightButton.style.left = rightX  +  "px";
+        var  buttonY = findY(targetRow) + 12
         rightButton.style.top = buttonY + "px";
         leftButton.style.top = buttonY + "px";
+        //infopaneLoop = (INFOPANE_DEFAULT_HEIGHT);
         
         if (ua.indexOf('ie') != -1) {
             isIE = true;
-            //tileX = tileX + 5;
         } else if (ua.indexOf('safari') != -1) {
             tileX = tileX + 10;
             //SCROLL_INCREMENT = SCROLL_INCREMENT + 5;
             timeout = 20;
-        } else if (ua.indexOf('firefox')) {
-            tileX = tileX + 0;
         }
          drawTiles();
          if (infoPane) {
             infoPane.style.left = tileX + "px";
+            infoPane.style.top = (tileY + infoPane.style.height) - infoPaneLoop + "px";
+            if (maximized) {
+                infoPaneLoop = infoPane.style.height;
+            } else {
+                infoPaneLoop = INFOPANE_DEFAULT_HEIGHT;
+            }
+         }
+         if (typeof imageLoadingPane != 'undefined') {           
+             imageLoadingPane.style.left = tileX;
+             imageLoadingPane.style.top = tileY - IMAGEPANE_HEIGHT - INFOPANE_DEFAULT_HEIGHT - 10;
          }
     }
     
@@ -535,7 +543,7 @@ function ImageScroller() {
         // give room for 4 pixels above and below
         infoPane.style.height = (INFOPANE_DEFAULT_HEIGHT) + "px";
         // give 3px padding for a border
-        infoPane.style.top = (tileY - (INFOPANE_DEFAULT_HEIGHT) - 5) + "px";
+        infoPane.style.top = (tileY - (INFOPANE_DEFAULT_HEIGHT + 5)) + "px";
         infoPane.style.left = tileX + "px";
         infoTable = document.createElement("table");
         infoTable.className = "infopaneTable";
@@ -620,7 +628,7 @@ function ImageScroller() {
             minimizeLink.addEventListener("click",function(e){doMaximize();}, true);
         }
         
-        var clipMe = 'rect(' + '0px,' + VIEWPORT_WIDTH +  'px,'+  INFOPANE_EXPAND_HEIGHT +'px,' +  0 + 'px)';
+        var clipMe = 'rect(' + '0px,' + VIEWPORT_WIDTH +  'px,'+  INFOPANE_DEFAULT_HEIGHT +'px,' +  0 + 'px)';
         infoPane.style.clip = clipMe;
 
 
@@ -676,7 +684,7 @@ function ImageScroller() {
         if (loadImage) {
 	            showImage(loadImage);
     	}
-        indicatorImage.style.visibility = "hidden";
+        hideProgressIndicator();
     }
     
     function AJAXInteraction(url, callback, type, loadImage) {
