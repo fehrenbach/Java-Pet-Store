@@ -2,7 +2,7 @@
 
 <!--  Copyright 2005 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: faces-config.xml,v 1.11 2006-04-21 18:15:16 basler Exp $ -->
+ $Id: faces-config.xml,v 1.12 2006-04-28 18:20:35 basler Exp $ -->
 
 <faces-config xmlns="http://java.sun.com/xml/ns/javaee"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -23,7 +23,7 @@
         <managed-bean-scope>request</managed-bean-scope>
         <managed-property>
             <property-name>itemId</property-name>
-            <value>#{param.itemId}</value>
+            <value>#{param.itemIdBinding}</value>
         </managed-property>             
     </managed-bean>
     

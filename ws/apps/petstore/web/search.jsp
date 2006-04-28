@@ -119,7 +119,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th align="right">Radius (in Miles):</th>
+                                        <th align="right">Area (in Miles):</th>
                                         <td>
                                             <h:inputText id="radius" value="#{MapBean.radius}" size="5"/>
                                         </td>
