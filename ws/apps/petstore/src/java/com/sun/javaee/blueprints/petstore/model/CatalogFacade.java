@@ -238,6 +238,21 @@ public class CatalogFacade implements ServletContextListener {
         }
         return item.getItemID();
     }
+    public void updateRating(Item item){
+        EntityManager em = emf.createEntityManager();
+        try{
+            utx.begin();
+            em.merge(item);
+            utx.commit();
+        } catch(Exception exe){
+            System.out.println("Error updating rating: "+exe);
+            try {
+                utx.rollback();
+            } catch (Exception e) {}
+        } finally {
+            em.close();
+        }       
+    }
     
     public Collection doSearch(String querryString){
         EntityManager em = emf.createEntityManager();

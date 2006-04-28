@@ -42,9 +42,8 @@ public class RatingBean {
             // persistant code goes here !!!!
             Item item = cf.getItem(itemId);
             item.addRating(grade);
-            cf.addRating(item);
+            cf.updateRating(item);
         }
-        
     }
 
     public int getGrade() {
