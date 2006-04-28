@@ -100,8 +100,11 @@
                             <h:inputText size="20" id="name"></h:inputText>
                             
                             <h:outputText value="Description"/>
+                            <h:inputTextarea id="description" cols="20" rows="5"></h:inputTextarea>
+                            <%--
                             <ui14:richTextarea id="description"
-                                           items="textGroup;|;listGroup;|;colorGroup;"></ui14:richTextarea>                            
+                                           items="textGroup;|;listGroup;|;colorGroup;"></ui14:richTextarea>   
+                         --%>
                             
                             <h:outputText value="Price"/>
                             <h:inputText size="20" id="price"></h:inputText>
