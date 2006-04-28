@@ -237,7 +237,6 @@ public class MapBean {
                         "\n lat=" + (dLatitude - dLatRadius) + " to " + (dLatitude + dLatRadius) + 
                         "\n long=" + (dLongitude - dLongRadius) + " to " + (dLongitude + dLongRadius));
                 
-                
                 items=cf.getItemsByItemIDByRadius(itemIds, dLatitude - dLatRadius,  
                     dLatitude + dLatRadius, dLongitude - dLongRadius, dLongitude + dLongRadius);
             }
@@ -258,7 +257,7 @@ public class MapBean {
     
     
     public String mapItems(FacesContext context, List<Item> items, GeoPoint[] geoCenterPoint, String centerx) {
-        if(items != null && items.size() > 0) {
+        if(items != null && (items.size() > 0 || geoCenterPoint != null)) {
             // Set up markers for the center and information window
             double dLatitude=0;
             double dLongitude=0;

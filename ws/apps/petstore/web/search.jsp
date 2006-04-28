@@ -84,7 +84,9 @@
                         <f:facet name="header">
                             <h:outputText value="Name"/>
                         </f:facet>
-                        <h:outputText value="#{item.title}"/>
+                        <a href="${pageContext.request.contextPath}/catalog.jsp#<h:outputText value='#{item.UID}'/>" >
+                            <h:outputText value="#{item.title}"/>
+                        </a>
                     </h:column>
                     <h:column>
                         <f:facet name="header">
@@ -96,9 +98,8 @@
                         <f:facet name="header">
                             <h:outputText value="Price"/>
                         </f:facet>
-			<h:outputText id="price" value="#{item.price}">
-                            <f:convertNumber type="currency" pattern="$####.00"/>
-                            <h:message for="price"/>
+			<h:outputText id="price" value="#{item.priceValue}" style="text-align: right">
+                            <f:convertNumber type="currency"/>
 			</h:outputText>                        
                     </h:column>
                     <h:column>

@@ -79,6 +79,16 @@ public class IndexDocument {
         this.contents=contents;
     }
     
+    public float getPriceValue() {
+        float fPrice=0f;
+        try {
+            fPrice=Float.parseFloat(price);
+        } catch (NumberFormatException nfe) {
+            System.out.println("Index Price format conversion error = " + nfe);
+        }
+        return fPrice;
+    }
+
     public String getPrice() {
         return this.price;
     }
