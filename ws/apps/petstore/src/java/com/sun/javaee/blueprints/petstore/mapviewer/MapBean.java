@@ -144,10 +144,18 @@ public class MapBean {
         return this.radius;
     }
     
+    public void clearValues() {
+        alMapMarkers.clear();
+        mapPoint=new MapPoint();
+        mapMarker=new MapMarker();
+    }
+    
     
     public String findAllByCategory() {
-        
         System.out.println("*** In findAllByCategory - ");
+
+        // clear old locations
+        clearValues();
         
         // get items from catalog
         FacesContext context=FacesContext.getCurrentInstance();
@@ -179,7 +187,7 @@ public class MapBean {
         }
 
         if(geoCenterPoint == null) {
-            // no center point so look up whole category
+            // no center point or center point error so look up just ids
             items=cf.getItemsByCategoryVLH(category, 0, 25);
         }
         if(items != null) {
@@ -194,6 +202,9 @@ public class MapBean {
     
     public String findAllByIDs() {
         System.out.println("*** In findAllByIDs - ");
+        // clear old locations
+        clearValues();
+
         // get items from catalog
         FacesContext context=FacesContext.getCurrentInstance();
         Map<String,Object> contextMap=context.getExternalContext().getApplicationMap();        
@@ -233,7 +244,7 @@ public class MapBean {
         }
 
         if(geoCenterPoint == null) {
-            // no center point so look up just ids
+            // no center point or center point error so look up just ids
             items=cf.getItemsByItemID(itemIds);
         }
 
@@ -252,9 +263,8 @@ public class MapBean {
             double dLatitude=0;
             double dLongitude=0;
             String infoBalloon="";
+            int startPos=0;
 
-            // clear old locations
-            alMapMarkers.clear();
             if(geoCenterPoint != null) {
                 // set values to used from centerAddress lookup
                 dLatitude=geoCenterPoint[0].getLatitude();
@@ -266,6 +276,7 @@ public class MapBean {
                 dLatitude=centerItem.getAddress().getLatitude();
                 dLongitude=centerItem.getAddress().getLongitude();
                 infoBalloon="<b>" + centerItem.getName() + "</b><br/>" + centerItem.getAddress().getAddressAsString();
+                startPos=1;
             }
 
             // lat and long of the center point
@@ -302,7 +313,7 @@ public class MapBean {
             double dLat=calculateLatitudeRadius(radius);
             double dLong=calculateLongitudeRadius(radius);
             getLogger().log(Level.FINE, "ZOOM - Lat and long  - " + zoomLevel + " - " + dLat + " - " + dLong);
-            for(int ii=1; ii < items.size(); ii++) {
+            for(int ii=startPos; ii < items.size(); ii++) {
                 loc=items.get(ii);
                 if(loc.getAddress() != null && !loc.getAddress().equals("")) {
                     mm=new MapMarker();
