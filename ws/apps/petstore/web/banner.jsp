@@ -32,18 +32,19 @@
 
 <script type="text/javascript">
 dojo.event.connect("before", window, "onload", this, "init");
-
+var bpui = {};
 function init() {
-    //var rss = new bpui.RSS();
+    //
     var engine = new Engine();
-    if (document.getElementById("menubarTODO")) {
+    if (document.getElementById("menubar")) {
         engine.inject({url:"/petstore/faces/rssbar.jsp",
                        injectionPoint: document.getElementById("menubar"),
                        initFunction : function() {
-                            var handler = function() {
-                                //rss.getRssInJson('https://blueprints.dev.java.net/servlets/ProjectRSS?type=news', '4');
+                            var init = function() {
+                                var rss = new bpui.RSS();
+                                rss.getRssInJson('/petstore/faces/dynamic/bpui_rssfeedhandler/getRssfeed', 'https://blueprints.dev.java.net/servlets/ProjectRSS?type=news', '4');
                             }
-                            setTimeout(handler, 1000);
+                            setTimeout(init, 0);
                        }
         });
     }

@@ -166,32 +166,26 @@ function Engine () {
             for(var loop = 0; loop < embeddedScripts.length; loop++) {
                 var script = embeddedScripts[loop];
                 // append to the script a method to call the scriptLoaderCallback
-                if (loop == (embeddedScripts.length -1)) {
-                    script = script + "scriptLoaderCallback(initFunction);"
-                }
                 eval(script);
+                if (loop == (embeddedScripts.length -1)) {
+                    initFunction();
+                }
             }
         });
    
         return target;
     }
     
-    function scriptLoaderCallback(initFunction) {
-        if (typeof initFunction == "function") {
-            setTimeout(initFunction, 0);
-        }  
-    }
-    
+   
     /**
      * Load the scripts in order and load them one after on another
      */
     function scriptLoader(scripts, index, callbackFunction) {
-        //alert("Script loader start index=" + index);
         var head = document.getElementsByTagName("head").item(0);
         var scriptElement = document.createElement("script");
         scriptElement.id = "c_script_" + index;
-        scriptElement.type = "text/JavaScript";
-        head.appendChild(scriptElement);
+        scriptElement.type = "text/javascript";
+        
         var loadHandler = function () {
             if (index < scripts.length &&  index != scripts.length -1) {
                 scriptLoader(scripts, ++index, callbackFunction);
@@ -199,19 +193,27 @@ function Engine () {
                 callbackFunction();
             }
         }
-        //alert("Script onready=" + (scriptElement.onreadystatechange = "undefined"));
-        scriptElement.onreadystatechange = function () {
-		    if (this.readyState == 'loaded') {
-		    	loadHandler();
-	    	}
-		 }; 
-
-        setTimeout("document.getElementById('c_script_" + index + "').src ='" + scripts[index] + "'", 0);
+        if (typeof scriptElement.onreadystatechange != 'undefined') {
+            scriptElement.onreadystatechange = function () {
+		        if (this.readyState == 'loaded') {
+		    	    loadHandler();
+	            }
+		     }; 
+        }
         scriptElement.onload = loadHandler;
+        
+        // Safari not seeing the onload event and does not support the onreadystate
+        if (navigator.userAgent.toLowerCase().indexOf("safari") != -1) {
+            scriptElement.src = scripts[index];
+            setTimeout(loadHandler, 0);
+        }
+        head.appendChild(scriptElement);
+        setTimeout("document.getElementById('c_script_" + index + "').src ='" + scripts[index] + "'", 0);
+
         scriptElement = null;
         head = null;
     }
-         
+            
   /**
    * If were returning an XML document remove any script in the
    * the document and add it to the global scope using a time out.
