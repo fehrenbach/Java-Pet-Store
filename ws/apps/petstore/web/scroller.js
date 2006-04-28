@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: scroller.js,v 1.16 2006-04-28 08:20:07 gmurray71 Exp $
+$Id: scroller.js,v 1.17 2006-04-28 18:22:54 gmurray71 Exp $
 */
 
 /**
@@ -103,6 +103,8 @@ function ImageScroller() {
     var currentChunck;
      // this map contains all the items 
     var map;
+    // this is the main container div
+    var containerDiv;
     
     this.getItems = function() {
         return map;
@@ -314,7 +316,7 @@ function ImageScroller() {
             var clipMe = 'rect(' + '0px,' + VIEWPORT_WIDTH +  'px,'+  infoPaneLoop +'px,' +  0 + 'px)';
             infoPane.style.clip = clipMe;
             infoPane.style.height = infoPaneLoop;
-            infoPane.style.top = (tileY - PADDING) - infoPaneLoop;
+            infoPane.style.top = (tileY + (PADDING *2) + INFOPANE_DEFAULT_HEIGHT + IMAGEPANE_HEIGHT) - infoPaneLoop;
             setTimeout(changeInfoPane, 5);
         } else {
             minimizeImage.src= MINIMIZE_IMG_URI;
@@ -331,7 +333,7 @@ function ImageScroller() {
             var clipMe = 'rect(' + '0px,' + VIEWPORT_WIDTH +  'px,'+  infoPaneLoop +'px,' +  0 + 'px)';
             infoPane.style.clip = clipMe;
             infoPane.style.height = infoPaneLoop;
-            infoPane.style.top = (tileY - PADDING) - infoPaneLoop;
+            infoPane.style.top = (tileY + (PADDING *2) + INFOPANE_DEFAULT_HEIGHT + IMAGEPANE_HEIGHT) - infoPaneLoop;
             if (debug) {
                 status2Div.innerHTML = "minimize infoPaneLoop =" + infoPaneLoop +  " infopane.top=" + infoPane.style.top;
             }
@@ -479,7 +481,7 @@ function ImageScroller() {
     }
     
     function initLayout() {
-        
+        containerDiv = document.getElementById("CatalogBrowser");
         rightButton = document.getElementById("right_button");
         leftButton = document.getElementById("left_button");
         layout();
@@ -503,26 +505,30 @@ function ImageScroller() {
         var ua = navigator.userAgent.toLowerCase();
 
         // this will need to be made generic depending on the thumb height
-        tileY = findY(targetRow);
-        tileX = findX(targetRow) + 1;
-        var rightX = findX(targetRow) + VIEWPORT_WIDTH - 20;
+        tileY = findY(containerDiv);
+        tileX = findX(containerDiv) + 4;
+        var rightX = tileX + VIEWPORT_WIDTH - 20;
         rightButton.style.left = rightX  +  "px";
-        var  buttonY = findY(targetRow) + 12
+        var  buttonY = tileY + IMAGEPANE_HEIGHT + INFOPANE_DEFAULT_HEIGHT + 12;
         rightButton.style.top = buttonY + "px";
         leftButton.style.top = buttonY + "px";
-        //infopaneLoop = (INFOPANE_DEFAULT_HEIGHT);
-        
+       
         if (ua.indexOf('ie') != -1) {
             isIE = true;
         } else if (ua.indexOf('safari') != -1) {
-            tileX = tileX + 10;
-            //SCROLL_INCREMENT = SCROLL_INCREMENT + 5;
+            tileX = tileX + 8;
             timeout = 20;
         }
          drawTiles();
          if (infoPane) {
             infoPane.style.left = tileX + "px";
-            infoPane.style.top = (tileY + infoPane.style.height) - infoPaneLoop + "px";
+            if (maximized) {
+            
+                infoPane.style.top = (tileY + IMAGEPANE_HEIGHT  + (PADDING*2) - infoPane.style.height) + "px";
+            } else {
+                infoPane.style.top = (tileY + IMAGEPANE_HEIGHT  + (PADDING*2)) + "px";
+            }
+            //infoPane.style.top = (tileY + infoPane.style.height) - infoPaneLoop + "px";
             if (maximized) {
                 infoPaneLoop = infoPane.style.height;
             } else {
@@ -531,7 +537,8 @@ function ImageScroller() {
          }
          if (typeof imageLoadingPane != 'undefined') {           
              imageLoadingPane.style.left = tileX;
-             imageLoadingPane.style.top = tileY - IMAGEPANE_HEIGHT - INFOPANE_DEFAULT_HEIGHT - 10;
+             //imageLoadingPane.style.top = tileY - IMAGEPANE_HEIGHT - INFOPANE_DEFAULT_HEIGHT - 10;
+             //imageLoadingPane.style.top = tileY + PADDING;
          }
     }
     
@@ -543,7 +550,7 @@ function ImageScroller() {
         // give room for 4 pixels above and below
         infoPane.style.height = (INFOPANE_DEFAULT_HEIGHT) + "px";
         // give 3px padding for a border
-        infoPane.style.top = (tileY - (INFOPANE_DEFAULT_HEIGHT + 5)) + "px";
+        infoPane.style.top = (tileY + IMAGEPANE_HEIGHT + (PADDING*2)) + "px";
         infoPane.style.left = tileX + "px";
         infoTable = document.createElement("table");
         infoTable.className = "infopaneTable";
@@ -654,7 +661,7 @@ function ImageScroller() {
         }
         div.appendChild(link);
         injectionPoint.appendChild(div);
-        div.style.top = tileY + "px";
+        div.style.top = tileY + INFOPANE_DEFAULT_HEIGHT + IMAGEPANE_HEIGHT + (PADDING * 3) + "px";
         tiles.push(div);
     }
     
