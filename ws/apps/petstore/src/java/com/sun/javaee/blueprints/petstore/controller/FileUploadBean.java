@@ -23,6 +23,7 @@ import java.util.Date;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.ServletContext;
 import javax.faces.context.ResponseWriter;
 import org.apache.shale.remoting.faces.ResponseFactory;
@@ -34,6 +35,7 @@ import com.sun.javaee.blueprints.petstore.model.Item;
 import com.sun.javaee.blueprints.petstore.model.Address;
 import com.sun.javaee.blueprints.petstore.model.CatalogFacade;
 import com.sun.javaee.blueprints.petstore.model.SellerContactInfo;
+import com.sun.javaee.blueprints.petstore.model.FileUploadResponse;
 import com.sun.javaee.blueprints.components.ui.fileupload.FileUploadStatus;
 import com.sun.javaee.blueprints.components.ui.fileupload.FileUploadUtil;
 import com.sun.javaee.blueprints.petstore.search.IndexDocument;
@@ -79,6 +81,9 @@ public class FileUploadBean {
             // Acquire a response containing these results
             ResponseWriter writer = factory.getResponseWriter(context, "text/xml");
             
+            String name = null;
+            String thumbPath = null;
+            String firstName = null;
             // persist the data
             try{
                 String fileNameKey = null;
@@ -106,21 +111,21 @@ public class FileUploadBean {
                 
                 if(bDebug) System.out.println("file name: "+ fileName);
                 String spath = constructThumbnail(absoluteFileName);
-                String thumbPath = null;
+                thumbPath = null;
                 if (spath != null) {
                     // recreate "images/FILENAME"
                     int idx = spath.lastIndexOf(System.getProperty("file.separator"));
                     thumbPath = "images/"+spath.substring(idx+1, spath.length());
                 }
                 String prodId=getStringValue(hmUpload, compName+":product");
-                String name=getStringValue(hmUpload, compName+":name");
+                name=getStringValue(hmUpload, compName+":name");
                 String desc=getStringValue(hmUpload, compName+":description");
                 String price=getStringValue(hmUpload, compName+":price");
                 if(desc.length() == 0) desc="No description available";
                 if(price.length() == 0) price="0";
                 
                 // Contact info
-                String firstName = getStringValue(hmUpload, compName+":firstName");
+                firstName = getStringValue(hmUpload, compName+":firstName");
                 String lastName = getStringValue(hmUpload, compName+":lastName");
                 String email = getStringValue(hmUpload, compName+":email");
                 // Add address fields to the file upload page and extract data
@@ -218,14 +223,26 @@ public class FileUploadBean {
             } catch (Exception ex) {
                 getLogger().log(Level.SEVERE, "fileupload.persist.exception", ex);
             }
+            HttpSession session = (HttpSession)context.getExternalContext().getSession(true);
+            String responseMessage = firstName+", Thank you for submitting your pet "+name+" !";
+            FileUploadResponse fuResponse = new FileUploadResponse(
+                    responseMessage,
+                    status.getStatus(), 
+                    Long.toString(status.getUploadTime()),
+                    status.getUploadTimeString(),
+                    status.getStartUploadDate().toString(),
+                    status.getEndUploadDate().toString(),
+                    Long.toString(status.getTotalUploadSize()),
+                    thumbPath);
+            session.setAttribute("fileuploadResponse", fuResponse);
             StringBuffer sb=new StringBuffer();
             response.setContentType("text/xml;charset=UTF-8");
             response.setHeader("Pragma", "No-Cache");
             response.setHeader("Cache-Control", "no-cache,no-store,max-age=0");
             response.setDateHeader("Expires", 1);
             sb.append("<response>");
-            sb.append("<message>***CUSTOM SERVER-SIDE RETURN *** MESSAGE->");
-            sb.append(status.getMessage());
+            sb.append("<message>");
+            sb.append(responseMessage);
             sb.append("</message>");
             sb.append("<status>");
             sb.append(status.getStatus());
@@ -245,6 +262,9 @@ public class FileUploadBean {
             sb.append("<upload_size>");
             sb.append(status.getTotalUploadSize());
             sb.append("</upload_size>");
+            sb.append("<thumbnail>");
+            sb.append(thumbPath);
+            sb.append("</thumbnail>");
             sb.append("</response>");
             if(bDebug) System.out.println("Response:\n" + sb);
             //response.getWriter().write(sb.toString());

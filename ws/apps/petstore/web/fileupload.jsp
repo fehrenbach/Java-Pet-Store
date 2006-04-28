@@ -15,13 +15,19 @@
     function testRetFunction(type, data, evt){
         // handle successful response here
         var resultx = data.getElementsByTagName("response")[0];
+        var message;
+        var thumbpath;
         if(resultx) {
-            // resultx is not set for IE, could be some problem in dojo.iframe, node upload
-            alert("Customer AJAX Return Function Call" + '\n' +
-                "Message: " + resultx.getElementsByTagName("message")[0].childNodes[0].nodeValue);
+            message = resultx.getElementsByTagName("message")[0].childNodes[0].nodeValue;
+            thumbpath = resultx.getElementsByTagName("thumbnail")[0].childNodes[0].nodeValue;
         } else {
-            alert("Customer AJAX Return Function Call");
+            // resultx is not set for IE, could be some problem in dojo.iframe, node upload
+            var name = document.getElementById("TestFileuploadForm:name").value;
+            var firstName = document.getElementById("TestFileuploadForm:firstName").value;
+            thumbpath = "";
+            message = firstName + ", Thank you for submitting your pet " + name;
         }
+        location.href="fileuploadstatus.jsp?message=" + message + "&thumb=" + thumbpath;
     }
 
    function storeCookie() {
@@ -59,7 +65,6 @@
      </style>
     </head>
     <body onload="Wait.style.visibility='hidden'">
-        <jsp:include page="banner.jsp" />
         <br/>
         <center><p id="Wait">Now Loading...<br/></p></center>
         
