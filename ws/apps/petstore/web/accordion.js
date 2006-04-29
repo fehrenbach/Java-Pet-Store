@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: accordion.js,v 1.16 2006-04-21 20:28:48 gmurray71 Exp $
+$Id: accordion.js,v 1.17 2006-04-29 08:18:57 gmurray71 Exp $
 */
 
 
@@ -74,7 +74,7 @@ function AccordionMenu () {
         // go out and get the categories
         // this should be made more geric
         var bindArgs = {
-            url:  "catalog?command=categories&format=json",
+            url:  "/petstore/catalog?command=categories&format=json",
             mimetype: "text/json",
             load: function(type,json) {
                postProcessAccordion(json);
@@ -108,7 +108,7 @@ function AccordionMenu () {
                   // now tell the scroller to load the first product
                   initiateExpansion(l);
                   if (categories[l].products[0]) {
-                    dojo.event.topic.publish("/scroller", {type:"showProducts", productId:categories[l].products[0].id});
+                    dojo.event.topic.publish("/catalog", {type:"showProducts", productId:categories[l].products[0].id});
                   } 
                   break;
                 }
@@ -116,7 +116,7 @@ function AccordionMenu () {
         } else {
             initiateExpansion(0);
             if (categories[0].products[0]) {
-                dojo.event.topic.publish("/scroller", {type:"showProducts", productId:categories[0].products[0].id});
+                dojo.event.topic.publish("/catalog", {type:"showProducts", productId:categories[0].products[0].id});
             } 
         }
     }
@@ -199,7 +199,7 @@ function AccordionMenu () {
                     	if (evt.target) src = evt.target;
                         else if (evt.srcElement) src = evt.srcElement
     
-                        dojo.event.topic.publish("/scroller", {type:"showProducts", productId:src.id});
+                        dojo.event.topic.publish("/catalog", {type:"showProducts", productId:src.id});
                     });
                     link.appendChild(document.createTextNode(categories[nExpandedIndex].products[l].name));
                     span.appendChild(link);

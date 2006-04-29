@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: scroller.js,v 1.18 2006-04-29 01:10:17 gmurray71 Exp $
+$Id: scroller.js,v 1.19 2006-04-29 08:18:57 gmurray71 Exp $
 */
 
 /**
@@ -10,7 +10,7 @@ $Id: scroller.js,v 1.18 2006-04-29 01:10:17 gmurray71 Exp $
 
 
 function ImageScroller() {
-    
+    var _this = this;
     var isIE;
     var initialized = false;
     // default sizes
@@ -105,7 +105,7 @@ function ImageScroller() {
         return map;
     }
         
-    function reset() {
+    this.reset = function() {
         resetTitles()
         tiles = [];
         index = 0;
@@ -131,39 +131,44 @@ function ImageScroller() {
         else if (isScrollingLeft) scrollLeft();
     }
     
-    this.setProducts = function(nId) {
-        reset();
-        pid = nId;
-        var url = "catalog?command=items&pid=" + pid + "&start=" + index + "&length=" + CHUNK_SIZE;
-        showProgressIndicator();
-        var ajax = new AJAXInteraction(url, postProcess);
-        ajax.doGet(); 
-    }
     
-    // do the value list pre-emptive fetching
+     // do the value list pre-emptive fetching
     function prefetch() {
         if (isScrollingRight && index % CHUNK_SIZE == 0) {
             if ((index / CHUNK_SIZE) != currentChunck) {
                 currentChunck = index / CHUNK_SIZE;
-                
-                var url = "/petstore/catalog?command=items&pid=" + pid+ "&start=" + index + "&length=" + CHUNK_SIZE;
-                if (debug) {
-                    status2Div.innerHTML = "getting more images index=" + index + " url=" + url;
-                }
-                showProgressIndicator(); 
-                var ajax = new AJAXInteraction(url, postProcess);
-                ajax.doGet();
+                // fire an event
+                dojo.event.topic.publish("/catalog", {type:"getChunck", id: pid, index: index, currentChunck: currentChunck});
             }
         }
     }
     
-    function showProgressIndicator() {
+    this.setGroupId = function(id) {
+        pid = id;
+    }
+
+    this.addItems = function(inItems) {
+        for (var loop=0; loop < inItems.length ; loop++) {
+            items.push(inItems[loop]);
+            map.put(inItems[loop].id, inItems[loop]);
+            createTile(inItems[loop]);
+            if (loop == 0 && !loadImage) {
+                showImage(inItems[loop].id);
+            }   
+
+        }
+        drawTiles();
+        rightButton.style.visibility="visible";
+        _this.hideProgressIndicator();
+    }
+    
+    this.showProgressIndicator = function() {
         if (indicatorImage) {
             indicatorImage.style.visibility = "visible";
         }
     }  
 
-    function hideProgressIndicator() {
+    this.hideProgressIndicator = function() {
         indicatorImage.style.visibility = "hidden";
     }
     
@@ -176,14 +181,14 @@ function ImageScroller() {
             if (imageReloadTries < IMG_RELOAD_RETRY_MAX) {
                 setTimeout(function(){this.loadIntoBuffer = loadIntoBuffer;postImageLoad(loadIntoBuffer);},500);
             } else {
-                hideProgressIndicator();
+                this.hideProgressIndicator();
             }
             imageReloadTries = imageReloadTries + 1;
             return;
         }
         var id;
 
-        hideProgressIndicator();
+        _this.hideProgressIndicator();
         if (loadIntoBuffer) {
             imageLoadingPane.src = imageBuffer.src;
         } else {
@@ -197,15 +202,16 @@ function ImageScroller() {
     }
     
 
-    function showImage(itemId) {
+    this.showImage = function(itemId) {
 	    window.location.href= originalURL + "#" + itemId;
-        setTimeout(showProgressIndicator,0);
+        _this.showProgressIndicator();
+        //setTimeout(this.showProgressIndicator,0);
         var i = map.get(itemId);
         
         if (!i) {
             return;
         }
-        dojo.event.topic.publish("/scroller", {type:"showingItem", id: itemId, rating: i.rating});
+        dojo.event.topic.publish("/catalog", {type:"showingItem", id: itemId, rating: i.rating});
         // create the image pane and append the description nodes
         // asumption is that if the imagePane is not set neigher are the info children
         if (typeof imagePane == 'undefined') {
@@ -438,19 +444,11 @@ function ImageScroller() {
             tiles[stopIndex].style.left = "0px";
         }
     }
-    
-    function handleEvent(args) {
-        if (args) {
-            if (args.type == "showProducts") {
-                this.setProducts(args.productId);
-            }
-        }
-    }
+
     
     this.load = function () {
         map = new Map();
         dojo.event.connect(window, "onresize", layout);
-        dojo.event.topic.subscribe("/scroller", this, handleEvent);
 	    var loadImage;
         originalURL = window.location.href;
         if (originalURL.indexOf("#") != -1) {
@@ -574,9 +572,9 @@ function ImageScroller() {
         link.appendChild(img);
         link.setAttribute("id", i.id);
         if (typeof div.attachEvent != 'undefined') {
-            div.attachEvent('onclick',function(e){this.id = div.id; showImage(this.id, false);});
+            div.attachEvent('onclick',function(e){this.id = div.id; _this.showImage(this.id, false);});
         } else {
-            link.addEventListener('click',function(e){this.id = div.id; showImage(this.id, false);}, true);
+            link.addEventListener('click',function(e){this.id = div.id; _this.showImage(this.id, false);}, true);
         }
         div.appendChild(link);
         injectionPoint.appendChild(div);
@@ -584,96 +582,7 @@ function ImageScroller() {
         tiles.push(div);
     }
     
-    function postProcess(responseXML,loadImage) {
-        var startLength = items.length;
-        var count = responseXML.getElementsByTagName("item").length;
-        for (var loop=0; loop < count ; loop++) {
-            var item = responseXML.getElementsByTagName("item")[loop];
-            var itemId =  getElementText("id", item);
-            var name =  getElementText("name", item);
-            var thumbURL =  getElementText("image-tb-url", item);
-            var imageURL =  getElementText("image-url", item);
-            var sDescription =  getElementText("description", item);
-            var price = getElementText("price", item);
-            var rating = getElementText("rating", item);
-            var i = new Item(itemId ,name, thumbURL, imageURL,"", sDescription, price,rating);
-            items.push(i);
-            map.put(itemId, i);
-            createTile(i);
-            
-            if (loop == 0 && !loadImage) {
-                showImage(itemId);
-            }   
-
-        }
-        drawTiles();
-        if (loadImage) {
-	            showImage(loadImage);
-    	}
-        hideProgressIndicator();
-    }
-    
-    function AJAXInteraction(url, callback, type, loadImage) {
-        this.loadImage = loadImage;
-        var req = init();
-        req.onreadystatechange = processRequest;
-        
-        function init() {
-            if (window.XMLHttpRequest) {
-                return new XMLHttpRequest();
-            } else if (window.ActiveXObject) {
-                return new ActiveXObject("Microsoft.XMLHTTP");
-            }
-        }
-        
-        function processRequest () {
-            if (req.readyState == 4) {
-                if (req.status == 200) {
-                    if (callback) {
-                        if (type && type == 'text') {
-                            callback(req.responseText,loadImage);
-                        } else {
-                            callback(req.responseXML,loadImage);
-                        }
-                    }
-                }
-            }
-        }
-        
-        this.doGet = function() {
-            req.open("GET", url, true);
-            req.send(null);
-        }
-        
-        this.doPost = function(body) {
-            req.open("POST", url, true);
-            req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-            req.send(body);
-        }
-    }
-    
-    function getElementText(local, parent) {
-        return getElementTextNS(null, local, parent, 0);
-    }
-    
-    function getElementTextNS(prefix, local, parent, index) {
-        var result = "";
-        if (prefix && isIE) {
-            result = parent.getElementsByTagName(prefix + ":" + local)[index];
-        } else {
-            result = parent.getElementsByTagName(local)[index];
-        }
-        if (result) {
-            if (result.childNodes.length > 1) {
-                return result.childNodes[1].nodeValue;
-            } else {
-                return result.firstChild.nodeValue;    		
-            }
-        } else {
-            return "";
-        }
-    }
-    
+       
     function findY(element) {
         var t = 0;
         if (element.offsetParent) {
