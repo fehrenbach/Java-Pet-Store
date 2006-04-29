@@ -43,43 +43,42 @@
     opacity: .65;
 }
 
-.infopaneTable{
-	width:500;
-}
-
-
-.infopaneText {
+.infopaneDescription {
 	color:white;
     font-size:12px;
 }
 
-.infopaneDescriptionText {
+.infopaneShortDescription {
 	color:white;
-    font-size:14px;
+    font-size:16px;
 }
 
 .infopanePrice {
     color:white;
     text-align: center;
+    height:20px;
 }
 
 .infopanePayPal{
     vertical-valign: bottom;
     text-align: right;
+    height:20px;
 }
 
 .infopaneRating{
-    vertical-valign: bottom;
+    vertical-valign: top;
     text-align: center;
     width:125px;
+    height:15px;
 	color:white;
     opacity: .95;
 }
 
 .infopaneTitle {
     width:255px;
+    height:15px;
 	color:white;
-    font-size:16px;
+    font-size:18px;
 }
 
 

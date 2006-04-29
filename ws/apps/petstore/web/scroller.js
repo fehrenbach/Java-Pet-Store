@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: scroller.js,v 1.19 2006-04-29 08:18:57 gmurray71 Exp $
+$Id: scroller.js,v 1.20 2006-04-29 22:53:54 gmurray71 Exp $
 */
 
 /**
@@ -17,12 +17,12 @@ function ImageScroller() {
     
     var VIEWPORT_WIDTH = 500;
     var IMAGEPANE_WIDTH = 500;
-    var IMAGEPANE_HEIGHT = 360;
-    var INFOPANE_DEFAULT_HEIGHT = 55;
+    var IMAGEPANE_HEIGHT = 335;
+    var INFOPANE_DEFAULT_HEIGHT = 75;
     var INFOPANE_EXPAND_HEIGHT = 175;
     var THUMB_WIDTH = 100;
     var THUMB_HEIGHT = 75;
-    var CHUNK_SIZE=6;
+    var CHUNK_SIZE=4;
     
     var IMAGE_PANE_ID = "imagePane";
     var IMAGE_PANE_BUFFER_ID = "imageBufferPane";

@@ -2,16 +2,16 @@
 
 var ac;
 var is;
-var listener;
+var controller;
 
 function initCatalog() {
 
     is = new ImageScroller();
     is.load();
-    listener = new CatalogController();
+    controller = new CatalogController();
     // wire in a listener for the rating component
-    dojo.event.connect("before", bpui.rating, "doClick", listener, "modifyState");
-    listener.initialize();    
+    dojo.event.connect("before", bpui.rating, "doClick", controller, "modifyState");
+    controller.initialize();    
     ac = new AccordionMenu();
     ac.load();
 }
@@ -19,7 +19,7 @@ function initCatalog() {
 function CatalogController() {
   dojo.event.topic.subscribe("/catalog", this, handleEvent);
   
-  var CHUNK_SIZE=6;
+  var CHUNK_SIZE=4;
   var initalRating;
   var initalItem;
   
@@ -43,8 +43,9 @@ function CatalogController() {
                 bpui.rating.modifyDisplay("rating", args.rating, true);
                 // get the currrent item
                 var i = is.getItems().get(args.id);
+                //alert(infoName + " setting the name to " + i.name);
                 infoName.innerHTML = i.name;
-                infoPrice.innerHTML = i.price;
+                infoPrice.innerHTML = "$" + i.price;
                 infoShortDescription.innerHTML = i.shortDescription;
                 infoDescription.innerHTML = i.description;
                 // update the paypal
@@ -84,93 +85,59 @@ function CatalogController() {
   
   this.setProducts = function(pid) {
         is.reset();
-        var url = "/petstore/catalog?command=items&pid=" + pid + "&start=" + 0 + "&length=" + CHUNK_SIZE;
         is.showProgressIndicator();
-        var ajax = new AJAXInteraction(url, postProcess, function(){this.id = pid;is.setGroupId(this.id);}, true);
-        ajax.doGet(); 
+        var bindArgs = {
+            url:  "/petstore/catalog?command=items&pid=" + pid + "&start=" + 0 + "&length=" + CHUNK_SIZE,
+            mimetype: "text/xml",
+            load: function(type,data,postProcessHandler) {
+               postProcess(data,true, pid);
+             }
+        };
+        dojo.io.bind(bindArgs);    
     }
   
   // do the value list pre-emptive fetching
   function getChunck(args) {           
-      var url = "/petstore/catalog?command=items&pid=" + args.id+ "&start=" + args.index + "&length=" + CHUNK_SIZE;
       is.showProgressIndicator(); 
-      alert("getting a chunck " + url);
-      var ajax = new AJAXInteraction(url, postProcess);
-      ajax.doGet(); 
-  }
+      if (typeof debug != 'undefined') {
+          document.getElementById("status").innerHTML = "url=" + "/petstore/catalog?command=items&pid=" + args.id + "&start=" +  args.index + "&length=" + CHUNK_SIZE;
+      }
+      var bindArgs = {
+            url:  "/petstore/catalog?command=items&pid=" + args.id + "&start=" +  args.index + "&length=" + CHUNK_SIZE,
+            mimetype: "text/xml",
+            load: function(type,data,postProcessHandler) {
+                postProcess(data,false);
+            }
+      };
+      dojo.io.bind(bindArgs);
+   }
   
-   function postProcess(responseXML, postProcessHandler, showImage) {
+   function postProcess(responseXML, showImage,pid) {
         var items = [];
         var count = responseXML.getElementsByTagName("item").length;
         for (var loop=0; loop < count ; loop++) {
             var item = responseXML.getElementsByTagName("item")[loop];
-            var itemId =  getElementText("id", item);
-            var name =  getElementText("name", item);
-            var thumbURL =  getElementText("image-tb-url", item);
-            var imageURL =  getElementText("image-url", item);
-            var description =  getElementText("description", item);
-            var price = getElementText("price", item);
-            var rating = getElementText("rating", item);
-            var i = {id: itemId, name: name, image: imageURL, thumbnail: thumbURL, description: description, price:price, rating: rating};
+            var itemId =  item.getElementsByTagName("id")[0].firstChild.nodeValue;
+            var name =  item.getElementsByTagName("name")[0].firstChild.nodeValue;
+            var thumbURL = item.getElementsByTagName("image-tb-url")[0].firstChild.nodeValue;
+            var imageURL = item.getElementsByTagName("image-url")[0].firstChild.nodeValue;
+            var description = item.getElementsByTagName("description")[0].firstChild.nodeValue;
+            var price = item.getElementsByTagName("price")[0].firstChild.nodeValue;
+            var rating = item.getElementsByTagName("rating")[0].firstChild.nodeValue;
+            var shortDescription;
+            if (description.length > 71) {
+                shortDescription = description.substring(0,71) + "...";
+            } else {
+                shortDescription = description;
+            }
+            var i = {id: itemId, name: name, image: imageURL, thumbnail: thumbURL, shortDescription: shortDescription, description: description, price:price, rating: rating};
             items.push(i);
         }
         is.addItems(items);
         if (showImage) {
-          is.showImage(items[0].id);
+            is.showImage(items[0].id);
+            is.setGroupId(pid);
         }
         is.hideProgressIndicator();
-        if (typeof postProcessHandler != 'undefined') {
-            postProcessHandler();
-        }
     }
-          
-    function AJAXInteraction(url, callback, postProcessHandler, showImage) {
-        var req = init();
-        req.onreadystatechange = processRequest;
-        
-        function init() {
-            if (window.XMLHttpRequest) {
-                return new XMLHttpRequest();
-            } else if (window.ActiveXObject) {
-                return new ActiveXObject("Microsoft.XMLHTTP");
-            }
-        }
-        
-        function processRequest () {
-            if (req.readyState == 4) {
-                if (req.status == 200) {
-                    if (callback) {
-                        callback(req.responseXML, postProcessHandler, showImage);
-                    }
-                }
-            }
-        }
-        
-        this.doGet = function() {
-            req.open("GET", url, true);
-            req.send(null);
-        }
-    }
-    
-      function getElementText(local, parent) {
-        return getElementTextNS(null, local, parent, 0);
-    }
-    
-    function getElementTextNS(prefix, local, parent, index) {
-        var result = "";
-        if (prefix && isIE) {
-            result = parent.getElementsByTagName(prefix + ":" + local)[index];
-        } else {
-            result = parent.getElementsByTagName(local)[index];
-        }
-        if (result) {
-            if (result.childNodes.length > 1) {
-                return result.childNodes[1].nodeValue;
-            } else {
-                return result.firstChild.nodeValue;    		
-            }
-        } else {
-            return "";
-        }
-    }  
 }
