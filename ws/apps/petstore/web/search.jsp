@@ -84,7 +84,7 @@
                         <f:facet name="header">
                             <h:outputText value="Name"/>
                         </f:facet>
-                        <a href="${pageContext.request.contextPath}/catalog.jsp#<h:outputText value='#{item.UID}'/>" >
+                        <a href="${pageContext.request.contextPath}/faces/catalog.jsp#<h:outputText value='#{item.UID}'/>" >
                             <h:outputText value="#{item.title}"/>
                         </a>
                     </h:column>
