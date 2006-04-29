@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: scroller.js,v 1.17 2006-04-28 18:22:54 gmurray71 Exp $
+$Id: scroller.js,v 1.18 2006-04-29 01:10:17 gmurray71 Exp $
 */
 
 /**
@@ -18,7 +18,7 @@ function ImageScroller() {
     var VIEWPORT_WIDTH = 500;
     var IMAGEPANE_WIDTH = 500;
     var IMAGEPANE_HEIGHT = 360;
-    var INFOPANE_DEFAULT_HEIGHT = 50;
+    var INFOPANE_DEFAULT_HEIGHT = 55;
     var INFOPANE_EXPAND_HEIGHT = 175;
     var THUMB_WIDTH = 100;
     var THUMB_HEIGHT = 75;
@@ -29,9 +29,9 @@ function ImageScroller() {
 
     var PADDING = 3;
     
-    var MINIMIZE_IMG_URI = "images/minimize.gif";
-    var MAXIMIZE_IMG_URI = "images/maximize.gif";
-    var INDICATOR_IMG_URI = "images/indicator-black.gif";
+    var MINIMIZE_IMG_URI = "/petstore/images/minimize.gif";
+    var MAXIMIZE_IMG_URI = "/petstore/images/maximize.gif";
+    var INDICATOR_IMG_URI = "/petstore/images/indicator-black.gif";
     var MAXIMIZE_IMG_TOOLTIP = "Show Details";
     var MINIMIZE_IMG_TOOLTIP = "Show Less Details";
     
@@ -68,11 +68,6 @@ function ImageScroller() {
     
     // infopane
     var infoPane;
-    var infoTable;
-    var infoTableName;
-    var infoTableShortDescription;
-    var infoTableDescription;
-    var infoTablePrice;
     var infoTableMinimize;
     var indicatorCell;
     var minimizeLink;
@@ -151,7 +146,7 @@ function ImageScroller() {
             if ((index / CHUNK_SIZE) != currentChunck) {
                 currentChunck = index / CHUNK_SIZE;
                 
-                var url = "catalog?command=items&pid=" + pid+ "&start=" + index + "&length=" + CHUNK_SIZE;
+                var url = "/petstore/catalog?command=items&pid=" + pid+ "&start=" + index + "&length=" + CHUNK_SIZE;
                 if (debug) {
                     status2Div.innerHTML = "getting more images index=" + index + " url=" + url;
                 }
@@ -218,6 +213,7 @@ function ImageScroller() {
             imagePane.style.width = IMAGEPANE_WIDTH + "px";
             imagePane.style.height = IMAGEPANE_HEIGHT  + "px";
             imagePane.id = IMAGE_PANE_ID;
+            
             var targetElement = document.getElementById("bodySpace");
             imageLoadingPane = document.createElement("img");
             imageLoadingPane.style.position = "absolute";
@@ -228,16 +224,10 @@ function ImageScroller() {
             targetElement.appendChild(imagePane);
             targetElement.appendChild(imageLoadingPane);
             imageLoadingPane.style.left = tileX + "px";
-            infoTableName.appendChild(document.createTextNode(i.name));
-            infoTableShortDescription.appendChild(document.createTextNode(i.shortDescription));
-            infoTableDescription.appendChild(document.createTextNode(i.description));
+            
             loadImage(i.image, false);
         } else {
-             imageLoadingPane.style.visibility = "visible";
-             infoTableName.lastChild.nodeValue = i.name;
-             infoTableDescription.lastChild.nodeValue = i.description;
-             infoTableShortDescription.lastChild.nodeValue = i.shortDescription;
-             
+             imageLoadingPane.style.visibility = "visible";            
              if (showingBuffer) {
                  showingBuffer = false;
              } else {
@@ -497,7 +487,6 @@ function ImageScroller() {
                 leftButton.addEventListener('mouseover',function(e){scrollDone();getPrevious();}, false);
                 leftButton.addEventListener('mouseout',function(e){scrollDone();}, false);
             }
-        
         createInfoPane();
     }
     
@@ -528,7 +517,6 @@ function ImageScroller() {
             } else {
                 infoPane.style.top = (tileY + IMAGEPANE_HEIGHT  + (PADDING*2)) + "px";
             }
-            //infoPane.style.top = (tileY + infoPane.style.height) - infoPaneLoop + "px";
             if (maximized) {
                 infoPaneLoop = infoPane.style.height;
             } else {
@@ -537,90 +525,26 @@ function ImageScroller() {
          }
          if (typeof imageLoadingPane != 'undefined') {           
              imageLoadingPane.style.left = tileX;
-             //imageLoadingPane.style.top = tileY - IMAGEPANE_HEIGHT - INFOPANE_DEFAULT_HEIGHT - 10;
-             //imageLoadingPane.style.top = tileY + PADDING;
          }
     }
     
     
     function createInfoPane() {
-	    infoPane = document.createElement("div");
-        infoPane.className = "infopane";
+	    infoPane = document.getElementById("infopane");
         infoPane.style.width = VIEWPORT_WIDTH + "px";
         // give room for 4 pixels above and below
         infoPane.style.height = (INFOPANE_DEFAULT_HEIGHT) + "px";
         // give 3px padding for a border
         infoPane.style.top = (tileY + IMAGEPANE_HEIGHT + (PADDING*2)) + "px";
         infoPane.style.left = tileX + "px";
-        infoTable = document.createElement("table");
-        infoTable.className = "infopaneTable";
-        var row;
-        var row2
-        var row3;
-
-        if (typeof infoTable.insertRow != 'undefined') {
-            row = infoTable.insertRow(0);
-            var blankRow = infoTable.insertRow(1);
-            row2 = infoTable.insertRow(2);
-            blankRow.style.height = "30px";
-            row3 = infoTable.insertRow(3);
-            var blankCell = blankRow.insertCell(0);
-            blankCell.appendChild(document.createTextNode(""));
-            infoTableName = row.insertCell(0);
-            row.insertCell(1);
-            infoTablePrice = row.insertCell(1);
-            infoTableMinimize = row.insertCell(3);
-            infoTableShortDescription = row2.insertCell(0);
-
-            indicatorCell = row.insertCell(3);
-            infoTableDescription = row3.insertCell(0);
-            infoTableShortDescription.colSpan = "3";
-        } else {
-            row = document.createElement("tr");
-            row2 = document.createElement("tr");
-            var blankRow = document.createElement("tr");
-            var blankCell = document.createElement("td");
-            blankCell.appendChild(document.createTextNode(""));
-            blankRow.appendChild(blankCell);
-            blankRow.style.height = "30px";
-            row3 = document.createElement("tr");
-            infoTableName = document.createElement("td");
-            row.appendChild(infoTableName);
-            infoTablePrice = document.createElement("td");
-            row.appendChild(infoTablePrice);
-            infoTableMinimize =  document.createElement("td");
-            row.appendChild(infoTableMinimize);
-            infoTableShortDescription = document.createElement("td");
-            row2.appendChild(infoTableShortDescription);
-            
-            indicatorCell = document.createElement("td");
-            infoTableMinimize.style.paddingLeft = "6px";
-            row2.appendChild(indicatorCell);
-            
-            infoTableDescription =  document.createElement("td");
-            row3.appendChild(infoTableDescription);
-            
-            infoTable.appendChild(row);
-            infoTable.appendChild(blankRow);
-            infoTable.appendChild(row2);
-   
-            infoTable.appendChild(row3);
-        }
-        infoTableShortDescription.setAttribute("colspan", "3");
-        infoTableName.className = "infopaneTitle";
-        infoTableName.style.width = (VIEWPORT_WIDTH - 25) + "px";
-        infoTableShortDescription.className = "infopaneText";
-        infoTableDescription.className = "infopaneDescriptionText";
-        infoTablePrice.id = "infopaneRating";
-        infoTableMinimize.setAttribute("colspan", "2");
-
+        infoTableMinimize = document.getElementById("infopaneDetailsIcon");                 
+        indicatorCell = document.getElementById("infopaneIndicator");
         indicatorCell.style.width = (10) + "px";
         indicatorImage = document.createElement("img");
         indicatorImage.className = "infopaneIndicator";
         indicatorImage.src = INDICATOR_IMG_URI;
         indicatorImage.style.visibility = "hidden";
         indicatorCell.appendChild(indicatorImage);
-        
         minimizeLink = document.createElement("a");
         minimizeLink.className = "infopaneLink";
         minimizeLink.title = MAXIMIZE_IMG_TOOLTIP;
@@ -634,15 +558,10 @@ function ImageScroller() {
         } else {
             minimizeLink.addEventListener("click",function(e){doMaximize();}, true);
         }
-        
         var clipMe = 'rect(' + '0px,' + VIEWPORT_WIDTH +  'px,'+  INFOPANE_DEFAULT_HEIGHT +'px,' +  0 + 'px)';
         infoPane.style.clip = clipMe;
-
-
-        infoPane.appendChild(infoTable);
-        injectionPoint.appendChild(infoPane);
 	}
-    
+
     function createTile(i) {
         var div = document.createElement("div");
         div.className = "tile";
@@ -675,7 +594,7 @@ function ImageScroller() {
             var thumbURL =  getElementText("image-tb-url", item);
             var imageURL =  getElementText("image-url", item);
             var sDescription =  getElementText("description", item);
-            var price = 0;
+            var price = getElementText("price", item);
             var rating = getElementText("rating", item);
             var i = new Item(itemId ,name, thumbURL, imageURL,"", sDescription, price,rating);
             items.push(i);

@@ -10,7 +10,7 @@
 <script>
 dojo.require("dojo.widget.FisheyeList");
 function browse(category) {
-    window.location.href="catalog.jsp?catid=" + category;
+    window.location.href="/petstore/faces/catalog.jsp?catid=" + category;
 }
 </script>
 <table bgcolor="white">
@@ -29,23 +29,23 @@ function browse(category) {
 	dojo:enableCrappySvgSupport="false">
 
 	<div class="dojo-FisheyeListItem" onClick="browse('Dogs');" 
-		dojo:iconsrc="images/dogs_icon.gif">
+		dojo:iconsrc="/petstore/images/dogs_icon.gif">
 	</div>
 
 	<div class="dojo-FisheyeListItem" onClick="browse('Cats');"
-		dojo:iconsrc="images/cats_icon.gif" c>
+		dojo:iconsrc="/petstore/images/cats_icon.gif" c>
 	</div>
 
 	<div class="dojo-FisheyeListItem" onClick="browse('Birds');"
-		dojo:iconsrc="images/birds_icon.gif" >
+		dojo:iconsrc="/petstore/images/birds_icon.gif" >
 	</div>
 
 	<div class="dojo-FisheyeListItem" onClick="browse('Fish');"
-		dojo:iconsrc="images/fish_icon.gif" >
+		dojo:iconsrc="/petstore/images/fish_icon.gif" >
 	</div>
 
 	<div class="dojo-FisheyeListItem" onClick="browse('Reptiles');"
-		dojo:iconsrc="images/reptiles_icon.gif"  >
+		dojo:iconsrc="/petstore/images/reptiles_icon.gif"  >
 	</div>
 </div>
 
@@ -76,7 +76,7 @@ function browse(category) {
             coords="280,180,350,250">
         </map>
 
-        <img src="images/splash.gif" 
+        <img src="/petstore/images/splash.gif" 
             alt="Pet Selection Map"
             usemap="#petmap" 
             width="350" 

@@ -23,6 +23,7 @@ public class CatalogServlet extends HttpServlet {
    private Collection categories;
 
    public void init(ServletConfig config) throws ServletException {
+       super.init(config);
        context = config.getServletContext();
        cf = (CatalogFacade)context.getAttribute("CatalogFacade");
    }
@@ -73,9 +74,10 @@ public class CatalogServlet extends HttpServlet {
                 // leave these headers here for development - remove for deploy
                 response.setHeader("Cache-Control", "no-cache");
                 response.setHeader("Pragma", "no-cache");
-                PrintWriter out = response.getWriter();            
+                PrintWriter out = response.getWriter();
+                String baseURL = "http://" + request.getServerName() + ":" + request.getServerPort() + "/" + request.getContextPath() + "/";  
                 //get response data
-                String str = handleItems(pid, start, length);               
+                String str = handleItems(pid, start, length, baseURL);               
                 out.println(str);
                 out.close();
          } else if ("categories".equals(command)) {
@@ -104,7 +106,7 @@ public class CatalogServlet extends HttpServlet {
          }
      }
    
-   private String handleItems(String pid, int start, int length) {
+   private String handleItems(String pid, int start, int length, String baseURL) {
        StringBuffer sb = new StringBuffer();
        // then write the data of the response
        sb.append("<items>\n");
@@ -120,8 +122,9 @@ public class CatalogServlet extends HttpServlet {
                     sb.append(" <rating>" + i.checkAverageRating() + "</rating>\n");
                     sb.append(" <name>" + i.getName() + "</name>\n");
                     sb.append(" <description>" + i.getDescription() + "</description>\n");
-                    sb.append(" <image-url>" + i.getImageURL() + "</image-url>\n");
-                    sb.append(" <image-tb-url>" + i.getImageThumbURL() + "</image-tb-url>\n");
+                    sb.append(" <price>" + formatter.format(i.getPrice()) + "</price>\n");
+                    sb.append(" <image-url>" + baseURL + i.getImageURL() + "</image-url>\n");
+                    sb.append(" <image-tb-url>" + baseURL + i.getImageThumbURL() + "</image-tb-url>\n");
                     sb.append("</item>\n");
        }
        sb.append("</items>");

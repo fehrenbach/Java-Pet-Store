@@ -164,6 +164,7 @@ function Engine () {
             // evaluate the embedded javascripts in the order they were added
             // consider using an onload handler
             for(var loop = 0; loop < embeddedScripts.length; loop++) {
+            //alert("evaluating " + embeddedScripts[loop]);
                 var script = embeddedScripts[loop];
                 // append to the script a method to call the scriptLoaderCallback
                 eval(script);

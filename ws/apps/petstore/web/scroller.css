@@ -58,7 +58,26 @@
     font-size:14px;
 }
 
+.infopanePrice {
+    color:white;
+    text-align: center;
+}
+
+.infopanePayPal{
+    vertical-valign: bottom;
+    text-align: right;
+}
+
+.infopaneRating{
+    vertical-valign: bottom;
+    text-align: center;
+    width:125px;
+	color:white;
+    opacity: .95;
+}
+
 .infopaneTitle {
+    width:255px;
 	color:white;
     font-size:16px;
 }
