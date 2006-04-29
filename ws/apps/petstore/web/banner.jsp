@@ -34,7 +34,7 @@
   <tr bgcolor="gray">
   <td id="menubar" align="left" width="650" height="50" colspan="2" >
       <f:view>
-        <ui:rssBar url="https://blueprints.dev.java.net/servlets/ProjectRSS?type=news" itemNumber="4"></ui:rssBar>
+        <ui:rssBar url="https://blueprints.dev.java.net/servlets/ProjectRSS?type=news" itemCount="4"></ui:rssBar>
     </f:view>
   </td>
   <td  align="right">
