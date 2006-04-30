@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: accordion.js,v 1.17 2006-04-29 08:18:57 gmurray71 Exp $
+$Id: accordion.js,v 1.18 2006-04-30 05:52:32 gmurray71 Exp $
 */
 
 
@@ -65,9 +65,9 @@ function AccordionMenu () {
     this.load = function() {
         dojo.event.topic.subscribe("/accordion", this, this.handleEvent);
         var agent = navigator.userAgent;
-        if (agent.indexOf("Safari") != -1) {
-            timeout = 0;
-        }
+        //if (agent.indexOf("Safari") != -1) {
+        //    timeout = 0;
+        //}
         divs = [];
         status = document.getElementById("status");
         accordion = document.getElementById("accordionBody");
@@ -193,12 +193,19 @@ function AccordionMenu () {
                     var target = categories[nExpandedIndex].products[l].id;
                     link.id = target;
                     link.className = "accordionLink";
+                    // some browsers aren't setting the styles for hovers so forcing them
+                    link.setAttribute("onmouseover", "this.className='accordionLinkHover';");
+                    link.setAttribute("onmouseout", "this.className='accordionLink';");
                     dojo.event.connect(link, "onclick", function(evt) {
                         this._target = target
                         var src;
-                    	if (evt.target) src = evt.target;
-                        else if (evt.srcElement) src = evt.srcElement
-    
+                    	if (evt.target) {
+                            src = evt.target;
+                        } else if (evt.srcElement) {
+                            src = evt.srcElement;
+                        }
+                        //src.parentNode.className = "accordionLinkSelected";
+                        // set this so the next time around it can be removed;
                         dojo.event.topic.publish("/catalog", {type:"showProducts", productId:src.id});
                     });
                     link.appendChild(document.createTextNode(categories[nExpandedIndex].products[l].name));

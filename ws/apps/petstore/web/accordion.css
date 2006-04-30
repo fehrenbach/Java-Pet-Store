@@ -16,7 +16,6 @@
   background:#404040;
 }
 
-
 .accordionTitle {
   vertical-align: top;
   padding-top: 10px;
@@ -31,21 +30,22 @@
 }
 
 .accordionRow {
-  vertical-align: middle;
+  color:white;
   cursor: pointer;
+  font-size:18px;
+  font-weight: bold;
+  vertical-align: middle;
   padding-top: 5px;
   text-align: center;
   width:150px;
   height:40px;
-  color:white;
-  font-size:18px;
-  font-weight: bold;
   background:#104E8B;
   opacity: .99;
 }
 
 .accordionProduct {
   text-align: center;
+  width:150px;
   color:white;
   font-size:12px;
   font-weight: bold;
@@ -53,12 +53,28 @@
   opacity: .99;
 }
 
+
 .accordionLink {
+  cursor: pointer;
   text-decoration: none;
   color:white;
 }
-.accordionLink:hover {
+
+.accordionLinkSelected {
+  text-align: center;
+  width:150px;
+  color:red;
+  font-size:12px;
+  font-weight: bold;
+  background:black;
+  opacity: .99;
+}
+
+
+.accordionLinkHover {
   text-decoration: underline;
   color:white;
 }
+
+
 
