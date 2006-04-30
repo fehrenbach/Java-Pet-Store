@@ -6,20 +6,15 @@
 <%@taglib prefix="h" uri="http://java.sun.com/jsf/html"%>
 <%@taglib prefix="ui" uri="http://java.sun.com/blueprints/ui" %>
 
-
-<script type="text/javascript">
-    if (typeof dojo == 'undefined') {   
-        load("/petstore/dojo.js");
-    }
-    function load(target) {
-        document.write("<script type='text/javascript' src='" + target + "'><" + "/script>");
-    }
-</script>
-
-
+<script type="text/javascript" src="/petstore/faces/static/META-INF/common/script.js"></script>
 <link rel="stylesheet" type="text/css" href="styles.css"></link>
-<script type="text/javascript" src="http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.servletContext.contextPath}/autocomplete.js"></script>
-<script type="text/javascript" src="http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.servletContext.contextPath}/ajax-commons.js"></script>
+<script type="text/javascript" src="/petstore/dojo.js"></script>
+<script type="text/javascript" src="/petstore/faces/static/META-INF/rss/rssbar.js"></script>
+<link type="text/css" rel="stylesheet" href="/petstore/faces/static/META-INF/rss/rssbar.css" />
+<script type="text/javascript">
+    var rss = new bpui.RSS();
+    dojo.addOnLoad(function(){rss.getRssInJson('/petstore/faces/dynamic/bpui_rssfeedhandler/getRssfeed', 'https://blueprints.dev.java.net/servlets/ProjectRSS?type=news', '4');});
+</script>
 
 <table border="0" bordercolor="gray" cellpadding="0" cellspacing="0" bgcolor="white" width="100%">
  <tr id="injectionPoint">
@@ -32,10 +27,15 @@
   </td>
  </tr>
   <tr bgcolor="gray">
-  <td id="menubar" align="left" width="650" height="50" colspan="2" >
-      <f:view>
-        <ui:rssBar url="https://blueprints.dev.java.net/servlets/ProjectRSS?type=news" itemCount="4"></ui:rssBar>
-    </f:view>
+  <td id="menubar" align="left" width="700" height="45" colspan="2" >
+    <div id="rss-bar">
+    <table border="0" cellpadding="0" cellspacing="0">
+        <tr>
+        <td id="rss-channel"></td>
+        <td id="rss-item"></td>
+        </tr>
+    </table>
+    </div>
   </td>
   <td  align="right">
   <a class="menuLink" href="http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.servletContext.contextPath}/faces/fileupload.jsp">Seller</a> <span class="menuItem">|</span>
