@@ -57,18 +57,16 @@
        storeCookie()
        document.forms['TestFileuploadForm'].onsubmit();
    }
-    
-</script>   
-     <style type="text/css">
-         p#Wait { position:absolute; top:0; left:0; width:100%; height:100%;
-                  margin:0; padding:50px; color:#333333; background:#dddddd; font-size:120%; }
-     </style>
+   
+   function showFU() {
+       document.getElementById("fucomponent").style.visibility = "visible";
+   }
+</script>
     </head>
-    <body onload="Wait.style.visibility='hidden'">
+    <body onload="showFU()">
         <jsp:include page="banner.jsp"/>
         <br/>
-        <center><p id="Wait">Now Loading...<br/></p></center>
-        
+        <div id="fucomponent" style="visibility:hidden;">
         <f:view>
     
             <ui:fileUploadTag id="TestFileuploadForm" serverLocationDir="../applications/j2ee-modules/petstore/images" 
@@ -150,6 +148,7 @@
                 <br><div id="progress"></div><br/>
             </ui:fileUploadTag>        
         </f:view>
+        </div>
 <script type="text/javascript">        
     /**
      * Start the autocompletion process, and begin asynchronous communication
