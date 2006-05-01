@@ -6,7 +6,6 @@
 <%@taglib prefix="h" uri="http://java.sun.com/jsf/html"%>
 <%@taglib prefix="ui" uri="http://java.sun.com/blueprints/ui" %>
 
-<script type="text/javascript" src="/petstore/faces/static/META-INF/common/script.js"></script>
 <link rel="stylesheet" type="text/css" href="styles.css"></link>
 <script type="text/javascript" src="/petstore/dojo.js"></script>
 <script type="text/javascript" src="/petstore/faces/static/META-INF/rss/rssbar.js"></script>
