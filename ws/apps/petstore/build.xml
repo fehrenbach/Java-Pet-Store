@@ -30,6 +30,8 @@
             <fileset file="${file.reference.commons-io-1.1.jar}"/>
             <fileset file="${file.reference.commons-logging.jar}"/>
         </copy>        
+        
+        <copy file="src/conf/persistence.xml" todir="${build.web.dir}/WEB-INF/classes/META-INF"/>
     
         <!-- Copy in the content -->
         <copy file="${commons.script}" todir="${build.web.dir}" />
