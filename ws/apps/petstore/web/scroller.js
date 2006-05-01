@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: scroller.js,v 1.20 2006-04-29 22:53:54 gmurray71 Exp $
+$Id: scroller.js,v 1.21 2006-05-01 07:57:57 gmurray71 Exp $
 */
 
 /**
@@ -11,17 +11,18 @@ $Id: scroller.js,v 1.20 2006-04-29 22:53:54 gmurray71 Exp $
 
 function ImageScroller() {
     var _this = this;
-    var isIE;
     var initialized = false;
     // default sizes
     
     var VIEWPORT_WIDTH = 500;
-    var IMAGEPANE_WIDTH = 500;
-    var IMAGEPANE_HEIGHT = 335;
-    var INFOPANE_DEFAULT_HEIGHT = 75;
-    var INFOPANE_EXPAND_HEIGHT = 175;
-    var THUMB_WIDTH = 100;
-    var THUMB_HEIGHT = 75;
+    // all sizes are realitive the the viewport width
+    var IMAGEPANE_WIDTH = VIEWPORT_WIDTH;
+    var IMAGEPANE_HEIGHT = Math.round(VIEWPORT_WIDTH / 1.49);
+    var INFOPANE_DEFAULT_HEIGHT = Math.round(VIEWPORT_WIDTH / 6.67);
+    var INFOPANE_EXPAND_HEIGHT = Math.round(VIEWPORT_WIDTH / 2.86);
+    var THUMB_WIDTH = Math.round(VIEWPORT_WIDTH / 5);;
+    var THUMB_HEIGHT = Math.round(VIEWPORT_WIDTH / 6.67);
+    
     var CHUNK_SIZE=4;
     
     var IMAGE_PANE_ID = "imagePane";
@@ -257,7 +258,7 @@ function ImageScroller() {
     
     function setOpacity(opacity, id) {
         var target = document.getElementById(id);
-        if (isIE) {
+        if (typeof target.style.filter != 'undefined') {
             target.style.filter = "alpha(opacity:" + opacity + ")"; 
         } else {
             target.style.opacity = opacity/100;
@@ -607,9 +608,7 @@ function ImageScroller() {
             l += element.x;
         return l;
     }
-     
-    
-    
+       
     function Map() {
         
         var size = 0;
@@ -644,17 +643,4 @@ function ImageScroller() {
             values = [];
         }
     }
-    
-    function Item(id,name,thumbnail,image,description,shortDescription,price,rating){
-        this.id = id;
-        this.name= name;
-        this.image = image;
-        this.thumbnail = thumbnail;
-        this.name = name;
-        this.description = description;
-        this.shortDescription = shortDescription;
-        this.price = price;
-        this.rating = rating;
-    }
-    
 }
