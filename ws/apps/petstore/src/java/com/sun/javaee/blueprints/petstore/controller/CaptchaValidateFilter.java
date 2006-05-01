@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CaptchaValidateFilter.java,v 1.5 2006-03-03 02:10:59 yutayoshida Exp $ */
+$Id: CaptchaValidateFilter.java,v 1.6 2006-05-01 23:20:29 yutayoshida Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -128,6 +128,7 @@ public class CaptchaValidateFilter implements Filter {
             //rd.forward(request, response);
             // assuming this is a xmlhttprequest
             response.setContentType("text/xml;charset=UTF-8");
+            ((HttpServletResponse)response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             ((HttpServletResponse)response).setHeader("Cache-Control", "no-store");
             ((HttpServletResponse)response).setHeader("Pragma", "no-cache");
             PrintWriter out = response.getWriter();
