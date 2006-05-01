@@ -41,6 +41,7 @@ public class MapBean {
     private ArrayList<MapMarker> alMapMarkers=new ArrayList<MapMarker>();
     private MapMarker mapMarker=new MapMarker();
     private MapPoint mapPoint=new MapPoint();
+    List<Item> items=null;
     private int zoomLevel=5, radius=30;
     private Logger _logger=null;
     private String category="CATS", centerAddress=null;
@@ -124,6 +125,11 @@ public class MapBean {
     public int getLocationCount() {
         return alMapMarkers.size();
     }
+
+    public List<Item> getItems() {
+        return items;
+    }
+    
     
     
     public void addMapMarker(MapMarker mm) {
@@ -166,7 +172,6 @@ public class MapBean {
 
         // check to see if radius set with centerpoint
         String centerx=getCenterAddress();
-        List<Item> items=null;
         GeoPoint[] geoCenterPoint=null;
         if(centerx != null && centerx.length() > 0) {
             // set center so use to/from lat & long to retrieve data
