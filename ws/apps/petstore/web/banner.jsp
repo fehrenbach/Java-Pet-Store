@@ -17,34 +17,31 @@
 
 <table border="0" bordercolor="gray" cellpadding="0" cellspacing="0" bgcolor="white" width="100%">
  <tr id="injectionPoint">
-  <td width="100"><img src="http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.servletContext.contextPath}/images/banner_logo.gif" border="0" width="70" height="70"></td>
-  <td align="left" colspan="1">
-  <div class="banner">Java Pet Store</div>
+  <td width="100"><a class="menuLink" href="/petstore/faces/index.jsp""><img src="/petstore/images/banner_logo.gif" border="0" width="70" height="70"></a></td>
+  <td align="left">
+   <div class="banner">Java Pet Store</div>
   </td>
-  <td id="bannerRight">
+  <td id="bannerRight" align="right">
+    <a class="menuLink" onmouseover="this.className='menuLinkHover';" onmouseout="this.className='menuLink';" href="/petstore/faces/fileupload.jsp">Seller</a> <span class="menuItem">|</span>
+    <a class="menuLink" onmouseover="this.className='menuLinkHover';" onmouseout="this.className='menuLink';" href="/petstore/faces/search.jsp">Search</a> <span class="menuItem">|</span>
+    <a class="menuLink" onmouseover="this.className='menuLinkHover';" onmouseout="this.className='menuLink';" href="/petstore/faces/catalog.jsp">Catalog</a> <span class="menuItem">|</span>
+    <a class="menuLink" onmouseover="this.className='menuLinkHover';" onmouseout="this.className='menuLink';" href="/petstore/faces/mapAll.jsp">Map</a> <span class="menuItem">|</span>
+    <a class="menuLink" onmouseover="this.className='menuLinkHover';" onmouseout="this.className='menuLink';" href="/petstore/index.html">Main</a>
   </td>
-  </td>
+  </tr>
  </tr>
   <tr bgcolor="gray">
-  <td id="menubar" align="left" width="700" height="45" colspan="2" >
+  <td id="menubar" align="left" colspan="3" height="45" >
     <div id="rss-bar">
     <table border="0" cellpadding="0" cellspacing="0">
         <tr>
-        <td id="rss-channel"></td>
+        <td id="rss-channel" nowrap="true"></td>
         <td id="rss-item"></td>
         </tr>
     </table>
     </div>
   </td>
-  <td  align="right">
-  <a class="menuLink" href="http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.servletContext.contextPath}/faces/fileupload.jsp">Seller</a> <span class="menuItem">|</span>
-  <a class="menuLink" href="http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.servletContext.contextPath}/faces/search.jsp">Search</a> <span class="menuItem">|</span>
-  <a class="menuLink" href="http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.servletContext.contextPath}/faces/catalog.jsp">Catalog</a> <span class="menuItem">|</span>
-  <a class="menuLink" href="http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.servletContext.contextPath}/faces/mapAll.jsp">Map</a> <span class="menuItem">|</span>
-  <a class="menuLink" href="http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.servletContext.contextPath}/faces/index.jsp">Main</a>
-  </td>
  </tr>
  </table>
 
-<div id="autocomplete" class="autocomplete"><table id="autocompleteTable" class="autocompleteTable"></table></div>
 
