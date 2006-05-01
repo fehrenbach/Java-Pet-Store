@@ -226,7 +226,6 @@ public class MapBean {
         
         // check to see if radius set with centerpoint
         String centerx=getCenterAddress();
-        List<Item> items=null;
         GeoPoint[] geoCenterPoint=null;
         if(centerx != null && centerx.length() > 0) {
             // set center so use to/from lat & long to retrieve data

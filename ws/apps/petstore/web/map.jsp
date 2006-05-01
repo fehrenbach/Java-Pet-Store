@@ -7,9 +7,6 @@
 <%@taglib prefix="ui" uri="http://java.sun.com/blueprints/ui/14" %>
 <%@taglib prefix="ui5" uri="http://java.sun.com/blueprints/ui" %>
 
-
-
-
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -34,25 +31,33 @@
                                 <td>
                                 <ul>
 <%
-try {
-    // need to use scriptlet to preform the reconciliation of items to map coords
-    // this way I don't have to create a new wrapper object
-    MapBean mapBean=(MapBean)session.getAttribute("MapBean");
-    MapMarker[] mapMarkers=(MapMarker[])mapBean.getLocations();
-    java.util.List<Item> items=mapBean.getItems();
-    for(int ii=0; ii < mapMarkers.length; ii++) {
-    
+    try {
+        // need to use scriptlet to preform the reconciliation of items to map coords
+        // this way I don't have to create a new wrapper object
+        MapBean mapBean=(MapBean)session.getAttribute("MapBean");
+        MapMarker[] mapMarkers=(MapMarker[])mapBean.getLocations();
+        java.util.List<Item> items=mapBean.getItems();
+        for(int ii=0; ii < mapMarkers.length; ii++) {
+
 %>
-                                        <li>
-                                            <a href="javascript:mapViewerx.openInfoWindowHtml(new GPoint(<%= mapMarkers[ii].getLongitude() %>, <%= mapMarkers[ii].getLatitude() %>), '<%= mapMarkers[ii].getMarkup() %>');"  onmouseover="show('pop1', event, '<%= items.get(ii).getItemID() %>')" onmouseout="hide('pop1')">
-                                                <%= mapMarkers[ii].getMarkup() %></a>&nbsp;<font size="-1"><a href="/petstore/faces/catalog.jsp#<%= items.get(ii).getItemID() %>"><i>(Detail)</i></a></font>
-                                        </li>
+                                    <li>
+                                        <a href="javascript:mapViewerx.openInfoWindowHtml(new GPoint(<%= mapMarkers[ii].getLongitude() %>, <%= mapMarkers[ii].getLatitude() %>), '<%= mapMarkers[ii].getMarkup() %>');"  onmouseover="show('pop1', event, '<%= items.get(ii).getItemID() %>')" onmouseout="hide('pop1')">
+                                            <b><%= items.get(ii).getName() %></b>
+                                        </a>
+                                        <a href="/petstore/faces/catalog.jsp#<%= items.get(ii).getItemID() %>" alt="Go to Detailed Catalog Page">
+                                            <i>(detail)</i>
+                                        </a>
+                                        <br/>
+                                        <a href="javascript:mapViewerx.openInfoWindowHtml(new GPoint(<%= mapMarkers[ii].getLongitude() %>, <%= mapMarkers[ii].getLatitude() %>), '<%= mapMarkers[ii].getMarkup() %>');"  onmouseover="show('pop1', event, '<%= items.get(ii).getItemID() %>')" onmouseout="hide('pop1')">
+                                            <font size="-1"><%= mapBean.changeSpaces(items.get(ii).getAddress().getAddressAsString()) %></font>
+                                        </a>
+                                    </li>
 <%
     }
-} catch(Exception ee) {
-    ee.printStackTrace();
-    
-}
+    } catch(Exception ee) {
+        ee.printStackTrace();
+
+    }
 %>
                                 </ul>
                                 <td>
@@ -83,7 +88,7 @@ try {
                                     </tr>
                                     <tr>
                                         <td colspan="2" align="center"><img name="image" id="imageId" src="" 
-                                          alt="[Loading Image...]" border="2"/></td>
+                                        alt="[Loading Image...]" border="2"/></td>
                                     </tr>
                                 </table>                    
                             </ui5:popupTag>            
@@ -96,8 +101,6 @@ try {
                     </td>
                 </tr>
             </table>
-
-        
             <script type="text/javascript">
                 bpui.mapviewer.createMapControl = function() {
                 return new GLargeMapControl();
