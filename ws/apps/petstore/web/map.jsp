@@ -36,6 +36,7 @@
 <%
 try {
     // need to use scriptlet to preform the reconciliation of items to map coords
+    // this way I don't have to create a new wrapper object
     MapBean mapBean=(MapBean)session.getAttribute("MapBean");
     MapMarker[] mapMarkers=(MapMarker[])mapBean.getLocations();
     java.util.List<Item> items=mapBean.getItems();
@@ -44,8 +45,7 @@ try {
 %>
                                         <li>
                                             <a href="javascript:mapViewerx.openInfoWindowHtml(new GPoint(<%= mapMarkers[ii].getLongitude() %>, <%= mapMarkers[ii].getLatitude() %>), '<%= mapMarkers[ii].getMarkup() %>');"  onmouseover="show('pop1', event, '<%= items.get(ii).getItemID() %>')" onmouseout="hide('pop1')">
-                                                <%= mapMarkers[ii].getMarkup() %>
-                                            </a>
+                                                <%= mapMarkers[ii].getMarkup() %></a>&nbsp;<font size="-1"><a href="/petstore/faces/catalog.jsp#<%= items.get(ii).getItemID() %>"><i>(Detail)</i></a></font>
                                         </li>
 <%
     }
