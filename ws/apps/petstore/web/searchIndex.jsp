@@ -100,7 +100,7 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
                             </tr>
                             <tr>
                                 <th align="left">Index File Location:</th>
-                                <td align="left"><input type="text" size="50" name="indexDirectory" value="<%=System.getProperty("com.sun.aas.installRoot")%>/lib/petstore/searchindex"/></td>
+                                <td align="left"><input type="text" size="50" name="indexDirectory" value="<%=System.getProperty("com.sun.aas.instanceRoot")%>/lib/petstore/searchindex"/></td>
                             </tr>
                             <tr>
                                 <th align="left">Data Source:</th>

@@ -35,9 +35,6 @@
     
         <!-- Copy in the content -->
         <copy file="${commons.script}" todir="${build.web.dir}" />
-        <!-- unzip lucene indexes into the javaee.home/lib directory, if they don't exist -->
-        <available file="${javaee.home}/lib/petstore" type="dir" property="lucene.index.exists"/>
-        <antcall target="unzipIndexes"/>
     </target>
     
     <target name="dojo" description="Unzips the dojo.zip to the right place">
@@ -51,12 +48,13 @@
         </unzip>
     </target>
     
-    <target name="unzipIndexes" unless="lucene.index.exists">
-        <unzip src="lib/petstoreIndexes.zip" dest="${javaee.home}/lib" overwrite="true"/>
+    <target name="unzipIndexes">
+        <unzip src="lib/petstoreIndexes.zip" dest="${javaee.domaindir}/lib/petstore" overwrite="true"/>
     </target>
     
     <target name="setup">
         <ant dir="." antfile="setup/setup.xml" target="setup" inheritAll="false" inheritRefs="false"/>
+        <antcall target="unzipIndexes"/>
     </target>
     
     <target name="unsetup">
