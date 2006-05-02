@@ -11,8 +11,8 @@
     <body>
         <hr/>
         <center>
-        <a href="http://blueprints.dev.java.net/">Java BluePrints</a> |
-        <a href="http://sun.com">Sun Microsystems</a> &copy; 2006 Sun Microsystems Inc. All rights reserved. Use is subject to license terms.
+            <a href="http://blueprints.dev.java.net/">Java BluePrints</a> |
+            <a href="http://sun.com">Sun Microsystems</a> &copy; 2006 Sun Microsystems Inc. All rights reserved. Use is subject to license terms.
         </center>
     </body>
 </html>
