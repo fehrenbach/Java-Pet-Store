@@ -1,7 +1,6 @@
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
-<%@page import="com.sun.javaee.blueprints.petstore.search.HTMLParser, com.sun.javaee.blueprints.petstore.search.SQLParser, javax.sql.*, java.sql.*, javax.rmi.*, javax.naming.*"%>
-
+<%@page import="com.sun.javaee.blueprints.petstore.search.HTMLParser, com.sun.javaee.blueprints.petstore.search.SQLParser, javax.sql.*, java.sql.*, javax.rmi.*, javax.naming.*, com.sun.javaee.blueprints.petstore.util.PetstoreConstants"%>
 <%--
 The taglib directive below imports the JSTL library. If you uncomment it,
 you must also add the JSTL library to the project. The Add Library... action
@@ -100,7 +99,7 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
                             </tr>
                             <tr>
                                 <th align="left">Index File Location:</th>
-                                <td align="left"><input type="text" size="50" name="indexDirectory" value="<%=System.getProperty("com.sun.aas.instanceRoot")%>/lib/petstore/searchindex"/></td>
+                                <td align="left"><input type="text" size="50" name="indexDirectory" value="<%= PetstoreConstants.PETSTORE_INDEX_DIRECTORY %>"/></td>
                             </tr>
                             <tr>
                                 <th align="left">Data Source:</th>
