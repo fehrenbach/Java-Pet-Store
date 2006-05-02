@@ -1,5 +1,5 @@
-/* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: AutocompleteBean.java,v 1.1 2006-04-19 04:55:06 yutayoshida Exp $ */
+/* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
+$Id: AutocompleteBean.java,v 1.2 2006-05-02 02:59:09 sean_brydon Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -31,7 +31,7 @@ public class AutocompleteBean {
         FacesContext context=FacesContext.getCurrentInstance();
         Map<String, Object> contextMap = context.getExternalContext().getApplicationMap();
         CatalogFacade catalogFacade = (CatalogFacade)contextMap.get("CatalogFacade");
-        List<ZipLocation> zipLocations = catalogFacade.getZipCodeLocations();
+        List<ZipLocation> zipLocations = catalogFacade.getZipCodeLocations("ignore",0, 20);
         
         if (zipLocations == null) {
             cities =new String[]{"Init Failed"};

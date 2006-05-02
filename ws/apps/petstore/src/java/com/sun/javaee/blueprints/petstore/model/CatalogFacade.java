@@ -197,11 +197,11 @@ public class CatalogFacade implements ServletContextListener {
      * and held as member field of facade.
      * @returns a List of ZipLocation objects
      */
-    public List<ZipLocation> getZipCodeLocations(){
+     public List<ZipLocation> getZipCodeLocations(String subString, int start, int chunkSize){
         EntityManager em = emf.createEntityManager();
         //Query query = em.createQuery("SELECT  z FROM ZipLocation z");
         Query query = em.createNamedQuery("Item.getAllZipCityState");
-        List<ZipLocation>  zipCodeLocations = query.getResultList();
+        List<ZipLocation>  zipCodeLocations = query.setFirstResult(start).setMaxResults(chunkSize).getResultList();
         em.close();
         return zipCodeLocations;
     }
