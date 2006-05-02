@@ -33,19 +33,19 @@ function browse(category) {
 	</div>
 
 	<div class="dojo-FisheyeListItem" onClick="browse('Cats');"
-		dojo:iconsrc="/petstore/images/cats_icon.gif" c>
+		dojo:iconsrc="/petstore/images/cats_icon.gif">
 	</div>
 
 	<div class="dojo-FisheyeListItem" onClick="browse('Birds');"
-		dojo:iconsrc="/petstore/images/birds_icon.gif" >
+		dojo:iconsrc="/petstore/images/birds_icon.gif">
 	</div>
 
 	<div class="dojo-FisheyeListItem" onClick="browse('Fish');"
-		dojo:iconsrc="/petstore/images/fish_icon.gif" >
+		dojo:iconsrc="/petstore/images/fish_icon.gif">
 	</div>
 
 	<div class="dojo-FisheyeListItem" onClick="browse('Reptiles');"
-		dojo:iconsrc="/petstore/images/reptiles_icon.gif"  >
+		dojo:iconsrc="/petstore/images/reptiles_icon.gif">
 	</div>
 </div>
 
@@ -56,22 +56,22 @@ function browse(category) {
      <tr>
       <td>
         <map name="petmap">
-        <area onmouseover="javascript:this.style.cursor='pointer';" onclick="loadCategory('BIRDS')" 
+        <area onmouseover="javascript:this.style.cursor='pointer';" onclick="browse('Birds')" 
             alt="Birds" 
             coords="72,2,280,250">
-        <area onmouseover="javascript:this.style.cursor='pointer';" onclick="loadCategory('FISH')" 
+        <area onmouseover="javascript:this.style.cursor='pointer';" onclick="browse('Fish')" 
             alt="Fish" 
             coords="2,180,72,250">
-        <area onmouseover="javascript:this.style.cursor='pointer';" onclick="loadCategory('DOGS')" 
+        <area onmouseover="javascript:this.style.cursor='pointer';" onclick="browse('Dogs')" 
             alt="Dogs" 
             coords="60,250,130,320">
-       <area onmouseover="javascript:this.style.cursor='pointer';" onclick="loadCategory('REPTILES')" 
+       <area onmouseover="javascript:this.style.cursor='pointer';" onclick="browse('Reptiles')" 
             alt="Reptiles" 
             coords="140,270,210,340">
-        <area onmouseover="javascript:this.style.cursor='pointer';" onclick="loadCategory('CATS')" 
+        <area onmouseover="javascript:this.style.cursor='pointer';" onclick="browse('Cats')" 
             alt="Cats" 
             coords="225,240,295,310">
-        <area onmouseover="javascript:this.style.cursor='pointer';" onclick="loadCategory('BIRDS')" 
+        <area onmouseover="javascript:this.style.cursor='pointer';" onclick="browse('Birds')" 
             alt="Birds" 
             coords="280,180,350,250">
         </map>
