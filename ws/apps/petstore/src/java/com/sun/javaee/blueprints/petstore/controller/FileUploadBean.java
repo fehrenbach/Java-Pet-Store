@@ -288,9 +288,10 @@ public class FileUploadBean {
                 thumbPath = aPath.substring(0, idx)+"_thumb"+aPath.substring(idx, aPath.length());
             }
         }
-        ImageScaler imgScaler = new ImageScaler();
         try {
-            imgScaler.resizeWithGraphics(aPath, thumbPath);
+            ImageScaler imgScaler = new ImageScaler(aPath);
+            imgScaler.keepAspectWithWidth();
+            imgScaler.resizeWithGraphics(thumbPath);
         } catch (Exception e) {
             System.out.print("ERROR in generating thumbnail");
         }

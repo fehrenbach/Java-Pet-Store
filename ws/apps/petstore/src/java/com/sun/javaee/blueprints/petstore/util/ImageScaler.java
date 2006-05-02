@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: ImageScaler.java,v 1.1 2006-04-21 22:57:31 yutayoshida Exp $ */
+$Id: ImageScaler.java,v 1.2 2006-05-02 00:28:37 yutayoshida Exp $ */
 
 package com.sun.javaee.blueprints.petstore.util;
 
@@ -12,35 +12,44 @@ import javax.imageio.*;
 
 public class ImageScaler {
     
+    private boolean keepAspect = false;
     private int thumbWidth = 133;
     private int thumbHeight = 100;
     private String format = "jpg";
+    private String aspectType = "width";
+    BufferedImage image = null;
     
     /** Creates a new instance of ImageScaler */
-    public ImageScaler() {
+    public ImageScaler(String imagePath) throws IOException {
+        this.image = ImageIO.read(new File(imagePath));
     }
     /* constructor with the target image size
      * @param width Width of the target image
      * @param height Height of the target image
      */
-    public ImageScaler(int width, int height) {
+    public ImageScaler(int width, int height, String imagePath) throws IOException {
         this.thumbWidth = width;
         this.thumbHeight = height;
+        this.image = ImageIO.read(new File(imagePath));
     }
     
+    /* must be called before resize method
+     * when it is necessary to keep the aspect ratio
+     */
+    public void keepAspectWithWidth() {
+        this.keepAspect = true;
+        this.thumbHeight = this.image.getHeight() * this.thumbWidth / this.image.getWidth();
+    }
+    public void keepAspectWithHeight() {
+        this.keepAspect = true;
+        this.thumbWidth = this.image.getWidth() * this.thumbHeight / this.image.getHeight();
+    }
     /* Using getScaledInstance
      * good quality, but very slow
      * @param from the path of the original image
      * @param to the path of the target thumbnail
      */
-    public void resizeWithScaledInstance(String from, String to) throws IOException {
-        BufferedImage image = ImageIO.read(new File(from));
-        // petstore specific operation - if height is larger than width,
-        // change the default w and h.
-        if (image.getHeight() > image.getWidth()) {
-            thumbWidth = 75;
-            thumbHeight = 100;
-        }
+    public void resizeWithScaledInstance(String to) throws IOException {
         BufferedImage bThumb = new BufferedImage(thumbWidth, thumbHeight, image.getType());
         bThumb.getGraphics().drawImage(image.getScaledInstance(thumbWidth, thumbHeight,
                 Image.SCALE_AREA_AVERAGING), 0, 0, thumbWidth, thumbHeight, null);
@@ -52,25 +61,18 @@ public class ImageScaler {
      * @param from the path of the original image
      * @param to the path of the target thumbnail
      */
-    public void resizeWithGraphics(String from, String to) throws IOException {
-        BufferedImage image = ImageIO.read(new File(from));
-        // petstore specific operation - if height is larger than width,
-        // change the default w and h.
-        if (image.getHeight() > image.getWidth()) {
-            thumbWidth = 75;
-            thumbHeight = 100;
-        }
+    public void resizeWithGraphics(String to) throws IOException {
         BufferedImage th = new BufferedImage(thumbWidth, thumbHeight, image.getType());
         Graphics2D g2d = th.createGraphics();
         g2d.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
         g2d.setRenderingHint(RenderingHints.KEY_DITHERING, RenderingHints.VALUE_DITHER_ENABLE);
-        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
         g2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
         g2d.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE);
+        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         g2d.drawImage(image, 0, 0, thumbWidth, thumbHeight, null);
         ImageIO.write(th, format, new File(to));
     }
@@ -81,8 +83,7 @@ public class ImageScaler {
      * @param to the path of the target thumbnail
      * @param power to rescale(0.25, 0.5...)
      */
-    public void resizeWithAffineTransform(String from, String to, double  power) throws IOException {
-        BufferedImage image = ImageIO.read(new File(from));
+    public void resizeWithAffineTransform(String to, double  power) throws IOException {
         int w = image.getWidth();
         int h = image.getHeight();
         BufferedImage th = new BufferedImage((int)(w*power), (int)(h*power), image.getType());
