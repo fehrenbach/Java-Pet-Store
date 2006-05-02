@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="petstore-setup" default="setup" basedir="..">
 
-  <property file="./setup/derby.properties" />
+  <property file="./setup/javadb.properties" />
   <import file="../bp-project.xml" />
 
   <!-- Database configuration tasks -->
@@ -21,7 +21,21 @@
          autocommit="true"
          onerror="abort" >
       <transaction src="${db.create.src}"/>
+    </sql>    
+    <dirname property="petstore-setup.dir" file="${ant.file.petstore-setup}"/>
+    <sql driver="${db.driver}"
+         encoding="utf-8"
+         url="${db.url}"
+         userid="${db.user}"
+         password="${db.password}"
+         classpathref="db.classpath"
+         delimiter="${db.delimiter}"
+         autocommit="true"
+         onerror="abort" ><![CDATA[
+      CALL SYSCS_UTIL.SYSCS_IMPORT_TABLE (null, 'ZIPLOCATION', '${petstore-setup.dir}/sql/javadb/cities.del', null, null, null, 0);
+      ]]>
     </sql>
+    
   </target>
   
   <target name="delete-db" description="Deletes the database tables." >
