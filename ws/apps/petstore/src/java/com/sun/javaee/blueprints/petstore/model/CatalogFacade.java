@@ -41,6 +41,38 @@ public class CatalogFacade implements ServletContextListener {
         return items;
     }
     
+        /**
+     * Value List Handler for items. The Chunk return contains an item with iID or nothing is returned. Uses the Java Persistence query language.
+     * @param pID is the product id that the item belongs to
+     * @param start position of the first result, numbered from 0
+     * @param chunkSize the maximum number of results to retrieve
+     * @returns a List of Item objects
+     */
+    public List<Item> getItemInChunckVLH(String pID, String iID, int chunkSize){
+        EntityManager em = emf.createEntityManager();
+        //make Java Persistence query
+        Query query = em.createQuery("SELECT i FROM Item i WHERE i.productID = :pID");
+        List<Item>  items;
+       // scroll through these till we find the set with the itemID we are loooking for
+       int index = 0;
+        while (true) {
+            items = query.setParameter("pID",pID).setFirstResult(index++ * chunkSize).setMaxResults(chunkSize).getResultList();
+            if ((items == null) || items.size() <= 0) break;
+            System.out.println("items.size=" + items.size());
+            Iterator<Item> it = items.iterator();
+            while ((it != null) && it.hasNext()) {
+                Item i = it.next();
+                // return this chunck if it contains the id we are looking for
+                if (i.getItemID().equals(iID)) {
+                    em.close();
+                    return items;
+                }
+            }
+        }
+        em.close();
+        return null;
+    }  
+    
     /**
      * Value List Handler for items. Uses the Java Persistence query language.
      * @param pID is the product id that the item belongs to

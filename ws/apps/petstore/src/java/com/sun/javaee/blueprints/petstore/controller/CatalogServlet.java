@@ -38,7 +38,6 @@ public class CatalogServlet extends HttpServlet {
        throws ServletException, IOException {
             request.setCharacterEncoding("UTF-8");
             String command = request.getParameter("command");
-            System.out.println("CatalogServlet: command=" + command);
             if ("category".equals(command)) {
                 String catid = request.getParameter("catid");
                 System.out.println("Request for category with id: " + catid);
@@ -68,7 +67,6 @@ public class CatalogServlet extends HttpServlet {
                         // defaults length to 10
                     }
                 }
-                System.err.println("**** Request for items with product id: " + pid + " start=" + start + " length=" + length);
                 // set content-type header before accessing the Writer
                 response.setContentType("text/xml;charset=UTF-8");
                 // leave these headers here for development - remove for deploy
@@ -76,9 +74,39 @@ public class CatalogServlet extends HttpServlet {
                 response.setHeader("Pragma", "no-cache");
                 PrintWriter out = response.getWriter();
                 String baseURL = "http://" + request.getServerName() + ":" + request.getServerPort() + "/" + request.getContextPath() + "/";  
+                List items = cf.getItemsVLH(pid, start, length);
                 //get response data
-                String str = handleItems(pid, start, length, baseURL);               
+                String str = handleItems(items, baseURL);               
                 out.println(str);
+                out.close();
+        } else if ("itemInChunck".equals(command)) {
+                String pid = request.getParameter("pid");
+                String itemId = request.getParameter("itemId");
+                 int start = 0;
+                String lengthString = request.getParameter("length");
+                int length = 10;
+                if (lengthString != null) {
+                    try {
+                        length = Integer.parseInt(lengthString);
+                    } catch (NumberFormatException nfe) {
+                        // defaults length to 10
+                    }
+                }
+                // set content-type header before accessing the Writer
+                response.setContentType("text/xml;charset=UTF-8");
+                // leave these headers here for development - remove for deploy
+                response.setHeader("Cache-Control", "no-cache");
+                response.setHeader("Pragma", "no-cache");
+                PrintWriter out = response.getWriter();
+                String baseURL = "http://" + request.getServerName() + ":" + request.getServerPort() + "/" + request.getContextPath() + "/";  
+                List items = cf.getItemInChunckVLH(pid, itemId, length);
+                //get response data
+                if (items != null) {
+                    String str = handleItems(items, baseURL);                  
+                    out.println(str);
+                } else {
+                    out.println("<items></items>");
+                }
                 out.close();
          } else if ("categories".equals(command)) {
                 System.out.println("Request for categories.");
@@ -111,6 +139,30 @@ public class CatalogServlet extends HttpServlet {
        // then write the data of the response
        sb.append("<items>\n");
        List items = cf.getItemsVLH(pid, start, length);
+       System.out.println("**** Items length=" + items.size());
+       Iterator<Item> it = items.iterator();
+       NumberFormat formatter = new DecimalFormat("00.00");
+       while (it.hasNext()) {
+                    Item i = it.next();
+                    sb.append("<item>\n");
+                    sb.append(" <id>" + i.getItemID() + "</id>\n");
+                    sb.append(" <product-id>" + i.getProductID() + "</product-id>\n");
+                    sb.append(" <rating>" + i.checkAverageRating() + "</rating>\n");
+                    sb.append(" <name>" + i.getName() + "</name>\n");
+                    sb.append(" <description>" + i.getDescription() + "</description>\n");
+                    sb.append(" <price>" + formatter.format(i.getPrice()) + "</price>\n");
+                    sb.append(" <image-url>" + baseURL + i.getImageURL() + "</image-url>\n");
+                    sb.append(" <image-tb-url>" + baseURL + i.getImageThumbURL() + "</image-tb-url>\n");
+                    sb.append("</item>\n");
+       }
+       sb.append("</items>");
+       return sb.toString();      
+   }
+   
+      private String handleItems(List items, String baseURL) {
+       StringBuffer sb = new StringBuffer();
+       // then write the data of the response
+       sb.append("<items>\n");
        System.out.println("**** Items length=" + items.size());
        Iterator<Item> it = items.iterator();
        NumberFormat formatter = new DecimalFormat("00.00");

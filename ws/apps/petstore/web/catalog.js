@@ -42,15 +42,7 @@ function CatalogController() {
                 bpui.rating.state["rating"].bindings["itemId"]=args.id;
                 bpui.rating.modifyDisplay("rating", args.rating, true);
                 // get the currrent item
-                var i = is.getItems().get(args.id);
-                //alert(infoName + " setting the name to " + i.name);
-                infoName.innerHTML = i.name;
-                infoPrice.innerHTML = "$" + i.price;
-                infoShortDescription.innerHTML = i.shortDescription;
-                infoDescription.innerHTML = i.description;
-                // update the paypal
-                buyNowAmount.value = i.price;
-                buyNowItemName.value = i.name;
+                showItemDetails(args.id);
             } else {
                 initalItem = args.id;
                 initalRating = args.rating;         
@@ -62,9 +54,22 @@ function CatalogController() {
         }
       } else if (args.type == "getChunck") {
           getChunck(args);
+      } else if (args.type == "showItemDetails") {
+          showProductDetails(args.productId, args.itemId);
       }  else if (args.type == "showProducts") {
           this.setProducts(args.productId);
       }
+  }
+  
+  function showItemDetails(id) {
+      var i = is.getItems().get(id);
+      infoName.innerHTML = i.name;
+      infoPrice.innerHTML = "$" + i.price;
+      infoShortDescription.innerHTML = i.shortDescription;
+      infoDescription.innerHTML = i.description;
+      // update the paypal
+      buyNowAmount.value = i.price;
+      buyNowItemName.value = i.name;
   }
   
   this.initialize = function() {
@@ -95,6 +100,21 @@ function CatalogController() {
         };
         dojo.io.bind(bindArgs);    
     }
+    
+    function showProductDetails(pid, itemId) {
+        is.reset();
+        is.showProgressIndicator();
+        var bindArgs = {
+            url:  "/petstore/catalog?command=itemInChunck&pid=" + pid + "&itemId=" + itemId + "&length=" + CHUNK_SIZE,
+            mimetype: "text/xml",
+            load: function(type,data,postProcessHandler) {
+               postProcess(data,true, pid, itemId);
+               showItemDetails(itemId);
+               is.doMaximize();
+             }
+        };
+        dojo.io.bind(bindArgs);          
+    }
   
   // do the value list pre-emptive fetching
   function getChunck(args) {           
@@ -112,7 +132,7 @@ function CatalogController() {
       dojo.io.bind(bindArgs);
    }
   
-   function postProcess(responseXML, showImage,pid) {
+   function postProcess(responseXML, showImage, pid, iId) {
         var items = [];
         var count = responseXML.getElementsByTagName("item").length;
         for (var loop=0; loop < count ; loop++) {
@@ -134,8 +154,11 @@ function CatalogController() {
             items.push(i);
         }
         is.addItems(items);
-        if (showImage) {
+        if (showImage && !iId) {
             is.showImage(items[0].id);
+            is.setGroupId(pid);
+        } else {
+            is.showImage(iId);
             is.setGroupId(pid);
         }
         is.hideProgressIndicator();
