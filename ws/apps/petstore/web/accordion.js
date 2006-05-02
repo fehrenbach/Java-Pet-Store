@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: accordion.js,v 1.19 2006-05-02 00:37:23 gmurray71 Exp $
+$Id: accordion.js,v 1.20 2006-05-02 23:57:42 gmurray71 Exp $
 */
 
 
@@ -93,59 +93,30 @@ function AccordionMenu () {
         }
         
         var originalURL = window.location.href;
-        var loadCateogry;
-        var loadItemDetails;
-        var productId;
-        var itemId;
-        if (originalURL.indexOf("?catid=") != -1) {
-	        var start = originalURL.indexOf("?catid=");
-            var stop = originalURL.indexOf("#");
-            if (stop == -1) {
-                stop =originalURL.length;
-            }
-	        loadCateogry = originalURL.substring(start + "?catId=".length, stop);    
-	    }
-        // TODO: Use a Regular Expression here
-        if (originalURL.indexOf("itemId=") != -1) {
-	        var start = originalURL.indexOf("itemId=");
-            var stop = originalURL.indexOf("&", start);
-            if (stop == -1) {
-                stop = originalURL.indexOf("#", start);
-            }
-            if (stop == -1) {
-                stop =originalURL.length;
-            }
-	        itemId = originalURL.substring(start + "itemId=".length, stop);
-	    }
-        if (originalURL.indexOf("pid=") != -1) {
-	        var start = originalURL.indexOf("pid=");
-            var stop = originalURL.indexOf("&");
-            if (stop == -1) {
-                stop = originalURL.indexOf("#");
-            }
-            if (stop == -1) {
-                stop =originalURL.length;
-            }
-	        productId = originalURL.substring(start + "pid=".length, stop);    
-	    }
 
-        if (itemId && productId) {
-            // find the right product and expand the accordion
-            for (var l=0; l < categories.length; l++) {
-                  // now tell the scroller to load the first product
-               for (var il=0; il < categories[l].products.length; il++) {   
-                  if (categories[l].products[il].id == productId) {
-                    initiateExpansion(l);
-                    break;
-                  } 
-
-                }
+        var params = {};
+        // look for the params
+        if (originalURL.indexOf("?") != -1) {
+            var qString = originalURL.split('?')[1];
+            // get rid of any bookmarking stuff
+            if (qString.indexOf("#") != -1) {
+                qString = qString.split('#')[0];
             }
-            dojo.event.topic.publish("/catalog", {type:"showItemDetails", productId: productId, itemId: itemId});
+            ps = qString.split('&');
+            // now go through and create the params map as an object literal
+            for (var i in ps) {
+                var t = ps[i].split('=');
+                params[t[0]] = t[1];
+            }
         }
-        if (loadCateogry) {
+        // first check for the item in product        
+        if (typeof params.itemId != 'undefined' &&
+            typeof params.pid != 'undefined') {
+            loadProductItem(params.pid, params.itemId);
+        // next if there is a catid definition then do it
+        } else if (typeof params.catid != 'undefined') {
             for (var l=0; l < categories.length; l++) {
-                if (loadCateogry == categories[l].name) {
+                if (params.catid == categories[l].name) {
                   // now tell the scroller to load the first product
                   initiateExpansion(l);
                   if (categories[l].products[0]) {
@@ -154,12 +125,33 @@ function AccordionMenu () {
                   break;
                 }
             }
-        } else if (!itemId && !productId) {
+        // for bookmarks this will load the comma separated pid,itemid following a #
+        // TODO: Need to consider error cases here
+        } else if (originalURL.indexOf("#") != -1) {
+            var qString = originalURL.split('#')[1];
+            var args = qString.split(',');
+            loadProductItem(args[0], args[1]);
+        // nothing is selected
+        } else {
             initiateExpansion(0);
             if (categories[0].products[0]) {
                 dojo.event.topic.publish("/catalog", {type:"showProducts", productId:categories[0].products[0].id});
-            } 
+            }
         }
+    }
+    
+    function loadProductItem(pid, itemId) {
+        // find the right product and expand the accordion
+        for (var l=0; l < categories.length; l++) {
+              // now tell the scroller to load the first product
+           for (var il=0; il < categories[l].products.length; il++) {   
+              if (categories[l].products[il].id == pid ) {
+                initiateExpansion(l);
+                break;
+              } 
+            }
+        }
+        dojo.event.topic.publish("/catalog", {type:"showItemDetails", productId: pid , itemId: itemId});    
     }
     
     function showStatus() {

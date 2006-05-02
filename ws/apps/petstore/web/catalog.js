@@ -22,6 +22,7 @@ function CatalogController() {
   var CHUNK_SIZE=4;
   var initalRating;
   var initalItem;
+  var originalURL;
   
   var infoName = document.getElementById("infopaneName");
   var infoRating = document.getElementById("infopaneRating");
@@ -37,6 +38,8 @@ function CatalogController() {
       if (args.type == "showingItem") {
         // update the id on the ratring component
         if (typeof bpui != 'undefined') {
+            var groupId = is.getGroupId();
+      	    window.location.href= originalURL +  "#" + groupId + "," + args.id;
             if (typeof bpui.rating != 'undefined') {
                 // update the rating
                 bpui.rating.state["rating"].bindings["itemId"]=args.id;
@@ -73,6 +76,11 @@ function CatalogController() {
   }
   
   this.initialize = function() {
+      originalURL = window.location.href;
+      if (originalURL.indexOf("#") != -1) {
+	        var start = originalURL.split("#");
+	        originalURL =start[0];      
+	  }
       var ratingInstance = bpui.rating.state["rating"];
       ratingInstance.grade = initalRating;
       bpui.rating.state["rating"].bindings["itemId"]=initalItem;
@@ -155,11 +163,11 @@ function CatalogController() {
         }
         is.addItems(items);
         if (showImage && !iId) {
+            is.setGroupId(pid);
             is.showImage(items[0].id);
-            is.setGroupId(pid);
         } else {
-            is.showImage(iId);
             is.setGroupId(pid);
+            is.showImage(iId);
         }
         is.hideProgressIndicator();
     }

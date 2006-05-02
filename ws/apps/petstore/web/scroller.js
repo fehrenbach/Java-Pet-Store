@@ -1,5 +1,5 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: scroller.js,v 1.23 2006-05-02 00:43:49 gmurray71 Exp $
+$Id: scroller.js,v 1.24 2006-05-02 23:57:43 gmurray71 Exp $
 */
 
 /**
@@ -93,7 +93,7 @@ function ImageScroller() {
     var imageReloadTries = 0;
     var IMG_RELOAD_RETRY_MAX = 30;
     // used for url book marking
-    var originalURL;
+
     
     var pid;
     var currentChunck;
@@ -104,6 +104,10 @@ function ImageScroller() {
     
     this.getItems = function() {
         return map;
+    }
+    
+    this.getGroupId = function() {
+        return pid;
     }
         
     this.reset = function() {
@@ -204,7 +208,7 @@ function ImageScroller() {
     
 
     this.showImage = function(itemId) {
-	    window.location.href= originalURL + "#" + itemId;
+
         _this.showProgressIndicator();
         //setTimeout(this.showProgressIndicator,0);
         var i = map.get(itemId);
@@ -451,12 +455,6 @@ function ImageScroller() {
         map = new Map();
         dojo.event.connect(window, "onresize", layout);
 	    var loadImage;
-        originalURL = window.location.href;
-        if (originalURL.indexOf("#") != -1) {
-	        var start = originalURL.indexOf("#");
-	        loadImage = originalURL.substring(start + 1,originalURL.length);
-	        originalURL = originalURL.substring(0,start);      
-	    }
 	    
         var targetRow = document.getElementById("targetRow");
         injectionPoint = document.getElementById("injection_point");
