@@ -51,5 +51,6 @@
         </f:view>
         &nbsp;&nbsp;&nbsp;  
         </center>
+        <jsp:include page="footer.jsp" />
     </body>
 </html>

@@ -24,8 +24,8 @@ public class PayPalBean {
     public PayPalBean() {
         postData=new BuyNowPostData();
         postData.setCurrencyCode("U.S. Dollar");
-        postData.setShippingCost(new BigDecimal("100"));
-        postData.setTax(new BigDecimal("200"));
+        postData.setShippingCost(new BigDecimal("25"));
+        postData.setTax(new BigDecimal("10"));
         postData.setUndefinedQuantity("1");
         postData.setSubmissionMethod("GET");
     }

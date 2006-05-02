@@ -74,8 +74,10 @@
                         <tr>
                             <th>Search String</th>
                             <td>
-                                <h:inputText size="50" id="searchString" value="#{SearchBean.searchString}"/> 
+                                <h:inputText size="50" id="searchString" value="#{SearchBean.searchString}"/>
+                                <!-- 
                                 Also Search Tags:<h:selectBooleanCheckbox id="searchTags" value="#{SearchBean.searchTags}"/>
+                                -->
                             </td>
                         </tr>
                         <tr>
@@ -111,7 +113,7 @@
                             <f:facet name="header">
                                 <h:outputText value="Name"/>
                             </f:facet>
-                            <a href="${pageContext.request.contextPath}/faces/catalog.jsp#<h:outputText value='#{item.UID}'/>"
+                            <a href="${pageContext.request.contextPath}/faces/catalog.jsp?pid=<h:outputText value='#{item.product}'/>&itemId=<h:outputText value='#{item.UID}'/>"
                                 onmouseover="show('pop1', event, '<h:outputText value='#{item.UID}'/>')" onmouseout="hide('pop1')">
                                 <h:outputText value="#{item.title}"/>
                             </a>
@@ -129,12 +131,6 @@
                             <h:outputText id="price" value="#{item.priceValue}" style="text-align: right">
                                 <f:convertNumber type="currency"/>
                             </h:outputText>                        
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="Tag(s)"/>
-                            </f:facet>
-                            <h:outputText value="#{item.tag}"/>
                         </h:column>
                         <f:facet name="footer">
                             <h:panelGroup>
@@ -171,5 +167,6 @@
                 <br/><br/><br/>
             </f:view>
         </center>
+        <jsp:include page="footer.jsp" />
     </body>
 </html>

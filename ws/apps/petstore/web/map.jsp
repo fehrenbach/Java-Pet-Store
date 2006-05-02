@@ -37,28 +37,55 @@
         MapBean mapBean=(MapBean)session.getAttribute("MapBean");
         MapMarker[] mapMarkers=(MapMarker[])mapBean.getLocations();
         java.util.List<Item> items=mapBean.getItems();
+        Item itemxx=null;
+        String popupOptions=null;
         for(int ii=0; ii < mapMarkers.length; ii++) {
 
+            System.out.println("loop - " + ii + " - " + mapBean.getCenterAddress());
+            if(mapBean.getCenterAddress() != null && !mapBean.getCenterAddress().equals("")) {
+                // center point is set to the first mapMarker, items are off by one
+                if(ii > 0) {
+                    // reconcile correct mapMarkers with items list
+                    itemxx=items.get(ii - 1);
+                    popupOptions="onmouseover=\"show('pop1', event, '" + itemxx.getItemID() + "')\" onmouseout=\"hide('pop1')\"";
+                } else {
+                    // first item of mapMarker is centerpoint, so no corresponding item, also no popup on mouseover
+                    itemxx=null;
+                    popupOptions="";
+                }
+            } else {
+                // no center point items should be 1-to-1 with mappedMarkers
+                itemxx=items.get(ii);
+                popupOptions="onmouseover=\"show('pop1', event, '" + itemxx.getItemID() + "')\" onmouseout=\"hide('pop1')\"";
+            }
 %>
                                     <li>
-                                        <a href="javascript:mapViewerx.openInfoWindowHtml(new GPoint(<%= mapMarkers[ii].getLongitude() %>, <%= mapMarkers[ii].getLatitude() %>), '<%= mapMarkers[ii].getMarkup() %>');"  onmouseover="show('pop1', event, '<%= items.get(ii).getItemID() %>')" onmouseout="hide('pop1')">
-                                            <b><%= items.get(ii).getName() %></b>
+                                        <a href="javascript:mapViewerx.openInfoWindowHtml(new GPoint(<%= mapMarkers[ii].getLongitude() %>,<%= mapMarkers[ii].getLatitude() %>), '<%= mapMarkers[ii].getMarkup() %>');" <%= popupOptions %>>
+                                            <%= mapBean.changeSpaces((itemxx == null) ? mapMarkers[ii].getMarkup() : "<b>" + itemxx.getName() + "</b>") %>
                                         </a>
-                                        <a href="/petstore/faces/catalog.jsp#<%= items.get(ii).getItemID() %>" alt="Go to Detailed Catalog Page">
+<%
+    if(itemxx != null) {
+        // remove these links for center point entry
+%>
+                                        <a href="/petstore/faces/catalog.jsp?pid=<%= itemxx.getProductID() %>&itemId=<%= itemxx.getItemID() %>" alt="Go to Detailed Catalog Page">
                                             <i>(detail)</i>
                                         </a>
+                                        
                                         <br/>
-                                        <a href="javascript:mapViewerx.openInfoWindowHtml(new GPoint(<%= mapMarkers[ii].getLongitude() %>, <%= mapMarkers[ii].getLatitude() %>), '<%= mapMarkers[ii].getMarkup() %>');"  onmouseover="show('pop1', event, '<%= items.get(ii).getItemID() %>')" onmouseout="hide('pop1')">
-                                            <font size="-1"><%= mapBean.changeSpaces(items.get(ii).getAddress().getAddressAsString()) %></font>
+                                        <a href="javascript:mapViewerx.openInfoWindowHtml(new GPoint(<%= mapMarkers[ii].getLongitude() %>, <%= mapMarkers[ii].getLatitude() %>), '<%= mapMarkers[ii].getMarkup() %>');" <%= popupOptions %>>
+                                            <font size="-1"><%= mapBean.changeSpaces((itemxx == null) ? mapMarkers[ii].getMarkup() : itemxx.getAddress().getAddressAsString()) %></font>
                                         </a>
-                                    </li>
 <%
     }
-    } catch(Exception ee) {
-        ee.printStackTrace();
-
-    }
 %>
+                                    </li>
+                                    <%
+                                        }
+                                        } catch(Exception ee) {
+                                            ee.printStackTrace();
+
+                                        }
+                                    %>
                                 </ul>
                                 <td>
                             </tr>
@@ -109,5 +136,6 @@
             </script>           
             <br/><br/>
         </center>
+        <jsp:include page="footer.jsp" />
     </body>
 </html>
