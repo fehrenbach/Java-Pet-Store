@@ -205,23 +205,9 @@ public class CatalogFacade implements ServletContextListener {
      */
     public List<ZipLocation> getZipCodeLocations(String city, int start, int chunkSize){
         EntityManager em = emf.createEntityManager();        
-        /*StringTokenizer parser = new StringTokenizer(city);
-        StringBuffer patternSB =  null;        
-        while (parser.hasMoreTokens()) {
-            String token = parser.nextToken();
-            char firstChar = Character.toUpperCase(token.charAt(0));
-            StringBuffer tokenSB = new StringBuffer(token);
-            tokenSB.setCharAt(0,firstChar);
-            patternSB.append(tokenSB);
-            patternSB.append(" ");
-        }*/
-        char firstChar = Character.toUpperCase(city.charAt(0));
-        StringBuffer patternSB = new StringBuffer(city);
-        patternSB.setCharAt(0,firstChar);
-        String pattern = "'"+patternSB+"%'";
+        String pattern = "'"+city.toUpperCase()+"%'";
         System.out.println("pattern is" + pattern);
-        Query query = em.createQuery("SELECT  z FROM ZipLocation z where z.city LIKE "+pattern);
-        //Query query = em.createNamedQuery("Item.getAllZipCityState");
+        Query query = em.createQuery("SELECT  z FROM ZipLocation z where UPPER(z.city) LIKE "+pattern);
         List<ZipLocation>  zipCodeLocations = query.setFirstResult(start).setMaxResults(chunkSize).getResultList();
         em.close();
         return zipCodeLocations;
