@@ -37,8 +37,8 @@
                     <tr>
                         <th align="right">Center Point Address:</th>
                         <td>
-                            <h:inputText id="centerAddress" value="#{MapBean.centerAddress}" size="50"/>
-                            <br/><small>For example: 4140 Network Circle, Santa Clara, CA, 95054</small>
+                            <h:inputText id="centerAddress" value="#{MapBean.centerAddress}" size="70"/>
+                            <br/><small><i>For example: 4140 Network Circle, Santa Clara, CA, 95054</i></small>
                         </td>
                     </tr>
                     <tr>
