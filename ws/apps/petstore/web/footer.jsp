@@ -1,3 +1,6 @@
+<%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
+$Id: footer.jsp,v 1.3 2006-05-03 22:00:33 inder Exp $ --%>
+
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
 

@@ -1,6 +1,5 @@
-/* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: scroller.js,v 1.24 2006-05-02 23:57:43 gmurray71 Exp $
-*/
+/* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
+$Id: scroller.js,v 1.25 2006-05-03 22:00:34 inder Exp $ */
 
 /**
 * ImageScroller - A multipurpose item brower

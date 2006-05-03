@@ -1,7 +1,5 @@
-/* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: accordion.js,v 1.21 2006-05-03 14:38:29 gmurray71 Exp $
-*/
-
+/* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
+$Id: accordion.js,v 1.22 2006-05-03 22:00:32 inder Exp $ */
 
 function AccordionMenu () {
     

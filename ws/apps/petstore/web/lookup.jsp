@@ -1,3 +1,6 @@
+<%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
+$Id: lookup.jsp,v 1.5 2006-05-03 22:00:33 inder Exp $ --%>
+
 <%@page contentType="text/xml"%>
 <%@page pageEncoding="UTF-8"%>
 <%@page import="com.sun.javaee.blueprints.petstore.model.CatalogFacade, com.sun.javaee.blueprints.petstore.model.Item"%>

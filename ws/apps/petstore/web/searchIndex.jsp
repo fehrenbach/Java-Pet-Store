@@ -1,3 +1,6 @@
+<%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
+$Id: searchIndex.jsp,v 1.6 2006-05-03 22:00:34 inder Exp $ --%>
+
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
 <%@page import="com.sun.javaee.blueprints.petstore.search.HTMLParser, com.sun.javaee.blueprints.petstore.search.SQLParser, javax.sql.*, java.sql.*, javax.rmi.*, javax.naming.*, com.sun.javaee.blueprints.petstore.util.PetstoreConstants"%>
