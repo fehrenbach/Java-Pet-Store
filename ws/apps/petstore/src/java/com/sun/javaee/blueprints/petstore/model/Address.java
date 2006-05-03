@@ -90,7 +90,7 @@ public class Address implements java.io.Serializable {
         this.longitude = longitude;
     }
     
-    public String getAddressAsString() {
+    public String addressToString() {
         StringBuffer sb=new StringBuffer();
         if(street1 != null) sb.append(street1);
         if(street2 != null) sb.append(" " + street2);

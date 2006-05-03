@@ -11,7 +11,7 @@ import javax.annotation.*;
 
 public class CatalogFacade implements ServletContextListener {
     
-    @PersistenceUnit(unitName="bppu") private EntityManagerFactory emf;
+    @PersistenceUnit(unitName="PetstorePu") private EntityManagerFactory emf;
     @Resource UserTransaction utx;
     
     public CatalogFacade(){ }
