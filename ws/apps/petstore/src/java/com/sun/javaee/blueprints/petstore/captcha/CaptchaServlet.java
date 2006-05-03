@@ -1,5 +1,5 @@
-/* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CaptchaServlet.java,v 1.3 2006-02-23 20:31:25 yutayoshida Exp $ */
+/* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
+$Id: CaptchaServlet.java,v 1.4 2006-05-03 21:41:37 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.captcha;
 
