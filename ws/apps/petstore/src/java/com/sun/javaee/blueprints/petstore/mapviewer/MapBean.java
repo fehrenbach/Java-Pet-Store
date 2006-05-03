@@ -278,7 +278,7 @@ public class MapBean {
                 Item centerItem=items.get(0);
                 dLatitude=centerItem.getAddress().getLatitude();
                 dLongitude=centerItem.getAddress().getLongitude();
-                infoBalloon="<b>" + centerItem.getName() + "</b><br/>" + centerItem.getAddress().getAddressAsString();
+                infoBalloon="<b>" + centerItem.getName() + "</b><br/>" + centerItem.getAddress().addressToString();
                 startPos=1;
             }
 
@@ -323,7 +323,7 @@ public class MapBean {
                     mm.setLatitude(loc.getAddress().getLatitude());
                     mm.setLongitude(loc.getAddress().getLongitude());
                     mm.setMarkup("<b>" + changeSpaces(loc.getName()) + "</b><br/>" + 
-                        changeSpaces(loc.getAddress().getAddressAsString()));
+                        changeSpaces(loc.getAddress().addressToString()));
 
                     addMapMarker(mm) ;
                 }

@@ -73,7 +73,7 @@
                                         
                                         <br/>
                                         <a href="javascript:mapViewerx.openInfoWindowHtml(new GPoint(<%= mapMarkers[ii].getLongitude() %>, <%= mapMarkers[ii].getLatitude() %>), '<%= mapMarkers[ii].getMarkup() %>');" <%= popupOptions %>>
-                                            <font size="-1"><%= mapBean.changeSpaces((itemxx == null) ? mapMarkers[ii].getMarkup() : itemxx.getAddress().getAddressAsString()) %></font>
+                                            <font size="-1"><%= mapBean.changeSpaces((itemxx == null) ? mapMarkers[ii].getMarkup() : itemxx.getAddress().addressToString()) %></font>
                                         </a>
 <%
     }

@@ -16,7 +16,7 @@
             out.println("<name>" + item.getName() + "</name>");
             String tmp=null;
             if(popupView != null && popupView.equals("2")) {
-                tmp=item.getAddress().getAddressAsString();
+                tmp=item.getAddress().addressToString();
             } else {
                 tmp=item.getDescription();
             }
