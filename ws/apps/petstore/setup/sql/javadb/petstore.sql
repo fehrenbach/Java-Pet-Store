@@ -155,23 +155,22 @@ INSERT INTO item VALUES('27', 'feline02', 'Wild Cat', 'This wild tiger loves to 
 INSERT INTO item VALUES('28', 'feline02', 'Saber Cat', 'Buy me', 'images/cat11.gif', 'images/cat11.gif', 237,'10','10', 15, 5);
 INSERT INTO item VALUES('29', 'feline02', 'Snappy Cat', 'Buy Me.', 'images/cat12.gif', 'images/cat12.gif', 337,'11','11', 15, 5);
 
-INSERT INTO item VALUES('100', 'canine02', 'Lazy Dog', 'Buy me', 'images/biscuit.jpg','images/biscuit-s.jpg', 100,'12','12', 15, 3);
-INSERT INTO item VALUES('101', 'canine01', 'Lazy Dog', 'Buy me', 'images/harrison.jpg','images/harrison-s.jpg', 250,'12','12', 15, 5);
-INSERT INTO item VALUES('102', 'canine01', 'Lazy Dog', 'Buy me', 'images/honey.jpg','images/honey-s.jpg', 257,'12','12', 20, 5);
-INSERT INTO item VALUES('103', 'canine01', 'Lazy Dog', 'Buy me', 'images/hunter.jpg','images/hunter-s.jpg', 500,'12','12', 15, 10);
-INSERT INTO item VALUES('104', 'canine02', 'Lazy Dog', 'Buy me', 'images/jack.jpg','images/jack-s.jpg', 215,'12','12', 15, 7);
-INSERT INTO item VALUES('105', 'canine01', 'Lazy Dog', 'Buy me', 'images/lady.jpg','images/lady-s.jpg', 2000,'12','12', 15, 5);
-INSERT INTO item VALUES('106', 'canine01', 'Lazy Dog', 'Buy me', 'images/maggie.jpg','images/maggie-s.jpg', 400,'12','12', 15, 3);
-INSERT INTO item VALUES('107', 'canine01', 'Lazy Dog', 'Buy me', 'images/marianna.jpg','images/marianna-s.jpg', 500,'12','12', 15, 10);
-INSERT INTO item VALUES('108', 'canine02', 'Lazy Dog', 'Buy me', 'images/puppup.jpg','images/puppup-s.jpg', 99,'12','12', 15, 6);
-INSERT INTO item VALUES('109', 'canine01', 'Lazy Dog', 'Buy me', 'images/rita.jpg','images/rita-s.jpg', 25,'12','12', 15, 9);
-INSERT INTO item VALUES('110', 'canine02', 'Lazy Dog', 'Buy me', 'images/sabrina.jpg','images/sabrina-s.jpg', 79,'12','12', 15, 5);
-INSERT INTO item VALUES('111', 'canine01', 'Lazy Dog', 'Buy me', 'images/thaidog.jpg','images/thaidog-s.jpg', 1000,'12','12', 15, 3);
-
+INSERT INTO item VALUES('100', 'canine02', 'Pretty Dog', 'Just like a statue or work of art she is so pretty. If you are an artist this dog is a perfect subject for your portraits. She is such a poser! She belongs in Hollywood with her own star on the wlak of fame.', 'images/biscuit.jpg','images/biscuit-s.jpg', 100,'12','12', 15, 3);
+INSERT INTO item VALUES('101', 'canine01', 'Beach Dog', 'A great dog to lay in the Sun with, chases a frisbee like a champ, and can swim like a shark. Heck, he can ride a surfboard if you dont mind sharing.', 'images/harrison.jpg','images/harrison-s.jpg', 250,'12','12', 15, 5);
+INSERT INTO item VALUES('102', 'canine01', 'Scrapper Dog', 'This scrapy woofer needs some clean up and some lessons. Help him out and take him home.', 'images/honey.jpg','images/honey-s.jpg', 257,'12','12', 20, 5);
+INSERT INTO item VALUES('103', 'canine01', 'Intense Worker Dog', 'My dog is full on energy and intensity. He needs a constant challenge to keep him happy. Great for a farm or house in the country. Bring him to work with you.', 'images/hunter.jpg','images/hunter-s.jpg', 500,'12','12', 15, 5);
+INSERT INTO item VALUES('104', 'canine02', 'Old Dog', 'This old geezer just wants to sleep at your feet. Slip him some food under the table and watch him wag his tail. Great dog for someone who retired before the dot-com bubble burst. A partner to loaf with.', 'images/jack.jpg','images/jack-s.jpg', 215,'12','12', 15, 7);
+INSERT INTO item VALUES('105', 'canine01', 'Female Huskie', 'Live in a cold area? This dog has her own winter jacket. She loves the snow. She even loves to eat the snow. One time, I saw her eat a whole snowman ...it was crazy fun to watch.', 'images/lady.jpg','images/lady-s.jpg', 2000,'12','12', 15, 5);
+INSERT INTO item VALUES('106', 'canine01', 'Rasta Dog', 'Hey mon! Want a dog to chill with. This dog wants the rasta life. You can see it in her eyes. The ocean, the sunshine, all you need is this dog to be complete.', 'images/maggie.jpg','images/maggie-s.jpg', 400,'12','12', 15, 3);
+INSERT INTO item VALUES('107', 'canine01', 'Tough Dog', 'Need a guard dog? An excellent guard dog that would love to sit next to you and watch reruns of police shows on TV. And loves kids. Its like having a trusted babysitter to watch your kids and home.', 'images/marianna.jpg','images/marianna-s.jpg', 500,'12','12', 15, 7);
+INSERT INTO item VALUES('108', 'canine02', 'Sad Puppy', 'Help to put a smile on the face of this puppy. What? You did not know dogs could smile? Well, see what happens when you drop some steak on the floor!', 'images/puppup.jpg','images/puppup-s.jpg', 99,'12','12', 15, 6);
+INSERT INTO item VALUES('109', 'canine01', 'Speedy Dog', 'A great runner for a fast owner. This is the fastest dog I have ever seen. Its naturally fast and does not take steroids to improve its performance.', 'images/rita.jpg','images/rita-s.jpg', 25,'12','12', 15, 9);
+INSERT INTO item VALUES('110', 'canine02', 'Young Dog', 'Ready to play! This young dog is eager to learn new tricks. Bring me home.', 'images/sabrina.jpg','images/sabrina-s.jpg', 79,'12','12', 15, 5);
+INSERT INTO item VALUES('111', 'canine01', 'Sleepy Dog', 'This sleepy dog is perfect for a relaxed home. Plus she just seems to love old music. Anytime she is near an elevator, she just wags her tail waiting to hear that old music.', 'images/thaidog.jpg','images/thaidog-s.jpg', 1000,'12','12', 15, 3);
 INSERT INTO item VALUES('112', 'canine01', 'Lazy Dog', 'OK, I can not get this dog to fetch the newspaper. Not even for a doggy biscuit. His name is "Rhymes". He is so lazy, it drives me crazy.', 'images/dog1.gif','images/dog1.gif', 200,'12','12', 15, 9);
 INSERT INTO item VALUES('113', 'canine01', 'Old Dog', 'This old geezer just wants to sleep at your feet. Slip him some food under the table and watch him wag his tail.', 'images/dog2.gif','images/dog2.gif', 70,'13','13', 15, 11);
 INSERT INTO item VALUES('114', 'canine01', 'Young Dog', 'A great young pet in need of training.', 'images/dog3.gif','images/dog3.gif', 301,'14','14', 15, 5);
-INSERT INTO item VALUES('115', 'canine02', 'Scrapper Dog', 'This scapy woofer needs some clean up and some lessons. Help him out and take him home.', 'images/dog4.gif','images/dog4.gif', 410,'15','15', 15, 5);
+INSERT INTO item VALUES('115', 'canine02', 'Scrapper Dog', 'This scrapy woofer needs some clean up and some lessons. Help him out and take him home.', 'images/dog4.gif','images/dog4.gif', 410,'15','15', 15, 5);
 INSERT INTO item VALUES('116', 'canine02', 'Grey Hound', 'A great runner for a fast owner. This is the fastest dog I have ever seen. Its naturally fast and does not take steroids to improve its performance.', 'images/dog5.gif', 'images/dog5.gif', 200,'16','16', 15, 3);
 INSERT INTO item VALUES('117', 'canine02', 'Beach Dog', 'A great dog to lay in the Sun with, chases a frisbee like a champ, and can swim like a shark. Heck, he can ride a surfboard if you dont mind sharing.', 'images/dog6.gif', 'images/dog6.gif', 200,'16','16', 15, 5);
 
