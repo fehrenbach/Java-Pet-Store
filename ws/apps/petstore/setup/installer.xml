@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 
-<!-- $Id: installer.xml,v 1.1 2006-04-18 13:03:21 inder Exp $ -->
+<!-- Copyright 2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
+ http://developer.sun.com/berkeley_license.html
+ $Id: installer.xml,v 1.2 2006-05-03 22:03:20 inder Exp $ -->
 
 <project name="installer" default="create-installer" basedir="..">
 
