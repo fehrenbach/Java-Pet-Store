@@ -20,6 +20,13 @@
             <h:form id="form1">
                 <table border="1" cellpadding="5" cellspacing="5" style="border-style:double; width:600px; border-color:darkgreen; padding:5px">
                     <tr>
+                        <td colspan=3>
+                        <i>Select the category whose items will be displayed in a Google map based on the Seller's address.  
+                        Optionally, enter a "Center Point Address" and "Area" to limit the search to a specific 
+                        area around the center point.</i>
+                        </td>
+                    </tr>
+                    <tr>
                         <th align="right">Select Category to Map:</th>
                         <td align="center" colspan=2>
                             <h:selectOneRadio value="#{MapBean.category}" required="true">
@@ -31,6 +38,7 @@
                         <th align="right">Center Point Address:</th>
                         <td>
                             <h:inputText id="centerAddress" value="#{MapBean.centerAddress}" size="50"/>
+                            <br/><small>For example: 4140 Network Circle, Santa Clara, CA, 95054</small>
                         </td>
                     </tr>
                     <tr>

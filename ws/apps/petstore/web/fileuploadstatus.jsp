@@ -40,6 +40,6 @@
         <button onclick="location.href='http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.servletContext.contextPath}/index.jsp'">Go back to home</button>
     </div>
     </center>
-    
+    <jsp:include page="footer.jsp" />    
     </body>
 </html>

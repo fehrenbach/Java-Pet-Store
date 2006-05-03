@@ -92,7 +92,7 @@
                         </c:if>
                     </table>
                     </td>
-                    <td>
+                    <td valign="top">
                         <f:view>
                             <ui5:popupTag id="pop1" xmlHttpRequestURL="/petstore/lookup.jsp?itemId=" 
                                 elementNamePairs="name=value1,description=value2,price=value3,image=imageId">
