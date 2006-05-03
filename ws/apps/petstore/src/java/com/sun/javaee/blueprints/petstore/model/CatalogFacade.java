@@ -41,7 +41,7 @@ public class CatalogFacade implements ServletContextListener {
         return items;
     }
     
-        /**
+    /**
      * Value List Handler for items. The Chunk return contains an item with iID or nothing is returned. Uses the Java Persistence query language.
      * @param pID is the product id that the item belongs to
      * @param start position of the first result, numbered from 0
@@ -53,8 +53,8 @@ public class CatalogFacade implements ServletContextListener {
         //make Java Persistence query
         Query query = em.createQuery("SELECT i FROM Item i WHERE i.productID = :pID");
         List<Item>  items;
-       // scroll through these till we find the set with the itemID we are loooking for
-       int index = 0;
+        // scroll through these till we find the set with the itemID we are loooking for
+        int index = 0;
         while (true) {
             items = query.setParameter("pID",pID).setFirstResult(index++ * chunkSize).setMaxResults(chunkSize).getResultList();
             if ((items == null) || items.size() <= 0) break;
@@ -71,7 +71,7 @@ public class CatalogFacade implements ServletContextListener {
         }
         em.close();
         return null;
-    }  
+    }
     
     /**
      * Value List Handler for items. Uses the Java Persistence query language.
@@ -108,14 +108,17 @@ public class CatalogFacade implements ServletContextListener {
     public List<Item> getItemsByItemID(String[] itemIDs){
         EntityManager em = emf.createEntityManager();
         String idString  = "";
-        for(int i=0;i<itemIDs.length;++i){
-            if(idString.length()!=0) idString+=",";
-            idString=idString+"'"+itemIDs[i]+"'";
-        }        
-        String queryString = "SELECT i FROM Item i WHERE " +
-                "i.itemID IN (" +idString+")";      
-        Query query = em.createQuery(queryString + " ORDER BY i.name");
-        List<Item>  items = query.getResultList();
+        List<Item>  items = new ArrayList();
+        if(itemIDs.length !=0) {
+            for(int i=0;i<itemIDs.length;++i){
+                if(idString.length()!=0) idString+=",";
+                idString=idString+"'"+itemIDs[i]+"'";
+            }
+            String queryString = "SELECT i FROM Item i WHERE " +
+                    "i.itemID IN (" +idString+")";
+            Query query = em.createQuery(queryString + " ORDER BY i.name");
+            items = query.getResultList();
+        }
         em.close();
         return items;
     }
@@ -128,24 +131,27 @@ public class CatalogFacade implements ServletContextListener {
     public List<Item> getItemsByItemIDByRadius(String[] itemIDs, double fromLat,
             double toLat, double fromLong, double toLong){
         EntityManager em = emf.createEntityManager();
+        List<Item>  items = new ArrayList();
         String idString  = "";
-        for(int i=0;i<itemIDs.length;++i){
-            if(idString.length()!=0) idString+=",";
-            idString=idString+"'"+itemIDs[i]+"'";
-        }       
-        String queryString = "SELECT i FROM Item i WHERE ((" +
-                "i.itemID IN (" +idString+"))"; 
-        Query query = em.createQuery(queryString + " AND " +
-                " ((i.address.latitude BETWEEN :fromLatitude AND :toLatitude) AND " +
-                "(i.address.longitude BETWEEN :fromLongitude AND :toLongitude )))" +
-                "  ORDER BY i.name");
-        query.setParameter("fromLatitude",fromLat);
-        query.setParameter("toLatitude",toLat);
-        query.setParameter("fromLongitude",fromLong);
-        query.setParameter("toLongitude",toLong);
-        List<Item>  items = query.getResultList();                
+        if(itemIDs.length !=0) {
+            for(int i=0;i<itemIDs.length;++i){
+                if(idString.length()!=0) idString+=",";
+                idString=idString+"'"+itemIDs[i]+"'";
+            }
+            String queryString = "SELECT i FROM Item i WHERE ((" +
+                    "i.itemID IN (" +idString+"))";
+            Query query = em.createQuery(queryString + " AND " +
+                    " ((i.address.latitude BETWEEN :fromLatitude AND :toLatitude) AND " +
+                    "(i.address.longitude BETWEEN :fromLongitude AND :toLongitude )))" +
+                    "  ORDER BY i.name");
+            query.setParameter("fromLatitude",fromLat);
+            query.setParameter("toLatitude",toLat);
+            query.setParameter("fromLongitude",fromLong);
+            query.setParameter("toLongitude",toLong);
+            items = query.getResultList();
+        }
         em.close();
-        return items;        
+        return items;
     }
     
     /**
@@ -197,10 +203,25 @@ public class CatalogFacade implements ServletContextListener {
      * and held as member field of facade.
      * @returns a List of ZipLocation objects
      */
-     public List<ZipLocation> getZipCodeLocations(String subString, int start, int chunkSize){
-        EntityManager em = emf.createEntityManager();
-        //Query query = em.createQuery("SELECT  z FROM ZipLocation z");
-        Query query = em.createNamedQuery("Item.getAllZipCityState");
+    public List<ZipLocation> getZipCodeLocations(String city, int start, int chunkSize){
+        EntityManager em = emf.createEntityManager();        
+        /*StringTokenizer parser = new StringTokenizer(city);
+        StringBuffer patternSB =  null;        
+        while (parser.hasMoreTokens()) {
+            String token = parser.nextToken();
+            char firstChar = Character.toUpperCase(token.charAt(0));
+            StringBuffer tokenSB = new StringBuffer(token);
+            tokenSB.setCharAt(0,firstChar);
+            patternSB.append(tokenSB);
+            patternSB.append(" ");
+        }*/
+        char firstChar = Character.toUpperCase(city.charAt(0));
+        StringBuffer patternSB = new StringBuffer(city);
+        patternSB.setCharAt(0,firstChar);
+        String pattern = "'"+patternSB+"%'";
+        System.out.println("pattern is" + pattern);
+        Query query = em.createQuery("SELECT  z FROM ZipLocation z where z.city LIKE "+pattern);
+        //Query query = em.createNamedQuery("Item.getAllZipCityState");
         List<ZipLocation>  zipCodeLocations = query.setFirstResult(start).setMaxResults(chunkSize).getResultList();
         em.close();
         return zipCodeLocations;
@@ -253,23 +274,7 @@ public class CatalogFacade implements ServletContextListener {
         }
         return item.getItemID();
     }
-    public String addRating(Item item){
-        EntityManager em = emf.createEntityManager();
-        try{
-            utx.begin();
-            em.joinTransaction();
-            em.persist(item);
-            utx.commit();
-        } catch(Exception exe){
-            System.out.println("Error persisting item: "+exe);
-            try {
-                utx.rollback();
-            } catch (Exception e) {}
-        } finally {
-            em.close();
-        }
-        return item.getItemID();
-    }
+    
     public void updateRating(Item item){
         EntityManager em = emf.createEntityManager();
         try{
@@ -283,7 +288,7 @@ public class CatalogFacade implements ServletContextListener {
             } catch (Exception e) {}
         } finally {
             em.close();
-        }       
+        }
     }
     
     public Collection doSearch(String querryString){

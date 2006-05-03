@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: AutocompleteBean.java,v 1.2 2006-05-02 02:59:09 sean_brydon Exp $ */
+$Id: AutocompleteBean.java,v 1.3 2006-05-03 00:26:05 smitha Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -31,7 +31,8 @@ public class AutocompleteBean {
         FacesContext context=FacesContext.getCurrentInstance();
         Map<String, Object> contextMap = context.getExternalContext().getApplicationMap();
         CatalogFacade catalogFacade = (CatalogFacade)contextMap.get("CatalogFacade");
-        List<ZipLocation> zipLocations = catalogFacade.getZipCodeLocations("ignore",0, 20);
+        List<ZipLocation> zipLocations = catalogFacade.getZipCodeLocations("san",0, 20);
+        Iterator<ZipLocation> it = zipLocations.iterator();
         
         if (zipLocations == null) {
             cities =new String[]{"Init Failed"};
@@ -68,7 +69,7 @@ public class AutocompleteBean {
     
     public void completeCity(FacesContext context, String prefix, CompletionResult result) {
         if (bDebug) { System.out.println("Completing City - " + prefix);
-                      System.out.println("first city : " + cities[0]); }
+        System.out.println("first city : " + cities[0]); }
         AutoCompleteUtilities.addMatchingItems(cities, prefix, result);
     }
     
