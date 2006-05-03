@@ -10,6 +10,29 @@
 <script type="text/javascript" src="/petstore/dojo.js"></script>
 <script type="text/javascript" src="/petstore/faces/static/META-INF/rss/rssbar.js"></script>
 <link type="text/css" rel="stylesheet" href="/petstore/faces/static/META-INF/rss/rssbar.css" />
+<style type="text/css">
+
+#rss-bar {
+    margin: 0 auto 0px;
+}
+
+#rss-bar table td#rss-channel {
+    background-repeat: no-repeat;
+    background-position: top left;
+    font-size: 14px;
+    font-weight: bold;
+    vertical-align: top;
+    text-align: center;
+    width: 254px;
+}
+
+#rss-bar table td#rss-item {
+    background-repeat: no-repeat;
+    font-size: 14px;
+    width: 534px;
+    text-align: left;
+}
+</style>
 <script type="text/javascript">
     var rss = new bpui.RSS();
     dojo.addOnLoad(function(){rss.getRssInJson('/petstore/faces/dynamic/bpui_rssfeedhandler/getRssfeed', 'https://blueprints.dev.java.net/servlets/ProjectRSS?type=news', '4');});
@@ -31,12 +54,12 @@
   </tr>
  </tr>
   <tr bgcolor="gray">
-  <td id="menubar" align="left" colspan="3" height="45" >
+  <td id="menubar" align="left" colspan="3" height="25" >
     <div id="rss-bar">
     <table border="0" cellpadding="0" cellspacing="0">
         <tr>
         <td id="rss-channel" nowrap="true"></td>
-        <td id="rss-item"></td>
+        <td id="rss-item" nowrap="true"></td>
         </tr>
     </table>
     </div>

@@ -1,4 +1,3 @@
-//window.onload = init;
 
 var ac;
 var is;
@@ -22,6 +21,8 @@ function CatalogController() {
   var initalRating;
   var initalItem;
   var originalURL;
+  // using this for some browsers that do not support innerHTML
+  var useDOMInjection = false;
   
   var infoName = document.getElementById("infopaneName");
   var infoRating = document.getElementById("infopaneRating");
@@ -65,16 +66,36 @@ function CatalogController() {
   
   function showItemDetails(id) {
       var i = is.getItems().get(id);
-      infoName.innerHTML = i.name;
-      infoPrice.innerHTML = "$" + i.price;
-      infoShortDescription.innerHTML = i.shortDescription;
-      infoDescription.innerHTML = i.description;
+      setNodeText(infoName, i.name);
+      setNodeText(infoPrice, "$" + i.price);
+      setNodeText(infoShortDescription, i.shortDescription);
+      setNodeText(infoDescription, i.description);
       // update the paypal
       buyNowAmount.value = i.price;
       buyNowItemName.value = i.name;
   }
   
+  function setNodeText(t, text) {
+      if (useDOMInjection) {
+            t.lastChild.nodeValue = text;
+      } else {
+          t.innerHTML = text;
+      }
+      
+      
+  }
+  
   this.initialize = function() {
+        // check whether the innerHTML changes can be used in the infopane
+      infoName.innerHTML = "   ";
+      if (!useDOMInjection && infoName.innerHTML != "   ") {
+        useDOMInjection = true;
+        infoName.appendChild(document.createTextNode("Name"));
+        infoPrice.appendChild(document.createTextNode("$0.00"));
+        infoShortDescription.appendChild(document.createTextNode("<description>"));
+        infoDescription.appendChild(document.createTextNode("<description>"));
+      }
+      
       originalURL = window.location.href;
       if (originalURL.indexOf("#") != -1) {
 	        var start = originalURL.split("#");
@@ -222,6 +243,7 @@ function CatalogController() {
             is.setGroupId(pid);
             is.showImage(iId);
         }
+        
         is.hideProgressIndicator();
     }
 }
