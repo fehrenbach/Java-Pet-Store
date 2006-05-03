@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--  Copyright 2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: web.xml,v 1.17 2006-05-03 22:03:21 inder Exp $ -->
+ $Id: web.xml,v 1.18 2006-05-03 23:20:44 yutayoshida Exp $ -->
  
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
@@ -18,6 +18,12 @@
         <listener-class>com.sun.javaee.blueprints.petstore.model.CatalogFacade</listener-class>
     </listener>
   
+    <servlet>
+        <display-name>FileUploadResponseServlet</display-name>
+        <servlet-name>FileUploadResponseServlet</servlet-name>
+        <servlet-class>com.sun.javaee.blueprints.petstore.controller.FileUploadResponseServlet</servlet-class>
+    </servlet>
+    
     <servlet>
         <display-name>CatalogServlet</display-name>
         <servlet-name>CatalogServlet</servlet-name>
@@ -39,6 +45,10 @@
         <servlet-name>ImageServlet</servlet-name>
         <servlet-class>com.sun.javaee.blueprints.petstore.controller.ImageServlet</servlet-class>
     </servlet>
+    <servlet-mapping>
+        <servlet-name>FileUploadResponseServlet</servlet-name>
+        <url-pattern>/FileUploadResponseServlet</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>CatalogServlet</servlet-name>
         <url-pattern>/catalog</url-pattern>

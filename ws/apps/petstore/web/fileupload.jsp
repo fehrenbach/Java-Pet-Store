@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: fileupload.jsp,v 1.30 2006-05-03 22:00:32 inder Exp $ --%>
+$Id: fileupload.jsp,v 1.31 2006-05-03 23:20:44 yutayoshida Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -15,8 +15,22 @@ $Id: fileupload.jsp,v 1.30 2006-05-03 22:00:32 inder Exp $ --%>
         <title>Petstore Seller page</title>
         
 <script type="text/javascript">
+    var doneButton = null;
     
     function testRetFunction(type, data, evt){
+        var statusServlet = "http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.servletContext.contextPath}/FileUploadResponseServlet";
+alert(statusServlet);
+        //because of iframeIO problem, initiate another ajax request to get the real response
+        var bindArgs = {
+            url: statusServlet,
+            mimeType: "text/json",
+            handle: function (type, json, http) {
+                processFUResponse(type, json, http);
+                }
+         };
+         dojo.io.bind(bindArgs);
+         
+        /***
         // handle successful response here
         var resultx = data.getElementsByTagName("response")[0];
         var message;
@@ -32,6 +46,21 @@ $Id: fileupload.jsp,v 1.30 2006-05-03 22:00:32 inder Exp $ --%>
             message = firstName + ", Thank you for submitting your pet " + name;
         }
         location.href="fileuploadstatus.jsp?message=" + message + "&thumb=" + thumbpath;
+        ***/
+    }
+    
+    function processFUResponse(type, json, http) {
+        
+        var message = json.message;
+        if (http.status == 401) {
+            // captcha error
+            doneButton.disabled = false;
+            alert("Authorization faild : please enter the correct captcha string");
+        } else {
+            // fileupload complete
+            var thumbpath = json.thumbnail;
+            location.href="fileuploadstatus.jsp?message=" + message + "&thumb=" + thumbpath;
+        }
     }
 
    function storeCookie() {
@@ -57,7 +86,8 @@ $Id: fileupload.jsp,v 1.30 2006-05-03 22:00:32 inder Exp $ --%>
    }
    
    function fileuploadOnsubmit() {
-       this.parent.doneButton.disabled = true;
+       doneButton = this.parent.doneButton;
+       doneButton.disabled = true;
        storeCookie()
        document.forms['TestFileuploadForm'].onsubmit();
    }

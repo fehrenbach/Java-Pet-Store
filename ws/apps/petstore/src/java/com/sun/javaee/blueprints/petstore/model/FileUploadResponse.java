@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: FileUploadResponse.java,v 1.2 2006-05-03 21:48:59 inder Exp $ */
+$Id: FileUploadResponse.java,v 1.3 2006-05-03 23:20:44 yutayoshida Exp $ */
 
 package com.sun.javaee.blueprints.petstore.model;
 
@@ -7,6 +7,7 @@ import com.sun.javaee.blueprints.components.ui.fileupload.FileUploadStatus;
 
 public class FileUploadResponse {
     
+    private String itemId = null;
     private String message = null;
     private String status = null;
     private String duration = null;
@@ -20,9 +21,10 @@ public class FileUploadResponse {
     public FileUploadResponse() {
     }
     
-    public FileUploadResponse(String message, String status, String duration,
+    public FileUploadResponse(String itemId, String message, String status, String duration,
             String durationString, String startDate, String endDate, String uploadSize,
             String thumbnail) {
+        this.itemId = itemId;
         this.message = message;
         this.duration = duration;
         this.durationString = durationString;
@@ -42,6 +44,12 @@ public class FileUploadResponse {
     public void setMessage(String str) {
         this.message = str;
     }
+    public String getItemId() {
+        return this.itemId;
+    }
+    public void setItemId(String str) {
+        this.itemId = str;
+    }
     public String getStatus() {
         return this.status;
     }
@@ -60,7 +68,7 @@ public class FileUploadResponse {
     public void setDurationString(String str) {
         this.durationString = str;
     }
-    public String getstartDate() {
+    public String getStartDate() {
         return this.startDate;
     }
     public void setStartDate(String str) {

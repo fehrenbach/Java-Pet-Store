@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: FileUploadBean.java,v 1.25 2006-05-03 21:48:57 inder Exp $ */
+$Id: FileUploadBean.java,v 1.26 2006-05-03 23:20:43 yutayoshida Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.ServletContext;
 import javax.faces.context.ResponseWriter;
+
 import org.apache.shale.remoting.faces.ResponseFactory;
 
 import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
@@ -34,14 +35,9 @@ import com.sun.javaee.blueprints.components.ui.fileupload.FileUploadStatus;
 import com.sun.javaee.blueprints.components.ui.fileupload.FileUploadUtil;
 import com.sun.javaee.blueprints.petstore.search.IndexDocument;
 import com.sun.javaee.blueprints.petstore.search.Indexer;
-
 import com.sun.j2ee.blueprints.ui.geocoder.GeoCoder;
 import com.sun.j2ee.blueprints.ui.geocoder.GeoPoint;
 
-/**
- *
- * @author basler
- */
 public class FileUploadBean {
     private boolean bDebug=true;
     private Logger _logger=null;
@@ -52,6 +48,11 @@ public class FileUploadBean {
      * outgoing response.</p>
      */
     private static ResponseFactory factory = new ResponseFactory();
+    
+    /**
+     * session attribute to contain the fileupload status
+     */
+    private static final String FILE_UL_RESPONSE = "fileuploadResponse";
     
     /** Creates a new instance of FileUploadBean */
     public FileUploadBean() {
@@ -75,6 +76,7 @@ public class FileUploadBean {
             // Acquire a response containing these results
             ResponseWriter writer = factory.getResponseWriter(context, "text/xml");
             
+            String itemId = null;
             String name = null;
             String thumbPath = null;
             String firstName = null;
@@ -201,7 +203,7 @@ public class FileUploadBean {
                 getLogger().log(Level.FINE, "Item " + name + " has been persisted");
                 
                 // index new item
-                String itemId = item.getItemID();
+                itemId = item.getItemID();
                 IndexDocument indexDoc=new IndexDocument();
                 indexDoc.setUID(itemId);
                 indexDoc.setPageURL(itemId);
@@ -220,6 +222,7 @@ public class FileUploadBean {
             HttpSession session = (HttpSession)context.getExternalContext().getSession(true);
             String responseMessage = firstName+", Thank you for submitting your pet "+name+" !";
             FileUploadResponse fuResponse = new FileUploadResponse(
+                    itemId,
                     responseMessage,
                     status.getStatus(), 
                     Long.toString(status.getUploadTime()),
@@ -228,7 +231,11 @@ public class FileUploadBean {
                     status.getEndUploadDate().toString(),
                     Long.toString(status.getTotalUploadSize()),
                     thumbPath);
-            session.setAttribute("fileuploadResponse", fuResponse);
+            session.removeAttribute(FILE_UL_RESPONSE);
+            session.setAttribute(FILE_UL_RESPONSE, fuResponse);
+            /** the following writer operation is for the case when iframe
+             * bug is fixed. they are not used currently in the client
+             */
             StringBuffer sb=new StringBuffer();
             response.setContentType("text/xml;charset=UTF-8");
             response.setHeader("Pragma", "No-Cache");
@@ -321,7 +328,6 @@ public class FileUploadBean {
         return sxTemp;
     }
     
-
     public String getUploadImageDirectory() {
         return PetstoreConstants.PETSTORE_IMAGE_DIRECTORY + "/images";
     }

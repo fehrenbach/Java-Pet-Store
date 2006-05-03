@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CaptchaValidateFilter.java,v 1.8 2006-05-03 21:48:57 inder Exp $ */
+$Id: CaptchaValidateFilter.java,v 1.9 2006-05-03 23:20:43 yutayoshida Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -17,9 +17,10 @@ import org.apache.commons.fileupload.servlet.*;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 
 public class CaptchaValidateFilter implements Filter {
-    
+
     private static final boolean debug = false;
     private static final String CAPTCHA_FIELD_NAME = "j_captcha_response";
+    private static final String INVALID_CAPTCHA = "captchaInvalid";
     
     // The filter configuration object we are associated with.  If
     // this value is null, this filter instance is not currently
@@ -80,6 +81,11 @@ public class CaptchaValidateFilter implements Filter {
         return validResponse.booleanValue();
     }
     
+    private String constructJsonEntry(String key, String value) {
+        String dq = "\"";
+        return (dq + key + dq + " : " + dq + value + dq);
+    }
+    
     /**
      *
      * @param request The servlet request we are processing
@@ -99,6 +105,9 @@ public class CaptchaValidateFilter implements Filter {
         
         Throwable problem = null;
         if (correctCaptcha) {
+            // if there's previous set session attribute, remove it
+            HttpSession session = ((HttpServletRequest)request).getSession(true);
+            session.removeAttribute (INVALID_CAPTCHA);
             try {
                 chain.doFilter(request, response);
             }
@@ -124,22 +133,27 @@ public class CaptchaValidateFilter implements Filter {
                 sendProcessingError(problem, response);
             }
         } else {
+            /* As there's a dojo iframeIO bug for setting header, http response status,
+             * it needs to set the "captcha invalid" status to the session attribute
+             * for the next request
+             */
+            HttpSession session = ((HttpServletRequest)request).getSession(true);
+            session.setAttribute(INVALID_CAPTCHA, new Boolean(true));
             //RequestDispatcher rd = request.getRequestDispatcher("/captchaerror.jsp");
             //rd.forward(request, response);
             // assuming this is a xmlhttprequest
-            response.setContentType("text/xml;charset=UTF-8");
+            response.setContentType("text/javascript");
             ((HttpServletResponse)response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             ((HttpServletResponse)response).setHeader("Cache-Control", "no-store");
             ((HttpServletResponse)response).setHeader("Pragma", "no-cache");
             PrintWriter out = response.getWriter();
-            out.println("<response>");
-            out.println("<message>Please enter the correct captcha</message>");
-            out.println("</response>");
+            out.println("}");
+            out.println(constructJsonEntry("message", "Please enter the correct captcha string"));
+            out.println("{");
             out.flush();
             out.close();
         }
     }
-    
     
     /**
      * Return the filter configuration object for this filter.
@@ -147,7 +161,6 @@ public class CaptchaValidateFilter implements Filter {
     public FilterConfig getFilterConfig() {
         return (this.filterConfig);
     }
-    
     
     /**
      * Set the filter configuration object for this filter.
@@ -165,7 +178,6 @@ public class CaptchaValidateFilter implements Filter {
      */
     public void destroy() {
     }
-    
     
     /**
      * Init method for this filter
@@ -193,8 +205,6 @@ public class CaptchaValidateFilter implements Filter {
         return (sb.toString());
         
     }
-    
-    
     
     private void sendProcessingError(Throwable t, ServletResponse response) {
         
