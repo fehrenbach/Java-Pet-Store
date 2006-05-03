@@ -5,15 +5,14 @@ var is;
 var controller;
 
 function initCatalog() {
-
+    ac = new AccordionMenu();
     is = new ImageScroller();
     is.load();
     controller = new CatalogController();
     // wire in a listener for the rating component
     dojo.event.connect("before", bpui.rating, "doClick", controller, "modifyState");
     controller.initialize();    
-    ac = new AccordionMenu();
-    ac.load();
+
 }
 
 function CatalogController() {
@@ -85,8 +84,10 @@ function CatalogController() {
       ratingInstance.grade = initalRating;
       bpui.rating.state["rating"].bindings["itemId"]=initalItem;
       bpui.rating.modifyDisplay("rating", initalRating, true);
+      loadAccordion();
   }
   
+ 
   this.modifyState = function(arg, rating) {
       var itemId = initalItem;
       if (typeof  bpui.rating.state["rating"].bindings["itemId"] != 'undefined') {
@@ -96,6 +97,58 @@ function CatalogController() {
       is.getItems().get(itemId).rating  = rating;
   }
   
+  function loadAccordion () {
+       
+        // go out and get the categories
+        // this should be made more geric
+        var bindArgs = {
+            url:  "/petstore/catalog?command=categories&format=json",
+            mimetype: "text/json",
+            load: function(type,json) {
+               ac.load(json);
+               processURLParameters();
+             }
+        };
+        dojo.io.bind(bindArgs);
+    }
+    
+    // this needs to happen after we have loaded the accordion data
+    function processURLParameters() {
+        originalURL = window.location.href;
+        var params = {};
+        // look for the params
+        if (originalURL.indexOf("?") != -1) {
+            var qString = originalURL.split('?')[1];
+            // get rid of any bookmarking stuff
+            if (qString.indexOf("#") != -1) {
+                qString = qString.split('#')[0];
+            }
+            ps = qString.split('&');
+            // now go through and create the params map as an object literal
+            for (var i in ps) {
+                var t = ps[i].split('=');
+                params[t[0]] = t[1];
+            }
+        }
+        // first check for the item in product        
+        if (typeof params.itemId != 'undefined' &&
+            typeof params.pid != 'undefined') {
+            ac.loadCategoryItem(params.pid, params.itemId);
+        // next if there is a catid definition then do it
+        } else if (typeof params.catid != 'undefined') {
+            ac.showCategory(params.catid);
+        // for bookmarks this will load the comma separated pid,itemid following a #
+        // TODO: Need to consider error cases here
+        } else if (originalURL.indexOf("#") != -1) {
+            var qString = originalURL.split('#')[1];
+            var args = qString.split(',');
+            ac.loadCategoryItem(args[0], args[1]);
+        // nothing is selected
+        } else {
+            ac.showFirstCategory();
+        }
+    }
+  
   this.setProducts = function(pid) {
         is.reset();
         is.showProgressIndicator();
@@ -103,7 +156,7 @@ function CatalogController() {
             url:  "/petstore/catalog?command=items&pid=" + pid + "&start=" + 0 + "&length=" + CHUNK_SIZE,
             mimetype: "text/xml",
             load: function(type,data,postProcessHandler) {
-               postProcess(data,true, pid);
+               processProductData(data,true, pid);
              }
         };
         dojo.io.bind(bindArgs);    
@@ -116,7 +169,7 @@ function CatalogController() {
             url:  "/petstore/catalog?command=itemInChunck&pid=" + pid + "&itemId=" + itemId + "&length=" + CHUNK_SIZE,
             mimetype: "text/xml",
             load: function(type,data,postProcessHandler) {
-               postProcess(data,true, pid, itemId);
+               processProductData(data,true, pid, itemId);
                showItemDetails(itemId);
                is.doMaximize();
              }
@@ -134,13 +187,13 @@ function CatalogController() {
             url:  "/petstore/catalog?command=items&pid=" + args.id + "&start=" +  args.index + "&length=" + CHUNK_SIZE,
             mimetype: "text/xml",
             load: function(type,data,postProcessHandler) {
-                postProcess(data,false);
+                processProductData(data,false, args.id);
             }
       };
       dojo.io.bind(bindArgs);
    }
   
-   function postProcess(responseXML, showImage, pid, iId) {
+   function processProductData(responseXML, showImage, pid, iId) {
         var items = [];
         var count = responseXML.getElementsByTagName("item").length;
         for (var loop=0; loop < count ; loop++) {

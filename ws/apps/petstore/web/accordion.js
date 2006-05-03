@@ -1,9 +1,11 @@
 /* Copyright 2005 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: accordion.js,v 1.20 2006-05-02 23:57:42 gmurray71 Exp $
+$Id: accordion.js,v 1.21 2006-05-03 14:38:29 gmurray71 Exp $
 */
 
 
 function AccordionMenu () {
+    
+    dojo.event.topic.subscribe("/accordion", this, this.handleEvent);
     
     var displayPortWidth = 100;
     var HEIGHT = 400;
@@ -14,8 +16,8 @@ function AccordionMenu () {
     
     var timeout = 5; // in ms
     
-    var accordion;
-    var divs;
+    var accordion = document.getElementById("accordionBody");
+    var  divs = [];
     var oExpandedIndex = -1;
     var nExpandedIndex = -1;
     var oHeight = ITEM_HEIGHT;
@@ -26,7 +28,7 @@ function AccordionMenu () {
        
     // while control the inline debug statements
     var debug = false;
-    var status;
+    var status = document.getElementById("status");
     
     function Row(id, div, defaultHeight) {
         this.id = id;
@@ -62,28 +64,7 @@ function AccordionMenu () {
         }
     }
            
-    this.load = function() {
-        dojo.event.topic.subscribe("/accordion", this, this.handleEvent);
-        var agent = navigator.userAgent;
-        //if (agent.indexOf("Safari") != -1) {
-        //    timeout = 0;
-        //}
-        divs = [];
-        status = document.getElementById("status");
-        accordion = document.getElementById("accordionBody");
-        // go out and get the categories
-        // this should be made more geric
-        var bindArgs = {
-            url:  "/petstore/catalog?command=categories&format=json",
-            mimetype: "text/json",
-            load: function(type,json) {
-               postProcessAccordion(json);
-             }
-        };
-        dojo.io.bind(bindArgs);
-    }
-    
-    function postProcessAccordion(lcategories) {
+    this.load = function(lcategories) {
         categories = lcategories;
         // create all the rows
         for (var l=0; l < categories.length; l++) {
@@ -91,69 +72,8 @@ function AccordionMenu () {
             createLinks(row.div, categories[l].name, l, "accordionLink");
             divs.push(row);
         }
-        
-        var originalURL = window.location.href;
-
-        var params = {};
-        // look for the params
-        if (originalURL.indexOf("?") != -1) {
-            var qString = originalURL.split('?')[1];
-            // get rid of any bookmarking stuff
-            if (qString.indexOf("#") != -1) {
-                qString = qString.split('#')[0];
-            }
-            ps = qString.split('&');
-            // now go through and create the params map as an object literal
-            for (var i in ps) {
-                var t = ps[i].split('=');
-                params[t[0]] = t[1];
-            }
-        }
-        // first check for the item in product        
-        if (typeof params.itemId != 'undefined' &&
-            typeof params.pid != 'undefined') {
-            loadProductItem(params.pid, params.itemId);
-        // next if there is a catid definition then do it
-        } else if (typeof params.catid != 'undefined') {
-            for (var l=0; l < categories.length; l++) {
-                if (params.catid == categories[l].name) {
-                  // now tell the scroller to load the first product
-                  initiateExpansion(l);
-                  if (categories[l].products[0]) {
-                    dojo.event.topic.publish("/catalog", {type:"showProducts", productId:categories[l].products[0].id});
-                  } 
-                  break;
-                }
-            }
-        // for bookmarks this will load the comma separated pid,itemid following a #
-        // TODO: Need to consider error cases here
-        } else if (originalURL.indexOf("#") != -1) {
-            var qString = originalURL.split('#')[1];
-            var args = qString.split(',');
-            loadProductItem(args[0], args[1]);
-        // nothing is selected
-        } else {
-            initiateExpansion(0);
-            if (categories[0].products[0]) {
-                dojo.event.topic.publish("/catalog", {type:"showProducts", productId:categories[0].products[0].id});
-            }
-        }
     }
-    
-    function loadProductItem(pid, itemId) {
-        // find the right product and expand the accordion
-        for (var l=0; l < categories.length; l++) {
-              // now tell the scroller to load the first product
-           for (var il=0; il < categories[l].products.length; il++) {   
-              if (categories[l].products[il].id == pid ) {
-                initiateExpansion(l);
-                break;
-              } 
-            }
-        }
-        dojo.event.topic.publish("/catalog", {type:"showItemDetails", productId: pid , itemId: itemId});    
-    }
-    
+     
     function showStatus() {
         if (debug) {
             var stat = "oExpandedIndex=" + oExpandedIndex +  " " ;
@@ -170,8 +90,41 @@ function AccordionMenu () {
         }
     }
     
-    function initiateExpansion(id) {
-               
+    this.showCategory = function(catid) {
+        for (var l=0; l < categories.length; l++) {
+            if (catid == categories[l].name) {
+                // now tell the scroller to load the first product
+                initiateExpansion(l);
+                if (categories[l].products[0]) {
+                    dojo.event.topic.publish("/catalog", {type:"showProducts", productId:categories[l].products[0].id});
+                } 
+                break;
+            }
+        }
+    }
+    
+    this.showFirstCategory = function() {
+        initiateExpansion(0);
+        if (categories[0].products[0]) {
+                dojo.event.topic.publish("/catalog", {type:"showProducts", productId:categories[0].products[0].id});
+        }
+    }
+    
+    this.loadCategoryItem = function(pid, itemId) {
+        // find the right product and expand the accordion
+        for (var l=0; l < categories.length; l++) {
+            // now tell the scroller to load the first product
+            for (var il=0; il < categories[l].products.length; il++) {   
+                if (categories[l].products[il].id == pid ) {
+                    initiateExpansion(l);
+                    break;
+                } 
+            }
+        }
+        dojo.event.topic.publish("/catalog", {type:"showItemDetails", productId: pid , itemId: itemId});    
+    }
+    
+    function initiateExpansion(id) {        
         // jump out if we are in progress
         if (!expanding && oExpandedIndex != Number(id)) {
             expanding = true;
