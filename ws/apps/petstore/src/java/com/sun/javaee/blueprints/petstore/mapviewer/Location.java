@@ -1,11 +1,5 @@
-/*
- * Location.java
- *
- * Created on March 2, 2006, 9:55 AM
- *
- * To change this template, choose Tools | Template Manager
- * and open the template in the editor.
- */
+/* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
+$Id: Location.java,v 1.2 2006-05-03 21:48:58 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.mapviewer;
 

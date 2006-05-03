@@ -1,3 +1,6 @@
+/* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
+$Id: CatalogFacade.java,v 1.38 2006-05-03 21:48:58 inder Exp $ */
+
 package com.sun.javaee.blueprints.petstore.model;
 
 import java.util.*;

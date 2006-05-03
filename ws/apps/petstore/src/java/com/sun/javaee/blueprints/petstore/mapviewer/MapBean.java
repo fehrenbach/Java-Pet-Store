@@ -1,16 +1,6 @@
-/*
- * MapBean.java
- *
- * Created on February 23, 2006, 6:42 PM
- *
- * To change this template, choose Tools | Template Manager
- * and open the template in the editor.
- */
+/* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
+$Id: MapBean.java,v 1.17 2006-05-03 21:48:58 inder Exp $ */
 
-/**
- *
- * @author basler
- */
 package com.sun.javaee.blueprints.petstore.mapviewer;
 
 import java.util.ArrayList;

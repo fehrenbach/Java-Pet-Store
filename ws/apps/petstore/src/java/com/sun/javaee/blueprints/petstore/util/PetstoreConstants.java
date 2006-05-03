@@ -1,17 +1,8 @@
-package com.sun.javaee.blueprints.petstore.util;
-/*
- * PetstoreContants.java
- *
- * Created on January 2, 2006, 11:25 AM
- *
- * To change this template, choose Tools | Template Manager
- * and open the template in the editor.
- */
+/* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
+$Id: PetstoreConstants.java,v 1.4 2006-05-03 21:49:00 inder Exp $ */
 
-/**
- *
- * @author basler
- */
+package com.sun.javaee.blueprints.petstore.util;
+
 public class PetstoreConstants {
     
     public static final String PETSTORE_INDEX_DIRECTORY=System.getProperty("com.sun.aas.instanceRoot") + 

@@ -1,11 +1,5 @@
-/*
- * indexDocuments.java
- *
- * Created on December 5, 2005, 10:06 AM
- *
- * To change this template, choose Tools | Template Manager
- * and open the template in the editor.
- */
+/* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
+$Id: IndexDocument.java,v 1.5 2006-05-03 21:48:59 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.search;
 

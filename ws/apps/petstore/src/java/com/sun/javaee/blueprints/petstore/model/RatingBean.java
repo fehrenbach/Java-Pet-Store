@@ -1,16 +1,11 @@
+/* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
+$Id: RatingBean.java,v 1.6 2006-05-03 21:48:59 inder Exp $ */
+
 package com.sun.javaee.blueprints.petstore.model;
 import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 import javax.faces.context.FacesContext;
 import java.util.Map;
-/*
- * RatingBean.java
- *
- * Created on March 14, 2006, 4:05 PM
- *
- * To change this template, choose Tools | Template Manager
- * and open the template in the editor.
- */
 
 /**
  *
