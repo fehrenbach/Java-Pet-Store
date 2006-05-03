@@ -155,11 +155,24 @@ INSERT INTO item VALUES('27', 'feline02', 'Wild Cat', 'This wild tiger loves to 
 INSERT INTO item VALUES('28', 'feline02', 'Saber Cat', 'Buy me', 'images/cat11.gif', 'images/cat11.gif', 237,'10','10', 15, 5);
 INSERT INTO item VALUES('29', 'feline02', 'Snappy Cat', 'Buy Me.', 'images/cat12.gif', 'images/cat12.gif', 337,'11','11', 15, 5);
 
-INSERT INTO item VALUES('112', 'canine01', 'Lazy Dog', 'OK, I can not get this dog to fetch the newpaper. Not even for a doggy biscuit. His name is "Rhymes". He is so lazy, it drives me crazy.', 'images/dog1.gif','images/dog1.gif', 257,'12','12', 15, 5);
-INSERT INTO item VALUES('113', 'canine01', 'Old Dog', 'This old geezer just wants to sleep at your feet. Slip him some food under the table and watch him wag his tail.', 'images/dog2.gif','images/dog2.gif', 70,'13','13', 15, 5);
-INSERT INTO item VALUES('114', 'canine01', 'Young Dog', 'A great young pet in need of training. ', 'images/dog3.gif','images/dog3.gif', 301,'14','14', 15, 5);
+INSERT INTO item VALUES('100', 'canine02', 'Lazy Dog', 'Buy me', 'images/biscuit.jpg','images/biscuit-s.jpg', 100,'12','12', 15, 3);
+INSERT INTO item VALUES('101', 'canine01', 'Lazy Dog', 'Buy me', 'images/harrison.jpg','images/harrison-s.jpg', 250,'12','12', 15, 5);
+INSERT INTO item VALUES('102', 'canine01', 'Lazy Dog', 'Buy me', 'images/honey.jpg','images/honey-s.jpg', 257,'12','12', 20, 5);
+INSERT INTO item VALUES('103', 'canine01', 'Lazy Dog', 'Buy me', 'images/hunter.jpg','images/hunter-s.jpg', 500,'12','12', 15, 10);
+INSERT INTO item VALUES('104', 'canine02', 'Lazy Dog', 'Buy me', 'images/jack.jpg','images/jack-s.jpg', 215,'12','12', 15, 7);
+INSERT INTO item VALUES('105', 'canine01', 'Lazy Dog', 'Buy me', 'images/lady.jpg','images/lady-s.jpg', 2000,'12','12', 15, 5);
+INSERT INTO item VALUES('106', 'canine01', 'Lazy Dog', 'Buy me', 'images/maggie.jpg','images/maggie-s.jpg', 400,'12','12', 15, 3);
+INSERT INTO item VALUES('107', 'canine01', 'Lazy Dog', 'Buy me', 'images/marianna.jpg','images/marianna-s.jpg', 500,'12','12', 15, 10);
+INSERT INTO item VALUES('108', 'canine02', 'Lazy Dog', 'Buy me', 'images/puppup.jpg','images/puppup-s.jpg', 99,'12','12', 15, 6);
+INSERT INTO item VALUES('109', 'canine01', 'Lazy Dog', 'Buy me', 'images/rita.jpg','images/rita-s.jpg', 25,'12','12', 15, 9);
+INSERT INTO item VALUES('110', 'canine02', 'Lazy Dog', 'Buy me', 'images/sabrina.jpg','images/sabrina-s.jpg', 79,'12','12', 15, 5);
+INSERT INTO item VALUES('111', 'canine01', 'Lazy Dog', 'Buy me', 'images/thaidog.jpg','images/thaidog-s.jpg', 1000,'12','12', 15, 3);
+
+INSERT INTO item VALUES('112', 'canine01', 'Lazy Dog', 'OK, I can not get this dog to fetch the newspaper. Not even for a doggy biscuit. His name is "Rhymes". He is so lazy, it drives me crazy.', 'images/dog1.gif','images/dog1.gif', 200,'12','12', 15, 9);
+INSERT INTO item VALUES('113', 'canine01', 'Old Dog', 'This old geezer just wants to sleep at your feet. Slip him some food under the table and watch him wag his tail.', 'images/dog2.gif','images/dog2.gif', 70,'13','13', 15, 11);
+INSERT INTO item VALUES('114', 'canine01', 'Young Dog', 'A great young pet in need of training.', 'images/dog3.gif','images/dog3.gif', 301,'14','14', 15, 5);
 INSERT INTO item VALUES('115', 'canine02', 'Scrapper Dog', 'This scapy woofer needs some clean up and some lessons. Help him out and take him home.', 'images/dog4.gif','images/dog4.gif', 410,'15','15', 15, 5);
-INSERT INTO item VALUES('116', 'canine02', 'Grey Hound', 'A great runner for a fast owner. This is the fastest dog I have ever seen. Its naturally fast and does not take steroids to improve its performance.', 'images/dog5.gif', 'images/dog5.gif', 200,'16','16', 15, 5);
+INSERT INTO item VALUES('116', 'canine02', 'Grey Hound', 'A great runner for a fast owner. This is the fastest dog I have ever seen. Its naturally fast and does not take steroids to improve its performance.', 'images/dog5.gif', 'images/dog5.gif', 200,'16','16', 15, 3);
 INSERT INTO item VALUES('117', 'canine02', 'Beach Dog', 'A great dog to lay in the Sun with, chases a frisbee like a champ, and can swim like a shark. Heck, he can ride a surfboard if you dont mind sharing.', 'images/dog6.gif', 'images/dog6.gif', 200,'16','16', 15, 5);
 
 INSERT INTO item VALUES('201', 'avian01', 'Sweet Parrot', 'This young little parrot is a great pet. It loves to sit on your finger, so you can where it just like a ring, but so much more exotic than a simple diamond.', 'images/parrot-popcorn.jpg', 'images/parrot-popcorn-s.jpg', 250,'8','8', 15, 5);
