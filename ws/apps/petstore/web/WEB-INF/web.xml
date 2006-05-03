@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--  Copyright 2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: web.xml,v 1.18 2006-05-03 23:20:44 yutayoshida Exp $ -->
+ $Id: web.xml,v 1.19 2006-05-03 23:47:15 inder Exp $ -->
  
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
@@ -118,11 +118,11 @@
     <!-- proxy for mapviewer -->
     <context-param>
         <param-name>proxyHost</param-name>
-        <param-value>webcache.sfbay.sun.com</param-value>
+        <param-value>@@proxy.host@@</param-value>
     </context-param>
     <context-param>
         <param-name>proxyPort</param-name>
-        <param-value>8080</param-value>
+        <param-value>@@proxy.port@@</param-value>
     </context-param>
 
     <!-- Faces Servlet -->

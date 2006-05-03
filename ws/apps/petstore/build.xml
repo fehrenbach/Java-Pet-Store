@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
+ http://developer.sun.com/berkeley_license.html
+ $Id: build.xml,v 1.41 2006-05-03 23:47:15 inder Exp $ -->
+ 
 <project name="petstore" default="default" basedir=".">
     <description>Builds, tests, and runs the project petstore.</description>
     
@@ -35,8 +39,23 @@
     
         <!-- Copy in the content -->
         <copy file="${commons.script}" todir="${build.web.dir}" />
+        <antcall target="insert-proxy-settings"/>
     </target>
     
+    <target name="insert-proxy-settings">
+        <copy todir="${build.web.dir}/WEB-INF/" file="web/WEB-INF/web.xml"/>
+        <concat destfile="${build.dir}/proxy.properties">proxy.host=${proxy.host}
+proxy.port=${proxy.port}
+          <filterchain>
+            <expandproperties/>
+          </filterchain>
+        </concat>
+        <!-- Replace value of the proxy settings in web.xml for Google maps -->
+        <replace file="${build.web.dir}/WEB-INF/web.xml" propertyFile="${build.dir}/proxy.properties">          
+          <replacefilter token="@@proxy.host@@" property="proxy.host"/>
+          <replacefilter token="@@proxy.port@@" property="proxy.port"/>
+        </replace>        
+    </target>
     <target name="dojo" description="Unzips the dojo.zip to the right place">
         <mkdir dir="${build.web.dir}"/>
         <unzip src="${dojo.zip}" dest="${build.web.dir}" >
