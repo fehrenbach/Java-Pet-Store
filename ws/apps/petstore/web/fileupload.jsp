@@ -1,5 +1,6 @@
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
+<%@page import="com.sun.javaee.blueprints.petstore.util.PetstoreConstants"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
 <%@taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
@@ -69,7 +70,7 @@
         <div id="fucomponent" style="visibility:hidden;">
         <f:view>
     
-            <ui:fileUploadTag id="TestFileuploadForm" serverLocationDir="../applications/j2ee-modules/petstore/images" 
+            <ui:fileUploadTag id="TestFileuploadForm" serverLocationDir="#{FileUploadBean.uploadImageDirectory}" 
                 postProcessingMethod="#{FileUploadBean.postProcessingMethod}"
                 retMimeType="text/xml" retFunction="testRetFunction" 
                 progressBarDivId="progress" progressBarSize="40">

@@ -22,7 +22,7 @@
             }
             out.println("<description>" + tmp + "</description>");
             out.println("<price>" + java.text.NumberFormat.getCurrencyInstance().format(item.getPrice()) + "</price>");
-            out.println("<image>" + request.getContextPath() + "/" + item.getImageThumbURL() + "</image>");
+            out.println("<image>" + request.getContextPath() + "/ImageServlet/" + item.getImageThumbURL() + "</image>");
             out.println("</response>");
             out.flush();
         }

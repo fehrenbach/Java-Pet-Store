@@ -53,6 +53,7 @@
     </target>
     
     <target name="setup">
+        <mkdir dir="${javaee.domaindir}/lib/petstore/images"/>
         <ant dir="." antfile="setup/setup.xml" target="setup" inheritAll="false" inheritRefs="false"/>
         <antcall target="unzipIndexes"/>
     </target>

@@ -327,6 +327,11 @@ public class FileUploadBean {
         return sxTemp;
     }
     
+
+    public String getUploadImageDirectory() {
+        return PetstoreConstants.PETSTORE_IMAGE_DIRECTORY + "/images";
+    }
+    
     
     /**
      * Method getLogger

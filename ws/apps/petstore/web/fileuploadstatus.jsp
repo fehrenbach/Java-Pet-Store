@@ -17,7 +17,7 @@
                 if (thumbfile == "") {
                     thumbfile = "${sessionScope['fileuploadResponse'].thumbnail}";
                 }
-                thumbpath = "http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.servletContext.contextPath}/";
+                thumbpath = "http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.servletContext.contextPath}/ImageServlet/";
                 thumbpath += thumbfile;
                 var divNode = document.getElementById("thumb");
                 var imgNode = document.createElement("img");
