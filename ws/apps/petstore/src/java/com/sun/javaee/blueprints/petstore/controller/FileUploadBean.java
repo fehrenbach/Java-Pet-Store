@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: FileUploadBean.java,v 1.28 2006-05-04 18:55:01 yutayoshida Exp $ */
+$Id: FileUploadBean.java,v 1.29 2006-05-04 20:50:08 smitha Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -66,7 +66,7 @@ public class FileUploadBean {
             HttpServletResponse response=(HttpServletResponse)context.getExternalContext().getResponse();
             
             //get the catalog facade
-            Map contextMap = context.getExternalContext().getApplicationMap();
+            Map<String,Object> contextMap = context.getExternalContext().getApplicationMap();
             CatalogFacade cf = (CatalogFacade)contextMap.get("CatalogFacade");
             
             // get proxy host and port from servlet context
@@ -118,33 +118,43 @@ public class FileUploadBean {
                 name=getStringValue(hmUpload, compName+":name");
                 String desc=getStringValue(hmUpload, compName+":description");
                 String price=getStringValue(hmUpload, compName+":price");
+                if(name.length() == 0) name="Old Dog";
                 if(desc.length() == 0) desc="No description available";
                 if(price.length() == 0) price="0";
+                
+                //Address
+                StringBuffer addressx=new StringBuffer();
+                String street1=getStringValue(hmUpload, compName+":street1");
+                String city=getStringValue(hmUpload, compName+":cityField");
+                String state=getStringValue(hmUpload, compName+":stateField");
+                String zip=getStringValue(hmUpload, compName+":zipField");
+                if (street1.length() == 0) street1 = "11 Main Steet";
+                if (city.length() == 0) city = "Milpitas";
+                if (state.length() == 0) state = "California";
+                if (zip.length() == 0) zip = "95035";
                 
                 // Contact info
                 firstName = getStringValue(hmUpload, compName+":firstName");
                 String lastName = getStringValue(hmUpload, compName+":lastName");
                 String email = getStringValue(hmUpload, compName+":email");
-                // Add address fields to the file upload page and extract data
-                StringBuffer addressx=new StringBuffer();
-                String street1=getStringValue(hmUpload, compName+":street1");
+                if (firstName.length() == 0) firstName = "Duke";
+                if (lastName.length() == 0) lastName = "Duke";
+                if (email.length() == 0) email = "aaa@bbb.ccc";
+                
                 if(street1.length() > 0) {
                     addressx.append(street1);
                 }
-                
-                String city=getStringValue(hmUpload, compName+":cityField");
+                                
                 if(city.length() > 0) {
                     addressx.append(comma);
                     addressx.append(city);
                 }
                 
-                String state=getStringValue(hmUpload, compName+":stateField");
                 if(state.length() > 0) {
                     addressx.append(comma);
                     addressx.append(state);
                 }
                 
-                String zip=getStringValue(hmUpload, compName+":zipField");
                 if(zip.length() > 0) {
                     addressx.append(comma);
                     addressx.append(zip);
@@ -226,7 +236,7 @@ public class FileUploadBean {
                     itemId,
                     prodId,
                     responseMessage,
-                    status.getStatus(), 
+                    status.getStatus(),
                     Long.toString(status.getUploadTime()),
                     status.getUploadTimeString(),
                     status.getStartUploadDate().toString(),
