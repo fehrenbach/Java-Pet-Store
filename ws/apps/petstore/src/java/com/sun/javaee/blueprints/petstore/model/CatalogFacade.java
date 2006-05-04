@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CatalogFacade.java,v 1.38 2006-05-03 21:48:58 inder Exp $ */
+$Id: CatalogFacade.java,v 1.39 2006-05-04 01:11:29 smitha Exp $ */
 
 package com.sun.javaee.blueprints.petstore.model;
 
@@ -61,7 +61,6 @@ public class CatalogFacade implements ServletContextListener {
         while (true) {
             items = query.setParameter("pID",pID).setFirstResult(index++ * chunkSize).setMaxResults(chunkSize).getResultList();
             if ((items == null) || items.size() <= 0) break;
-            System.out.println("items.size=" + items.size());
             Iterator<Item> it = items.iterator();
             while ((it != null) && it.hasNext()) {
                 Item i = it.next();
@@ -86,19 +85,10 @@ public class CatalogFacade implements ServletContextListener {
     public List<Item> getItemsVLH(String pID, int start, int chunkSize){
         EntityManager em = emf.createEntityManager();
         
-        //make Java Persistence query
-        System.out.println("CatalogFacade: productId=" + pID + " start=" + start + " chunkSize=" + chunkSize);
-        
+        //make Java Persistence query        
         //Query query = em.createNamedQuery("Item.getItemsPerProductCategory");
         Query query = em.createQuery("SELECT i FROM Item i WHERE i.productID = :pID");
         List<Item>  items = query.setParameter("pID",pID).setFirstResult(start).setMaxResults(chunkSize).getResultList();
-       /*
-       Iterator<Item> it = items.iterator();
-          while (it.hasNext()) {
-               Item i = it.next();
-              System.out.println("*****CatalogFacade:**" +i.getItemID() + "\n");
-          }
-        **/
         em.close();
         return items;
     }
@@ -209,7 +199,6 @@ public class CatalogFacade implements ServletContextListener {
     public List<ZipLocation> getZipCodeLocations(String city, int start, int chunkSize){
         EntityManager em = emf.createEntityManager();        
         String pattern = "'"+city.toUpperCase()+"%'";
-        System.out.println("pattern is" + pattern);
         Query query = em.createQuery("SELECT  z FROM ZipLocation z where UPPER(z.city) LIKE "+pattern);
         List<ZipLocation>  zipCodeLocations = query.setFirstResult(start).setMaxResults(chunkSize).getResultList();
         em.close();

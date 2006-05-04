@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: RatingBean.java,v 1.7 2006-05-04 01:08:22 smitha Exp $ */
+$Id: RatingBean.java,v 1.8 2006-05-04 01:11:29 smitha Exp $ */
 
 package com.sun.javaee.blueprints.petstore.model;
 import java.util.logging.Logger;
@@ -32,7 +32,6 @@ public class RatingBean {
         // "itemId" is the primarykey for the product...
         // "grade" is the grade to be store
         String itemId=getItemId();
-        System.out.println("\n *** have rating - " + itemId + " - " + grade);
         if(itemId != null) {
             if(grade>=1){
                 //call the catalog facade to update rating
