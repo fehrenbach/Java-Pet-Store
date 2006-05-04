@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: FileUploadResponseServlet.java,v 1.2 2006-05-04 02:47:37 yutayoshida Exp $ */
+$Id: FileUploadResponseServlet.java,v 1.3 2006-05-04 03:37:07 yutayoshida Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -41,7 +41,7 @@ public class FileUploadResponseServlet extends HttpServlet {
         if (reqContentType!=null && reqContentType.equals("xml")) {
             response.setContentType("text/xml;charset=UTF-8");
         } else {
-            response.setContentType("text/plain");
+            response.setContentType("text/javascript");
         }
         response.setHeader("Pragma", "No-Cache");
         response.setHeader("Cache-Control", "no-cache,no-store,max-age=0");

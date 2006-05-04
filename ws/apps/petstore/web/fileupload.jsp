@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: fileupload.jsp,v 1.32 2006-05-04 02:47:37 yutayoshida Exp $ --%>
+$Id: fileupload.jsp,v 1.33 2006-05-04 03:37:08 yutayoshida Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -49,8 +49,12 @@ $Id: fileupload.jsp,v 1.32 2006-05-04 02:47:37 yutayoshida Exp $ --%>
     }
     
     function processFUResponse(type, json, http) {
-        
+        if (typeof json == "string") {
+            // in case json is not an object
+            json = eval('(' + json + ')');
+        }
         var message = json.message;
+        var thumbpath = json.thumbnail;
         if (http.status == 401) {
             // captcha error
             doneButton.disabled = false;
