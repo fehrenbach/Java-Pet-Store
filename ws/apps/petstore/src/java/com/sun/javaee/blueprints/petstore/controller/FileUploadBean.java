@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: FileUploadBean.java,v 1.26 2006-05-03 23:20:43 yutayoshida Exp $ */
+$Id: FileUploadBean.java,v 1.27 2006-05-04 01:36:13 smitha Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -194,7 +194,7 @@ public class FileUploadBean {
                     priceF=new Float(0);
                     getLogger().log(Level.INFO, "Price isn't in a proper number - " + price);
                 }
-                Address addr = new Address(street1,null,city,state,zip,
+                Address addr = new Address(street1,"",city,state,zip,
                         latitude,longitude);
                 SellerContactInfo contactInfo = new SellerContactInfo(firstName, lastName, email);
                 Item item = new Item(prodId,name,desc,fileName, thumbPath, priceF,
