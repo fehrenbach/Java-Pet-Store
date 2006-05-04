@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: fileupload.jsp,v 1.31 2006-05-03 23:20:44 yutayoshida Exp $ --%>
+$Id: fileupload.jsp,v 1.32 2006-05-04 02:47:37 yutayoshida Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -19,7 +19,6 @@ $Id: fileupload.jsp,v 1.31 2006-05-03 23:20:44 yutayoshida Exp $ --%>
     
     function testRetFunction(type, data, evt){
         var statusServlet = "http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.servletContext.contextPath}/FileUploadResponseServlet";
-alert(statusServlet);
         //because of iframeIO problem, initiate another ajax request to get the real response
         var bindArgs = {
             url: statusServlet,

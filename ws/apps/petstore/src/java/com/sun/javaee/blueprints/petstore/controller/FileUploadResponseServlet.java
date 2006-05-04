@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: FileUploadResponseServlet.java,v 1.1 2006-05-03 23:20:43 yutayoshida Exp $ */
+$Id: FileUploadResponseServlet.java,v 1.2 2006-05-04 02:47:37 yutayoshida Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -17,7 +17,7 @@ public class FileUploadResponseServlet extends HttpServlet {
     
     private String constructJsonEntry(String key, String value) {
         String dq = "\"";
-        return (dq + key + dq + " : " + dq + value + dq);
+        return (key + " : " + dq + value + dq);
     }
     
     /** Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -41,7 +41,7 @@ public class FileUploadResponseServlet extends HttpServlet {
         if (reqContentType!=null && reqContentType.equals("xml")) {
             response.setContentType("text/xml;charset=UTF-8");
         } else {
-            response.setContentType("text/javascript;charset=UTF-8");
+            response.setContentType("text/plain");
         }
         response.setHeader("Pragma", "No-Cache");
         response.setHeader("Cache-Control", "no-cache,no-store,max-age=0");
@@ -101,13 +101,13 @@ public class FileUploadResponseServlet extends HttpServlet {
                     sb.append("{");
                     sb.append(constructJsonEntry("itemid", flr.getItemId()) + ",\n");
                     sb.append(constructJsonEntry("message", flr.getMessage()) + ",\n");
-                    sb.append(constructJsonEntry("status", flr.getMessage()) + ",\n");
-                    sb.append(constructJsonEntry("duration", flr.getMessage()) + ",\n");
-                    sb.append(constructJsonEntry("duration_string", flr.getMessage()) + ",\n");
-                    sb.append(constructJsonEntry("start_date", flr.getMessage()) + ",\n");
-                    sb.append(constructJsonEntry("end_date", flr.getMessage()) + ",\n");
-                    sb.append(constructJsonEntry("upload_size", flr.getMessage()) + ",\n");
-                    sb.append(constructJsonEntry("thumbnail", flr.getMessage()));
+                    sb.append(constructJsonEntry("status", flr.getStatus()) + ",\n");
+                    sb.append(constructJsonEntry("duration", flr.getDuration()) + ",\n");
+                    sb.append(constructJsonEntry("duration_string", flr.getDurationString()) + ",\n");
+                    sb.append(constructJsonEntry("start_date", flr.getStartDate()) + ",\n");
+                    sb.append(constructJsonEntry("end_date", flr.getEndDate()) + ",\n");
+                    sb.append(constructJsonEntry("upload_size", flr.getUploadSize()) + ",\n");
+                    sb.append(constructJsonEntry("thumbnail", flr.getThumbnail()));
                     sb.append("}");
                 }
                 
