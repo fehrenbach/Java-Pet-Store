@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CatalogFacade.java,v 1.39 2006-05-04 01:11:29 smitha Exp $ */
+$Id: CatalogFacade.java,v 1.40 2006-05-04 21:48:59 smitha Exp $ */
 
 package com.sun.javaee.blueprints.petstore.model;
 
@@ -85,7 +85,7 @@ public class CatalogFacade implements ServletContextListener {
     public List<Item> getItemsVLH(String pID, int start, int chunkSize){
         EntityManager em = emf.createEntityManager();
         
-        //make Java Persistence query        
+        //make Java Persistence query
         //Query query = em.createNamedQuery("Item.getItemsPerProductCategory");
         Query query = em.createQuery("SELECT i FROM Item i WHERE i.productID = :pID");
         List<Item>  items = query.setParameter("pID",pID).setFirstResult(start).setMaxResults(chunkSize).getResultList();
@@ -197,7 +197,7 @@ public class CatalogFacade implements ServletContextListener {
      * @returns a List of ZipLocation objects
      */
     public List<ZipLocation> getZipCodeLocations(String city, int start, int chunkSize){
-        EntityManager em = emf.createEntityManager();        
+        EntityManager em = emf.createEntityManager();
         String pattern = "'"+city.toUpperCase()+"%'";
         Query query = em.createQuery("SELECT  z FROM ZipLocation z where UPPER(z.city) LIKE "+pattern);
         List<ZipLocation>  zipCodeLocations = query.setFirstResult(start).setMaxResults(chunkSize).getResultList();
@@ -243,10 +243,10 @@ public class CatalogFacade implements ServletContextListener {
             em.persist(item);
             utx.commit();
         } catch(Exception exe){
-            System.out.println("Error persisting item: "+exe);
             try {
                 utx.rollback();
             } catch (Exception e) {}
+            throw new RuntimeException("Error persisting item");
         } finally {
             em.close();
         }
@@ -260,10 +260,10 @@ public class CatalogFacade implements ServletContextListener {
             em.merge(item);
             utx.commit();
         } catch(Exception exe){
-            System.out.println("Error updating rating: "+exe);
             try {
                 utx.rollback();
             } catch (Exception e) {}
+            throw new RuntimeException("Error updating rating");
         } finally {
             em.close();
         }
