@@ -232,6 +232,6 @@ INSERT INTO item VALUES('417', 'reptile02', 'Green Iguana', 'This is one proud a
 INSERT INTO item VALUES('418', 'reptile02', 'Iguana', 'My iguana needs a home. His tail is really long. He is very nice.', 'images/lizard2.gif','images/lizard2.gif', 500,'9','9', 15, 5);
 INSERT INTO item VALUES('419', 'reptile02', 'Frog', 'This little green frog was rescued from the chef in the kitchen of a french restaurant. If I had not acted quickly, his legs would have been appetizers. Now for just a small fee you can buy him as your pet.', 'images/frog1.gif','images/frog1.gif', 1500,'9','9', 15, 3);
 
-INSERT INTO id_gen VALUES('ITEM_ID',406);
+INSERT INTO id_gen VALUES('ITEM_ID',419);
 INSERT INTO id_gen VALUES('ADDRESS_ID',22);
 INSERT INTO id_gen VALUES('CONTACT_INFO_ID',16);
