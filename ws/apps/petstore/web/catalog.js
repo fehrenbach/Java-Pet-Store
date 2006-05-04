@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: catalog.js,v 1.10 2006-05-04 07:37:44 gmurray71 Exp $ */
+$Id: catalog.js,v 1.11 2006-05-04 07:48:11 gmurray71 Exp $ */
 
 var ac;
 var is;
@@ -134,7 +134,7 @@ function CatalogController() {
     
     // this needs to happen after we have loaded the accordion data
     function processURLParameters() {
-        originalURL = window.location.href;
+        originalURL = decodeURIComponent(window.location.href);
         var params = {};
         // look for the params
         if (originalURL.indexOf("?") != -1) {
@@ -165,6 +165,8 @@ function CatalogController() {
         } else if (originalURL.indexOf("#") != -1) {
             var qString = originalURL.split('#')[1];
             var args = qString.split(',');
+            originalURL = originalURL.split('#')[0];
+            window.location.href = originalURL;
             ac.loadCategoryItem(args[0], args[1]);
         // nothing is selected
         } else {
