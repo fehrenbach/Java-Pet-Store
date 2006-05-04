@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: FileUploadBean.java,v 1.29 2006-05-04 20:50:08 smitha Exp $ */
+$Id: FileUploadBean.java,v 1.30 2006-05-04 21:29:39 smitha Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -81,7 +81,6 @@ public class FileUploadBean {
             String thumbPath = null;
             String firstName = null;
             String prodId = null;
-            // persist the data
             try{
                 String fileNameKey = null;
                 Set keySet = hmUpload.keySet();
@@ -96,29 +95,30 @@ public class FileUploadBean {
                 String absoluteFileName=getStringValue(hmUpload, fileNameKey);
                 if(bDebug) System.out.println("Abs name: "+ absoluteFileName);
                 String fileName = null;
-                if(absoluteFileName != null) {
+                if(absoluteFileName.length() > 0) {
                     int lastSeparator = absoluteFileName.lastIndexOf("/") + 1;
                     if (lastSeparator != -1) {
                         // set to proper location so image can be read
                         fileName = "images/" + absoluteFileName.substring(lastSeparator, absoluteFileName.length());
                     }
+                    String spath = constructThumbnail(absoluteFileName);
+                    thumbPath = null;
+                    if (spath != null) {
+                        // recreate "images/FILENAME"
+                        int idx = spath.lastIndexOf(System.getProperty("file.separator"));
+                        thumbPath = "images/"+spath.substring(idx+1, spath.length());
+                    }
+                } else{
+                    fileName = "images/dragon-iron-med.jpg";
+                    thumbPath = "images/dragon-iron-thumb.jpg ";
                 }
                 
-                String compName=getStringValue(hmUpload, FileUploadUtil.COMPONENT_NAME);
-                
-                if(bDebug) System.out.println("file name: "+ fileName);
-                String spath = constructThumbnail(absoluteFileName);
-                thumbPath = null;
-                if (spath != null) {
-                    // recreate "images/FILENAME"
-                    int idx = spath.lastIndexOf(System.getProperty("file.separator"));
-                    thumbPath = "images/"+spath.substring(idx+1, spath.length());
-                }
+                String compName=getStringValue(hmUpload, FileUploadUtil.COMPONENT_NAME);                               
                 prodId=getStringValue(hmUpload, compName+":product");
                 name=getStringValue(hmUpload, compName+":name");
                 String desc=getStringValue(hmUpload, compName+":description");
                 String price=getStringValue(hmUpload, compName+":price");
-                if(name.length() == 0) name="Old Dog";
+                if(name.length() == 0) name="Default Monster";
                 if(desc.length() == 0) desc="No description available";
                 if(price.length() == 0) price="0";
                 
@@ -144,7 +144,7 @@ public class FileUploadBean {
                 if(street1.length() > 0) {
                     addressx.append(street1);
                 }
-                                
+                
                 if(city.length() > 0) {
                     addressx.append(comma);
                     addressx.append(city);
