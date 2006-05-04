@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: FileUploadResponse.java,v 1.3 2006-05-03 23:20:44 yutayoshida Exp $ */
+$Id: FileUploadResponse.java,v 1.4 2006-05-04 18:55:02 yutayoshida Exp $ */
 
 package com.sun.javaee.blueprints.petstore.model;
 
@@ -8,6 +8,7 @@ import com.sun.javaee.blueprints.components.ui.fileupload.FileUploadStatus;
 public class FileUploadResponse {
     
     private String itemId = null;
+    private String productId = null;
     private String message = null;
     private String status = null;
     private String duration = null;
@@ -21,10 +22,11 @@ public class FileUploadResponse {
     public FileUploadResponse() {
     }
     
-    public FileUploadResponse(String itemId, String message, String status, String duration,
+    public FileUploadResponse(String itemId, String productId, String message, String status, String duration,
             String durationString, String startDate, String endDate, String uploadSize,
             String thumbnail) {
         this.itemId = itemId;
+        this.productId = productId;
         this.message = message;
         this.duration = duration;
         this.durationString = durationString;
@@ -49,6 +51,12 @@ public class FileUploadResponse {
     }
     public void setItemId(String str) {
         this.itemId = str;
+    }
+    public String getProductId() {
+        return this.productId;
+    }
+    public void setProductId(String str) {
+        this.productId = str;
     }
     public String getStatus() {
         return this.status;

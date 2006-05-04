@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: FileUploadBean.java,v 1.27 2006-05-04 01:36:13 smitha Exp $ */
+$Id: FileUploadBean.java,v 1.28 2006-05-04 18:55:01 yutayoshida Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -80,6 +80,7 @@ public class FileUploadBean {
             String name = null;
             String thumbPath = null;
             String firstName = null;
+            String prodId = null;
             // persist the data
             try{
                 String fileNameKey = null;
@@ -113,7 +114,7 @@ public class FileUploadBean {
                     int idx = spath.lastIndexOf(System.getProperty("file.separator"));
                     thumbPath = "images/"+spath.substring(idx+1, spath.length());
                 }
-                String prodId=getStringValue(hmUpload, compName+":product");
+                prodId=getStringValue(hmUpload, compName+":product");
                 name=getStringValue(hmUpload, compName+":name");
                 String desc=getStringValue(hmUpload, compName+":description");
                 String price=getStringValue(hmUpload, compName+":price");
@@ -223,6 +224,7 @@ public class FileUploadBean {
             String responseMessage = firstName+", Thank you for submitting your pet "+name+" !";
             FileUploadResponse fuResponse = new FileUploadResponse(
                     itemId,
+                    prodId,
                     responseMessage,
                     status.getStatus(), 
                     Long.toString(status.getUploadTime()),

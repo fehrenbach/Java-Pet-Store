@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: fileupload.jsp,v 1.33 2006-05-04 03:37:08 yutayoshida Exp $ --%>
+$Id: fileupload.jsp,v 1.34 2006-05-04 18:55:02 yutayoshida Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -55,6 +55,8 @@ $Id: fileupload.jsp,v 1.33 2006-05-04 03:37:08 yutayoshida Exp $ --%>
         }
         var message = json.message;
         var thumbpath = json.thumbnail;
+        var productId = json.productid;
+        var itemid = json.itemid;
         if (http.status == 401) {
             // captcha error
             doneButton.disabled = false;
@@ -62,7 +64,7 @@ $Id: fileupload.jsp,v 1.33 2006-05-04 03:37:08 yutayoshida Exp $ --%>
         } else {
             // fileupload complete
             var thumbpath = json.thumbnail;
-            location.href="fileuploadstatus.jsp?message=" + message + "&thumb=" + thumbpath;
+            location.href="fileuploadstatus.jsp?message=" + message + "&id=" + itemid + "&productId=" + productId + "&thumb=" + thumbpath;
         }
     }
 

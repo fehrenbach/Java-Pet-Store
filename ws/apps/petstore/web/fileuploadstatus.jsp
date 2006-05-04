@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: fileuploadstatus.jsp,v 1.5 2006-05-03 22:00:33 inder Exp $ --%>
+$Id: fileuploadstatus.jsp,v 1.6 2006-05-04 18:55:02 yutayoshida Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -39,8 +39,10 @@ $Id: fileuploadstatus.jsp,v 1.5 2006-05-03 22:00:33 inder Exp $ --%>
         <div id="thumb"></div>
         <br/><br/>
         Would you like to :-<br/>
-        <button onclick="location.href='fileupload.jsp'">Submit another pet</button>
-        <button onclick="location.href='http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.servletContext.contextPath}/index.jsp'">Go back to home</button>
+        <button onclick="location.href='fileupload.jsp'">Submit another pet</button><br/>
+        <button onclick="location.href='http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.servletContext.contextPath}/index.jsp'">Go back to home</button><br/>
+        <button onclick="location.href='catalog.jsp?pid=${param.productId}&itemId=${param.id}'">Go to your pet page</button><br/>
+
     </div>
     </center>
     <jsp:include page="footer.jsp" />    
