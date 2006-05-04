@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: search.jsp,v 1.18 2006-05-03 22:00:34 inder Exp $ --%>
+$Id: search.jsp,v 1.19 2006-05-04 00:11:39 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -10,8 +10,6 @@ $Id: search.jsp,v 1.18 2006-05-03 22:00:34 inder Exp $ --%>
 <%@taglib prefix="ui5" uri="http://java.sun.com/blueprints/ui" %>
 
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-   "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
