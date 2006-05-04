@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: scroller.js,v 1.25 2006-05-03 22:00:34 inder Exp $ */
+$Id: scroller.js,v 1.26 2006-05-04 07:20:09 gmurray71 Exp $ */
 
 /**
 * ImageScroller - A multipurpose item brower
@@ -22,7 +22,7 @@ function ImageScroller() {
     var THUMB_WIDTH = Math.round(VIEWPORT_WIDTH / 5);;
     var THUMB_HEIGHT = Math.round(VIEWPORT_WIDTH / 6.67);
     
-    var CHUNK_SIZE=4;
+    var CHUNK_SIZE=5;
     
     var IMAGE_PANE_ID = "imagePane";
     var IMAGE_PANE_BUFFER_ID = "imageBufferPane";
@@ -51,7 +51,7 @@ function ImageScroller() {
     // keeps track how for the scroll has gone 
     var offset = 0;
        
-    var timeout = 25; // in ms
+    var timeout = 30; // in ms
     var isScrollingRight = false;
     var isScrollingLeft = false;
     
@@ -521,9 +521,9 @@ function ImageScroller() {
          }
          if (typeof imageLoadingPane != 'undefined') {           
              imageLoadingPane.style.left = tileX;
+             imageLoadingPane.style.top = tileY;
          }
     }
-    
     
     function createInfoPane() {
 	    infoPane = document.getElementById("infopane");

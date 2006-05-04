@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: catalog.js,v 1.8 2006-05-03 22:00:32 inder Exp $ */
+$Id: catalog.js,v 1.9 2006-05-04 07:20:09 gmurray71 Exp $ */
 
 var ac;
 var is;
@@ -19,10 +19,14 @@ function initCatalog() {
 function CatalogController() {
   dojo.event.topic.subscribe("/catalog", this, handleEvent);
   
-  var CHUNK_SIZE=4;
+  // this object structure contains a list of the products and chunks that have been loaded
+  var pList = new ProductList();
+  
+  var CHUNK_SIZE=5;
   var initalRating;
   var initalItem;
   var originalURL;
+  
   // using this for some browsers that do not support innerHTML
   var useDOMInjection = false;
   
@@ -34,7 +38,7 @@ function CatalogController() {
   var infoDescription =  document.getElementById("infopaneDescription"); 
   // for paypal
   var buyNowAmount = document.getElementById("buyNow1_amount");
-  var buyNowItemName = document.getElementById("buyNow1_item_name"); 
+  var buyNowItemName = document.getElementById("buyNow1_item_name");
   
   function handleEvent(args) {
       if (args.type == "showingItem") {
@@ -83,8 +87,6 @@ function CatalogController() {
       } else {
           t.innerHTML = text;
       }
-      
-      
   }
   
   this.initialize = function() {
@@ -101,7 +103,8 @@ function CatalogController() {
       originalURL = window.location.href;
       if (originalURL.indexOf("#") != -1) {
 	        var start = originalURL.split("#");
-	        originalURL =start[0];      
+	        originalURL =start[0];
+            window.location.href = originalURL;
 	  }
       var ratingInstance = bpui.rating.state["rating"];
       ratingInstance.grade = initalRating;
@@ -175,14 +178,21 @@ function CatalogController() {
   this.setProducts = function(pid) {
         is.reset();
         is.showProgressIndicator();
-        var bindArgs = {
-            url:  "/petstore/catalog?command=items&pid=" + pid + "&start=" + 0 + "&length=" + CHUNK_SIZE,
-            mimetype: "text/xml",
-            load: function(type,data,postProcessHandler) {
-               processProductData(data,true, pid);
-             }
-        };
-        dojo.io.bind(bindArgs);    
+        if (pList.hasChunck(pid, 0)) {
+            var items = pList.getChunck(pid, 0);
+            is.addItems(items);
+            is.setGroupId(pid);
+            is.showImage(items[0].id);
+        } else {
+            var bindArgs = {
+                url:  "/petstore/catalog?command=items&pid=" + pid + "&start=" + 0 + "&length=" + CHUNK_SIZE,
+                mimetype: "text/xml",
+                load: function(type,data,postProcessHandler) {
+                    processProductData(data,true, pid, null,0);
+                }
+            };
+            dojo.io.bind(bindArgs);
+        }    
     }
     
     function showProductDetails(pid, itemId) {
@@ -206,20 +216,30 @@ function CatalogController() {
       if (typeof debug != 'undefined') {
           document.getElementById("status").innerHTML = "url=" + "/petstore/catalog?command=items&pid=" + args.id + "&start=" +  args.index + "&length=" + CHUNK_SIZE;
       }
-      var bindArgs = {
-            url:  "/petstore/catalog?command=items&pid=" + args.id + "&start=" +  args.index + "&length=" + CHUNK_SIZE,
-            mimetype: "text/xml",
-            load: function(type,data,postProcessHandler) {
-                processProductData(data,false, args.id);
+      // load the chunck data if we have it
+      if (pList.hasChunck(args.id, args.currentChunck)) {
+            if (typeof debug != 'undefined') {
+                document.getElementById("status").innerHTML = "chunck from cache=" + args.id + "&currentChunck=" +  args.currentChunck;
             }
-      };
-      dojo.io.bind(bindArgs);
+            is.addItems(pList.getChunck(args.id, args.currentChunck));
+            is.setGroupId(args.id);
+      } else {
+          var bindArgs = {
+                url:  "/petstore/catalog?command=items&pid=" + args.id + "&start=" +  args.index + "&length=" + CHUNK_SIZE,
+                mimetype: "text/xml",
+                load: function(type,data,postProcessHandler) {
+                    processProductData(data,false, args.id, null, args.currentChunck);
+                }
+          };
+          dojo.io.bind(bindArgs);
+      }
    }
   
-   function processProductData(responseXML, showImage, pid, iId) {
+   function processProductData(responseXML, showImage, pid, iId, chunckId) {
         var items = [];
         var count = responseXML.getElementsByTagName("item").length;
         for (var loop=0; loop < count ; loop++) {
+
             var item = responseXML.getElementsByTagName("item")[loop];
             var itemId =  item.getElementsByTagName("id")[0].firstChild.nodeValue;
             var name =  item.getElementsByTagName("name")[0].firstChild.nodeValue;
@@ -237,15 +257,71 @@ function CatalogController() {
             var i = {id: itemId, name: name, image: imageURL, thumbnail: thumbURL, shortDescription: shortDescription, description: description, price:price, rating: rating};
             items.push(i);
         }
+        // cache the chuncks 
+        if (typeof chunckId != 'undefined') {
+            pList.addChunck(pid, chunckId, items);
+        }
         is.addItems(items);
-        if (showImage && !iId) {
+        if (showImage && iId == null) {
             is.setGroupId(pid);
             is.showImage(items[0].id);
         } else {
             is.setGroupId(pid);
             is.showImage(iId);
         }
-        
         is.hideProgressIndicator();
+    }
+    
+    function ProductList() {
+        var _plist = this;
+        var map = new Map();
+        
+        this.addChunck = function(pid, chunkNumber, items) {
+            map.put(pid + "_" + chunkNumber, items, true);  
+        }
+        
+        this.getChunck = function(pid, chunkNumber) {
+            return map.get(pid + "_" + chunkNumber);  
+        }
+        
+        this.hasChunck = function(pid, chunkNumber) {
+            return (map.get(pid + "_" + chunkNumber) != null);  
+        }
+
+    }
+    
+    function Map() {
+        
+        var size = 0;
+        var keys = [];
+        var values = [];
+        
+        this.put = function(key,value, replace) {
+            if (this.get(key) == null) {
+                keys[size] = key; values[size] = value;
+                size++;
+            } else if (replace) {
+                for (i=0; i < size; i++) {
+                    if (keys[i] == key) {
+                        values[i] = value;
+                    }
+                }
+            }
+        }
+        
+        this.get = function(key) {
+            for (i=0; i < size; i++) {
+                if (keys[i] == key) {
+                    return values[i];
+                }
+            }
+            return null;
+        }
+        
+        this.clear = function() {
+            size = 0;
+            keys = [];
+            values = [];
+        }
     }
 }
