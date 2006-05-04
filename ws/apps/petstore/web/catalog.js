@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: catalog.js,v 1.9 2006-05-04 07:20:09 gmurray71 Exp $ */
+$Id: catalog.js,v 1.10 2006-05-04 07:37:44 gmurray71 Exp $ */
 
 var ac;
 var is;
@@ -100,12 +100,6 @@ function CatalogController() {
         infoDescription.appendChild(document.createTextNode("<description>"));
       }
       
-      originalURL = window.location.href;
-      if (originalURL.indexOf("#") != -1) {
-	        var start = originalURL.split("#");
-	        originalURL =start[0];
-            window.location.href = originalURL;
-	  }
       var ratingInstance = bpui.rating.state["rating"];
       ratingInstance.grade = initalRating;
       bpui.rating.state["rating"].bindings["itemId"]=initalItem;
@@ -148,6 +142,8 @@ function CatalogController() {
             // get rid of any bookmarking stuff
             if (qString.indexOf("#") != -1) {
                 qString = qString.split('#')[0];
+                originalURL = originalURL.split('#')[0];
+                window.location.href = originalURL;
             }
             ps = qString.split('&');
             // now go through and create the params map as an object literal
@@ -155,6 +151,7 @@ function CatalogController() {
                 var t = ps[i].split('=');
                 params[t[0]] = t[1];
             }
+
         }
         // first check for the item in product        
         if (typeof params.itemId != 'undefined' &&
