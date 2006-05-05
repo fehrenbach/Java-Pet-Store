@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: FileUploadBean.java,v 1.33 2006-05-05 20:15:23 inder Exp $ */
+$Id: FileUploadBean.java,v 1.34 2006-05-05 20:59:01 yutayoshida Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -26,6 +26,7 @@ import com.sun.j2ee.blueprints.ui.geocoder.GeoPoint;
 import com.sun.javaee.blueprints.petstore.model.Address;
 import com.sun.javaee.blueprints.petstore.model.CatalogFacade;
 import com.sun.javaee.blueprints.petstore.model.Category;
+import com.sun.javaee.blueprints.petstore.model.Product;
 import com.sun.javaee.blueprints.petstore.model.FileUploadResponse;
 import com.sun.javaee.blueprints.petstore.model.Item;
 import com.sun.javaee.blueprints.petstore.model.SellerContactInfo;
@@ -42,6 +43,7 @@ public class FileUploadBean {
     private Logger _logger=null;
     private static final String comma=", ";
     private List<SelectItem> categories = null;
+    private List<SelectItem> products = null;
     private CatalogFacade catalogFacade = null;
     
     /**
@@ -59,6 +61,31 @@ public class FileUploadBean {
     public FileUploadBean() {
     }
     
+    public void setProducts(List<SelectItem> products) {
+        this.products = products;
+    }
+    public List<SelectItem> getProducts() {
+        if (catalogFacade == null) {
+            FacesContext context=FacesContext.getCurrentInstance();
+            Map<String,Object> contextMap = context.getExternalContext().getApplicationMap();
+            this.catalogFacade = (CatalogFacade)contextMap.get("CatalogFacade");
+        }
+            //get the catalog facade
+        if (products == null) {
+            products = new ArrayList<SelectItem>();
+        
+            List<Product> tmpPd = catalogFacade.getProducts();
+            String name = null;
+            String productId = null;
+            for (Product pd : tmpPd) {
+                name = pd.getName();
+                productId = pd.getProductID();
+                SelectItem si = new SelectItem(productId, name);
+                products.add(si);
+            }
+        }
+        return this.products;
+    }
     public void setCategories(List<SelectItem> categories) {
         this.categories = categories;
     }

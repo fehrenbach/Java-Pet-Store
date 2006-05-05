@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: fileupload.jsp,v 1.35 2006-05-05 05:44:58 yutayoshida Exp $ --%>
+$Id: fileupload.jsp,v 1.36 2006-05-05 20:59:02 yutayoshida Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -127,7 +127,7 @@ $Id: fileupload.jsp,v 1.35 2006-05-05 05:44:58 yutayoshida Exp $ --%>
                             
                             <h:outputText value="Category"/>
                             <h:selectOneMenu id="product">
-                                <f:selectItems value="#{FileUploadBean.categories}"/>
+                                <f:selectItems value="#{FileUploadBean.products}"/>
                             </h:selectOneMenu>
                             
                             <h:outputText value="Pet's Name"/>
