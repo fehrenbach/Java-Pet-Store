@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: SearchIndex.java,v 1.5 2006-05-03 21:49:00 inder Exp $ */
+$Id: SearchIndex.java,v 1.6 2006-05-05 01:49:44 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.search;
 
@@ -26,7 +26,7 @@ import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
  */
 public class SearchIndex {
     
-    private boolean bDebug=false;
+    private static final boolean bDebug=false;
     private Vector<IndexDocument> vtHits=new Vector();
     private Hits hits=null;
     private static Logger _logger=null;

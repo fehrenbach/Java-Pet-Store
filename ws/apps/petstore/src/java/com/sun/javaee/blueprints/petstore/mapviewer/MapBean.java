@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: MapBean.java,v 1.17 2006-05-03 21:48:58 inder Exp $ */
+$Id: MapBean.java,v 1.18 2006-05-05 01:49:42 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.mapviewer;
 
@@ -36,12 +36,13 @@ public class MapBean {
     private Logger _logger=null;
     private String category="CATS", centerAddress=null;
     private String[] itemIds=new String[0];
+    private static final boolean bDebug=false;
     
     /** Creates a new instance of MapBean */
     public MapBean() {
         init();
     }
-
+    
     public void init() {
         alMapMarkers.clear();
     }
@@ -63,7 +64,7 @@ public class MapBean {
         
         // get the CatalogFacade for the app
         FacesContext context=FacesContext.getCurrentInstance();
-        Map<String,Object> contextMap=context.getExternalContext().getApplicationMap();        
+        Map<String,Object> contextMap=context.getExternalContext().getApplicationMap();
         CatalogFacade cf=(CatalogFacade)contextMap.get("CatalogFacade");
         
         // get the categories from the database
@@ -74,7 +75,7 @@ public class MapBean {
         }
         return arCats;
     }
-
+    
     public void setCategory(String category) {
         this.category=category;
     }
@@ -90,7 +91,6 @@ public class MapBean {
     }
     
     
-
     // map.jsp fields
     public void setMapMarker(MapMarker mapMarker) {
         this.mapMarker=mapMarker;
@@ -115,7 +115,7 @@ public class MapBean {
     public int getLocationCount() {
         return alMapMarkers.size();
     }
-
+    
     public List<Item> getItems() {
         return items;
     }
@@ -132,7 +132,7 @@ public class MapBean {
     public int getZoomLevel() {
         return this.zoomLevel;
     }
-
+    
     public void setRadius(int radius) {
         this.radius=radius;
     }
@@ -148,18 +148,18 @@ public class MapBean {
     
     
     public String findAllByCategory() {
-        System.out.println("*** In findAllByCategory - ");
-
+        if(bDebug) System.out.println("*** In findAllByCategory - ");
+        
         // clear old locations
         clearValues();
         
         // get items from catalog
         FacesContext context=FacesContext.getCurrentInstance();
-        Map<String,Object> contextMap=context.getExternalContext().getApplicationMap();        
+        Map<String,Object> contextMap=context.getExternalContext().getApplicationMap();
         CatalogFacade cf=(CatalogFacade)contextMap.get("CatalogFacade");
         // should always have a value
         if(category == null) category="CATS";
-
+        
         // check to see if radius set with centerpoint
         String centerx=getCenterAddress();
         GeoPoint[] geoCenterPoint=null;
@@ -172,37 +172,40 @@ public class MapBean {
                 double dLatitude=geoCenterPoint[0].getLatitude();
                 double dLongRadius=calculateLongitudeRadius(radius);
                 double dLongitude=geoCenterPoint[0].getLongitude();
-                
-                System.out.println("\n *** cat radius" + dLatitude + " - " + dLongitude +
-                        "\n lat=" + (dLatitude - dLatRadius) + " to " + (dLatitude + dLatRadius) + 
-                        "\n long=" + (dLongitude - dLongRadius) + " to " + (dLongitude + dLongRadius));
-                items=cf.getItemsByCategoryByRadiusVLH(category, 0, 25, dLatitude - dLatRadius,  
-                    dLatitude + dLatRadius, dLongitude - dLongRadius, dLongitude + dLongRadius);
+                if(bDebug) {
+                    System.out.println("\n *** cat radius" + dLatitude + " - " + dLongitude +
+                            "\n lat=" + (dLatitude - dLatRadius) + " to " + (dLatitude + dLatRadius) +
+                            "\n long=" + (dLongitude - dLongRadius) + " to " + (dLongitude + dLongRadius));
+                }
+                items=cf.getItemsByCategoryByRadiusVLH(category, 0, 25, dLatitude - dLatRadius,
+                        dLatitude + dLatRadius, dLongitude - dLongRadius, dLongitude + dLongRadius);
             }
         }
-
+        
         if(geoCenterPoint == null) {
             // no center point or center point error so look up just ids
             items=cf.getItemsByCategoryVLH(category, 0, 25);
         }
-        if(items != null) {
-            System.out.println("\nHave Database items - " + items.size());
-        } else {
-            System.out.println("\nHave NULL items from the database");
+        if(bDebug) {
+            if(items != null) {
+                System.out.println("\nHave Database items - " + items.size());
+            } else {
+                System.out.println("\nHave NULL items from the database");
+            }
         }
-    
+        
         return mapItems(context, items, geoCenterPoint, centerx);
     }
     
     
     public String findAllByIDs() {
-        System.out.println("*** In findAllByIDs - ");
+        if(bDebug) System.out.println("*** In findAllByIDs - ");
         // clear old locations
         clearValues();
-
+        
         // get items from catalog
         FacesContext context=FacesContext.getCurrentInstance();
-        Map<String,Object> contextMap=context.getExternalContext().getApplicationMap();        
+        Map<String,Object> contextMap=context.getExternalContext().getApplicationMap();
         CatalogFacade cf=(CatalogFacade)contextMap.get("CatalogFacade");
         // should always have a value
         ValueExpression vex=context.getApplication().getExpressionFactory().createValueExpression(context.getELContext(), "#{paramValues.mapSelectedItems}", String[].class);
@@ -211,8 +214,7 @@ public class MapBean {
         if(itemx != null) {
             itemIds=itemx;
         }
-        System.out.println("\n *** GET TYPE - " + vex.getType(context.getELContext()) + " - " + itemIds);
-        System.out.println("Have number of selected items - " + itemIds.length);
+        if(bDebug) System.out.println("Have number of selected items - " + itemIds.length);
         
         // check to see if radius set with centerpoint
         String centerx=getCenterAddress();
@@ -226,25 +228,28 @@ public class MapBean {
                 double dLatitude=geoCenterPoint[0].getLatitude();
                 double dLongRadius=calculateLongitudeRadius(radius);
                 double dLongitude=geoCenterPoint[0].getLongitude();
+                if(bDebug) {
+                    System.out.println("\n *** id radius" + dLatitude + " - " + dLongitude +
+                            "\n lat=" + (dLatitude - dLatRadius) + " to " + (dLatitude + dLatRadius) +
+                            "\n long=" + (dLongitude - dLongRadius) + " to " + (dLongitude + dLongRadius));
+                }
                 
-                System.out.println("\n *** id radius" + dLatitude + " - " + dLongitude +
-                        "\n lat=" + (dLatitude - dLatRadius) + " to " + (dLatitude + dLatRadius) + 
-                        "\n long=" + (dLongitude - dLongRadius) + " to " + (dLongitude + dLongRadius));
-                
-                items=cf.getItemsByItemIDByRadius(itemIds, dLatitude - dLatRadius,  
-                    dLatitude + dLatRadius, dLongitude - dLongRadius, dLongitude + dLongRadius);
+                items=cf.getItemsByItemIDByRadius(itemIds, dLatitude - dLatRadius,
+                        dLatitude + dLatRadius, dLongitude - dLongRadius, dLongitude + dLongRadius);
             }
         }
-
+        
         if(geoCenterPoint == null) {
             // no center point or center point error so look up just ids
             items=cf.getItemsByItemID(itemIds);
         }
-
-        if(items != null) {
-            System.out.println("\nHave Database items - " + items.size());
-        } else {
-            System.out.println("\nHave NULL items from the database");
+        
+        if(bDebug) {
+            if(items != null) {
+                System.out.println("\nHave Database items - " + items.size());
+            } else {
+                System.out.println("\nHave NULL items from the database");
+            }
         }
         return mapItems(context, items, geoCenterPoint, centerx);
     }
@@ -257,7 +262,7 @@ public class MapBean {
             double dLongitude=0;
             String infoBalloon="";
             int startPos=0;
-
+            
             if(geoCenterPoint != null) {
                 // set values to used from centerAddress lookup
                 dLatitude=geoCenterPoint[0].getLatitude();
@@ -271,7 +276,7 @@ public class MapBean {
                 infoBalloon="<b>" + centerItem.getName() + "</b><br/>" + centerItem.getAddress().addressToString();
                 startPos=1;
             }
-
+            
             // lat and long of the center point
             mapPoint.setLatitude(dLatitude);
             mapPoint.setLongitude(dLongitude);
@@ -281,7 +286,7 @@ public class MapBean {
             mapMarker.setLongitude(dLongitude);
             mapMarker.setMarkup(changeSpaces(infoBalloon));
             addMapMarker(mapMarker) ;
-
+            
             // check area and set initial zoom level
             if(radius < 5) {
                 zoomLevel=4;
@@ -298,7 +303,7 @@ public class MapBean {
             } else {
                 zoomLevel=12;
             }
-
+            
             // add other locations
             String outputx="";
             MapMarker mm=null;
@@ -312,9 +317,9 @@ public class MapBean {
                     mm=new MapMarker();
                     mm.setLatitude(loc.getAddress().getLatitude());
                     mm.setLongitude(loc.getAddress().getLongitude());
-                    mm.setMarkup("<b>" + changeSpaces(loc.getName()) + "</b><br/>" + 
-                        changeSpaces(loc.getAddress().addressToString()));
-
+                    mm.setMarkup("<b>" + changeSpaces(loc.getName()) + "</b><br/>" +
+                            changeSpaces(loc.getAddress().addressToString()));
+                    
                     addMapMarker(mm) ;
                 }
             }
@@ -326,19 +331,19 @@ public class MapBean {
         //?long = long2 ? long1
         //a = sin²(?lat/2) + cos(lat1).cos(lat2).sin²(?long/2)
         //c = 2.atan2(?a, ?(1?a))
-        //d = R.c 
+        //d = R.c
         
         // return null so navigation will stay on main lookup page
         return "map";
     }
     
-
+    
     public GeoPoint[] lookUpAddress(FacesContext context) {
         // look up lat and long of center point
         // get proxy host and port from servlet context
         String proxyHost=context.getExternalContext().getInitParameter("proxyHost");
         String proxyPort=context.getExternalContext().getInitParameter("proxyPort");
-
+        
         // get latitude & longitude
         GeoCoder geoCoder=new GeoCoder();
         if(proxyHost != null && proxyPort != null) {
@@ -353,7 +358,7 @@ public class MapBean {
         } else {
             getLogger().log(Level.INFO, "A \"proxyHost\" and \"proxyPort\" isn't set as a web.xml context-param. A proxy server may be necessary to reach the open internet.");
         }
-
+        
         // use component to get points based on location (this uses Yahoo's map service
         GeoPoint points[]=null;
         try {
@@ -364,14 +369,14 @@ public class MapBean {
             } else if(points.length > 1) {
                 getLogger().log(Level.INFO, "Matched " + points.length + " locations, taking the first one");
             }
-
+            
         } catch (Exception ee) {
             getLogger().log(Level.WARNING, "geocoder.lookup.exception", ee);
         }
         return points;
     }
     
-        
+    
     public double calculateLatitudeRadius(int radius) {
         // 1 latitude degree = 68.70795454545454 miles
         // 1 latitude mile = 0.014554355556290625173426834100111 degrees
@@ -386,18 +391,18 @@ public class MapBean {
     
     public String changeSpaces(String text) {
         return text.replaceAll(" ", "&nbsp;");
-    }    
+    }
     
     /**
-    * Method getLogger
-    *
-    * @return Logger - logger for the NodeAgent
-    */
+     * Method getLogger
+     *
+     * @return Logger - logger for the NodeAgent
+     */
     public Logger getLogger() {
         if (_logger == null) {
             _logger=PetstoreUtil.getBaseLogger();
         }
         return _logger;
-    }    
+    }
     
 }

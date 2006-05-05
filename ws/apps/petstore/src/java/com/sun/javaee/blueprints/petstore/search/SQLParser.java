@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: SQLParser.java,v 1.4 2006-05-03 21:49:00 inder Exp $ */
+$Id: SQLParser.java,v 1.5 2006-05-05 01:49:43 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.search;
 
@@ -23,7 +23,7 @@ import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
  */
 public class SQLParser {
 
-    private boolean bDebug=false;
+    private static final boolean bDebug=false;
     private Logger _logger=null;
 
     /** Creates a new instance of SQLParser */

@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: FileUploadBean.java,v 1.30 2006-05-04 21:29:39 smitha Exp $ */
+$Id: FileUploadBean.java,v 1.31 2006-05-05 01:49:40 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -39,7 +39,7 @@ import com.sun.j2ee.blueprints.ui.geocoder.GeoCoder;
 import com.sun.j2ee.blueprints.ui.geocoder.GeoPoint;
 
 public class FileUploadBean {
-    private boolean bDebug=true;
+    private static final boolean bDebug=false;
     private Logger _logger=null;
     private static final String comma=", ";
     
@@ -285,7 +285,7 @@ public class FileUploadBean {
             writer.flush();
             
         } catch (IOException iox) {
-            System.out.println("FileUploadPhaseListener error writting AJAX response : " + iox);
+            getLogger().log(Level.SEVERE, "FileUploadPhaseListener error writting AJAX response", iox);
         }
     }
     
@@ -306,7 +306,7 @@ public class FileUploadBean {
             imgScaler.keepAspectWithWidth();
             imgScaler.resizeWithGraphics(thumbPath);
         } catch (Exception e) {
-            System.out.print("ERROR in generating thumbnail");
+            getLogger().log(Level.SEVERE, "ERROR in generating thumbnail", e);
         }
         return thumbPath;
     }

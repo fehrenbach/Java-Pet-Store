@@ -1,7 +1,11 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: IndexDocument.java,v 1.5 2006-05-03 21:48:59 inder Exp $ */
+$Id: IndexDocument.java,v 1.6 2006-05-05 01:49:43 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.search;
+
+import java.util.logging.Logger;
+import java.util.logging.Level;
+import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
 
 /**
  * This class is a simple stuctured used to hold petstore indexed info for indexing and search
@@ -11,6 +15,8 @@ public class IndexDocument {
     
     public String uid="", pageURL="", title="", summary="", image="";
     public String modifiedDate="", contents="", price="0", product="", tag="";
+    private Logger _logger=null;
+    
     
     /** Creates a new instance of indexDocuments */
     public IndexDocument() {
@@ -78,7 +84,7 @@ public class IndexDocument {
         try {
             fPrice=Float.parseFloat(price);
         } catch (NumberFormatException nfe) {
-            System.out.println("Index Price format conversion error = " + nfe);
+            getLogger().log(Level.SEVERE, "Invalid Price " + nfe);
         }
         return fPrice;
     }
@@ -112,6 +118,18 @@ public class IndexDocument {
             " price=" + price + " product=" + product + " tag=" + tag;
         return sxRet;
                 
+    }
+
+    /**
+     * Method getLogger
+     *
+     * @return Logger - logger for the NodeAgent
+     */
+    public Logger getLogger() {
+        if (_logger == null) {
+            _logger=PetstoreUtil.getBaseLogger();
+        }
+        return _logger;
     }
     
     
