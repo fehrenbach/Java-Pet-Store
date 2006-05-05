@@ -1,34 +1,41 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: FileUploadBean.java,v 1.32 2006-05-05 05:44:57 yutayoshida Exp $ */
+$Id: FileUploadBean.java,v 1.33 2006-05-05 20:15:23 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
-import java.util.*;
+
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.logging.Logger;
 import java.util.logging.Level;
-
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.ServletContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.model.SelectItem;
-
 import org.apache.shale.remoting.faces.ResponseFactory;
-
 import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
 import com.sun.javaee.blueprints.petstore.util.PetstoreConstants;
 import com.sun.javaee.blueprints.petstore.util.ImageScaler;
-import com.sun.javaee.blueprints.petstore.model.*;
 import com.sun.javaee.blueprints.components.ui.fileupload.FileUploadStatus;
 import com.sun.javaee.blueprints.components.ui.fileupload.FileUploadUtil;
 import com.sun.javaee.blueprints.petstore.search.IndexDocument;
 import com.sun.javaee.blueprints.petstore.search.Indexer;
 import com.sun.j2ee.blueprints.ui.geocoder.GeoCoder;
 import com.sun.j2ee.blueprints.ui.geocoder.GeoPoint;
+import com.sun.javaee.blueprints.petstore.model.Address;
+import com.sun.javaee.blueprints.petstore.model.CatalogFacade;
+import com.sun.javaee.blueprints.petstore.model.Category;
+import com.sun.javaee.blueprints.petstore.model.FileUploadResponse;
+import com.sun.javaee.blueprints.petstore.model.Item;
+import com.sun.javaee.blueprints.petstore.model.SellerContactInfo;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class FileUploadBean {
     private boolean bDebug=false;

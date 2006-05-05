@@ -1,20 +1,23 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CaptchaValidateFilter.java,v 1.11 2006-05-05 16:14:20 basler Exp $ */
+$Id: CaptchaValidateFilter.java,v 1.12 2006-05-05 20:15:23 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import java.text.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-
 import com.sun.javaee.blueprints.petstore.captcha.CaptchaSingleton;
-
-import org.apache.commons.fileupload.*;
-import org.apache.commons.fileupload.servlet.*;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 public class CaptchaValidateFilter implements Filter {
 

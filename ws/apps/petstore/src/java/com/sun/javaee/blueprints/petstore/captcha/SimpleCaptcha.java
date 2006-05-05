@@ -1,11 +1,19 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: SimpleCaptcha.java,v 1.6 2006-05-05 16:14:19 basler Exp $ */
+$Id: SimpleCaptcha.java,v 1.7 2006-05-05 20:15:23 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.captcha;
 
-import java.awt.*;
-import java.awt.image.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import java.awt.image.FilteredImageSource;
+import java.awt.image.ImageFilter;
+import java.awt.image.ImageProducer;
 import java.util.Random;
+
 
 public class SimpleCaptcha {
     
@@ -103,6 +111,5 @@ public class SimpleCaptcha {
             }
         }
         return lastBimg;
-    }
-    
+    }    
 }

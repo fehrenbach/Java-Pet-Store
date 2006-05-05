@@ -1,9 +1,9 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: BlueFilter.java,v 1.4 2006-05-05 16:14:19 basler Exp $ */
+$Id: BlueFilter.java,v 1.5 2006-05-05 20:15:22 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.captcha;
 
-import java.awt.image.*;
+import java.awt.image.RGBImageFilter;
 
 /**
  *

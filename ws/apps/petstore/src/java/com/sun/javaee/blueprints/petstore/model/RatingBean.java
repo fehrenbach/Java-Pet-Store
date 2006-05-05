@@ -1,9 +1,7 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: RatingBean.java,v 1.8 2006-05-04 01:11:29 smitha Exp $ */
+$Id: RatingBean.java,v 1.9 2006-05-05 20:15:25 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.model;
-import java.util.logging.Logger;
-import javax.servlet.ServletContext;
 import javax.faces.context.FacesContext;
 import java.util.Map;
 

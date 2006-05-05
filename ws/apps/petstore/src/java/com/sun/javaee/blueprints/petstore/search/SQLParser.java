@@ -1,12 +1,9 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: SQLParser.java,v 1.5 2006-05-05 01:49:43 basler Exp $ */
+$Id: SQLParser.java,v 1.6 2006-05-05 20:15:25 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.search;
 
 import java.io.File;
-import javax.naming.InitialContext;
-import javax.rmi.PortableRemoteObject;
-import javax.sql.DataSource;
 import java.sql.DriverManager;
 import java.sql.Connection;
 import java.sql.Statement;
@@ -14,7 +11,6 @@ import java.sql.ResultSet;
 import java.util.Properties;
 import java.util.logging.Logger;
 import java.util.logging.Level;
-
 import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
 
 /**

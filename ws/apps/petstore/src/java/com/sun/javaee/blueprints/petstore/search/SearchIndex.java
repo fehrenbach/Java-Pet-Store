@@ -1,9 +1,9 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: SearchIndex.java,v 1.6 2006-05-05 01:49:44 basler Exp $ */
+$Id: SearchIndex.java,v 1.7 2006-05-05 20:15:25 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.search;
 
-import java.util.*;
+
 import java.io.IOException;
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -19,6 +19,8 @@ import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.document.Field;
 
 import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
+import java.util.Enumeration;
+import java.util.Vector;
 
 /**
  * Base search mechanism for Petstore indexes created from the database data

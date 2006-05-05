@@ -1,18 +1,14 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: AutocompleteBean.java,v 1.5 2006-05-04 02:47:36 yutayoshida Exp $ */
+$Id: AutocompleteBean.java,v 1.6 2006-05-05 20:15:23 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
-import java.util.*;
-
-import javax.faces.application.Application;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-
-import com.sun.javaee.blueprints.petstore.model.*;
-
-import com.sun.j2ee.blueprints.ui.autocomplete.AutoCompleteUtilities;
 import com.sun.j2ee.blueprints.ui.autocomplete.CompletionResult;
+import com.sun.javaee.blueprints.petstore.model.CatalogFacade;
+import com.sun.javaee.blueprints.petstore.model.ZipLocation;
+import java.util.List;
+import java.util.Map;
 
 public class AutocompleteBean {
     

@@ -1,25 +1,26 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: HTMLParser.java,v 1.3 2006-05-05 01:49:42 basler Exp $ */
+$Id: HTMLParser.java,v 1.4 2006-05-05 20:15:25 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.search;
 
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
 import javax.swing.text.html.parser.ParserDelegator;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.HTML;
 import javax.swing.text.MutableAttributeSet;
 import java.util.logging.Logger;
 import java.util.logging.Level;
-
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
 import org.apache.lucene.document.DateField;
 import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.Vector;
 
 
 /**

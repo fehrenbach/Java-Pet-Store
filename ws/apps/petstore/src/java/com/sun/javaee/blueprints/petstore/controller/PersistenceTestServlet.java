@@ -1,19 +1,20 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: PersistenceTestServlet.java,v 1.4 2006-05-05 16:14:20 basler Exp $ */
+$Id: PersistenceTestServlet.java,v 1.5 2006-05-05 20:15:24 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
-import java.io.*;
-import java.util.*;
-import java.text.*;
-
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.annotation.*;
-import javax.persistence.*;
-
-import com.sun.javaee.blueprints.petstore.model.*;
-
+import com.sun.javaee.blueprints.petstore.model.Address;
+import com.sun.javaee.blueprints.petstore.model.CatalogFacade;
+import com.sun.javaee.blueprints.petstore.model.Item;
+import com.sun.javaee.blueprints.petstore.model.SellerContactInfo;
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * This is a simple example of an HTTP Servlet.  It responds to the GET

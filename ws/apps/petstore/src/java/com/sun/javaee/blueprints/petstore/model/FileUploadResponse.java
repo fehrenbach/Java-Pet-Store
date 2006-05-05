@@ -1,9 +1,7 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: FileUploadResponse.java,v 1.4 2006-05-04 18:55:02 yutayoshida Exp $ */
+$Id: FileUploadResponse.java,v 1.5 2006-05-05 20:15:24 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.model;
-
-import com.sun.javaee.blueprints.components.ui.fileupload.FileUploadStatus;
 
 public class FileUploadResponse {
     

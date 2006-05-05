@@ -1,14 +1,17 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: ImageScaler.java,v 1.2 2006-05-02 00:28:37 yutayoshida Exp $ */
+$Id: ImageScaler.java,v 1.3 2006-05-05 20:15:26 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.util;
 
-import java.io.*;
-import java.awt.*;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.awt.image.AffineTransformOp;
 import java.awt.geom.AffineTransform;
-import javax.imageio.*;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 public class ImageScaler {
     

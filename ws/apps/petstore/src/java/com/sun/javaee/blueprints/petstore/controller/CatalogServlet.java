@@ -1,18 +1,25 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CatalogServlet.java,v 1.29 2006-05-05 16:14:20 basler Exp $ */
+$Id: CatalogServlet.java,v 1.30 2006-05-05 20:15:23 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
-import java.io.*;
-import java.util.*;
-import java.text.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.annotation.*;
-import javax.persistence.*;
-
-import com.sun.javaee.blueprints.petstore.model.*;
-
+import com.sun.javaee.blueprints.petstore.model.CatalogFacade;
+import com.sun.javaee.blueprints.petstore.model.Category;
+import com.sun.javaee.blueprints.petstore.model.Item;
+import com.sun.javaee.blueprints.petstore.model.Product;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * This is a simple example of an HTTP Servlet.  It responds to the GET
@@ -32,8 +39,7 @@ public class CatalogServlet extends HttpServlet {
 
    public void destroy() {
        cf = null;
-   }   
-   
+   }      
    
    public void doGet (HttpServletRequest request,
                       HttpServletResponse response)

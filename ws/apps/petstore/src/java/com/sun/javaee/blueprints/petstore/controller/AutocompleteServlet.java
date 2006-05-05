@@ -1,20 +1,25 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: AutocompleteServlet.java,v 1.10 2006-05-05 16:14:20 basler Exp $ */
+$Id: AutocompleteServlet.java,v 1.11 2006-05-05 20:15:23 inder Exp $ */
 package com.sun.javaee.blueprints.petstore.controller;
 
-import java.io.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import java.util.*;
-import java.text.*;
 
-import com.sun.javaee.blueprints.petstore.model.*;
-import javax.annotation.Resource;
-import javax.persistence.*;
+import com.sun.javaee.blueprints.petstore.model.CatalogFacade;
 
 import com.sun.javaee.blueprints.petstore.util.PetstoreConstants;
 import com.sun.javaee.blueprints.petstore.search.SearchIndex;
 import com.sun.javaee.blueprints.petstore.search.IndexDocument;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Iterator;
+import java.util.Vector;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class AutocompleteServlet extends HttpServlet {
     

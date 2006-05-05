@@ -1,9 +1,13 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: Address.java,v 1.7 2006-05-03 21:48:58 inder Exp $ */
+$Id: Address.java,v 1.8 2006-05-05 20:15:24 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.model;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.TableGenerator;
 
 @Entity
 public class Address implements java.io.Serializable {

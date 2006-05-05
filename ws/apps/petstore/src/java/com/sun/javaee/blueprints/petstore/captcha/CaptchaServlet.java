@@ -1,18 +1,16 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CaptchaServlet.java,v 1.6 2006-05-05 16:14:19 basler Exp $ */
+$Id: CaptchaServlet.java,v 1.7 2006-05-05 20:15:23 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.captcha;
 
-import java.io.*;
-import java.net.*;
-
-import javax.servlet.*;
-import javax.servlet.http.*;
-
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
-import com.sun.image.codec.jpeg.JPEGCodec;
 import java.awt.image.BufferedImage;
-import javax.imageio.*;
+import java.io.IOException;
+import java.io.OutputStream;
+import javax.imageio.ImageIO;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class CaptchaServlet extends HttpServlet {
     

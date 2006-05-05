@@ -1,16 +1,22 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CatalogFacade.java,v 1.40 2006-05-04 21:48:59 smitha Exp $ */
+$Id: CatalogFacade.java,v 1.41 2006-05-05 20:15:24 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.model;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnit;
+import javax.persistence.Query;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.transaction.UserTransaction;
 
-import javax.servlet.*;
-import javax.ejb.*;
-
-import javax.persistence.*;
-import javax.transaction.*;
-import javax.annotation.*;
 
 public class CatalogFacade implements ServletContextListener {
     

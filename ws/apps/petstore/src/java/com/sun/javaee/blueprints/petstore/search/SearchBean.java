@@ -1,21 +1,10 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: SearchBean.java,v 1.3 2006-05-03 21:49:00 inder Exp $ */
+$Id: SearchBean.java,v 1.4 2006-05-05 20:15:25 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.search;
 
 import java.util.Vector;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
 import com.sun.javaee.blueprints.petstore.util.PetstoreConstants;
-import javax.faces.component.html.HtmlDataTable;
-
-import javax.faces.model.SelectItem;
-import java.util.Iterator;
-import javax.faces.context.FacesContext;
-import javax.el.ValueExpression;
 
 /**
  *
