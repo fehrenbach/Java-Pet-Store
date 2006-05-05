@@ -1,36 +1,28 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: FileUploadBean.java,v 1.31 2006-05-05 01:49:40 basler Exp $ */
+$Id: FileUploadBean.java,v 1.32 2006-05-05 05:44:57 yutayoshida Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
-import java.util.HashMap;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.Map;
+import java.util.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.logging.Logger;
 import java.util.logging.Level;
-import java.util.Date;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.ServletContext;
 import javax.faces.context.ResponseWriter;
+import javax.faces.model.SelectItem;
 
 import org.apache.shale.remoting.faces.ResponseFactory;
 
 import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
 import com.sun.javaee.blueprints.petstore.util.PetstoreConstants;
 import com.sun.javaee.blueprints.petstore.util.ImageScaler;
-import com.sun.javaee.blueprints.petstore.model.Item;
-import com.sun.javaee.blueprints.petstore.model.Address;
-import com.sun.javaee.blueprints.petstore.model.CatalogFacade;
-import com.sun.javaee.blueprints.petstore.model.SellerContactInfo;
-import com.sun.javaee.blueprints.petstore.model.FileUploadResponse;
+import com.sun.javaee.blueprints.petstore.model.*;
 import com.sun.javaee.blueprints.components.ui.fileupload.FileUploadStatus;
 import com.sun.javaee.blueprints.components.ui.fileupload.FileUploadUtil;
 import com.sun.javaee.blueprints.petstore.search.IndexDocument;
@@ -39,9 +31,11 @@ import com.sun.j2ee.blueprints.ui.geocoder.GeoCoder;
 import com.sun.j2ee.blueprints.ui.geocoder.GeoPoint;
 
 public class FileUploadBean {
-    private static final boolean bDebug=false;
+    private boolean bDebug=false;
     private Logger _logger=null;
     private static final String comma=", ";
+    private List<SelectItem> categories = null;
+    private CatalogFacade catalogFacade = null;
     
     /**
      * <p>Factory for response writers that we can use to construct the
@@ -58,16 +52,38 @@ public class FileUploadBean {
     public FileUploadBean() {
     }
     
+    public void setCategories(List<SelectItem> categories) {
+        this.categories = categories;
+    }
+    public List<SelectItem> getCategories() {
+        if (catalogFacade == null) {
+            FacesContext context=FacesContext.getCurrentInstance();
+            Map<String,Object> contextMap = context.getExternalContext().getApplicationMap();
+            this.catalogFacade = (CatalogFacade)contextMap.get("CatalogFacade");
+        }
+            //get the catalog facade
+        if (categories == null) {
+            categories = new ArrayList<SelectItem>();
+        
+            List<Category> tmpCat = catalogFacade.getCategories();
+            String name = null;
+            String categoryId = null;
+            for (Category cat : tmpCat) {
+                name = cat.getName();
+                categoryId = cat.getCategoryID();
+                SelectItem si = new SelectItem(categoryId, name);
+                categories.add(si);
+            }
+        }
+        return this.categories;
+    }
+    
     public void postProcessingMethod(FacesContext context, HashMap hmUpload, FileUploadStatus status) {
         if(bDebug) System.out.println("IN Custom Post Processing method");
         try {
             // set custom return enabled so Phaselistener knows not to send default response
             status.enableCustomReturn();
             HttpServletResponse response=(HttpServletResponse)context.getExternalContext().getResponse();
-            
-            //get the catalog facade
-            Map<String,Object> contextMap = context.getExternalContext().getApplicationMap();
-            CatalogFacade cf = (CatalogFacade)contextMap.get("CatalogFacade");
             
             // get proxy host and port from servlet context
             String proxyHost=context.getExternalContext().getInitParameter("proxyHost");
@@ -210,7 +226,11 @@ public class FileUploadBean {
                 SellerContactInfo contactInfo = new SellerContactInfo(firstName, lastName, email);
                 Item item = new Item(prodId,name,desc,fileName, thumbPath, priceF,
                         addr,contactInfo,0,0);
-                String itemID = cf.addItem(item);
+                if (catalogFacade == null) {
+                    Map<String,Object> contextMap = context.getExternalContext().getApplicationMap();
+                    this.catalogFacade = (CatalogFacade)contextMap.get("CatalogFacade");
+                }
+                String itemID = catalogFacade.addItem(item);
                 getLogger().log(Level.FINE, "Item " + name + " has been persisted");
                 
                 // index new item
