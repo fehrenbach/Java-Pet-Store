@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CaptchaValidateFilter.java,v 1.10 2006-05-04 02:47:36 yutayoshida Exp $ */
+$Id: CaptchaValidateFilter.java,v 1.11 2006-05-05 16:14:20 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 

@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: PersistenceTestServlet.java,v 1.3 2006-05-03 21:48:58 inder Exp $ */
+$Id: PersistenceTestServlet.java,v 1.4 2006-05-05 16:14:20 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -51,7 +51,7 @@ public class PersistenceTestServlet extends HttpServlet {
                 item.setDescription(desc);
                 item.setPrice(new Float(listPrice));
                 item.setImageURL("test.gif");
-		item.setProductID("canine01");
+        item.setProductID("canine01");
 
                 Address addr = new Address();
                 //TO-DO: Add address fields and extract data
@@ -69,7 +69,7 @@ public class PersistenceTestServlet extends HttpServlet {
                 contactInfo.setLastName("duke");
                 contactInfo.setEmail("abc@abc.xyz");
 
- 		item.setAddress(addr);
+        item.setAddress(addr);
                 item.setContactInfo(contactInfo);
                 cf.addItem(item);
                 out.println("The item has been added. Here is the Item id: "+item.getItemID());

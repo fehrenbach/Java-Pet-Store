@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: build.xml,v 1.41 2006-05-03 23:47:15 inder Exp $ -->
+ $Id: build.xml,v 1.42 2006-05-05 16:14:19 basler Exp $ -->
  
 <project name="petstore" default="default" basedir=".">
     <description>Builds, tests, and runs the project petstore.</description>
@@ -80,4 +80,16 @@ proxy.port=${proxy.port}
     <target name="unsetup">
         <ant dir="." antfile="setup/setup.xml" target="unsetup" inheritAll="false" inheritRefs="false"/>
     </target>
+    
+    <target name="checkLines">
+        <!--
+        <java classname="com.sun.javaee.blueprints.petstore.util.RemoveLines">
+        </java>
+        -->
+        <fixcrlf srcdir="./src/java" tab="remove" tablength="4" eol="unix" includes="**/*.properties,**/*.jsp,**/*.html,**/*.sh,**/*.java,**/*.xml" excludes="**/ja/**" />
+        
+    </target>
+    
+
+    
 </project>
