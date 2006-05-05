@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: fileuploadstatus.jsp,v 1.7 2006-05-04 22:34:17 yutayoshida Exp $ --%>
+$Id: fileuploadstatus.jsp,v 1.8 2006-05-05 21:05:47 yutayoshida Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -111,18 +111,18 @@ $Id: fileuploadstatus.jsp,v 1.7 2006-05-04 22:34:17 yutayoshida Exp $ --%>
         
         <div id="popupText" style="position:absolute;z-index:2;border:1px solid;padding:5px;
              border-color:blue;font-size:10pt;background-color:#00ffff;color:blue;display:none"></div>
-        <table border="0" cellpadding="0" cellspacing="0">
+        <table border="0" cellpadding="4" cellspacing="4">
             <tr>
             <td><a href="fileupload.jsp" onmouseover="highlightButton(1)" onmouseout="darkenButton(1)">
-			<img name="seller" id="seller" src="../images/seller-thumb-g.jpg" alt="seller" border="0">
+			<img name="seller" id="seller" src="../images/seller-thumb-g.jpg" alt="seller" width="105" height="60" border="0">
 		</a>
             </td>
             <td><a href="catalog.jsp?pid=${param.productId}&itemId=${param.id}" onmouseover="highlightButton(2)" onmouseout="darkenButton(2)">
-			<img name="catalog" id="catalog" src="../images/catalog-thumb-g.jpg" alt="catalog" border="0">
+			<img name="catalog" id="catalog" src="../images/catalog-thumb-g.jpg" alt="catalog" width="105" height="60" border="0">
 		</a>
             </td>
             <td><a href="http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.servletContext.contextPath}/index.jsp" onmouseover="highlightButton(3)" onmouseout="darkenButton(3)">
-			<img name="home" id="home" src="../images/index-thumb-g.jpg" alt="index" border="0">
+			<img name="home" id="home" src="../images/index-thumb-g.jpg" alt="index" width="105" height="60" border="0">
 		</a>
             </td>
             </tr>
