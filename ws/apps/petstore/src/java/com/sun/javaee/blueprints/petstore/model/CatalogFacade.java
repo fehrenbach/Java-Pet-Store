@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CatalogFacade.java,v 1.41 2006-05-05 20:15:24 inder Exp $ */
+$Id: CatalogFacade.java,v 1.42 2006-05-05 20:19:03 smitha Exp $ */
 
 package com.sun.javaee.blueprints.petstore.model;
 
@@ -40,6 +40,13 @@ public class CatalogFacade implements ServletContextListener {
         List<Category> categories = em.createQuery("SELECT c FROM Category c").getResultList();
         em.close();
         return categories;
+    }
+    
+    public List<Product> getProducts(){
+        EntityManager em = emf.createEntityManager();
+        List<Product> products = em.createQuery("SELECT p FROM Product p").getResultList();
+        em.close();
+        return products;
     }
     
     public List<Item> getAllItemsFromCategory(String catID){
