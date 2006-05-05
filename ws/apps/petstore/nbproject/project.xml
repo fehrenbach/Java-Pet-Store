@@ -11,10 +11,6 @@
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library files="1">
-                    <file>${file.reference.petstoreIndexes.zip-old}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library files="1">
                     <file>${file.reference.ajax-wrapper-comp.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
@@ -43,27 +39,11 @@
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library files="1">
-                    <file>${file.reference.ui.jar-orig}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library files="1">
                     <file>${file.reference.commons-fileupload-1.1.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library files="1">
                     <file>${file.reference.bp-dynamic-text-comp.jar}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library files="1">
-                    <file>${file.reference.petstoreIndexes.zip-old1}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library files="1">
-                    <file>${file.reference.petstore-20060428.zip}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library files="1">
-                    <file>${file.reference.petstoreIndexes-old2.zip}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
             </web-module-libraries>
