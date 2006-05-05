@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: FileUploadResponseServlet.java,v 1.5 2006-05-05 20:15:23 inder Exp $ */
+$Id: FileUploadResponseServlet.java,v 1.6 2006-05-05 21:30:06 yutayoshida Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 public class FileUploadResponseServlet extends HttpServlet {
     
     private static final String FILE_UL_RESPONSE = "fileuploadResponse";
+    private static final String PERSIST_FAILURE = "persist_failure";
     
     private String constructJsonEntry(String key, String value) {
         String dq = "\"";
@@ -36,8 +37,12 @@ public class FileUploadResponseServlet extends HttpServlet {
         HttpSession session = request.getSession(true);
         
         Boolean cInvalid = (Boolean)session.getAttribute("captchaInvalid");
+        Boolean pFailure = (Boolean)session.getAttribute(PERSIST_FAILURE);
         if (cInvalid == null) {
             cInvalid = new Boolean(false);
+        }
+        if (pFailure == null) {
+            pFailure = new Boolean(false);
         }
         
         if (reqContentType!=null && reqContentType.equals("xml")) {
@@ -63,6 +68,19 @@ public class FileUploadResponseServlet extends HttpServlet {
             } else {
                 sb.append("{");
                 sb.append(constructJsonEntry("message", "Please enter the correct captcha string"));
+                sb.append("}");
+            }
+        } else if (pFailure.booleanValue()) {
+            response.setStatus(response.SC_INTERNAL_SERVER_ERROR );
+            if (reqContentType!=null && reqContentType.equals("xml")) {
+                sb.append("<response>");
+                sb.append("<message>");
+                sb.append("Persistence failed. The entered address is invalid?");
+                sb.append("</message>");
+                sb.append("</response>");
+            } else {
+                sb.append("{");
+                sb.append(constructJsonEntry("message", "Persistence failed. The entered address is invalid?"));
                 sb.append("}");
             }
         } else {

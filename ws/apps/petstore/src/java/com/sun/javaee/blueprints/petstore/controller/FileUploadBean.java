@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: FileUploadBean.java,v 1.34 2006-05-05 20:59:01 yutayoshida Exp $ */
+$Id: FileUploadBean.java,v 1.35 2006-05-05 21:30:06 yutayoshida Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -56,6 +56,8 @@ public class FileUploadBean {
      * session attribute to contain the fileupload status
      */
     private static final String FILE_UL_RESPONSE = "fileuploadResponse";
+    
+    private static final String PERSIST_FAILRE = "persist_failure";
     
     /** Creates a new instance of FileUploadBean */
     public FileUploadBean() {
@@ -131,6 +133,7 @@ public class FileUploadBean {
             String thumbPath = null;
             String firstName = null;
             String prodId = null;
+            HttpSession session = (HttpSession)context.getExternalContext().getSession(true);
             try{
                 String fileNameKey = null;
                 Set keySet = hmUpload.keySet();
@@ -281,10 +284,16 @@ public class FileUploadBean {
                 indexDoc.setSummary(desc);
                 indexItem(indexDoc);
                 
+            } catch (RuntimeException re) {
+                getLogger().log(Level.SEVERE, "persist failed in addItem()", re);
+                // store the info for later use
+                session.setAttribute(PERSIST_FAILRE, new Boolean(true));
             } catch (Exception ex) {
                 getLogger().log(Level.SEVERE, "fileupload.persist.exception", ex);
             }
-            HttpSession session = (HttpSession)context.getExternalContext().getSession(true);
+            if (session.getAttribute(PERSIST_FAILRE)!=null) {
+                session.removeAttribute(PERSIST_FAILRE);
+            }
             String responseMessage = firstName+", Thank you for submitting your pet "+name+" !";
             FileUploadResponse fuResponse = new FileUploadResponse(
                     itemId,
