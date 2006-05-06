@@ -1,10 +1,10 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: index.jsp,v 1.10 2006-05-03 22:00:33 inder Exp $ --%>
+$Id: index.jsp,v 1.11 2006-05-06 21:47:09 inder Exp $ --%>
 
 <html>
  <head>
   <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
-  <title>Java Pet Store Reference Application, Ver 2.0</title>
+  <title>Java Pet Store Reference Application</title>
  </head>
 <body>
 
