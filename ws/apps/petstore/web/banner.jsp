@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: banner.jsp,v 1.20 2006-05-03 22:00:32 inder Exp $ --%>
+$Id: banner.jsp,v 1.21 2006-05-06 01:44:59 yutayoshida Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -34,10 +34,13 @@ $Id: banner.jsp,v 1.20 2006-05-03 22:00:32 inder Exp $ --%>
     width: 534px;
     text-align: left;
 }
+#rss-bar table a { color: #ccffff;}
+#rss-bar table a:hover { color: #ffff00;}
+
 </style>
 <script type="text/javascript">
     var rss = new bpui.RSS();
-    dojo.addOnLoad(function(){rss.getRssInJson('/petstore/faces/dynamic/bpui_rssfeedhandler/getRssfeed', 'https://blueprints.dev.java.net/servlets/ProjectRSS?type=news', '4');});
+    dojo.addOnLoad(function(){rss.getRssInJson('/petstore/faces/dynamic/bpui_rssfeedhandler/getRssfeed', 'https://blueprints.dev.java.net/servlets/ProjectRSS?type=news', '4', '4000', 'News from BluePrints');});
 </script>
 
 <table border="0" bordercolor="gray" cellpadding="0" cellspacing="0" bgcolor="white" width="100%">
