@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: scroller.js,v 1.26 2006-05-04 07:20:09 gmurray71 Exp $ */
+$Id: scroller.js,v 1.27 2006-05-08 22:55:26 gmurray71 Exp $ */
 
 /**
 * ImageScroller - A multipurpose item brower
@@ -23,6 +23,7 @@ function ImageScroller() {
     var THUMB_HEIGHT = Math.round(VIEWPORT_WIDTH / 6.67);
     
     var CHUNK_SIZE=5;
+    var PREFETCH_THRESHHOLD = 4;
     
     var IMAGE_PANE_ID = "imagePane";
     var IMAGE_PANE_BUFFER_ID = "imageBufferPane";
@@ -138,7 +139,7 @@ function ImageScroller() {
     
      // do the value list pre-emptive fetching
     function prefetch() {
-        if (isScrollingRight && index % CHUNK_SIZE == 0) {
+        if (isScrollingRight && (index + PREFETCH_THRESHHOLD) % CHUNK_SIZE == 0) {
             if ((index / CHUNK_SIZE) != currentChunck) {
                 currentChunck = index / CHUNK_SIZE;
                 // fire an event

@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CatalogServlet.java,v 1.30 2006-05-05 20:15:23 inder Exp $ */
+$Id: CatalogServlet.java,v 1.31 2006-05-08 22:55:25 gmurray71 Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -81,7 +81,7 @@ public class CatalogServlet extends HttpServlet {
                 response.setHeader("Cache-Control", "no-cache");
                 response.setHeader("Pragma", "no-cache");
                 PrintWriter out = response.getWriter();
-                String baseURL = "http://" + request.getServerName() + ":" + request.getServerPort() + "/" + request.getContextPath() + "/";  
+                String baseURL = "http://" + request.getServerName() + ":" + request.getServerPort() + "/" + request.getContextPath() + "/ImageServlet/";  
                 List items = cf.getItemsVLH(pid, start, length);
                 //get response data
                 String str = handleItems(items, baseURL);               
@@ -106,7 +106,7 @@ public class CatalogServlet extends HttpServlet {
                 response.setHeader("Cache-Control", "no-cache");
                 response.setHeader("Pragma", "no-cache");
                 PrintWriter out = response.getWriter();
-                String baseURL = "http://" + request.getServerName() + ":" + request.getServerPort() + "/" + request.getContextPath() + "/";  
+                String baseURL = "http://" + request.getServerName() + ":" + request.getServerPort() + "/" + request.getContextPath() + "/ImageServlet/";  
                 List items = cf.getItemInChunckVLH(pid, itemId, length);
                 //get response data
                 if (items != null) {
@@ -147,7 +147,6 @@ public class CatalogServlet extends HttpServlet {
        // then write the data of the response
        sb.append("<items>\n");
        List items = cf.getItemsVLH(pid, start, length);
-       System.out.println("**** Items length=" + items.size());
        Iterator<Item> it = items.iterator();
        NumberFormat formatter = new DecimalFormat("00.00");
        while (it.hasNext()) {
