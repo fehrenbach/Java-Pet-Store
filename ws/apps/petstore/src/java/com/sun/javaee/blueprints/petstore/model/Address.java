@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: Address.java,v 1.8 2006-05-05 20:15:24 inder Exp $ */
+$Id: Address.java,v 1.9 2006-05-08 18:31:55 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.model;
 
@@ -100,7 +100,7 @@ public class Address implements java.io.Serializable {
     public String addressToString() {
         StringBuffer sb=new StringBuffer();
         if(street1 != null) sb.append(street1);
-        if(street2 != null) sb.append(" " + street2);
+        if(street2 != null && !street2.equals("")) sb.append(" " + street2);
         if(city != null) sb.append(COMMA + city);
         if(state != null) sb.append(COMMA + state);
         if(zip != null) sb.append(COMMA + zip);
