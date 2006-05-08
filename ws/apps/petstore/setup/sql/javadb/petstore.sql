@@ -131,7 +131,7 @@ INSERT INTO Address VALUES('43', 'Palm Dr & Arboretum Rd', '', 'Stanford','CA','
 INSERT INTO Address VALUES('44', 'Millbrae Ave &  Willow Ave', '', 'Millbrae ','CA','94030',37.596635,-122.391083);
 INSERT INTO Address VALUES('45', 'Cesar Chavez St & Sanchez', '', 'San Francisco','CA','94131',37.74753,-122.428982);
 INSERT INTO Address VALUES('46', 'University Ave & Middlefield Rd', '', 'Palo Alto','CA','94301',37.450638,-122.156975);
-INSERT INTO Address VALUES('47', 'Bay Street and Columbus Ave ', '', 'San Francisco','CA','94133',37.805328,-122.416882);
+INSERT INTO Address VALUES('47', 'W el Camino Real & S Mary Ave', '', 'Sunnyvale','CA','94087',37.371641,-122.048772);
 INSERT INTO Address VALUES('48', 'Telegraph Ave & Bancroft Way', '', 'Berkeley','CA','94704',37.868825,-122.25978);
 INSERT INTO Address VALUES('49', '1st St & Market St ', '', 'San Francisco','CA','94105',37.791028,-122.399082);
 INSERT INTO Address VALUES('50', 'San Antonio Rd & Middlefield Rd', '', 'Palo Alto','CA','94303',37.416239,-122.103474);
