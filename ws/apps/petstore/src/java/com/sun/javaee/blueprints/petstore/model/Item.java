@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: Item.java,v 1.16 2006-05-05 20:15:24 inder Exp $ */
+$Id: Item.java,v 1.17 2006-05-09 05:57:21 smitha Exp $ */
 
 package com.sun.javaee.blueprints.petstore.model;
 
@@ -8,7 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.TableGenerator;
@@ -92,12 +92,12 @@ public class Item implements java.io.Serializable {
         return imageThumbURL;
     }
     
-    @ManyToOne(cascade={CascadeType.PERSIST})
+    @OneToOne(cascade={CascadeType.PERSIST})
     public Address getAddress() {
         return address;
     }
     
-    @ManyToOne(cascade={CascadeType.PERSIST})    
+    @OneToOne(cascade={CascadeType.PERSIST})    
     public SellerContactInfo getContactInfo() {
         return contactInfo;
     }
