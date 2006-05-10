@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: catalog.js,v 1.11 2006-05-04 07:48:11 gmurray71 Exp $ */
+$Id: catalog.js,v 1.12 2006-05-10 19:58:42 gmurray71 Exp $ */
 
 var ac;
 var is;
@@ -137,7 +137,13 @@ function CatalogController() {
         originalURL = decodeURIComponent(window.location.href);
         var params = {};
         // look for the params
-        if (originalURL.indexOf("?") != -1) {
+         if (originalURL.indexOf("#") != -1) {
+            var qString = originalURL.split('#')[1];
+            var args = qString.split(',');
+            originalURL = originalURL.split('#')[0];
+            ac.loadCategoryItem(args[0], args[1]);
+            return;
+    	} else if (originalURL.indexOf("?") != -1) {
             var qString = originalURL.split('?')[1];
             // get rid of any bookmarking stuff
             if (qString.indexOf("#") != -1) {
@@ -151,24 +157,15 @@ function CatalogController() {
                 var t = ps[i].split('=');
                 params[t[0]] = t[1];
             }
-
-        }
-        // first check for the item in product        
-        if (typeof params.itemId != 'undefined' &&
-            typeof params.pid != 'undefined') {
-            ac.loadCategoryItem(params.pid, params.itemId);
-        // next if there is a catid definition then do it
-        } else if (typeof params.catid != 'undefined') {
-            ac.showCategory(params.catid);
-        // for bookmarks this will load the comma separated pid,itemid following a #
-        // TODO: Need to consider error cases here
-        } else if (originalURL.indexOf("#") != -1) {
-            var qString = originalURL.split('#')[1];
-            var args = qString.split(',');
-            originalURL = originalURL.split('#')[0];
-            window.location.href = originalURL;
-            ac.loadCategoryItem(args[0], args[1]);
-        // nothing is selected
+                   // first check for the item in product        
+      		if (typeof params.itemId != 'undefined' &&
+        	    typeof params.pid != 'undefined') {
+         	   ac.loadCategoryItem(params.pid, params.itemId);
+        	// next if there is a catid definition then do it
+        	} else if (typeof params.catid != 'undefined') {
+            	ac.showCategory(params.catid);
+        	}
+      	 // nothing is selected
         } else {
             ac.showFirstCategory();
         }

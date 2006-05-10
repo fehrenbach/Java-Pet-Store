@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: banner.jsp,v 1.21 2006-05-06 01:44:59 yutayoshida Exp $ --%>
+$Id: banner.jsp,v 1.22 2006-05-10 19:58:42 gmurray71 Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -34,7 +34,11 @@ $Id: banner.jsp,v 1.21 2006-05-06 01:44:59 yutayoshida Exp $ --%>
     width: 534px;
     text-align: left;
 }
-#rss-bar table a { color: #ccffff;}
+
+#rss-bar table a {
+    color: white;
+    text-decoration: none;
+}
 #rss-bar table a:hover { color: #ffff00;}
 
 </style>
