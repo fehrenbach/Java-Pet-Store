@@ -74,8 +74,8 @@ INSERT INTO category VALUES('BIRDS', 'Birds', 'Loving and feathery friends', 'bi
 INSERT INTO category VALUES('REPTILES', 'Reptiles', 'Loving and scaly friends', 'reptiles_icon.gif');
 INSERT INTO category VALUES('FISH', 'Fish', 'Loving aquatic friends', 'fish_icon.gif');
 
-INSERT INTO product VALUES('feline01', 'CATS', 'Long Hair', 'Great for reducing mouse populations', 'cat1.gif');
-INSERT INTO product VALUES('feline02', 'CATS', 'Short Hair', 'Friendly house cat keeps you away from the vacuum', 'cat2.gif');
+INSERT INTO product VALUES('feline01', 'CATS', 'Hairy Cat', 'Great for reducing mouse populations', 'cat1.gif');
+INSERT INTO product VALUES('feline02', 'CATS', 'Groomed Cat', 'Friendly house cat keeps you away from the vacuum', 'cat2.gif');
 INSERT INTO product VALUES('canine01', 'DOGS', 'Medium Dogs', 'Friendly dog from England', 'dog1.gif');
 INSERT INTO product VALUES('canine02', 'DOGS', 'Small Dogs', 'Great companion dog to sit on your lap','dog2.gif');
 INSERT INTO product VALUES('avian01', 'BIRDS', 'Parrot', 'Friend for a lifetime.', 'bird1.gif');
