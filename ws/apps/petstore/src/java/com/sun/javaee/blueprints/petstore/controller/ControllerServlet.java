@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: ControllerServlet.java,v 1.6 2006-05-05 20:15:23 inder Exp $ */
+$Id: ControllerServlet.java,v 1.7 2006-05-11 17:47:45 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -11,12 +11,16 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
+
 
 /**
  * This servlet is responsible for interacting with a client
@@ -30,6 +34,7 @@ public class ControllerServlet extends HttpServlet {
     private ServletContext ctx;
     private static String CACHE = "controller_cache";
     private static String CACHE_TIMES = "controller_cache_times";
+    private Logger _logger=null;
 
    public void init(ServletConfig config) throws ServletException {
        ctx = config.getServletContext();
@@ -43,11 +48,11 @@ public class ControllerServlet extends HttpServlet {
        throws ServletException, IOException {
             request.setCharacterEncoding("UTF-8");
             String command = request.getParameter("command");
-            System.out.println("ControllerServlet : command=" + command);
+            //System.out.println("ControllerServlet : command=" + command);
            
             if ("content".equals(command)) {
                 String target = request.getParameter("target");
-                System.out.println("ControllerServlet : target=" + target);
+                //System.out.println("ControllerServlet : target=" + target);
                 if (target != null) target = target.trim();
                 response.setContentType("text/html;charset=UTF-8");
                 PrintWriter out = response.getWriter();
@@ -99,8 +104,7 @@ public class ControllerServlet extends HttpServlet {
                 return getResource(con.getInputStream());
             }
         } catch (Exception e) {
-            System.out.println("ControllerServlet:loadResource error: Could not load " + resource);
-            System.out.println("Reason: " + e);
+            getLogger().log(Level.SEVERE, "ControllerServlet:loadResource error: Could not load", resource + " - " + e.toString());
         }
         return null;
     }
@@ -115,10 +119,21 @@ public class ControllerServlet extends HttpServlet {
                 buffer.append(curLine + "\n");
             }
         } catch (Exception e) {
-            System.out.println("ControllerServlet:loadResource from stream error:"  + e);
+            getLogger().log(Level.SEVERE, "ControllerServlet:loadResource from stream error", e);
         }
         return buffer;
     }
 
+    /**
+     * Method getLogger
+     *
+     * @return Logger - logger for the NodeAgent
+     */
+    public Logger getLogger() {
+        if (_logger == null) {
+            _logger=PetstoreUtil.getBaseLogger();
+        }
+        return _logger;
+    }
 
 }

@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: map.jsp,v 1.14 2006-05-03 22:00:33 inder Exp $ --%>
+$Id: map.jsp,v 1.15 2006-05-11 17:47:46 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -44,7 +44,7 @@ $Id: map.jsp,v 1.14 2006-05-03 22:00:33 inder Exp $ --%>
         String popupOptions=null;
         for(int ii=0; ii < mapMarkers.length; ii++) {
 
-            System.out.println("loop - " + ii + " - " + mapBean.getCenterAddress());
+            //System.out.println("loop - " + ii + " - " + mapBean.getCenterAddress());
             if(mapBean.getCenterAddress() != null && !mapBean.getCenterAddress().equals("")) {
                 // center point is set to the first mapMarker, items are off by one
                 if(ii > 0) {

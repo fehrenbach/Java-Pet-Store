@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CatalogServlet.java,v 1.31 2006-05-08 22:55:25 gmurray71 Exp $ */
+$Id: CatalogServlet.java,v 1.32 2006-05-11 17:47:45 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -48,7 +48,7 @@ public class CatalogServlet extends HttpServlet {
             String command = request.getParameter("command");
             if ("category".equals(command)) {
                 String catid = request.getParameter("catid");
-                System.out.println("Request for category with id: " + catid);
+                //System.out.println("Request for category with id: " + catid);
                 // set content-type header before accessing the Writer
                 response.setContentType("text/xml;charset=UTF-8");
                 PrintWriter out = response.getWriter();             
@@ -117,7 +117,7 @@ public class CatalogServlet extends HttpServlet {
                 }
                 out.close();
          } else if ("categories".equals(command)) {
-                System.out.println("Request for categories.");
+                //System.out.println("Request for categories.");
                 String format = request.getParameter("format");
                 
                 //get response data in proper format
@@ -133,7 +133,7 @@ public class CatalogServlet extends HttpServlet {
                 out.close();         
          } else if ("item".equals(command)) {
              String targetId = request.getParameter("id");          
-             System.out.println("CatalogServlet: Request for item with id: " + targetId);
+             //System.out.println("CatalogServlet: Request for item with id: " + targetId);
              String str = handleItem(targetId);
              response.setContentType("text/xml;charset=UTF-8");
              PrintWriter out = response.getWriter();
@@ -170,7 +170,7 @@ public class CatalogServlet extends HttpServlet {
        StringBuffer sb = new StringBuffer();
        // then write the data of the response
        sb.append("<items>\n");
-       System.out.println("**** Items length=" + items.size());
+       //System.out.println("**** Items length=" + items.size());
        Iterator<Item> it = items.iterator();
        NumberFormat formatter = new DecimalFormat("00.00");
        while (it.hasNext()) {
