@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: map.jsp,v 1.15 2006-05-11 17:47:46 basler Exp $ --%>
+$Id: map.jsp,v 1.16 2006-05-14 21:08:17 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -97,12 +97,12 @@ $Id: map.jsp,v 1.15 2006-05-11 17:47:46 basler Exp $ --%>
                     </td>
                     <td valign="top">
                         <f:view>
-                            <ui5:popupTag id="pop1" xmlHttpRequestURL="/petstore/lookup.jsp?itemId=" 
+                            <ui5:popupTag id="pop1" xmlHttpRequestURL="../lookup.jsp?itemId=" 
                                 elementNamePairs="name=value1,description=value2,price=value3,image=imageId">
                                 <!-- Used as spaces to center the table, this could be done programmatically,
                                 but browser diff, so I left it in the hands of the component user.  The image is located 
                                 in the component jar so for retrieval, push it through the faces servlet -->
-                                <img id="spaceImage" height="10px" width="12px" src="/petstore/faces/static/META-INF/popup/images/spacer.gif" align="left">
+                                <img id="spaceImage" height="10px" width="12px" src="${pageContext.request.contextPath}/faces/static/META-INF/popup/images/spacer.gif" align="left">
                                 <table border="0" width="270px" bgcolor="#ffffff" cellpadding="5" cellspacing="5">
                                     <tr>
                                         <td align="left" valign="top"><b>Name:</b>
