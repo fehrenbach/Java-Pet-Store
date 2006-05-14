@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: map.jsp,v 1.16 2006-05-14 21:08:17 basler Exp $ --%>
+$Id: map.jsp,v 1.17 2006-05-14 21:17:29 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -70,7 +70,7 @@ $Id: map.jsp,v 1.16 2006-05-14 21:08:17 basler Exp $ --%>
     if(itemxx != null) {
         // remove these links for center point entry
 %>
-                                        <a href="/petstore/faces/catalog.jsp?pid=<%= itemxx.getProductID() %>&itemId=<%= itemxx.getItemID() %>" alt="Go to Detailed Catalog Page">
+                                        <a href="${pageContext.request.contextPath}/faces/catalog.jsp?pid=<%= itemxx.getProductID() %>&itemId=<%= itemxx.getItemID() %>" alt="Go to Detailed Catalog Page">
                                             <i>(detail)</i>
                                         </a>
                                         
