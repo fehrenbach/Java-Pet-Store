@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: search.jsp,v 1.20 2006-05-14 21:08:17 basler Exp $ --%>
+$Id: search.jsp,v 1.21 2006-05-30 22:31:25 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -115,7 +115,7 @@ $Id: search.jsp,v 1.20 2006-05-14 21:08:17 basler Exp $ --%>
                                 <h:outputText value="Name"/>
                             </f:facet>
                             <a href="${pageContext.request.contextPath}/faces/catalog.jsp?pid=<h:outputText value='#{item.product}'/>&itemId=<h:outputText value='#{item.UID}'/>"
-                                onmouseover="show('pop1', event, '<h:outputText value='#{item.UID}'/>')" onmouseout="hide('pop1')">
+                                onmouseover="bpui.popup.show('pop1', event, '<h:outputText value='#{item.UID}'/>')" onmouseout="bpui.popup.hide('pop1')">
                                 <h:outputText value="#{item.title}"/>
                             </a>
                         </h:column>

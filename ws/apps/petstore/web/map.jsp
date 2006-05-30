@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: map.jsp,v 1.17 2006-05-14 21:17:29 basler Exp $ --%>
+$Id: map.jsp,v 1.18 2006-05-30 22:31:24 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -50,7 +50,7 @@ $Id: map.jsp,v 1.17 2006-05-14 21:17:29 basler Exp $ --%>
                 if(ii > 0) {
                     // reconcile correct mapMarkers with items list
                     itemxx=items.get(ii - 1);
-                    popupOptions="onmouseover=\"show('pop1', event, '" + itemxx.getItemID() + "')\" onmouseout=\"hide('pop1')\"";
+                    popupOptions="onmouseover=\"bpui.popup.show('pop1', event, '" + itemxx.getItemID() + "')\" onmouseout=\"bpui.popup.hide('pop1')\"";
                 } else {
                     // first item of mapMarker is centerpoint, so no corresponding item, also no popup on mouseover
                     itemxx=null;
@@ -59,7 +59,7 @@ $Id: map.jsp,v 1.17 2006-05-14 21:17:29 basler Exp $ --%>
             } else {
                 // no center point items should be 1-to-1 with mappedMarkers
                 itemxx=items.get(ii);
-                popupOptions="onmouseover=\"show('pop1', event, '" + itemxx.getItemID() + "')\" onmouseout=\"hide('pop1')\"";
+                popupOptions="onmouseover=\"bpui.popup.show('pop1', event, '" + itemxx.getItemID() + "')\" onmouseout=\"bpui.popup.hide('pop1')\"";
             }
 %>
                                     <li>
