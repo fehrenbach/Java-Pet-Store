@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: catalog.jsp,v 1.16 2006-05-10 19:58:42 gmurray71 Exp $ --%>
+$Id: catalog.jsp,v 1.17 2006-05-31 19:13:03 basler Exp $ --%>
 <script type="text/javascript" src="scroller.js"></script>
 <link rel="stylesheet" type="text/css" href="scroller.css"></link>
 <script type="text/javascript" src="accordion.js"></script>
@@ -35,10 +35,10 @@ $Id: catalog.jsp,v 1.16 2006-05-10 19:58:42 gmurray71 Exp $ --%>
   <tr id="targetRow">
    <td width="500" height="70 align="top">
      <div class="nav" id="right_button">
-       <img src="/petstore/images/right.gif" name="nextRoll" title="Show More Items" border="0">
+       <img src="${pageContext.request.contextPath}/images/right.gif" name="nextRoll" title="Show More Items" border="0">
      </div>
      <div class="nav" id="left_button">
-        <img src="/petstore/images/left.gif" name="previousRoll" title="Show Previous Items" border="0">
+        <img src="${pageContext.request.contextPath}/images/left.gif" name="previousRoll" title="Show Previous Items" border="0">
     </div>
     <div id="infopane" class="infopane">
         <table class="infopaneTable">

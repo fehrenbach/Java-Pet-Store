@@ -1,9 +1,16 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: catalog.js,v 1.12 2006-05-10 19:58:42 gmurray71 Exp $ */
+$Id: catalog.js,v 1.13 2006-05-31 19:13:03 basler Exp $ */
 
 var ac;
 var is;
 var controller;
+
+function getApplicationContextRoot() {
+    var urlArray=window.location.toString().split("/", 4);
+    return "/" + urlArray[3];
+}
+
+var applicationContextRoot=getApplicationContextRoot();
 
 function initCatalog() {
     ac = new AccordionMenu();
@@ -122,7 +129,7 @@ function CatalogController() {
         // go out and get the categories
         // this should be made more geric
         var bindArgs = {
-            url:  "/petstore/catalog?command=categories&format=json",
+            url:  applicationContextRoot + "/catalog?command=categories&format=json",
             mimetype: "text/json",
             load: function(type,json) {
                ac.load(json);
@@ -181,7 +188,7 @@ function CatalogController() {
             is.showImage(items[0].id);
         } else {
             var bindArgs = {
-                url:  "/petstore/catalog?command=items&pid=" + pid + "&start=" + 0 + "&length=" + CHUNK_SIZE,
+                url:  applicationContextRoot + "/catalog?command=items&pid=" + pid + "&start=" + 0 + "&length=" + CHUNK_SIZE,
                 mimetype: "text/xml",
                 load: function(type,data,postProcessHandler) {
                     processProductData(data,true, pid, null,0);
@@ -195,7 +202,7 @@ function CatalogController() {
         is.reset();
         is.showProgressIndicator();
         var bindArgs = {
-            url:  "/petstore/catalog?command=itemInChunck&pid=" + pid + "&itemId=" + itemId + "&length=" + CHUNK_SIZE,
+            url:  applicationContextRoot + "/catalog?command=itemInChunck&pid=" + pid + "&itemId=" + itemId + "&length=" + CHUNK_SIZE,
             mimetype: "text/xml",
             load: function(type,data,postProcessHandler) {
                processProductData(data,true, pid, itemId);
@@ -210,7 +217,7 @@ function CatalogController() {
   function getChunck(args) {           
       is.showProgressIndicator(); 
       if (typeof debug != 'undefined') {
-          document.getElementById("status").innerHTML = "url=" + "/petstore/catalog?command=items&pid=" + args.id + "&start=" +  args.index + "&length=" + CHUNK_SIZE;
+          document.getElementById("status").innerHTML = "url=" + applicationContextRoot + "/catalog?command=items&pid=" + args.id + "&start=" +  args.index + "&length=" + CHUNK_SIZE;
       }
       // load the chunck data if we have it
       if (pList.hasChunck(args.id, args.currentChunck)) {
@@ -221,7 +228,7 @@ function CatalogController() {
             is.setGroupId(args.id);
       } else {
           var bindArgs = {
-                url:  "/petstore/catalog?command=items&pid=" + args.id + "&start=" +  args.index + "&length=" + CHUNK_SIZE,
+                url:  applicationContextRoot + "/catalog?command=items&pid=" + args.id + "&start=" +  args.index + "&length=" + CHUNK_SIZE,
                 mimetype: "text/xml",
                 load: function(type,data,postProcessHandler) {
                     processProductData(data,false, args.id, null, args.currentChunck);

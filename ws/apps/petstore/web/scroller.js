@@ -1,11 +1,18 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: scroller.js,v 1.27 2006-05-08 22:55:26 gmurray71 Exp $ */
+$Id: scroller.js,v 1.28 2006-05-31 19:13:04 basler Exp $ */
 
 /**
 * ImageScroller - A multipurpose item brower
 * @ Author: Greg Murray
 *
 */
+
+function getApplicationContextRoot() {
+    var urlArray=window.location.toString().split("/", 4);
+    return "/" + urlArray[3];
+}
+
+var applicationContextRoot=getApplicationContextRoot();
 
 
 function ImageScroller() {
@@ -30,9 +37,9 @@ function ImageScroller() {
 
     var PADDING = 3;
     
-    var MINIMIZE_IMG_URI = "/petstore/images/minimize.gif";
-    var MAXIMIZE_IMG_URI = "/petstore/images/maximize.gif";
-    var INDICATOR_IMG_URI = "/petstore/images/indicator-black.gif";
+    var MINIMIZE_IMG_URI = applicationContextRoot + "/images/minimize.gif";
+    var MAXIMIZE_IMG_URI = applicationContextRoot + "/images/maximize.gif";
+    var INDICATOR_IMG_URI = applicationContextRoot + "/images/indicator-black.gif";
     var MAXIMIZE_IMG_TOOLTIP = "Show Details";
     var MINIMIZE_IMG_TOOLTIP = "Show Less Details";
     

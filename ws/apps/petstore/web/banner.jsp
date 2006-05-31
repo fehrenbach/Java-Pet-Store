@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: banner.jsp,v 1.22 2006-05-10 19:58:42 gmurray71 Exp $ --%>
+$Id: banner.jsp,v 1.23 2006-05-31 19:13:03 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -9,9 +9,9 @@ $Id: banner.jsp,v 1.22 2006-05-10 19:58:42 gmurray71 Exp $ --%>
 <%@taglib prefix="ui" uri="http://java.sun.com/blueprints/ui" %>
 
 <link rel="stylesheet" type="text/css" href="styles.css"></link>
-<script type="text/javascript" src="/petstore/dojo.js"></script>
-<script type="text/javascript" src="/petstore/faces/static/META-INF/rss/rssbar.js"></script>
-<link type="text/css" rel="stylesheet" href="/petstore/faces/static/META-INF/rss/rssbar.css" />
+<script type="text/javascript" src="${pageContext.request.contextPath}/dojo.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/faces/static/META-INF/rss/rssbar.js"></script>
+<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/faces/static/META-INF/rss/rssbar.css" />
 <style type="text/css">
 
 #rss-bar {
@@ -44,21 +44,21 @@ $Id: banner.jsp,v 1.22 2006-05-10 19:58:42 gmurray71 Exp $ --%>
 </style>
 <script type="text/javascript">
     var rss = new bpui.RSS();
-    dojo.addOnLoad(function(){rss.getRssInJson('/petstore/faces/dynamic/bpui_rssfeedhandler/getRssfeed', 'https://blueprints.dev.java.net/servlets/ProjectRSS?type=news', '4', '4000', 'News from BluePrints');});
+    dojo.addOnLoad(function(){rss.getRssInJson('${pageContext.request.contextPath}/faces/dynamic/bpui_rssfeedhandler/getRssfeed', 'https://blueprints.dev.java.net/servlets/ProjectRSS?type=news', '4', '4000', 'News from BluePrints');});
 </script>
 
 <table border="0" bordercolor="gray" cellpadding="0" cellspacing="0" bgcolor="white" width="100%">
  <tr id="injectionPoint">
-  <td width="100"><a class="menuLink" href="/petstore/faces/index.jsp""><img src="/petstore/images/banner_logo.gif" border="0" width="70" height="70"></a></td>
+  <td width="100"><a class="menuLink" href="${pageContext.request.contextPath}/faces/index.jsp""><img src="${pageContext.request.contextPath}/images/banner_logo.gif" border="0" width="70" height="70"></a></td>
   <td align="left">
    <div class="banner">Java Pet Store</div>
   </td>
   <td id="bannerRight" align="right">
-    <a class="menuLink" onmouseover="this.className='menuLinkHover';" onmouseout="this.className='menuLink';" href="/petstore/faces/fileupload.jsp">Seller</a> <span class="menuItem">|</span>
-    <a class="menuLink" onmouseover="this.className='menuLinkHover';" onmouseout="this.className='menuLink';" href="/petstore/faces/search.jsp">Search</a> <span class="menuItem">|</span>
-    <a class="menuLink" onmouseover="this.className='menuLinkHover';" onmouseout="this.className='menuLink';" href="/petstore/faces/catalog.jsp">Catalog</a> <span class="menuItem">|</span>
-    <a class="menuLink" onmouseover="this.className='menuLinkHover';" onmouseout="this.className='menuLink';" href="/petstore/faces/mapAll.jsp">Map</a> <span class="menuItem">|</span>
-    <a class="menuLink" onmouseover="this.className='menuLinkHover';" onmouseout="this.className='menuLink';" href="/petstore/index.html">Main</a>
+    <a class="menuLink" onmouseover="this.className='menuLinkHover';" onmouseout="this.className='menuLink';" href="${pageContext.request.contextPath}/faces/fileupload.jsp">Seller</a> <span class="menuItem">|</span>
+    <a class="menuLink" onmouseover="this.className='menuLinkHover';" onmouseout="this.className='menuLink';" href="${pageContext.request.contextPath}/faces/search.jsp">Search</a> <span class="menuItem">|</span>
+    <a class="menuLink" onmouseover="this.className='menuLinkHover';" onmouseout="this.className='menuLink';" href="${pageContext.request.contextPath}/faces/catalog.jsp">Catalog</a> <span class="menuItem">|</span>
+    <a class="menuLink" onmouseover="this.className='menuLinkHover';" onmouseout="this.className='menuLink';" href="${pageContext.request.contextPath}/faces/mapAll.jsp">Map</a> <span class="menuItem">|</span>
+    <a class="menuLink" onmouseover="this.className='menuLinkHover';" onmouseout="this.className='menuLink';" href="${pageContext.request.contextPath}/index.html">Main</a>
   </td>
   </tr>
  </tr>

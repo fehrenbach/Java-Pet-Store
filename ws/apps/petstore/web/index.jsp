@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: index.jsp,v 1.11 2006-05-06 21:47:09 inder Exp $ --%>
+$Id: index.jsp,v 1.12 2006-05-31 19:13:03 basler Exp $ --%>
 
 <html>
  <head>
@@ -12,7 +12,7 @@ $Id: index.jsp,v 1.11 2006-05-06 21:47:09 inder Exp $ --%>
 <script>
 dojo.require("dojo.widget.FisheyeList");
 function browse(category) {
-    window.location.href="/petstore/faces/catalog.jsp?catid=" + category;
+    window.location.href="${pageContext.request.contextPath}/faces/catalog.jsp?catid=" + category;
 }
 </script>
 <table bgcolor="white">
@@ -31,23 +31,23 @@ function browse(category) {
 	dojo:enableCrappySvgSupport="false">
 
 	<div class="dojo-FisheyeListItem" onClick="browse('Dogs');" 
-		dojo:iconsrc="/petstore/images/dogs_icon.gif">
+		dojo:iconsrc="${pageContext.request.contextPath}/images/dogs_icon.gif">
 	</div>
 
 	<div class="dojo-FisheyeListItem" onClick="browse('Cats');"
-		dojo:iconsrc="/petstore/images/cats_icon.gif">
+		dojo:iconsrc="${pageContext.request.contextPath}/images/cats_icon.gif">
 	</div>
 
 	<div class="dojo-FisheyeListItem" onClick="browse('Birds');"
-		dojo:iconsrc="/petstore/images/birds_icon.gif">
+		dojo:iconsrc="${pageContext.request.contextPath}/images/birds_icon.gif">
 	</div>
 
 	<div class="dojo-FisheyeListItem" onClick="browse('Fish');"
-		dojo:iconsrc="/petstore/images/fish_icon.gif">
+		dojo:iconsrc="${pageContext.request.contextPath}/images/fish_icon.gif">
 	</div>
 
 	<div class="dojo-FisheyeListItem" onClick="browse('Reptiles');"
-		dojo:iconsrc="/petstore/images/reptiles_icon.gif">
+		dojo:iconsrc="${pageContext.request.contextPath}/images/reptiles_icon.gif">
 	</div>
 </div>
 
@@ -78,7 +78,7 @@ function browse(category) {
             coords="280,180,350,250">
         </map>
 
-        <img src="/petstore/images/splash.gif" 
+        <img src="${pageContext.request.contextPath}/images/splash.gif" 
             alt="Pet Selection Map"
             usemap="#petmap" 
             width="350" 

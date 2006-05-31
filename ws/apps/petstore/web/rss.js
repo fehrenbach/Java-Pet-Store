@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: rss.js,v 1.2 2006-05-03 22:00:34 inder Exp $ */
+$Id: rss.js,v 1.3 2006-05-31 19:13:03 basler Exp $ */
 
 dojo.require("dojo.io.*");
 
@@ -19,7 +19,7 @@ bpui.RSS = function() {
     
     this.getRssInJson = function (uri, number) {
         rssItemNum = number;
-        var encodedURI = encodeURI("/petstore/faces/dynamic/bpui_rssfeedhandler/getRssfeed?style=json&itemNumber="+number+"&url="+uri);
+        var encodedURI = encodeURI(bpui.contextRoot + "/faces/dynamic/bpui_rssfeedhandler/getRssfeed?style=json&itemNumber="+number+"&url="+uri);
         //alert("encoded url=" + encodedURI);
         var bindArgs = {
                     url: encodedURI,
@@ -99,5 +99,12 @@ bpui.RSS = function() {
     function resumeCycle (evt) {
         cycleRss();
     }
+
+    bpui.getContextRoot = function() {
+        var urlArray=window.location.toString().split("/", 4);
+        return "/" + urlArray[3];
+    }
+
+    bpui.contextRoot = bpui.getContextRoot();
 }
 

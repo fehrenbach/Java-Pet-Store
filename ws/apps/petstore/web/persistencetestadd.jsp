@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: persistencetestadd.jsp,v 1.2 2006-05-03 22:00:33 inder Exp $ --%>
+$Id: persistencetestadd.jsp,v 1.3 2006-05-31 19:13:03 basler Exp $ --%>
 <html>
     <head>
         <title>Java[tm] BluePrints Solutions Catalog: Auto ID Generation using Java persistence</title>
@@ -11,7 +11,7 @@ $Id: persistencetestadd.jsp,v 1.2 2006-05-03 22:00:33 inder Exp $ --%>
         </h2>
       
         Please enter the item details:
-        <form name="additem" action="/petstore/persistencetest/add.do" method="GET">
+        <form name="additem" action="${pageContext.request.contextPath}/persistencetest/add.do" method="GET">
             <table>
                 <tr>
                     <td colspan="2"><b>Item Name:</b></td>
