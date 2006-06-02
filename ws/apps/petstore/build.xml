@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: build.xml,v 1.43 2006-05-05 16:23:28 basler Exp $ -->
+ $Id: build.xml,v 1.44 2006-06-02 16:38:18 basler Exp $ -->
  
 <project name="petstore" default="default" basedir=".">
     <description>Builds, tests, and runs the project petstore.</description>
@@ -26,7 +26,7 @@
             <fileset file="lib/ajax-wrapper-comp.jar"/>
             <fileset file="lib/bp-dynamic-text-comp.jar"/>
             <fileset file="./build/catalog-persistence.jar"/>
-            <fileset file="${file.reference.lucene-1.4.3.jar}"/>
+            <fileset file="${file.reference.lucene-core-2.0.0.jar}"/>
             <fileset file="${file.reference.bp-ui-5.jar}"/>
             <fileset file="${file.reference.bp-ui-14.jar}"/>
             <fileset file="${file.reference.shale-remoting.jar}"/>

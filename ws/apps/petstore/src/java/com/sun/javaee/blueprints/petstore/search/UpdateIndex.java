@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: UpdateIndex.java,v 1.2 2006-05-03 21:49:00 inder Exp $ */
+$Id: UpdateIndex.java,v 1.3 2006-06-02 16:38:20 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.search;
 
@@ -24,7 +24,7 @@ import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
  */
 public class UpdateIndex {
     
-    private static final boolean bDebug=false;
+    private static final boolean bDebug=true;
     private Logger _logger;
     
     /** Creates a new instance of UpdateIndex */
@@ -52,7 +52,7 @@ public class UpdateIndex {
         // Read index and delete targeted doc through a term
         IndexReader reader=IndexReader.open(indexFile);
         // delete document by term
-        int del=reader.delete(new Term("uid", sxDocId));
+        int del=reader.deleteDocuments(new Term("uid", sxDocId));
         if(bDebug) {
             System.out.println("return Number of items deleted:"  + del);
             int deleted=0;
@@ -71,12 +71,15 @@ public class UpdateIndex {
         Field field=doc.getField(sxTagField);
         if(field == null) {
             // create new tag field
-            field=Field.Text(sxTagField, tagString);
+            //field=Field.Text(sxTagField, tagString);
+            field=new Field(sxTagField, tagString, Field.Store.YES, Field.Index.TOKENIZED);        
+
         } else {
             // get existing field and append new tag
             tagString=field.stringValue() + " " + tagString;
             doc.removeField(sxTagField);
-            field=Field.Text(sxTagField, tagString);
+            //field=Field.Text(sxTagField, tagString);
+            field=new Field(sxTagField, tagString, Field.Store.YES, Field.Index.TOKENIZED);        
         }
 
         

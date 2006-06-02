@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: SearchIndex.java,v 1.7 2006-05-05 20:15:25 inder Exp $ */
+$Id: SearchIndex.java,v 1.8 2006-06-02 16:38:20 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.search;
 
@@ -50,7 +50,7 @@ public class SearchIndex {
             Analyzer analyzer=new StandardAnalyzer();
             // search "contents" attribute by default where all relavant words are kept
             QueryParser queryParser=new QueryParser(searchField, analyzer);
-            queryParser.setOperator(QueryParser.DEFAULT_OPERATOR_AND);
+            queryParser.setDefaultOperator(QueryParser.Operator.AND);
             Query query=queryParser.parse(searchString);
             
             getLogger().log(Level.INFO, "search.string", searchString);
