@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: UpdateIndex.java,v 1.3 2006-06-02 16:38:20 basler Exp $ */
+$Id: UpdateIndex.java,v 1.4 2006-06-02 16:42:54 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.search;
 
@@ -24,7 +24,7 @@ import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
  */
 public class UpdateIndex {
     
-    private static final boolean bDebug=true;
+    private static final boolean bDebug=false;
     private Logger _logger;
     
     /** Creates a new instance of UpdateIndex */
@@ -71,14 +71,12 @@ public class UpdateIndex {
         Field field=doc.getField(sxTagField);
         if(field == null) {
             // create new tag field
-            //field=Field.Text(sxTagField, tagString);
             field=new Field(sxTagField, tagString, Field.Store.YES, Field.Index.TOKENIZED);        
 
         } else {
             // get existing field and append new tag
             tagString=field.stringValue() + " " + tagString;
             doc.removeField(sxTagField);
-            //field=Field.Text(sxTagField, tagString);
             field=new Field(sxTagField, tagString, Field.Store.YES, Field.Index.TOKENIZED);        
         }
 

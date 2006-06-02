@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: Indexer.java,v 1.6 2006-06-02 16:38:20 basler Exp $ */
+$Id: Indexer.java,v 1.7 2006-06-02 16:42:54 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.search;
 
@@ -36,13 +36,6 @@ public class Indexer {
     public void addDocument(IndexDocument indexDoc) throws IOException {
         // create an index document for the page
         Document doc=new Document();
-        /*
-        doc.add(Field.UnIndexed("url", indexDoc.getPageURL()));
-        doc.add(Field.UnIndexed("image", indexDoc.getImage()));
-        doc.add(Field.UnIndexed("price", indexDoc.getPrice()));
-        doc.add(Field.UnIndexed("product", indexDoc.getProduct()));
-        doc.add(new Field("uid", indexDoc.getUID(), true, true, false));
-        */
         
         doc.add(new Field("url", indexDoc.getPageURL(), Field.Store.YES, Field.Index.UN_TOKENIZED));        
         doc.add(new Field("image", indexDoc.getImage(), Field.Store.YES, Field.Index.UN_TOKENIZED));        
@@ -53,16 +46,10 @@ public class Indexer {
         // Add the last modified date of the file a field named "modified".  Use a
         // Keyword field, so that it's searchable, but so that no attempt is made
         // to tokenize the field into words.
-        //doc.add(Field.Keyword("modified", indexDoc.getModifiedDate()));
         doc.add(new Field("modified", indexDoc.getModifiedDate(), Field.Store.YES, Field.Index.UN_TOKENIZED));
         // use string return instead of reader, because info isn't retrievable which is 
         // needed for delete/add of document to index when tagging occurs
         //doc.add(Field.Text("contents", new StringReader(indexDoc.getContents())));
-        /*
-        doc.add(Field.Text("contents", indexDoc.getContents()));
-        doc.add(Field.Text("title", indexDoc.getTitle()));
-        doc.add(Field.UnIndexed("summary", indexDoc.getSummary()));
-        */
         doc.add(new Field("contents", indexDoc.getContents(), Field.Store.YES, Field.Index.TOKENIZED));        
         doc.add(new Field("title", indexDoc.getTitle(), Field.Store.YES, Field.Index.TOKENIZED));        
         doc.add(new Field("summary", indexDoc.getSummary(), Field.Store.YES, Field.Index.TOKENIZED));        
