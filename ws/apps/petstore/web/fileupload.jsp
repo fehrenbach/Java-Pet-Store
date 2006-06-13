@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: fileupload.jsp,v 1.37 2006-05-05 21:30:06 yutayoshida Exp $ --%>
+$Id: fileupload.jsp,v 1.38 2006-06-13 17:44:37 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -119,7 +119,7 @@ $Id: fileupload.jsp,v 1.37 2006-05-05 21:30:06 yutayoshida Exp $ --%>
                 <script type="text/javascript">
                     dojo.require("dojo.widget.Wizard");
                 </script>
-                <div id="wizard1" dojoType="Wizard" style="width: 100px; height: 500px;"
+                <div id="wizard1" dojoType="WizardContainer" style="width: 100px; height: 500px;"
                      hideDisabledButtons="true" doneButtonLabel="Submit"
                      nextButtonLabel="Next >>" previousButtonLabel="<< Previous" >
                     <div dojoType="WizardPane">
