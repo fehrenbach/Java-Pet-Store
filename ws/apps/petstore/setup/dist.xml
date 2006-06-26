@@ -1,9 +1,20 @@
 <?xml version="1.0"?>
 <!-- Copyright 2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: dist.xml,v 1.2 2006-04-18 13:41:34 inder Exp $ -->
+ $Id: dist.xml,v 1.3 2006-06-26 21:25:07 inder Exp $ -->
 
-<project name="bpcatalog" default="dist" basedir="..">
+<project name="petstore-dist" default="dist" basedir="..">
+
+  <target name="sdk">
+    <property file="setup/sdk-dist.properties"/>
+    <antcall target="clean"/>
+    <antcall target="assemble-dist"/>
+    <delete file="dist/petstore/bp-project.xml"/>
+    <copy tofile="dist/petstore/bp-project.xml" file="setup/sdk-bp-project.xml"/>
+    <antcall target="create-zip"/>
+  </target>
+
+
   <target name="dist">
     <property file="setup/dist.properties"/>
     <property name="tmpdist" value="dist/${release.dirname}"/>
@@ -19,7 +30,8 @@
   </target>
 
   <target name="assemble-dist">
-    <echo message="Creating ${release.fullname} distribution..."/>
+    <echo message="Creating ${release.dirname} distribution..."/>
+    <property name="tmpdist" value="dist/${release.dirname}"/>
     <mkdir dir="${tmpdist}"/>
     <copy file="lib/3RD-PARTY-LICENSE.txt" todir="${tmpdist}"/>
   
