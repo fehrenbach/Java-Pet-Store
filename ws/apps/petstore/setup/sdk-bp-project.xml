@@ -2,7 +2,7 @@
 
 <!-- Copyright 2005-2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: sdk-bp-project.xml,v 1.1 2006-06-26 21:25:07 inder Exp $ -->
+ $Id: sdk-bp-project.xml,v 1.2 2006-06-28 17:36:32 inder Exp $ -->
 
 
 <!-- bp-project.xml: this is the file that should be included by the project 
@@ -22,6 +22,9 @@
       <isset property="samples.bp-project.present"/>
     </not>
   </condition>
+
+  <property name="dojo.home" value="lib/dojo" /> 
+  <property name="commons.script.home" value="lib/js" /> 
 
   <import file="${bp-project.home}/main.xml"/>
 
