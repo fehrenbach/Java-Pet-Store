@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- Copyright 2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: dist.xml,v 1.5 2006-06-28 17:36:32 inder Exp $ -->
+ $Id: dist.xml,v 1.6 2006-06-28 17:51:01 inder Exp $ -->
 
 <project name="petstore-dist" default="dist" basedir="..">
 
@@ -16,6 +16,11 @@
       <fileset dir="../../lib">
         <include name="dojo/**"/>
         <include name="js/**"/>
+      </fileset>
+    </copy>
+    <copy todir="dist/petstore">
+      <fileset dir="../..">
+        <include name="bp-project/**"/>
       </fileset>
     </copy>
     <antcall target="create-zip"/>
