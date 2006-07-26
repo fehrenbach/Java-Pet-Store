@@ -2,12 +2,10 @@
 <html lang="en">
 <head>
 
-  
   <meta content="text/html;charset=ISO-8859-1" http-equiv="Content-Type">
-
-  
-  
   <title>Java BluePrints</title>
+
+
   <style type="text/css">
 body,th,td,p,div,span,a,ul,ul li, ol, ol li, ol li b, dl,h1,h2,h3,h4,h5,h6,li
 {font-family:geneva,helvetica,arial,"lucida sans",sans-serif; font-size:10pt}
@@ -18,9 +16,8 @@ code,kbd,tt,pre {font-family:monaco,courier,"courier new";font-size:10pt;color:#
 li {padding-bottom: 8px}
 p.copy, p.copy a {font-family:geneva,helvetica,arial,"lucida sans",sans-serif; font-size:8pt}
 p.copy {text-align: center}
-  </style><!-- Copyright 2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
- http://developer.sun.com/berkeley_license.html
- $Id: index.html,v 1.4 2006-05-11 23:55:10 sean_brydon Exp $ -->
+  </style><!-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
+$Id: index.html,v 1.5 2006-07-26 23:52:56 sean_brydon Exp $ -->
 </head>
 
 
@@ -32,12 +29,12 @@ p.copy {text-align: center}
 
     <tr>
 
-      <td align="right" bgcolor="#587993" valign="top"> <font color="#ffffff" size="-1"><b>Java
+      <td align="right" bgcolor="#587993" valign="top">
+      <font color="#ffffff" size="-1"><b>Java
 BluePrints</b></font>&nbsp; </td>
 
     </tr>
 
-  
   </tbody>
 </table>
 
@@ -69,11 +66,15 @@ BluePrints website</a>. <br>
 
 The rest of this document describes how to setup and use the Java Pet
 Store Reference application with the Java EE 5 SDK. <br>
+
 <br>
+
 <h2>Using the Java Pet Store with NetBeans</h2>
+
 The Java Pet Store is NetBeans-ready! This download includes a NetBeans
 project which you can load into NetBeans to build and deploy the Java
-Pet Store. See the document for <a href="https://blueprints.dev.java.net/petstore/usingnetbeans.html">Using the Java Pet Store with NetBeans</a> for more detail.
+Pet Store. See the document for <a href="https://blueprints.dev.java.net/petstore/usingnetbeans.html">Using
+the Java Pet Store with NetBeans</a> for more detail.
 <h2><a name="building-deploying-running"></a>Building,
 Deploying, and Running from the Command Line</h2>
 
@@ -91,14 +92,14 @@ hereafter in this document.&nbsp;&nbsp;</li>
 
   <li>Ensure that&nbsp;<code>ant</code> is
 available in your path. You can use <code>&lt;javaeesdk.home&gt;/lib/ant/bin/ant</code>
-or any other version of Ant later than 1.6.5.</li>
+or you can use your own ant installation as long as it is ant version
+1.6.5 or later.</li>
 
   <li>Edit <code>&lt;petstore.home&gt;/bp-project/build.properties</code>
 and ensure
 that the following properties match your Java EE 5 SDK
 installation.&nbsp;<br>
 
-    
     <table border="1" cellpadding="5" cellspacing="0" width="80%">
 
       <tbody>
@@ -170,11 +171,9 @@ administrator username specified for the serve while installing Java EE
 path to a file containing the admin
 password for the Java EE 5 SDK. The password file needs to be in the
 following format:
-          
           <p><code>AS_ADMIN_PASSWORD=&lt;javaeesdk-admin-password&gt;</code>
           </p>
 
-          
           <p>Where you will
 replace &lt;javaeesdk-admin-password&gt; with
 the admin password for the Java EE 5 SDK.</p>
@@ -201,7 +200,8 @@ while installing the Java EE 5 SDK</td>
 
           <td style="text-align: center;"><code>proxy.host</code></td>
 
-          <td>The host name of your HTTP proxy server, if the server
+          <td>The host name of your HTTP proxy server, if the
+server
 running Java EE SDK is behind a firewall. Leave blank otherwise</td>
 
           <td style="text-align: center;"><code>myproxy.mydomain</code></td>
@@ -212,16 +212,15 @@ running Java EE SDK is behind a firewall. Leave blank otherwise</td>
 
           <td style="text-align: center;"><code>proxy.port</code></td>
 
-          <td>The port number of your HTTP proxy server, if the server
+          <td>The port number of your HTTP proxy server, if the
+server
 running Java EE SDK is behind a firewall. Leave blank otherwise</td>
 
           <td style="text-align: center;"><code>8080</code></td>
 
         </tr>
 
-      
       </tbody>
-    
     </table>
 
   </li>
@@ -232,11 +231,11 @@ directory to <code>&lt;javaeesdk.home&gt;/bin</code>
 and issue the following
 commands:<br>
 
-    <code>asadmin start-domain<br>
+    <code></code><code>asadmin start-database</code><code></code><br>
 
-asadmin start-database</code><br>
+    <code>asadmin start-domain</code></li>
 
-  </li>
+  <li></li>
 
   <li>Change directory to &lt;petstore.home&gt; and enter
 the following commands<code></code><br>
@@ -276,6 +275,8 @@ asadmin start-database</code><br>
   <li>Change directory to&nbsp;<span style="font-style: italic;"></span><code>&lt;petstore.home&gt;
     </code>and enter the command:<br>
 
+    <code>ant undeploy</code><br>
+
     <code>ant unsetup</code><br>
 
 This will uninstall the petstore application
@@ -304,11 +305,13 @@ command. Often an error here contains the clue for what went wrong</li>
 
   <li>Review the application server log files for any errors</li>
 
-  <li>If the sample application is accessed through a URL other than
+  <li>If the sample application is accessed through a URL other
+than
 "http://localhost:8080/" then a new map KEY will have to
 be generated to access the Google map service (this is not our
 restiction, it is Googles).&nbsp; The key is currently
-free and can be generated from http://www.google.com/apis/maps/.&nbsp;
+free and can be generated from
+http://www.google.com/apis/maps/.&nbsp;
 The resultant key can be placed in the Map Viewer component's key"
 attribute in the WEB-INF/web.xml deployment descriptor under
 the param-name com.sun.j2ee.blueprints.ui.mapviewer.KEY.&nbsp; For
