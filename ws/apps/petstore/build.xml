@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: build.xml,v 1.46 2006-06-13 17:44:32 basler Exp $ -->
+ $Id: build.xml,v 1.47 2006-07-31 22:46:57 basler Exp $ -->
  
 <project name="petstore" default="default" basedir=".">
     <description>Builds, tests, and runs the project petstore.</description>
@@ -12,7 +12,7 @@
     <import file="bp-project.xml" />
 
     <property name="commons.script" value="${commons.script.home}/ajax-commons.js" /> 
-    <property name="dojo.zip" value="${dojo.home}/dojo.zip" />
+    <property name="dojo.zip" value="${dojo.home}/dojo-0.3.1-ajax.zip" />
 
     <target name="-post-compile">
         <!-- copy property files into build directory -->

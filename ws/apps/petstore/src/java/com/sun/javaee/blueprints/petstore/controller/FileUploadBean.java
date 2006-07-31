@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: FileUploadBean.java,v 1.35 2006-05-05 21:30:06 yutayoshida Exp $ */
+$Id: FileUploadBean.java,v 1.36 2006-07-31 22:46:58 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -32,7 +32,7 @@ import com.sun.javaee.blueprints.petstore.model.Item;
 import com.sun.javaee.blueprints.petstore.model.SellerContactInfo;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -114,7 +114,7 @@ public class FileUploadBean {
         return this.categories;
     }
     
-    public void postProcessingMethod(FacesContext context, HashMap hmUpload, FileUploadStatus status) {
+    public void postProcessingMethod(FacesContext context, Hashtable htUpload, FileUploadStatus status) {
         if(bDebug) System.out.println("IN Custom Post Processing method");
         try {
             // set custom return enabled so Phaselistener knows not to send default response
@@ -136,7 +136,7 @@ public class FileUploadBean {
             HttpSession session = (HttpSession)context.getExternalContext().getSession(true);
             try{
                 String fileNameKey = null;
-                Set keySet = hmUpload.keySet();
+                Set keySet = htUpload.keySet();
                 Iterator iter = keySet.iterator();
                 while(iter.hasNext()){
                     String key = iter.next().toString();
@@ -145,7 +145,7 @@ public class FileUploadBean {
                         break;
                     }
                 }
-                String absoluteFileName=getStringValue(hmUpload, fileNameKey);
+                String absoluteFileName=getStringValue(htUpload, fileNameKey);
                 if(bDebug) System.out.println("Abs name: "+ absoluteFileName);
                 String fileName = null;
                 if(absoluteFileName.length() > 0) {
@@ -166,30 +166,30 @@ public class FileUploadBean {
                     thumbPath = "images/dragon-iron-thumb.jpg ";
                 }
                 
-                String compName=getStringValue(hmUpload, FileUploadUtil.COMPONENT_NAME);                               
-                prodId=getStringValue(hmUpload, compName+":product");
-                name=getStringValue(hmUpload, compName+":name");
-                String desc=getStringValue(hmUpload, compName+":description");
-                String price=getStringValue(hmUpload, compName+":price");
+                String compName=getStringValue(htUpload, FileUploadUtil.COMPONENT_NAME);                               
+                prodId=getStringValue(htUpload, compName+":product");
+                name=getStringValue(htUpload, compName+":name");
+                String desc=getStringValue(htUpload, compName+":description");
+                String price=getStringValue(htUpload, compName+":price");
                 if(name.length() == 0) name="Default Monster";
                 if(desc.length() == 0) desc="No description available";
                 if(price.length() == 0) price="0";
                 
                 //Address
                 StringBuffer addressx=new StringBuffer();
-                String street1=getStringValue(hmUpload, compName+":street1");
-                String city=getStringValue(hmUpload, compName+":cityField");
-                String state=getStringValue(hmUpload, compName+":stateField");
-                String zip=getStringValue(hmUpload, compName+":zipField");
+                String street1=getStringValue(htUpload, compName+":street1");
+                String city=getStringValue(htUpload, compName+":cityField");
+                String state=getStringValue(htUpload, compName+":stateField");
+                String zip=getStringValue(htUpload, compName+":zipField");
                 if (street1.length() == 0) street1 = "11 Main Steet";
                 if (city.length() == 0) city = "Milpitas";
                 if (state.length() == 0) state = "California";
                 if (zip.length() == 0) zip = "95035";
                 
                 // Contact info
-                firstName = getStringValue(hmUpload, compName+":firstName");
-                String lastName = getStringValue(hmUpload, compName+":lastName");
-                String email = getStringValue(hmUpload, compName+":email");
+                firstName = getStringValue(htUpload, compName+":firstName");
+                String lastName = getStringValue(htUpload, compName+":lastName");
+                String email = getStringValue(htUpload, compName+":email");
                 if (firstName.length() == 0) firstName = "Duke";
                 if (lastName.length() == 0) lastName = "Duke";
                 if (email.length() == 0) email = "aaa@bbb.ccc";
@@ -395,8 +395,8 @@ public class FileUploadBean {
     }
     
     
-    private String getStringValue(HashMap hmUpload, String key)  {
-        String sxTemp=(String)hmUpload.get(key);
+    private String getStringValue(Hashtable htUpload, String key)  {
+        String sxTemp=(String)htUpload.get(key);
         if(sxTemp == null) {
             sxTemp="";
         }
