@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: fileupload.jsp,v 1.38 2006-06-13 17:44:37 basler Exp $ --%>
+$Id: fileupload.jsp,v 1.39 2006-08-02 18:43:08 yutayoshida Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -196,8 +196,10 @@ $Id: fileupload.jsp,v 1.38 2006-06-13 17:44:37 basler Exp $ --%>
     TestFileuploadForm_cityField.start = function() {
 
         // Calculate size and position of the menu <div> we will use
-        this.menu.style.left = this._x() + "px";
-        this.menu.style.top = this._y() + this.target.offsetHeight + 2 + "px";
+        // Use the text box ID instead of div.
+        var elm = getElementPosition("TestFileuploadForm:cityField");
+        this.menu.style.left = elm.left + "px";
+        this.menu.style.top = elm.top + 2 + "px";
         var width = this._width();
         if (width > 0) {
           this.menu.style.width = width + "px";
@@ -211,8 +213,10 @@ $Id: fileupload.jsp,v 1.38 2006-06-13 17:44:37 basler Exp $ --%>
     TestFileuploadForm_stateField.start = function() {
 
         // Calculate size and position of the menu <div> we will use
-        this.menu.style.left = this._x() + "px";
-        this.menu.style.top = this._y() + this.target.offsetHeight + 2 + "px";
+        // Use the text box ID instead of <div>
+        var elm = getElementPosition("TestFileuploadForm:stateField");
+        this.menu.style.left = elm.left + "px";
+        this.menu.style.top = elm.top + 2 + "px";
         var width = this._width();
         if (width > 0) {
           this.menu.style.width = width + "px";
@@ -222,6 +226,23 @@ $Id: fileupload.jsp,v 1.38 2006-06-13 17:44:37 basler Exp $ --%>
         this._callback();
 
     }        
+    
+    function getElementPosition(elmId) {
+        var elm = document.getElementById(elmId);
+        var offsetLeft = 0;
+        var offsetTop = 0;
+        while (elm) {
+            offsetLeft += elm.offsetLeft;
+            offsetTop += elm.offsetTop;
+            elm = elm.offsetParent;
+        }
+        if (navigator.userAgent.indexOf("Mac") != -1 && typeof document.body.leftMargin != "undefined") {
+            offsetLeft += document.body.leftMargin;
+            offsetTop += document.body.topMargin;
+        }
+        offsetTop -= 60;
+        return {left:offsetLeft, top:offsetTop};
+    }
     
 </script>        
     <jsp:include page="footer.jsp" />    
