@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: fileupload.jsp,v 1.39 2006-08-02 18:43:08 yutayoshida Exp $ --%>
+$Id: fileupload.jsp,v 1.40 2006-08-03 18:25:12 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -94,8 +94,8 @@ $Id: fileupload.jsp,v 1.39 2006-08-02 18:43:08 yutayoshida Exp $ --%>
    }
    
    function fileuploadOnsubmit() {
-       doneButton = this.parent.doneButton;
-       doneButton.disabled = true;
+       //doneButton = this.parent.doneButton;
+       //doneButton.disabled = true;
        storeCookie()
        document.forms['TestFileuploadForm'].onsubmit();
    }
@@ -103,7 +103,31 @@ $Id: fileupload.jsp,v 1.39 2006-08-02 18:43:08 yutayoshida Exp $ --%>
    function showFU() {
        document.getElementById("fucomponent").style.visibility = "visible";
    }
+   
+   function switchPanes(fromDivId, toDivId) {
+        // show pane
+        var divx=document.getElementById(fromDivId);
+        divx.style.visibility='hidden';
+        divx=document.getElementById(toDivId);
+        divx.style.visibility='visible';
+   }
 </script>
+<style>
+span.button {    
+    background-color: #6699CC; 
+    color: white; 
+    cursor:pointer;
+    border: thin outset black;
+    padding: 1px 5px;
+}
+div.pane {
+    width: 90%; 
+    background-color: #EEEEEE;
+    border: thin double blue;
+    padding: .5cm;
+}
+
+</style>
     </head>
     <body onload="showFU()">
         <jsp:include page="banner.jsp"/>
@@ -115,136 +139,75 @@ $Id: fileupload.jsp,v 1.39 2006-08-02 18:43:08 yutayoshida Exp $ --%>
                 postProcessingMethod="#{FileUploadBean.postProcessingMethod}"
                 retMimeType="text/xml" retFunction="testRetFunction" 
                 progressBarDivId="progress" progressBarSize="40">
-                
-                <script type="text/javascript">
-                    dojo.require("dojo.widget.Wizard");
-                </script>
-                <div id="wizard1" dojoType="WizardContainer" style="width: 100px; height: 500px;"
-                     hideDisabledButtons="true" doneButtonLabel="Submit"
-                     nextButtonLabel="Next >>" previousButtonLabel="<< Previous" >
-                    <div dojoType="WizardPane">
-                        <h:panelGrid columns="2">
-                            <f:facet name="header">
-                                <h:outputText value="Information about your pet"/>
-                            </f:facet>
-                            
-                            <h:outputText value="Category"/>
-                            <h:selectOneMenu id="product">
-                                <f:selectItems value="#{FileUploadBean.products}"/>
-                            </h:selectOneMenu>
-                            
-                            <h:outputText value="Pet's Name"/>
-                            <h:inputText size="20" id="name"></h:inputText>
-                            
-                            <h:outputText value="Description"/>
-                            <h:inputTextarea id="description" cols="20" rows="5"></h:inputTextarea>
-                            <%--
-                            <ui14:richTextarea id="description"
-                                           items="textGroup;|;listGroup;|;colorGroup;"></ui14:richTextarea>   
-                         --%>
-                            
-                            <h:outputText value="Price"/>
-                            <h:inputText size="20" id="price"></h:inputText>
-                            
-                            <h:outputText value="Image File"/>                 
-                            <input type="file" size="20" name="fileToUpload" id="fileToUploadId"/>
-                        </h:panelGrid>
-                    </div>
-                    <div dojoType="WizardPane" canGoBack="true" doneFunction="fileuploadOnsubmit">
-                        <h:panelGrid columns="2">
-                            <f:facet name="header">
-                                <h:outputText value="Information about yourself"/>
-                            </f:facet>
-                            <h:outputText value="First Name"/>
-                            <h:inputText size="20" id="firstName"></h:inputText>
-                            <h:outputText value="Last Name"/>
-                            <h:inputText size="20" id="lastName"></h:inputText>
-                            <h:outputText value="Seller Email"/>
-                            <h:inputText size="20" id="email"></h:inputText>
-                            <h:outputText value="Street"/>
-                            <h:inputText size="20" id="street1"></h:inputText>
-                            <h:outputText value="City"/>
-                            <ui14:autoComplete size="20" maxlength="100" id="cityField"
-                            completionMethod="#{AutocompleteBean.completeCity}"
-                            value="#{AddressBean.city}" required="true"
-                            ondisplay="function(item) { return extractCity(item); }"
-                            onchoose="function(item) { return chooseCity(item); }" />
-                            <h:outputText value="State"/>
-                            <ui14:autoComplete size="2"  maxlength="100" id="stateField" 
-                            completionMethod="#{AutocompleteBean.completeState}" 
-                            value="#{AddressBean.state}" required="true" />
-                            <h:outputText value="Zip"/>
-                            <h:inputText size="5" id="zipField" value="#{AddressBean.zip}" required="true" />
+                <div id="pane2" class="pane" style="visibility: hidden;">
+                    <h:panelGrid columns="2" style="width: 80%">
+                        <f:facet name="header">
+                            <h:outputText value="Information about yourself"/>
+                        </f:facet>
+                        <h:outputText value="First Name"/>
+                        <h:inputText size="20" id="firstName"></h:inputText>
+                        <h:outputText value="Last Name"/>
+                        <h:inputText size="20" id="lastName"></h:inputText>
+                        <h:outputText value="Seller Email"/>
+                        <h:inputText size="20" id="email"></h:inputText>
+                        <h:outputText value="Street"/>
+                        <h:inputText size="20" id="street1"></h:inputText>
+                        <h:outputText value="City"/>
+                        <ui14:autoComplete size="20" maxlength="100" id="cityField"
+                        completionMethod="#{AutocompleteBean.completeCity}"
+                        value="#{AddressBean.city}" required="true"
+                        ondisplay="function(item) { return extractCity(item); }"
+                        onchoose="function(item) { return chooseCity(item); }" />
+                        <h:outputText value="State"/>
+                        <ui14:autoComplete size="2"  maxlength="100" id="stateField" 
+                        completionMethod="#{AutocompleteBean.completeState}" 
+                        value="#{AddressBean.state}" required="true" />
+                        <h:outputText value="Zip"/>
+                        <h:inputText size="5" id="zipField" value="#{AddressBean.zip}" required="true" />
 
-                            <h:outputText value="Enter the text as it is shown below (case insensitive)"/>
-                            <h:outputText />
-                            <h:graphicImage id="captchaImg" url="CaptchaServlet"/>
-                            <h:inputText id="captcharesponse"></h:inputText>
-                          
-                        </h:panelGrid>
-                    </div>
+                        <h:outputText value="Enter the text as it is shown below (case insensitive)"/>
+                        <h:outputText />
+                        <h:graphicImage id="captchaImg" url="CaptchaServlet"/>
+                        <h:inputText id="captcharesponse"></h:inputText>
+                        <br/><span class="button" onclick="switchPanes('pane2', 'pane1');">&lt;&lt; Previous</span>
+                        &nbsp;&nbsp;&nbsp;<span class="button" onclick="fileuploadOnsubmit()">Submit</span>
+                        <br/><div id="progress"></div><br/>
+
+                    </h:panelGrid>
                 </div>
-                <br><div id="progress"></div><br/>
+                <div class="pane"style="position:absolute; top:125px;" id="pane1">
+                    <h:panelGrid columns="2" style="width: 80%">
+                        <f:facet name="header">
+                            <h:outputText value="Information about your pet"/>
+                        </f:facet>
+
+                        <h:outputText value="Category"/>
+                        <h:selectOneMenu id="product">
+                            <f:selectItems value="#{FileUploadBean.products}"/>
+                        </h:selectOneMenu>
+
+                        <h:outputText value="Pet's Name"/>
+                        <h:inputText size="20" id="name"></h:inputText>
+
+                        <h:outputText value="Description"/>
+                        <h:inputTextarea id="description" cols="20" rows="5"></h:inputTextarea>
+                        <%--
+                        <ui14:richTextarea id="description"
+                                       items="textGroup;|;listGroup;|;colorGroup;"></ui14:richTextarea>   
+                         --%>
+
+                        <h:outputText value="Price"/>
+                        <h:inputText size="20" id="price"></h:inputText>
+
+                        <h:outputText value="Image File"/>                 
+                        <input type="file" size="20" name="fileToUpload" id="fileToUploadId"/>
+                    </h:panelGrid>
+                    <br/><span class="button" onclick="switchPanes('pane1', 'pane2');">Next &gt;&gt;</span>
+                </div>
             </ui:fileUploadTag>        
         </f:view>
         </div>
-<script type="text/javascript">        
-    /**
-     * Start the autocompletion process, and begin asynchronous communication
-     * with the host on each keystroke.
-     */
-    TestFileuploadForm_cityField.start = function() {
-
-        // Calculate size and position of the menu <div> we will use
-        // Use the text box ID instead of div.
-        var elm = getElementPosition("TestFileuploadForm:cityField");
-        this.menu.style.left = elm.left + "px";
-        this.menu.style.top = elm.top + 2 + "px";
-        var width = this._width();
-        if (width > 0) {
-          this.menu.style.width = width + "px";
-        }
-        
-        this.started = true;
-        this._callback();
-
-    }        
-    
-    TestFileuploadForm_stateField.start = function() {
-
-        // Calculate size and position of the menu <div> we will use
-        // Use the text box ID instead of <div>
-        var elm = getElementPosition("TestFileuploadForm:stateField");
-        this.menu.style.left = elm.left + "px";
-        this.menu.style.top = elm.top + 2 + "px";
-        var width = this._width();
-        if (width > 0) {
-          this.menu.style.width = width + "px";
-        }
-        
-        this.started = true;
-        this._callback();
-
-    }        
-    
-    function getElementPosition(elmId) {
-        var elm = document.getElementById(elmId);
-        var offsetLeft = 0;
-        var offsetTop = 0;
-        while (elm) {
-            offsetLeft += elm.offsetLeft;
-            offsetTop += elm.offsetTop;
-            elm = elm.offsetParent;
-        }
-        if (navigator.userAgent.indexOf("Mac") != -1 && typeof document.body.leftMargin != "undefined") {
-            offsetLeft += document.body.leftMargin;
-            offsetTop += document.body.topMargin;
-        }
-        offsetTop -= 60;
-        return {left:offsetLeft, top:offsetTop};
-    }
-    
-</script>        
+ 
     <jsp:include page="footer.jsp" />    
     </body>
 </html>
