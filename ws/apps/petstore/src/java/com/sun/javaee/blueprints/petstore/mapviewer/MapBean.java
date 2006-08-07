@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: MapBean.java,v 1.19 2006-05-05 20:15:24 inder Exp $ */
+$Id: MapBean.java,v 1.20 2006-08-07 18:28:29 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.mapviewer;
 
@@ -192,7 +192,7 @@ public class MapBean {
             }
         }
         
-        return mapItems(context, items, geoCenterPoint, centerx);
+        return mapItems(context, items, geoCenterPoint, getCenterAddress());
     }
     
     
@@ -249,7 +249,7 @@ public class MapBean {
                 System.out.println("\nHave NULL items from the database");
             }
         }
-        return mapItems(context, items, geoCenterPoint, centerx);
+        return mapItems(context, items, geoCenterPoint, getCenterAddress());
     }
     
     
@@ -331,7 +331,6 @@ public class MapBean {
         //c = 2.atan2(?a, ?(1?a))
         //d = R.c
         
-        // return null so navigation will stay on main lookup page
         return "map";
     }
     
@@ -364,6 +363,13 @@ public class MapBean {
             points=geoCoder.geoCode(centerx);
             if ((points == null) || (points.length < 1)) {
                 getLogger().log(Level.INFO, "No addresses for location - " + centerx);
+                // invalid address, need to set to something or erase center point
+                // decided that putting in dummy coord and notifying user best approach
+                points=new GeoPoint[]{ new GeoPoint() };
+                points[0].setLatitude(37.395908d);
+                points[0].setLongitude(-121.952735d);
+                setCenterAddress(getCenterAddress() + " <i><small>(Invalid address, using default!)</small></i>");
+                
             } else if(points.length > 1) {
                 getLogger().log(Level.INFO, "Matched " + points.length + " locations, taking the first one");
             }
