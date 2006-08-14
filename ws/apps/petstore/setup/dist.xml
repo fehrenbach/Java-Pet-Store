@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- Copyright 2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: dist.xml,v 1.7 2006-08-11 23:17:05 basler Exp $ -->
+ $Id: dist.xml,v 1.8 2006-08-14 22:25:36 basler Exp $ -->
 
 <project name="petstore-dist" default="dist" basedir="..">
 
@@ -19,6 +19,8 @@
       </fileset>
     </copy>
     <delete dir="dist/petstore/bp-project"/>
+    <!-- remove extra libs from SDK -->    
+    <delete dir="dist/petstore/lib/dojo/dojo.zip"/>    
     <antcall target="create-zip"/>
   </target>
 
