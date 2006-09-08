@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--  Copyright 2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: web.xml,v 1.19 2006-05-03 23:47:15 inder Exp $ -->
- 
+ $Id: web.xml,v 1.20 2006-09-08 18:59:46 basler Exp $ -->
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
     <display-name>Petstore</display-name>
@@ -10,6 +9,14 @@
         <filter-name>CaptchaValidateFilter</filter-name>
         <filter-class>com.sun.javaee.blueprints.petstore.controller.CaptchaValidateFilter</filter-class>
     </filter>
+    <filter>
+        <filter-name>EntryFilter</filter-name>
+        <filter-class>com.sun.javaee.blueprints.petstore.controller.EntryFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>EntryFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
     <filter-mapping>
         <filter-name>CaptchaValidateFilter</filter-name>
         <url-pattern>/faces/dynamic/bpui_fileupload_handler/handleFileUpload</url-pattern>
@@ -59,17 +66,6 @@
         <url-pattern>/controller</url-pattern>
     </servlet-mapping>
 
-    <servlet>
-        <description>AutoCompletes Form Input using XmlHttpRequest Objects</description>
-        <servlet-name> AutocompleteServlet </servlet-name>
-        <servlet-class>com.sun.javaee.blueprints.petstore.controller.AutocompleteServlet</servlet-class>
-    </servlet>
-  
-    <servlet-mapping>
-        <servlet-name>AutocompleteServlet</servlet-name>
-        <url-pattern>/autocomplete</url-pattern>
-    </servlet-mapping>
-  
     <servlet>
         <description>Persistence Test Servlet</description>
         <servlet-name>PersistenceTestServlet</servlet-name>
@@ -124,7 +120,13 @@
         <param-name>proxyPort</param-name>
         <param-value>@@proxy.port@@</param-value>
     </context-param>
+    <!-- filter init-param not working so use servlet context -->
+    <context-param>
+        <param-name>entryPages</param-name>
+        <param-value>index.html|index.jsp|fileupload.jsp|search.jsp|catalog.jsp|mapAll.jsp|.jpg|.gif</param-value>
+    </context-param>
 
+    
     <!-- Faces Servlet -->
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
