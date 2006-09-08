@@ -1,7 +1,7 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: PersistenceTestServlet.java,v 1.5 2006-05-05 20:15:24 inder Exp $ */
+$Id: PersistenceTestServlet.java,v 1.1 2006-09-08 22:50:20 basler Exp $ */
 
-package com.sun.javaee.blueprints.petstore.controller;
+package com.sun.javaee.blueprints.petstore.test;
 
 import com.sun.javaee.blueprints.petstore.model.Address;
 import com.sun.javaee.blueprints.petstore.model.CatalogFacade;

@@ -6,20 +6,24 @@
 
 package com.sun.javaee.blueprints.petstore.controller;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import java.text.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.StringTokenizer;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
 
 /**
  *
@@ -34,6 +38,8 @@ public class EntryFilter implements Filter {
     // configured.
     private FilterConfig filterConfig = null;
     private String[] entryPages=null;
+    private Logger _logger=null;
+    private static final boolean bDebug=false;
     
     public EntryFilter() {
     }
@@ -56,15 +62,14 @@ public class EntryFilter implements Filter {
         try {
             
             // Implement a simple security model for now. Just make sure a session
-            // exists for internally used resources except for entry pages and images.  
+            // exists for internally used resources except for entry pages and images.
             // This model does require cookies.
             // In the future, programtic security will
             // be needed to match sellers with their products and customers.
             HttpServletRequest httpRequest=(HttpServletRequest)request;
-            //System.out.println("*** page='" + httpRequest.getServletPath() + "' pathInfo" + httpRequest.getPathInfo());
             if(!httpRequest.isRequestedSessionIdValid()) {
                 // not a valid session, make sure pages are entry pages or access images
-                System.out.println("*** Do not have Session, have page " + httpRequest.getPathInfo());
+                getLogger().log(Level.FINE,"Do not have Session, have page " + httpRequest.getPathInfo());
                 boolean foundx=false;
                 for(int ii=0; ii < entryPages.length; ii++) {
                     if(httpRequest.getPathInfo().endsWith(entryPages[ii])) {
@@ -138,16 +143,14 @@ public class EntryFilter implements Filter {
         
         // read in allowed access points
         String entryPagesParam=filterConfig.getServletContext().getInitParameter("entryPages");
-        System.out.println("\n*** entry String = " + entryPagesParam);
+        if(bDebug) System.out.println("\n*** entry String = " + entryPagesParam);
         // loop through pages to see if
         try {
             StringTokenizer stPages=new StringTokenizer(entryPagesParam, "|");
             int countx=stPages.countTokens();
-            System.out.println("Token Count = " + countx);
             entryPages=new String[countx];
             for(int ii=0; ii < countx; ii++) {
                 entryPages[ii]=stPages.nextToken();
-                System.out.println("add page = " + entryPages[ii]);
             }
         } catch(Exception ee) {
             ee.printStackTrace();
@@ -217,5 +220,15 @@ public class EntryFilter implements Filter {
     }
     
     
-    private static final boolean bDebug = true;
+    /**
+     * Method getLogger
+     *
+     * @return Logger - logger for the NodeAgent
+     */
+    public Logger getLogger() {
+        if (_logger == null) {
+            _logger=PetstoreUtil.getBaseLogger();
+        }
+        return _logger;
+    }
 }
