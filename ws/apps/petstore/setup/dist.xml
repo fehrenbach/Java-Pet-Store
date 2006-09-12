@@ -1,11 +1,26 @@
 <?xml version="1.0"?>
 <!-- Copyright 2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: dist.xml,v 1.9 2006-08-15 16:44:28 basler Exp $ -->
+ $Id: dist.xml,v 1.10 2006-09-12 22:27:04 yutayoshida Exp $ -->
 
 <project name="petstore-dist" default="dist" basedir="..">
 
   <target name="sdk">
+    <property file="setup/sdk-dist.properties"/>
+    <property name="tmpdist" value="dist/${release.dirname}"/>
+    <antcall target="sdk-dist"/>
+    <antcall target="compact-jars"/>
+    <delete dir="${tmpdist}/ant-task"/>
+    <antcall target="create-zip"/>
+  </target>
+  <target name="sdk-download">
+    <property file="setup/sdk-dist.properties"/>
+    <property name="tmpdist" value="dist/${release.dirname}"/>
+    <antcall target="sdk-dist"/>
+    <delete dir="${tmpdist}/ant-task"/>
+    <antcall target="create-zip"/>
+  </target>
+  <target name="sdk-dist">
     <property file="setup/sdk-dist.properties"/>
     <property name="tmpdist" value="dist/${release.dirname}"/>
     <antcall target="clean"/>
@@ -19,7 +34,6 @@
       </fileset>
     </copy>
     <delete dir="dist/petstore/bp-project"/>
-    <antcall target="create-zip"/>
   </target>
 
 
@@ -29,6 +43,7 @@
     <antcall target="clean"/>
     <antcall target="assemble-dist"/>
     <fixcrlf srcdir="${tmpdist}" tab="remove" tablength="2" eol="unix" includes="**/*.properties,**/*.jsp,**/*.html,**/*.sh,**/*.java,**/*.xml" excludes="**/ja/**" />
+    <delete dir="${tmpdist}/ant-task"/>
     <antcall target="create-zip"/>
   </target>
 
