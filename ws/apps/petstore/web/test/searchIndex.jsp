@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: searchIndex.jsp,v 1.6 2006-05-03 22:00:34 inder Exp $ --%>
+$Id: searchIndex.jsp,v 1.1 2006-09-13 17:31:21 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -22,13 +22,14 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
     if(submit != null) {
         if(indexType != null && indexType.equals("database")) {
             String sqlStatement=request.getParameter("sqlStatement");
+            String sqlStatementTag=request.getParameter("sqlStatementTag");
             String dataSource=request.getParameter("dataSource");
             String indexDirectory=request.getParameter("indexDirectory");
             SQLParser sp=new SQLParser();
             InitialContext ic=new InitialContext();
             DataSource ds=(DataSource)PortableRemoteObject.narrow(ic.lookup(dataSource), DataSource.class);
             Connection conn=ds.getConnection();
-            sp.runSQL(indexDirectory, conn, sqlStatement);
+            sp.runSQL(indexDirectory, conn, sqlStatement, sqlStatementTag);
 
         } else {
             String beginURL=request.getParameter("beginURL");
@@ -109,12 +110,21 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
                                 <td align="left"><input type="text" size="50" name="dataSource" value="java:comp/env/jdbc/PetstoreDB"/></td>
                             </tr>
                             <tr>
-                                <th align="left" colspan="2">SQL:</th>
+                                <th align="left" colspan="2">Main SQL Statement:</th>
                             </tr>
                             <tr>
                                 <td align="left" colspan="2">
                                     <textarea rows="10" cols="70" wrap="soft" 
                                     name="sqlStatement">select itemid "id", name "title", description "summary", imageurl "image", price "price", productid "product", '' tag,  CURRENT_TIMESTAMP "modifiedDate" from "APP"."ITEM"</textarea>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th align="left" colspan="2">Tag SQL Prepared Statement:</th>
+                            </tr>
+                            <tr>
+                                <td align="left" colspan="2">
+                                    <textarea rows="3" cols="70" wrap="soft" 
+                                    name="sqlStatementTag">select tag from tag, tag_item where tag.tagid=tag_item.tagid and itemid=?</textarea>
                                 </td>
                             </tr>
                         </table>

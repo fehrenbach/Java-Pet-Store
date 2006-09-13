@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CatalogFacade.java,v 1.42 2006-05-05 20:19:03 smitha Exp $ */
+$Id: CatalogFacade.java,v 1.43 2006-09-13 17:31:18 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.model;
 
@@ -259,7 +259,7 @@ public class CatalogFacade implements ServletContextListener {
             try {
                 utx.rollback();
             } catch (Exception e) {}
-            throw new RuntimeException("Error persisting item");
+            throw new RuntimeException("Error persisting item", exe);
         } finally {
             em.close();
         }
@@ -276,7 +276,7 @@ public class CatalogFacade implements ServletContextListener {
             try {
                 utx.rollback();
             } catch (Exception e) {}
-            throw new RuntimeException("Error updating rating");
+            throw new RuntimeException("Error updating rating", exe);
         } finally {
             em.close();
         }
@@ -291,6 +291,41 @@ public class CatalogFacade implements ServletContextListener {
         Collection results = searchQuery.getResultList();
         em.close();
         return results;
+    }
+    
+    public int addTagToItem(String sxTag, Item item){
+        EntityManager em = emf.createEntityManager();
+        Tag tag=null;
+        try {
+            List<Tag> tags = em.createQuery("SELECT t FROM Tag t WHERE t.tag = :tag").setParameter("tag", sxTag).getResultList();
+            if(tags.size() > 0) {
+                // found tag so add in reference item
+                tag=tags.get(0);
+                if(!tag.itemExists(item)) {
+                    // add item to tag
+                    tag.addItem(item);
+                    tag.incrementRefCount();
+                }
+            } else {
+                // need add tag and reference item
+                tag=new Tag(sxTag);
+                // add item to tag
+                tag.addItem(item);
+                tag.incrementRefCount();
+            }
+            utx.begin();
+            em.joinTransaction();
+            em.persist(tag);
+            utx.commit();
+        } catch(Exception exe){
+            try {
+                utx.rollback();
+            } catch (Exception e) {}
+            throw new RuntimeException("Error persisting tag", exe);
+        } finally {
+            em.close();
+        }
+        return tag.getTagID();
     }
 }
 

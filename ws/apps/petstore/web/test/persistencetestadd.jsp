@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: persistencetestadd.jsp,v 1.3 2006-05-31 19:13:03 basler Exp $ --%>
+$Id: persistencetestadd.jsp,v 1.1 2006-09-13 17:31:21 basler Exp $ --%>
 <html>
     <head>
         <title>Java[tm] BluePrints Solutions Catalog: Auto ID Generation using Java persistence</title>

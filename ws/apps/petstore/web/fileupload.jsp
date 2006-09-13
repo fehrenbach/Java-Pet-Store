@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: fileupload.jsp,v 1.41 2006-08-03 18:33:06 basler Exp $ --%>
+$Id: fileupload.jsp,v 1.42 2006-09-13 17:31:18 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -202,6 +202,9 @@ div.pane {
 
                         <h:outputText value="Image File"/>                 
                         <input type="file" size="20" name="fileToUpload" id="fileToUploadId"/>
+
+                        <h:outputText value="Custom Tag Keywords (seperated by spaces)"/>
+                        <h:inputText size="20" id="tags"></h:inputText>
                     </h:panelGrid>
                     <br/><span class="button" onclick="switchPanes('pane1', 'pane2');">Next &gt;&gt;</span>
                 </div>

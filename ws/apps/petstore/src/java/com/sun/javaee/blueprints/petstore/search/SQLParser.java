@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: SQLParser.java,v 1.6 2006-05-05 20:15:25 inder Exp $ */
+$Id: SQLParser.java,v 1.7 2006-09-13 17:31:18 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.search;
 
@@ -12,6 +12,7 @@ import java.util.Properties;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
+import java.sql.PreparedStatement;
 
 /**
  *
@@ -27,7 +28,7 @@ public class SQLParser {
     }
     
     
-    public void runSQL(String sxIndexFile, Connection conn, String sql) {
+    public void runSQL(String sxIndexFile, Connection conn, String sql, String tagSql) {
         getLogger().log(Level.INFO, "index.sql.statement", sql);
         
         Indexer indexer=null;
@@ -43,15 +44,21 @@ public class SQLParser {
             // create and execute query on provide connection
             Statement statement=conn.createStatement();
             ResultSet result=statement.executeQuery(sql);
-            boolean hasNext=result.next();
-            String title=null, summary=null;
-            while(hasNext) {
+            PreparedStatement pstatement=null;
+            if(tagSql != null && !tagSql.trim().equals("")) {
+                pstatement=conn.prepareStatement(tagSql);
+            }
+            ResultSet resultx=null;
+            String title=null, summary=null, sxId=null;
+            StringBuffer sbTags=null;
+            while(result.next()) {
                 // extract information from row
                 title=result.getString("title");
                 summary=result.getString("summary");
+                sxId=result.getString("id");
                 indexDoc=new IndexDocument();
-                indexDoc.setUID(result.getString("id"));
-                indexDoc.setPageURL(result.getString("id"));
+                indexDoc.setUID(sxId);
+                indexDoc.setPageURL(sxId);
                 indexDoc.setImage(result.getString("image"));
                 indexDoc.setPrice(result.getString("price"));
                 indexDoc.setProduct(result.getString("product"));
@@ -59,11 +66,22 @@ public class SQLParser {
                 indexDoc.setContents(title + " " + summary);
                 indexDoc.setTitle(title);
                 indexDoc.setSummary(summary);
+                
+                // add tags, so need to read them in from database
+                if(pstatement != null) {
+                    pstatement.setString(1, sxId);
+                    resultx=pstatement.executeQuery();
+                    sbTags=new StringBuffer();
+                    while(resultx.next()) {
+                        // loop through tags
+                        sbTags.append(resultx.getString(1) + " ");
+                    }
+                }
+                indexDoc.setTag(sbTags.toString().trim());
                 getLogger().log(Level.INFO, "Adding document to index: " + indexDoc.toString());
 
                 // add doc to index
                 indexer.addDocument(indexDoc);
-                hasNext=result.next();
             }
 
         } catch (Exception e) {
@@ -110,7 +128,7 @@ public class SQLParser {
             String sxJdbcURL="jdbc:derby://localhost:1527/petstore";
             Connection conn=DriverManager.getConnection(sxJdbcURL, props);        
 
-            sp.runSQL("/tmp/tmp/index", conn, "select itemid \"id\", name \"title\", description \"summary\", imageurl \"image\", listprice \"price\", productid \"product\", '' \"modifiedDate\" from \"APP\".\"ITEM\"");
+            sp.runSQL("/tmp/tmp/index", conn, "select itemid \"id\", name \"title\", description \"summary\", imageurl \"image\", listprice \"price\", productid \"product\", '' \"modifiedDate\" from \"APP\".\"ITEM\"", null);
         } catch(Exception e) {
             e.printStackTrace();
         }

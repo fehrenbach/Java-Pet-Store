@@ -68,6 +68,24 @@ CREATE TABLE ziplocation (
  primary key (zipcode)
 );
 
+
+create table tag(
+    tagid INTEGER NOT NULL,
+    tag VARCHAR(30) NOT NULL,
+    refcount INTEGER NOT NULL,
+    primary key (tagid)
+);
+
+
+create table tag_item(
+    tagid INTEGER NOT NULL,
+    itemid VARCHAR(10) NOT NULL,
+    unique(tagid, itemid),
+    foreign key (itemid) references item(itemid),
+    foreign key (tagid) references tag(tagid)
+);
+
+
 INSERT INTO category VALUES('CATS', 'Cats', 'Loving and finicky friends', 'cats_icon.gif');
 INSERT INTO category VALUES('DOGS', 'Dogs', 'Loving and furry friends', 'dogs_icon.gif');
 INSERT INTO category VALUES('BIRDS', 'Birds', 'Loving and feathery friends', 'birds_icon.gif');
@@ -398,6 +416,19 @@ INSERT INTO item VALUES('417', 'reptile02', 'Green Iguana', 'This is one proud a
 INSERT INTO item VALUES('418', 'reptile02', 'Iguana', 'My iguana needs a home. His tail is really long. He is very nice.', 'images/lizard2.gif','images/lizard2.gif', 500,'101','101', 15, 5);
 INSERT INTO item VALUES('419', 'reptile02', 'Frog', 'This little green frog was rescued from the chef in the kitchen of a french restaurant. If I had not acted quickly, his legs would have been appetizers. Now for just a small fee you can buy him as your pet.', 'images/frog1.gif','images/frog1.gif', 1500,'102','102', 15, 3);
 
+INSERT INTO tag VALUES(1,'awesome',3);
+INSERT INTO tag VALUES(2,'interesting',2);
+INSERT INTO tag VALUES(3,'cool',1);
+
+INSERT INTO tag_item VALUES(1, '1');
+INSERT INTO tag_item VALUES(1, '2');
+INSERT INTO tag_item VALUES(1, '3');
+INSERT INTO tag_item VALUES(2, '1');
+INSERT INTO tag_item VALUES(2, '2');
+INSERT INTO tag_item VALUES(3, '1');
+
 INSERT INTO id_gen VALUES('ITEM_ID',419);
 INSERT INTO id_gen VALUES('ADDRESS_ID',102);
 INSERT INTO id_gen VALUES('CONTACT_INFO_ID',102);
+INSERT INTO id_gen VALUES('TAG_ID',3);
+

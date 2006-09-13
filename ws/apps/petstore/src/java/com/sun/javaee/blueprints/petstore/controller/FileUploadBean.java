@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: FileUploadBean.java,v 1.36 2006-07-31 22:46:58 basler Exp $ */
+$Id: FileUploadBean.java,v 1.37 2006-09-13 17:31:17 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -30,6 +30,7 @@ import com.sun.javaee.blueprints.petstore.model.Product;
 import com.sun.javaee.blueprints.petstore.model.FileUploadResponse;
 import com.sun.javaee.blueprints.petstore.model.Item;
 import com.sun.javaee.blueprints.petstore.model.SellerContactInfo;
+import com.sun.javaee.blueprints.petstore.model.Tag;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Hashtable;
@@ -37,6 +38,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 public class FileUploadBean {
     private boolean bDebug=false;
@@ -174,6 +176,8 @@ public class FileUploadBean {
                 if(name.length() == 0) name="Default Monster";
                 if(desc.length() == 0) desc="No description available";
                 if(price.length() == 0) price="0";
+                String tags=getStringValue(htUpload, compName+":tags");
+                if(tags == null) tags="";
                 
                 //Address
                 StringBuffer addressx=new StringBuffer();
@@ -270,6 +274,17 @@ public class FileUploadBean {
                 String itemID = catalogFacade.addItem(item);
                 getLogger().log(Level.FINE, "Item " + name + " has been persisted");
                 
+                // now parse tags for item
+                StringTokenizer stTags=new StringTokenizer(tags, " ");
+                ArrayList arTags=new ArrayList();
+                arTags.add(item);
+                String tagx=null;
+                while(stTags.hasMoreTokens()) {
+                    tagx=stTags.nextToken();
+                    System.out.println("TAGXXX = " + tagx);
+                    catalogFacade.addTagToItem(tagx, item);
+                }
+                
                 // index new item
                 itemId = item.getItemID();
                 IndexDocument indexDoc=new IndexDocument();
@@ -282,6 +297,7 @@ public class FileUploadBean {
                 indexDoc.setContents(name + " " + desc);
                 indexDoc.setTitle(name);
                 indexDoc.setSummary(desc);
+                indexDoc.setTag(tags);
                 indexItem(indexDoc);
                 
             } catch (RuntimeException re) {

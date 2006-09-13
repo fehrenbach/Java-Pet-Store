@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: searchTest.jsp,v 1.4 2006-06-02 16:38:20 basler Exp $ --%>
+$Id: searchTest.jsp,v 1.1 2006-09-13 17:31:21 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -14,7 +14,6 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
    "http://www.w3.org/TR/html4/loose.dtd">
- <jsp:include page="banner.jsp" />
   
 <%
     try {
