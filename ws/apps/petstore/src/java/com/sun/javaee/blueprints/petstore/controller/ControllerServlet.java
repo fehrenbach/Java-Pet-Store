@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: ControllerServlet.java,v 1.8 2006-09-08 22:50:19 basler Exp $ */
+$Id: ControllerServlet.java,v 1.9 2006-09-14 01:53:09 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -376,6 +376,8 @@ public class ControllerServlet extends HttpServlet {
             }
         } else {
             getLogger().log(Level.SEVERE, "Servlet '" + request.getServletPath() + "' not registered in ControllerServlet!!");
+            HttpServletResponse httpResponse=(HttpServletResponse)response;
+            httpResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }
     

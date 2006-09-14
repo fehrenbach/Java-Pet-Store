@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: FileUploadBean.java,v 1.37 2006-09-13 17:31:17 basler Exp $ */
+$Id: FileUploadBean.java,v 1.38 2006-09-14 01:53:09 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -281,7 +281,7 @@ public class FileUploadBean {
                 String tagx=null;
                 while(stTags.hasMoreTokens()) {
                     tagx=stTags.nextToken();
-                    System.out.println("TAGXXX = " + tagx);
+                    if(bDebug) System.out.println("Adding TAG = " + tagx);
                     catalogFacade.addTagToItem(tagx, item);
                 }
                 

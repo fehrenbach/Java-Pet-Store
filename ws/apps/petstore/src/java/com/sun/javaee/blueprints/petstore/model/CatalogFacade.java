@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CatalogFacade.java,v 1.43 2006-09-13 17:31:18 basler Exp $ */
+$Id: CatalogFacade.java,v 1.44 2006-09-14 01:53:10 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.model;
 
@@ -327,5 +327,15 @@ public class CatalogFacade implements ServletContextListener {
         }
         return tag.getTagID();
     }
+    
+    
+    public List<Tag> getTagsInChunk(int start, int chunkSize) {
+        EntityManager em = emf.createEntityManager();
+        Query query = em.createQuery("SELECT t FROM Tag t ORDER BY t.refCount DESC, t.tag");
+        List<Tag> tags = query.setFirstResult(start).setMaxResults(chunkSize).getResultList();
+        em.close();
+        return tags;
+    }
+    
 }
 
