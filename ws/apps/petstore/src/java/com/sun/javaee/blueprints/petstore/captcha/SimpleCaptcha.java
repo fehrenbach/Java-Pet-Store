@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: SimpleCaptcha.java,v 1.7 2006-05-05 20:15:23 inder Exp $ */
+$Id: SimpleCaptcha.java,v 1.8 2006-09-15 21:34:52 yutayoshida Exp $ */
 
 package com.sun.javaee.blueprints.petstore.captcha;
 
@@ -12,11 +12,14 @@ import java.awt.image.BufferedImage;
 import java.awt.image.FilteredImageSource;
 import java.awt.image.ImageFilter;
 import java.awt.image.ImageProducer;
+import javax.servlet.http.HttpSession;
 import java.util.Random;
 
 
 public class SimpleCaptcha {
     
+    private final static String CAPTCHA_STRING = "captcha_string";
+    private final static String CAPTAHA_SESSION_ID = "captcha_session_id";
     private Random rd = null;
     private String cstring = null;
     private String cid = null;
@@ -55,6 +58,22 @@ public class SimpleCaptcha {
         this.rd = new Random();
     }
     
+    public Boolean validateResponseWithSession(HttpSession session, String text) {
+        String id = session.getId();
+        String lcstring = (String)session.getAttribute(CAPTCHA_STRING);
+        String lid = (String)session.getAttribute(CAPTAHA_SESSION_ID);
+        if (lcstring==null || lid==null) {
+            return Boolean.FALSE;
+        }
+        // should be case insensitive
+        String ltext = text.toLowerCase();
+        if (id.equals(lid) && ltext.equals(lcstring.toLowerCase())) {
+            return Boolean.TRUE;
+        } else {
+            return Boolean.FALSE;
+        }
+    }
+    
     public Boolean validateResponse(String id, String text) {
         // should be case insensitive
         String ltext = text.toLowerCase();
@@ -64,6 +83,16 @@ public class SimpleCaptcha {
         } else {
             return Boolean.FALSE;
         }
+    }
+    
+    public BufferedImage getCaptchaImageWithSession(HttpSession session) {
+        this.cid = session.getId();
+        RandomString rs = new RandomString();
+        
+        this.cstring = rs.getString(5, "IiOo0");
+        session.setAttribute(CAPTCHA_STRING, this.cstring);
+        session.setAttribute(CAPTAHA_SESSION_ID, this.cid);
+        return getCaptchaImage(this.cstring, this.width, this.height);
     }
     
     public BufferedImage getCaptchaImageWithId(String id) {
