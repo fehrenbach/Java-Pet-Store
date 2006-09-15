@@ -73,7 +73,8 @@ create table tag(
     tagid INTEGER NOT NULL,
     tag VARCHAR(30) NOT NULL,
     refcount INTEGER NOT NULL,
-    primary key (tagid)
+    primary key (tagid),
+    unique(tag)
 );
 
 

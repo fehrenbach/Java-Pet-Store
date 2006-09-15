@@ -1,13 +1,19 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: Item.java,v 1.17 2006-05-09 05:57:21 smitha Exp $ */
+$Id: Item.java,v 1.18 2006-09-15 23:07:42 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.model;
 
+import static javax.persistence.CascadeType.REMOVE;
+import java.util.Collection;
+import java.util.Vector;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -38,6 +44,8 @@ public class Item implements java.io.Serializable {
     private SellerContactInfo contactInfo;
     private int totalScore;
     private int numberOfVotes;
+    private Collection<Tag> tags=new Vector();
+
       
     public Item() { }
     public Item(String productID, String name, String description,
@@ -143,6 +151,18 @@ public class Item implements java.io.Serializable {
         this.numberOfVotes = numberOfVotes;
     }
     
+    @ManyToMany(cascade = REMOVE)
+    @JoinTable(name = "TAG_ITEM", joinColumns = @JoinColumn(name = "ITEMID", referencedColumnName = "ITEMID")
+    , inverseJoinColumns = @JoinColumn(name = "TAGID", referencedColumnName = "TAGID")
+    )
+    public Collection<Tag> getTags() {
+        return tags;
+    }
+    public void setTags(Collection<Tag> tags) {
+        this.tags=tags;
+    }
+    
+    
     /*Business Methods
      **/
     public void addRating(int score){
@@ -158,6 +178,16 @@ public class Item implements java.io.Serializable {
         }    
         return average;
     }
+    
+    public String tagsAsString() {
+        StringBuffer sbTags=new StringBuffer();
+        for(Tag tag : this.getTags()) {
+            sbTags.append(tag.getTag());
+            sbTags.append(" ");
+        }
+        return sbTags.toString().trim();
+    }
+    
 }
 
 

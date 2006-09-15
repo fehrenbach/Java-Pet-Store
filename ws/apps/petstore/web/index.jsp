@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: index.jsp,v 1.12 2006-05-31 19:13:03 basler Exp $ --%>
+$Id: index.jsp,v 1.13 2006-09-15 23:07:43 basler Exp $ --%>
 
 <html>
  <head>
@@ -97,6 +97,9 @@ function browse(category) {
  <div style="position: absolute; visibility: hidden;z-index:5" id="menu-popup">
   <table id="completeTable" class="popupTable" ></table>
  </div>
+
+ <br/><br/>
+ <jsp:include page="footer.jsp" />
 
 </body>
 </html>

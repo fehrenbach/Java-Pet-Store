@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CatalogFacade.java,v 1.44 2006-09-14 01:53:10 basler Exp $ */
+$Id: CatalogFacade.java,v 1.45 2006-09-15 23:07:42 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.model;
 
@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Vector;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -297,20 +298,22 @@ public class CatalogFacade implements ServletContextListener {
         EntityManager em = emf.createEntityManager();
         Tag tag=null;
         try {
-            List<Tag> tags = em.createQuery("SELECT t FROM Tag t WHERE t.tag = :tag").setParameter("tag", sxTag).getResultList();
-            if(tags.size() > 0) {
-                // found tag so add in reference item
+            List<Tag> tags=em.createQuery("SELECT t FROM Tag t WHERE t.tag = :tag").setParameter("tag", sxTag).getResultList();
+            
+            
+            if(tags != null && !tags.isEmpty()) {
                 tag=tags.get(0);
+                // found tag so add in reference item
                 if(!tag.itemExists(item)) {
                     // add item to tag
-                    tag.addItem(item);
+                    tag.getItems().add(item);
                     tag.incrementRefCount();
                 }
             } else {
                 // need add tag and reference item
                 tag=new Tag(sxTag);
                 // add item to tag
-                tag.addItem(item);
+                tag.getItems().add(item);
                 tag.incrementRefCount();
             }
             utx.begin();
@@ -331,10 +334,21 @@ public class CatalogFacade implements ServletContextListener {
     
     public List<Tag> getTagsInChunk(int start, int chunkSize) {
         EntityManager em = emf.createEntityManager();
-        Query query = em.createQuery("SELECT t FROM Tag t ORDER BY t.refCount DESC, t.tag");
+        Query query = em.createQuery("SELECT t FROM Tag t ORDER BY t.tag");
         List<Tag> tags = query.setFirstResult(start).setMaxResults(chunkSize).getResultList();
         em.close();
         return tags;
+    }
+
+    public Tag getTag(String sxTag) {
+        Tag tag=null;
+        EntityManager em = emf.createEntityManager();
+        List<Tag> tags=em.createQuery("SELECT t FROM Tag t WHERE t.tag = :tag").setParameter("tag", sxTag).getResultList();
+        em.close();
+        if(tags != null && !tags.isEmpty()) {
+            tag=tags.get(0);
+        }
+        return tag;
     }
     
 }

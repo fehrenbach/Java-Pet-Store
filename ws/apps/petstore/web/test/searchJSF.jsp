@@ -1,9 +1,9 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: search.jsp,v 1.24 2006-09-15 23:07:43 basler Exp $ --%>
+$Id: searchJSF.jsp,v 1.1 2006-09-15 23:07:44 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
-<%@page import="java.util.*, com.sun.javaee.blueprints.petstore.search.*"%>
+<%@page import="java.util.*, com.sun.javaee.blueprints.petstore.search.SearchIndex, com.sun.javaee.blueprints.petstore.search.IndexDocument, com.sun.javaee.blueprints.petstore.search.UpdateIndex, com.sun.javaee.blueprints.petstore.util.PetstoreConstants"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
 <%@taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
@@ -14,20 +14,6 @@ $Id: search.jsp,v 1.24 2006-09-15 23:07:43 basler Exp $ --%>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Search Page</title>
-        <style>
-            .itemTable {
-            padding: 0.3cm;
-            width: 800px;
-            border-style: double; 
-            border-color: darkgreen; 
-            }
-            .itemCell {
-            border-style: solid; 
-            border-color: darkgreen; 
-            border-width: thin;
-            padding: 5px
-            }
-        </style>
     </head>
     <body>   
         <jsp:include page="banner.jsp" />
@@ -62,7 +48,7 @@ $Id: search.jsp,v 1.24 2006-09-15 23:07:43 basler Exp $ --%>
                     <!-- Used as spaces to center the table, this could be done programmatically,
                     but browser diff, so I left it in the hands of the component user.  The image is located 
                     in the component jar so for retrieval, push it through the faces servlet -->
-                    <img id="spaceImage" height="10px" width="3px" src="${pageContext.request.contextPath}/faces/static/META-INF/popup/images/spacer.gif" align="left">
+                    <img id="spaceImage" height="10px" width="5px" src="${pageContext.request.contextPath}/faces/static/META-INF/popup/images/spacer.gif" align="left">
                     <table border="0" width="270px" bgcolor="#ffffff" cellpadding="5" cellspacing="5">
                         <tr>
                             <td align="left" valign="top"><b>Name:</b>
@@ -78,23 +64,25 @@ $Id: search.jsp,v 1.24 2006-09-15 23:07:43 basler Exp $ --%>
                         </tr>
                         <tr>
                             <td colspan="2" align="center"><img name="image" id="imageId" src="" 
-                            alt="[Loading Image...]" border="2"/><br/><br/></td>
+                            alt="[Loading Image...]" border="2"/></td>
                         </tr>
-                    </table> 
+                    </table>                    
                 </ui5:popupTag>            
         
                 <h1>Search Page</h1>
                 <h:form id="searchForm">
-                    <table class="itemTable" style="width: 700px">
+                    <table border="1" cellpadding="5" cellspacing="5" style="border-style:double; width:600px; border-color:darkgreen; padding:5px">
                         <tr>
-                            <th class="itemCell">Search String</th>
-                            <td class="itemCell">
+                            <th>Search String</th>
+                            <td>
                                 <h:inputText size="50" id="searchString" value="#{SearchBean.searchString}"/>
-                                &nbsp;&nbsp;&nbsp;Also Search Tags:<h:selectBooleanCheckbox id="searchTags" value="#{SearchBean.searchTags}"/>
+                                <!-- 
+                                Also Search Tags:<h:selectBooleanCheckbox id="searchTags" value="#{SearchBean.searchTags}"/>
+                                -->
                             </td>
                         </tr>
                         <tr>
-                            <td  class="itemCell" align="center" colspan="2">
+                            <td align="center" colspan="2">
                                 <h:commandButton action="#{SearchBean.searchAction}" id="searchSubmit" type="submit" value="Submit"/>
                                 <h:commandButton id="searchReset" type="reset" value="Reset"/>
                             </td>
@@ -103,64 +91,57 @@ $Id: search.jsp,v 1.24 2006-09-15 23:07:43 basler Exp $ --%>
                     <h:messages/>
                 </h:form>
                 <br/>
-                     
+            
+                <h:form id="resultsForm">
+                    <h:dataTable id="results" border="1" 
+                        value="#{SearchBean.hits}" var="item" rendered="#{SearchBean.showResults}"
+                        style="border-style:double; width:600px; border-color:darkgreen; padding:5px"
+                        cellpadding="5px" cellspacing="5px" >
                 
-                
-                <h:form id="resultsForm" rendered="#{SearchBean.showResults}">
-                    <table class="itemTable">
-                        <tr>
-                            <th class="itemCell">
-                                Map
-                            <br/>
-                            <img src="../images/check_all.gif" onclick="return checkAll()"/><img src="../images/uncheck_all.gif" onclick="return uncheckAll()"/>
-                            </th>
-                            <th class="itemCell">Name</th>
-                            <th class="itemCell">Description</th>
-                            <th class="itemCell">Tags</th>
-                            <th class="itemCell">Price</th>
-                        </tr>
-<%
-SearchBean searchBean=(SearchBean)session.getAttribute("SearchBean");
-if(searchBean != null) {
-    List<IndexDocument> hits=searchBean.getHits();
-    if(hits != null) {
-        for(IndexDocument indexDoc : hits) {
-%>                    
-                        <tr>
-                            <td class="itemCell">
-                                <input type="checkbox" name="mapSelectedItems" value="<%= indexDoc.getUID() %>"/>                        
-                            </td>
-                            <td class="itemCell">
-                                <a href="${pageContext.request.contextPath}/faces/catalog.jsp?pid=<%= indexDoc.getProduct() %>&itemId=<%= indexDoc.getUID() %>"
-                                    onmouseover="bpui.popup.show('pop1', event, '<%= indexDoc.getUID() %>')" onmouseout="bpui.popup.hide('pop1')">
-                                    <%= indexDoc.getTitle() %>
-                                </a>
-                            </td>
-                            <td class="itemCell">
-                                <%= indexDoc.getSummary() %>
-                            </td>
-                            <td class="itemCell">
-                                <%= (indexDoc.getTag().equals("") ? "&nbsp;" : indexDoc.getTag()) %>
-                            </td>
-                            <td class="itemCell">
-                                <%= indexDoc.getPriceDisplay() %>
-                            </td>
-                        </tr>
-<%
-        }
-    }                        
-}
-%>
-                            <tr>
-                                <td colspan="4">
+                        <h:column >
+                            <f:facet name="header">
+                                <h:panelGroup>
+                                    <h:outputText value="Map"/><br/>
+                                    <h:commandButton image="../images/check_all.gif" onclick="return checkAll()"/>
+                                    <h:commandButton image="../images/uncheck_all.gif" onclick="return uncheckAll()"/>
+                                </h:panelGroup>
+                            </f:facet>
+                        
+                            <input type="checkbox" name="mapSelectedItems" value="<h:outputText value='#{item.UID}'/>"/>                        
+                        
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Name"/>
+                            </f:facet>
+                            <a href="${pageContext.request.contextPath}/faces/catalog.jsp?pid=<h:outputText value='#{item.product}'/>&itemId=<h:outputText value='#{item.UID}'/>"
+                                onmouseover="bpui.popup.show('pop1', event, '<h:outputText value='#{item.UID}'/>')" onmouseout="bpui.popup.hide('pop1')">
+                                <h:outputText value="#{item.title}"/>
+                            </a>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Description"/>
+                            </f:facet>
+                            <h:outputText value="#{item.summary}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Price"/>
+                            </f:facet>
+                            <h:outputText id="price" value="#{item.priceValue}" style="text-align: right">
+                                <f:convertNumber type="currency"/>
+                            </h:outputText>                        
+                        </h:column>
+                        <f:facet name="footer">
+                            <h:panelGroup>
                                 <br/>
                                 <center>
-                                    <table class="itemTable">
+                                    <table border=1 cellpadding="5" cellspacing="5">
                                         <tr>
                                             <th align="right">Center Point Address:</th>
                                             <td>
                                                 <h:inputText id="centerAddress" value="#{MapBean.centerAddress}" size="50"/>
-                                                <br/><small><i>For example: 4140 Network Circle, Santa Clara, CA, 95054</i></small>
                                             </td>
                                         </tr>
                                         <tr>
@@ -178,10 +159,10 @@ if(searchBean != null) {
                                     </table>
                                 </center>
                                 <br/>
-                            </td>
-                        </tr>
-                    </table>
-                    
+                            </h:panelGroup>
+                        </f:facet>
+                    </h:dataTable>
+                
                     <h:messages/>
                 </h:form>
                 <br/><br/><br/>

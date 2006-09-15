@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: tag.jsp,v 1.1 2006-09-14 01:53:11 basler Exp $ --%>
+$Id: tag.jsp,v 1.2 2006-09-15 23:07:43 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -20,22 +20,159 @@ $Id: tag.jsp,v 1.1 2006-09-14 01:53:11 basler Exp $ --%>
         Collection<Tag> tags=cf.getTagsInChunk(0, 20);
     
 %>
+    <style>
+        .itemTable {
+            padding: 0.3cm;
+            border-style: double; 
+            width: 800px; 
+            border-color: darkgreen; 
+        }
+        .itemCell {
+            border-style: solid; 
+            border-color: darkgreen; 
+            border-width: thin;
+            padding: 5px
+        }
+        .tagCell {
+            padding: 0.3cm;
+        }
+        .xxlarge 
+        {
+            font-size: xx-large;
+            color: red;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .xlarge 
+        {
+            font-size: x-large;
+            color: blue;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .large
+        {
+            font-size: large;
+            color: green;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .medium 
+        {
+            font-size: medium;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .items 
+        {
+            display: inline;
+        }
+    </style>
+    <script language="javascript">
+        function retrieveItems(tag) {
+            var bindArgs = {
+                // url when using the jsp to serve the ajax request
+                url: "../tagItemLookup.jsp?tag=" + escape(tag),
+                mimetype: "text/xml",
+                handle: returnFunctionx};
+
+            // dispatch the request
+            dojo.io.bind(bindArgs);      
+        }
         
+        
+        function returnFunctionx(type, data, evt) {
+            // statically setup popup for simple case
+            var componentId="displayItems";
+            // check return of the dojo call to make sure it is valid
+            if (evt.readyState == 4) {
+                if (evt.status == 200) {
+                    // get results and replace dom elements
+                    var itemsx=data.getElementsByTagName("item");
+                    //alert("test " + itemsx.length);
+                    display="<table class='itemTable'><tr><th class='itemCell'>Name</th><th class='itemCell'>Description</th><th class='itemCell'>Tags</th><th class='itemCell'>Price</th></tr>"
+                    for(var ii=0; ii < itemsx.length; ii++) {
+                        item=itemsx[ii];
+                        display +="<tr>";
+                        display +="<td class='itemCell'><a href='./catalog.jsp?pid="+ item.getElementsByTagName("productID")[0].childNodes[0].nodeValue +"&itemId=" + 
+                            item.getElementsByTagName("itemID")[0].childNodes[0].nodeValue + "' onmouseover='bpui.popup.show(&quot;pop1&quot;, event, &quot;" 
+                            + item.getElementsByTagName("itemID")[0].childNodes[0].nodeValue + "&quot;)' onmouseout='bpui.popup.hide(&quot;pop1&quot;)'>" 
+                            + item.getElementsByTagName("name")[0].childNodes[0].nodeValue +"</a></td>";
+                        display +="<td class='itemCell'>" + item.getElementsByTagName("description")[0].childNodes[0].nodeValue +"</td>";
+                        display +="<td class='itemCell'>" + item.getElementsByTagName("tags")[0].childNodes[0].nodeValue +"</td>";
+                        display +="<td class='itemCell'>" + item.getElementsByTagName("price")[0].childNodes[0].nodeValue +"</td>";
+                        display +="</tr>";
+                    }
+                    display+="</table>";
+                    document.getElementById(componentId).innerHTML=display;
+                    document.getElementById(componentId).style.visibility='visible';
+                } else if (evt.status == 204){
+                    alert("204 return");
+                }
+            }
+        }
+        
+    </script>
     </head>
     <body>   
         <jsp:include page="banner.jsp" />
-        <center>
-        <h1>Tag Page</h1>
-        <table border="0">
-            <tr>    
-<%
-    for(Tag tag : tags) {
-        out.println("<td align='center'><font size='+" + (tag.getRefCount() / 10) + "'>" + tag.getTag() + "</font> (" + tag.getRefCount() + ")</td>");
-    }
-%>
-            </tr>
-        </table>
-        </center>
+        <f:view>
+            
+                <ui5:popupTag id="pop1" xmlHttpRequestURL="../lookup.jsp?popupView=2&itemId=" 
+                    elementNamePairs="name=value1,description=value2,price=value3,image=imageId">
+                    <!-- Used as spaces to center the table, this could be done programmatically,
+                    but browser diff, so I left it in the hands of the component user.  The image is located 
+                    in the component jar so for retrieval, push it through the faces servlet -->
+                    <img id="spaceImage" height="10px" width="10px" src="${pageContext.request.contextPath}/faces/static/META-INF/popup/images/spacer.gif" align="left">
+                    <table border="0" width="270px" bgcolor="#ffffff" cellpadding="5" cellspacing="5">
+                        <tr>
+                            <td align="left" valign="top"><b>Name:</b>
+                            <span id="value1">Loading Data...</span></td>
+                        </tr>
+                        <tr>
+                            <td align="left" valign="top"><b>Seller Address:</b>
+                            <span id="value2">Loading Data...</span></td>
+                        </tr>
+                        <tr>
+                            <td align="left" valign="top"><b>Price:</b>
+                            <span id="value3">Loading Data...</span></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" align="center"><img name="image" id="imageId" src="" 
+                            alt="[Loading Image...]" border="2"/><br/><br/></td>
+                        </tr>
+                    </table> 
+                </ui5:popupTag>            
+            <center>
+                <h1>Tag Page</h1>
+                <table border="0">
+                    <tr>    
+                        <%
+                        String style=null;
+                        int refx=0;
+                        for(Tag tag : tags) {
+                        refx=tag.getRefCount() / 5;
+                        if(refx > 3) {
+                            style="xxlarge";
+                        } else if(refx == 2) {
+                            style="xlarge";
+                        } else if(refx == 1) {
+                            style="large";
+                        } else {
+                            style="medium";
+                        }
+                        
+                        out.println("<td class='tagCell'><span onclick=\"retrieveItems('" + tag.getTag() + "')\" class='" + style +"'>" +  tag.getTag() + "</span> (" + tag.getRefCount() + ")</td>");
+                        }
+                        %>
+                    </tr>
+                </table>
+                <div id="displayItems" class="items">
+                    
+                </div>
+            </center>
+        </f:view>
+        <br/><br/><br/><br/>
         <jsp:include page="footer.jsp" />
     </body>
 </html>

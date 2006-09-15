@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: map.jsp,v 1.18 2006-05-30 22:31:24 basler Exp $ --%>
+$Id: map.jsp,v 1.19 2006-09-15 23:07:43 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -118,7 +118,7 @@ $Id: map.jsp,v 1.18 2006-05-30 22:31:24 basler Exp $ --%>
                                     </tr>
                                     <tr>
                                         <td colspan="2" align="center"><img name="image" id="imageId" src="" 
-                                        alt="[Loading Image...]" border="2"/></td>
+                                        alt="[Loading Image...]" border="2"/><br/><br/></td>
                                     </tr>
                                 </table>                    
                             </ui5:popupTag>            

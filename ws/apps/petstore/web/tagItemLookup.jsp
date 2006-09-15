@@ -1,0 +1,39 @@
+<%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
+$Id: tagItemLookup.jsp,v 1.1 2006-09-15 23:07:44 basler Exp $ --%>
+
+<%@page contentType="text/xml"%>
+<%@page pageEncoding="UTF-8"%>
+<%@page import="java.util.*, java.text.NumberFormat, com.sun.javaee.blueprints.petstore.model.CatalogFacade, com.sun.javaee.blueprints.petstore.model.Item, com.sun.javaee.blueprints.petstore.model.Tag"%>
+
+<%
+    String sxTag=request.getParameter("tag");
+
+    try {
+        ServletContext context=config.getServletContext();
+        CatalogFacade cf=(CatalogFacade)context.getAttribute("CatalogFacade");
+        Tag tag=cf.getTag(sxTag);
+        out.println("<response>");
+
+        if(tag != null) {
+            out.println("<tag>" + tag.getTag() + "</tag>");
+            out.println("<items>");
+            Collection<Item> items=tag.getItems();
+            for(Item item : items) {
+                out.println("<item>");
+                out.println("<itemID>" + item.getItemID() + "</itemID>");
+                out.println("<productID>" + item.getProductID() + "</productID>");
+                out.println("<name><![CDATA[" + item.getName() + "]]></name>");
+                out.println("<description><![CDATA[" + item.getDescription() + "]]></description>");
+                out.println("<tags><![CDATA[" + item.tagsAsString() + "]]></tags>");
+                out.println("<price><![CDATA[" + NumberFormat.getCurrencyInstance().format(item.getPrice()) + "]]></price>");
+                out.println("</item>");
+            }
+            out.println("</items>");
+        }
+        out.println("</response>");
+        out.flush();
+    } catch(Exception ee) {
+        ee.printStackTrace();
+    }
+
+%>
