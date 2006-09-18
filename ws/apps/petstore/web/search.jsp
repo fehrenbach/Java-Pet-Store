@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: search.jsp,v 1.24 2006-09-15 23:07:43 basler Exp $ --%>
+$Id: search.jsp,v 1.25 2006-09-18 16:16:13 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -152,7 +152,7 @@ if(searchBean != null) {
 }
 %>
                             <tr>
-                                <td colspan="4">
+                                <td colspan="5">
                                 <br/>
                                 <center>
                                     <table class="itemTable">

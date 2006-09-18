@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CatalogFacade.java,v 1.45 2006-09-15 23:07:42 basler Exp $ */
+$Id: CatalogFacade.java,v 1.46 2006-09-18 16:16:11 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.model;
 
@@ -316,8 +316,12 @@ public class CatalogFacade implements ServletContextListener {
                 tag.getItems().add(item);
                 tag.incrementRefCount();
             }
+            // add tag to items ???
+            item.getTags().add(tag);
+            
             utx.begin();
             em.joinTransaction();
+            em.merge(item);
             em.persist(tag);
             utx.commit();
         } catch(Exception exe){

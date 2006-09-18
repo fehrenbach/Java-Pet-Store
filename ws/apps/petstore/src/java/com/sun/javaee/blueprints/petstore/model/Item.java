@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: Item.java,v 1.18 2006-09-15 23:07:42 basler Exp $ */
+$Id: Item.java,v 1.19 2006-09-18 16:16:12 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.model;
 
@@ -151,10 +151,7 @@ public class Item implements java.io.Serializable {
         this.numberOfVotes = numberOfVotes;
     }
     
-    @ManyToMany(cascade = REMOVE)
-    @JoinTable(name = "TAG_ITEM", joinColumns = @JoinColumn(name = "ITEMID", referencedColumnName = "ITEMID")
-    , inverseJoinColumns = @JoinColumn(name = "TAGID", referencedColumnName = "TAGID")
-    )
+    @ManyToMany(cascade = REMOVE, mappedBy = "items")
     public Collection<Tag> getTags() {
         return tags;
     }
