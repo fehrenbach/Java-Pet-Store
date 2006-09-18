@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: tag.jsp,v 1.2 2006-09-15 23:07:43 basler Exp $ --%>
+$Id: tag.jsp,v 1.3 2006-09-18 16:56:09 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -15,9 +15,9 @@ $Id: tag.jsp,v 1.2 2006-09-15 23:07:43 basler Exp $ --%>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Tag Page</title>
 <%
-    try {
-        CatalogFacade cf = (CatalogFacade)config.getServletContext().getAttribute("CatalogFacade");
-        Collection<Tag> tags=cf.getTagsInChunk(0, 20);
+try {
+    CatalogFacade cf = (CatalogFacade)config.getServletContext().getAttribute("CatalogFacade");
+    Collection<Tag> tags=cf.getTagsInChunk(0, 20);
     
 %>
     <style>
@@ -65,7 +65,7 @@ $Id: tag.jsp,v 1.2 2006-09-15 23:07:43 basler Exp $ --%>
         }
         .items 
         {
-            display: inline;
+            visibility: hidden;
         }
     </style>
     <script language="javascript">
@@ -89,15 +89,16 @@ $Id: tag.jsp,v 1.2 2006-09-15 23:07:43 basler Exp $ --%>
                 if (evt.status == 200) {
                     // get results and replace dom elements
                     var itemsx=data.getElementsByTagName("item");
-                    //alert("test " + itemsx.length);
-                    display="<table class='itemTable'><tr><th class='itemCell'>Name</th><th class='itemCell'>Description</th><th class='itemCell'>Tags</th><th class='itemCell'>Price</th></tr>"
+                    display="<table class='itemTable'><tr><td class='itemCell' align='center' colspan='4'><h2>Tag: " + 
+                        data.getElementsByTagName("tag")[0].childNodes[0].nodeValue + 
+                        "</h2></td></tr><tr><th class='itemCell'>Name</th><th class='itemCell'>Description</th><th class='itemCell'>Tags</th><th class='itemCell'>Price</th></tr>"
                     for(var ii=0; ii < itemsx.length; ii++) {
                         item=itemsx[ii];
                         display +="<tr>";
                         display +="<td class='itemCell'><a href='./catalog.jsp?pid="+ item.getElementsByTagName("productID")[0].childNodes[0].nodeValue +"&itemId=" + 
-                            item.getElementsByTagName("itemID")[0].childNodes[0].nodeValue + "' onmouseover='bpui.popup.show(&quot;pop1&quot;, event, &quot;" 
-                            + item.getElementsByTagName("itemID")[0].childNodes[0].nodeValue + "&quot;)' onmouseout='bpui.popup.hide(&quot;pop1&quot;)'>" 
-                            + item.getElementsByTagName("name")[0].childNodes[0].nodeValue +"</a></td>";
+                            item.getElementsByTagName("itemID")[0].childNodes[0].nodeValue + "' onmouseover='bpui.popup.show(&quot;pop1&quot;, event, &quot;" + 
+                            item.getElementsByTagName("itemID")[0].childNodes[0].nodeValue + "&quot;)' onmouseout='bpui.popup.hide(&quot;pop1&quot;)'>" + 
+                            item.getElementsByTagName("name")[0].childNodes[0].nodeValue +"</a></td>";
                         display +="<td class='itemCell'>" + item.getElementsByTagName("description")[0].childNodes[0].nodeValue +"</td>";
                         display +="<td class='itemCell'>" + item.getElementsByTagName("tags")[0].childNodes[0].nodeValue +"</td>";
                         display +="<td class='itemCell'>" + item.getElementsByTagName("price")[0].childNodes[0].nodeValue +"</td>";
@@ -147,24 +148,26 @@ $Id: tag.jsp,v 1.2 2006-09-15 23:07:43 basler Exp $ --%>
                 <h1>Tag Page</h1>
                 <table border="0">
                     <tr>    
-                        <%
-                        String style=null;
-                        int refx=0;
-                        for(Tag tag : tags) {
-                        refx=tag.getRefCount() / 5;
-                        if(refx > 3) {
-                            style="xxlarge";
-                        } else if(refx == 2) {
-                            style="xlarge";
-                        } else if(refx == 1) {
-                            style="large";
-                        } else {
-                            style="medium";
-                        }
-                        
-                        out.println("<td class='tagCell'><span onclick=\"retrieveItems('" + tag.getTag() + "')\" class='" + style +"'>" +  tag.getTag() + "</span> (" + tag.getRefCount() + ")</td>");
-                        }
-                        %>
+<%
+    String style=null;
+    int refx=0, ii=0;
+    for(Tag tag : tags) {
+        refx=tag.getRefCount() / 5;
+        if(refx > 3) {
+            style="xxlarge";
+        } else if(refx == 2) {
+            style="xlarge";
+        } else if(refx == 1) {
+            style="large";
+        } else {
+            style="medium";
+        }
+        
+        if((ii % 6) == 0) out.println("</tr>\n<tr>");
+        out.println("<td class='tagCell'><span onclick=\"retrieveItems('" + tag.getTag() + "')\" class='" + style +"'>" +  tag.getTag() + "</span> (" + tag.getRefCount() + ")</td>");
+        ii++;
+    }
+%>
                     </tr>
                 </table>
                 <div id="displayItems" class="items">
