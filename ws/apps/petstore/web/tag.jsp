@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: tag.jsp,v 1.3 2006-09-18 16:56:09 basler Exp $ --%>
+$Id: tag.jsp,v 1.4 2006-09-18 17:48:27 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -17,8 +17,14 @@ $Id: tag.jsp,v 1.3 2006-09-18 16:56:09 basler Exp $ --%>
 <%
 try {
     CatalogFacade cf = (CatalogFacade)config.getServletContext().getAttribute("CatalogFacade");
-    Collection<Tag> tags=cf.getTagsInChunk(0, 20);
-    
+    List<Tag> tags=cf.getTagsInChunk(0, 18);
+    // since top 20 come from database or desending refCount order, need to reorder by tag name
+    Collections.sort(tags, new Comparator() {
+        public int compare(Object one, Object two) {
+             int cc=((Tag)two).getTag().compareTo(((Tag)one).getTag());
+             return (cc < 0 ? 1 : cc > 0 ? -1 : 0);
+        }
+    });    
 %>
     <style>
         .itemTable {
