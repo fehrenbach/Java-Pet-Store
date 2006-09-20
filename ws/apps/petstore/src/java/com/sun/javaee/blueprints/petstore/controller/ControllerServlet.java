@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: ControllerServlet.java,v 1.11 2006-09-20 17:02:18 basler Exp $ */
+$Id: ControllerServlet.java,v 1.12 2006-09-20 23:29:34 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -155,10 +155,10 @@ public class ControllerServlet extends HttpServlet {
             Boolean cInvalid = (Boolean)session.getAttribute("captchaInvalid");
             Boolean pFailure = (Boolean)session.getAttribute(PERSIST_FAILURE);
             if (cInvalid == null) {
-                cInvalid = new Boolean(false);
+                cInvalid = Boolean.valueOf(false);
             }
             if (pFailure == null) {
-                pFailure = new Boolean(false);
+                pFailure = Boolean.valueOf(false);
             }
             
             if (reqContentType!=null && reqContentType.equals("xml")) {
@@ -436,7 +436,7 @@ public class ControllerServlet extends HttpServlet {
                 if (cacheModified < lastModified) {
                     StringBuffer buffer = getResource(con.getInputStream());
                     synchronized(cacheTimes) {
-                        cacheTimes.put(resource, new Long(lastModified));
+                        cacheTimes.put(resource, Long.valueOf(lastModified));
                     }
                     synchronized(cache) {
                         cache.put(resource, buffer);
@@ -467,31 +467,6 @@ public class ControllerServlet extends HttpServlet {
             getLogger().log(Level.SEVERE, "ControllerServlet:loadResource from stream error", e);
         }
         return buffer;
-    }
-    
-    
-    private String handleItems(String pid, int start, int length, String baseURL) {
-        StringBuffer sb = new StringBuffer();
-        // then write the data of the response
-        sb.append("<items>\n");
-        List items = cf.getItemsVLH(pid, start, length);
-        Iterator<Item> it = items.iterator();
-        NumberFormat formatter = new DecimalFormat("00.00");
-        while (it.hasNext()) {
-            Item i = it.next();
-            sb.append("<item>\n");
-            sb.append(" <id>" + i.getItemID() + "</id>\n");
-            sb.append(" <product-id>" + i.getProductID() + "</product-id>\n");
-            sb.append(" <rating>" + i.checkAverageRating() + "</rating>\n");
-            sb.append(" <name>" + i.getName() + "</name>\n");
-            sb.append(" <description>" + i.getDescription() + "</description>\n");
-            sb.append(" <price>" + formatter.format(i.getPrice()) + "</price>\n");
-            sb.append(" <image-url>" + baseURL + i.getImageURL() + "</image-url>\n");
-            sb.append(" <image-tb-url>" + baseURL + i.getImageThumbURL() + "</image-tb-url>\n");
-            sb.append("</item>\n");
-        }
-        sb.append("</items>");
-        return sb.toString();
     }
     
     private String handleItems(List items, String baseURL) {

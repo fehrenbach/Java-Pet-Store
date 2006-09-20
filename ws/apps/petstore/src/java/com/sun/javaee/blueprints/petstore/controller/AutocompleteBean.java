@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: AutocompleteBean.java,v 1.6 2006-05-05 20:15:23 inder Exp $ */
+$Id: AutocompleteBean.java,v 1.7 2006-09-20 23:29:34 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -85,7 +85,8 @@ public class AutocompleteBean {
         if (prefix == null || prefix.equals("")) {
             prefix = "a";
         }
-        String decodedStr = initCities(prefix, ITEMCOUNT);
+        initCities(prefix, ITEMCOUNT);
+        //String decodedStr = initCities(prefix, ITEMCOUNT);
         // add items directly rather than calling autocompleteutilities
         //if (decodedStr == null) decodedStr = "a";
         //AutoCompleteUtilities.addMatchingItems(cities, decodedStr, result);
@@ -98,7 +99,8 @@ public class AutocompleteBean {
         if (prefix == null || prefix.equals("")) {
             prefix = "a";
         }
-        String decodedStr = initCities(prefix, ITEMCOUNT);
+        initCities(prefix, ITEMCOUNT);
+        //String decodedStr = initCities(prefix, ITEMCOUNT);
         // add items directly rather than calling autocompleteutilities
         //if (decodedStr == null) decodedStr = "a";
         //AutoCompleteUtilities.addMatchingItems(states, decodedStr, result);

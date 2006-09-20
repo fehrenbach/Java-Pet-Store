@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CatalogFacade.java,v 1.47 2006-09-20 17:02:18 basler Exp $ */
+$Id: CatalogFacade.java,v 1.48 2006-09-20 23:29:34 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.model;
 
@@ -123,15 +123,19 @@ public class CatalogFacade implements ServletContextListener {
      */
     public List<Item> getItemsByItemID(String[] itemIDs){
         EntityManager em = emf.createEntityManager();
-        String idString  = "";
         List<Item>  items = new ArrayList();
+        StringBuffer sbItemIDs=new StringBuffer();
         if(itemIDs.length !=0) {
-            for(int i=0;i<itemIDs.length;++i){
-                if(idString.length()!=0) idString+=",";
-                idString=idString+"'"+itemIDs[i]+"'";
+            for(int i=0; i < itemIDs.length; ++i){
+                sbItemIDs.append("'");
+                sbItemIDs.append(itemIDs[i]);
+                sbItemIDs.append("',");
             }
+            // remove last comma
+            String idString=sbItemIDs.toString();
+            idString=idString.substring(0, idString.length() - 1);
             String queryString = "SELECT i FROM Item i WHERE " +
-                    "i.itemID IN (" +idString+")";
+                    "i.itemID IN (" + idString + ")";
             Query query = em.createQuery(queryString + " ORDER BY i.name");
             items = query.getResultList();
         }
@@ -148,12 +152,17 @@ public class CatalogFacade implements ServletContextListener {
             double toLat, double fromLong, double toLong){
         EntityManager em = emf.createEntityManager();
         List<Item>  items = new ArrayList();
-        String idString  = "";
+        StringBuffer sbItemIDs=new StringBuffer();
         if(itemIDs.length !=0) {
             for(int i=0;i<itemIDs.length;++i){
-                if(idString.length()!=0) idString+=",";
-                idString=idString+"'"+itemIDs[i]+"'";
+                sbItemIDs.append("'");
+                sbItemIDs.append(itemIDs[i]);
+                sbItemIDs.append("',");
             }
+            // remove last comma
+            String idString=sbItemIDs.toString();
+            idString=idString.substring(0, idString.length() - 1);
+            
             String queryString = "SELECT i FROM Item i WHERE ((" +
                     "i.itemID IN (" +idString+"))";
             Query query = em.createQuery(queryString + " AND " +
@@ -425,7 +434,9 @@ public class CatalogFacade implements ServletContextListener {
         } finally {
             try {
                 // must close file or will not be able to reindex
-                indexer.close();
+                if(indexer != null) {
+                    indexer.close();
+                }
             } catch (Exception ee) {
                 ee.printStackTrace();
             }

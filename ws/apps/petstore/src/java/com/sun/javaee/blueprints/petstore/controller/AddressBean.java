@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: AddressBean.java,v 1.4 2006-05-05 16:14:19 basler Exp $ */
+$Id: AddressBean.java,v 1.5 2006-09-20 23:29:33 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -9,7 +9,7 @@ public class AddressBean {
     private String city;
     private String state;
     private String zip;
-    private final boolean bDebug=false;
+    private static final boolean bDebug=false;
     
     public AddressBean() {
     }

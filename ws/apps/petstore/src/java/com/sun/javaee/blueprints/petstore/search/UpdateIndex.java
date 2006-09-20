@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: UpdateIndex.java,v 1.5 2006-09-20 17:02:19 basler Exp $ */
+$Id: UpdateIndex.java,v 1.6 2006-09-20 23:29:34 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.search;
 
@@ -39,13 +39,13 @@ public class UpdateIndex {
         
         // get document to update, so data can be added
         SearchIndex si=new SearchIndex();
-        Vector vtHits=si.query(indexFile, sxDocId, "uid");
+        si.query(indexFile, sxDocId, "uid");
         
         Hits hits=si.getHitsNative();
         // should only have one return
         if(hits.length() > 1) {
             // exception, should only be one
-            new IllegalStateException("Should only have one document in index with uid=" + sxDocId);
+           throw new IllegalStateException("Should only have one document in index with uid=" + sxDocId);
         }
         
         Document doc=(Document)hits.doc(0);

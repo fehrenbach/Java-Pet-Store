@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: SQLParser.java,v 1.7 2006-09-13 17:31:18 basler Exp $ */
+$Id: SQLParser.java,v 1.8 2006-09-20 23:29:34 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.search;
 
@@ -90,7 +90,9 @@ public class SQLParser {
         } finally {
             try {
                 // must close file or will not be able to reindex
-                indexer.close();
+                if(indexer != null) {
+                    indexer.close();
+                }
             } catch (Exception ee) {
                 ee.printStackTrace();
             }

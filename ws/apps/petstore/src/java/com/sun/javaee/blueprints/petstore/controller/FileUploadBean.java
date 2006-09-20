@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: FileUploadBean.java,v 1.39 2006-09-20 17:02:18 basler Exp $ */
+$Id: FileUploadBean.java,v 1.40 2006-09-20 23:29:34 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -292,7 +292,7 @@ public class FileUploadBean {
             } catch (RuntimeException re) {
                 getLogger().log(Level.SEVERE, "persist failed in addItem()", re);
                 // store the info for later use
-                session.setAttribute(PERSIST_FAILRE, new Boolean(true));
+                session.setAttribute(PERSIST_FAILRE, Boolean.valueOf(true));
             } catch (Exception ex) {
                 getLogger().log(Level.SEVERE, "fileupload.persist.exception", ex);
             }
