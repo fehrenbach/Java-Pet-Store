@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2004 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://adventurebuilder.dev.java.net/LICENSE.txt
- $Id: application.xml,v 1.1 2006-09-20 21:33:19 inder Exp $ -->
+ $Id: application.xml,v 1.1 2006-09-20 21:50:51 inder Exp $ -->
 
 <application version="1.4" xmlns="http://java.sun.com/xml/ns/j2ee" 
                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"

@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?><!-- Copyright 2005 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at:  http://developer.sun.com/berkeley_license.html $Id: web.xml,v 1.1 2006-09-20 21:33:21 inder Exp $ --><web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"                       xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">                 <display-name>DocOrientedServiceClientWAR</display-name>  <servlet>    <servlet-name>FrontController</servlet-name>    <servlet-class>       com.sun.javaee.blueprints.catalogclient.FrontController    </servlet-class>  </servlet>  <servlet-mapping>    <servlet-name>FrontController</servlet-name>    <url-pattern>*.do</url-pattern>  </servlet-mapping>  <session-config>    <session-timeout>54</session-timeout>  </session-config>  <welcome-file-list>    <welcome-file>index.jsp</welcome-file>  </welcome-file-list>  <error-page>    <exception-type>      java.lang.RuntimeException    </exception-type>    <location>      /systemerror.jsp    </location>  </error-page>
-      <ejb-local-ref>
-          <ejb-ref-name>ejb/CatalogFacade</ejb-ref-name>
-          <ejb-ref-type>Session</ejb-ref-type>
-          <local>com.sun.javaee.blueprints.catalogclient.ejb.CatalogFacade</local>
-          <ejb-link>CatalogFacadeBean</ejb-link>
-      </ejb-local-ref>
-</web-app>

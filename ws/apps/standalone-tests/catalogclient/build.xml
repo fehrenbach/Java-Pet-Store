@@ -5,14 +5,10 @@
   <property file="${user.home}/build.properties" />
   <property file=".../../setup/derby.properties" />
   
-  <import file="../../setup/setup.xml" />
-  <import file="../../../../setup/common-ant.xml" />
+  <import file="../../../main.xml" />
 
-  <property name="module.name" value="bp-catalog-client" />
+  <property name="is.war.module" value="true"/>
 
-  <property name="dist.dir" value="dist" />
-  <property name="app.module" value="${dist.dir}/bp-catalog-client.war" />
-  <property name="build.dir" value="build" />
   <property name="web.docbase.dir" value="web" />
   <property name="build.classes.dir" value="${build.dir}/classes" />
   <property name="war.build.dir" value="${build.dir}/war" />
@@ -31,25 +27,6 @@
 	</javac>
   </target>
   
-  <target name="war" depends="build" description="Packages the War file">
-    <mkdir dir="${war.build.dir}"/>
-    <!-- Copy in the compiled Classes -->
-    <copy todir="${war.build.dir}/WEB-INF/classes">
-     <fileset dir="${build.classes.dir}"/>
-    </copy>  
-    <!-- Copy in the content -->
-    <copy todir="${war.build.dir}">
-     <fileset dir="${web.docbase.dir}"/>
-    </copy>
-    <copy todir="${war.build.dir}">
-     <fileset dir="${war.build.dir}"/>
-    </copy> 
-    <mkdir dir="${dist.dir}"/>
-    <delete file="${app.module}"/>
-    <jar jarfile="./build/bp-catalog-client.war" basedir="${war.build.dir}" />
-    <delete dir="${war.build.dir}"/>
-  </target>
-
    <target name="ejbjar" depends="build">
     <delete dir="${ejb.build.dir}" quiet="true"/>
     <mkdir dir="${ejb.build.dir}"/>
