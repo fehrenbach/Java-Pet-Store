@@ -1,13 +1,18 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CatalogFacade.java,v 1.46 2006-09-18 16:16:11 basler Exp $ */
+$Id: CatalogFacade.java,v 1.47 2006-09-20 17:02:18 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.model;
 
+import com.sun.javaee.blueprints.petstore.search.IndexDocument;
+import com.sun.javaee.blueprints.petstore.search.Indexer;
+import com.sun.javaee.blueprints.petstore.search.UpdateIndex;
+import com.sun.javaee.blueprints.petstore.util.PetstoreConstants;
+import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
+import java.util.StringTokenizer;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -17,12 +22,16 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.transaction.UserTransaction;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 
 public class CatalogFacade implements ServletContextListener {
     
     @PersistenceUnit(unitName="PetstorePu") private EntityManagerFactory emf;
     @Resource UserTransaction utx;
+    private Logger _logger=null;
+    private static final boolean bDebug=false;
     
     public CatalogFacade(){ }
     
@@ -249,13 +258,25 @@ public class CatalogFacade implements ServletContextListener {
         return result;
     }
     
+    /**
+     * Method to add an item with tags that are added using the addTag method
+     *
+     */
     public String addItem(Item item){
         EntityManager em = emf.createEntityManager();
         try{
             utx.begin();
             em.joinTransaction();
-            em.persist(item);
+            for(Tag tag : item.getTags()) {
+                tag.incrementRefCount();
+                tag.getItems().add(item);
+                em.merge(tag);
+            }
             utx.commit();
+            // index item
+            if(bDebug) System.out.println("\n***Item id of new item is : " + item.getItemID());
+            indexItem(new IndexDocument(item));
+            
         } catch(Exception exe){
             try {
                 utx.rollback();
@@ -294,36 +315,41 @@ public class CatalogFacade implements ServletContextListener {
         return results;
     }
     
-    public int addTagToItem(String sxTag, Item item){
+    
+    public void addTagsToItemId(String sxTags, String itemId) {
         EntityManager em = emf.createEntityManager();
+        // now parse tags for item
+        Item item=getItem(itemId);
+        StringTokenizer stTags=new StringTokenizer(sxTags, " ");
+        String tagx=null;
         Tag tag=null;
-        try {
-            List<Tag> tags=em.createQuery("SELECT t FROM Tag t WHERE t.tag = :tag").setParameter("tag", sxTag).getResultList();
-            
-            
-            if(tags != null && !tags.isEmpty()) {
-                tag=tags.get(0);
-                // found tag so add in reference item
-                if(!tag.itemExists(item)) {
-                    // add item to tag
-                    tag.getItems().add(item);
-                    tag.incrementRefCount();
-                }
-            } else {
-                // need add tag and reference item
-                tag=new Tag(sxTag);
-                // add item to tag
+        while(stTags.hasMoreTokens()) {
+            tagx=stTags.nextToken().toLowerCase();
+            if(!item.containsTag(tagx)) {
+                // tag doesn't exist so add tag
+                if(bDebug) System.out.println("Adding TAG = " + tagx);
+                tag=addTag(tagx);
+                //tag.incrementRefCount();
                 tag.getItems().add(item);
                 tag.incrementRefCount();
+                item.getTags().add(tag);
             }
-            // add tag to items ???
-            item.getTags().add(tag);
-            
+        }
+        try {
+            // persist data
             utx.begin();
             em.joinTransaction();
             em.merge(item);
-            em.persist(tag);
+            for( Tag tagz : item.getTags()) {
+                if(bDebug) System.out.println("\n***Merging tag = " + tagz.getTag());
+                em.merge(tagz);
+            }
             utx.commit();
+            
+            // update indexes
+            UpdateIndex update=new UpdateIndex();
+            update.updateDocTag(PetstoreConstants.PETSTORE_INDEX_DIRECTORY, "tag" , item.tagsAsString(), item.getItemID(), UpdateIndex.REPLACE_FIELD);
+            
         } catch(Exception exe){
             try {
                 utx.rollback();
@@ -332,18 +358,48 @@ public class CatalogFacade implements ServletContextListener {
         } finally {
             em.close();
         }
-        return tag.getTagID();
+    }
+    
+    
+    public Tag addTag(String sxTag){
+        EntityManager em = emf.createEntityManager();
+        Tag tag=null;
+        try {
+            List<Tag> tags=em.createQuery("SELECT t FROM Tag t WHERE t.tag = :tag").setParameter("tag", sxTag).getResultList();
+            if(tags.isEmpty()) {
+                // need to create tag and set flag to add reference item
+                tag=new Tag(sxTag);
+                // persist data
+                utx.begin();
+                em.joinTransaction();
+                em.persist(tag);
+                utx.commit();
+            } else {
+                // see if item already exists in tag
+                tag=tags.get(0);
+            }
+            
+        } catch(Exception exe){
+            try {
+                utx.rollback();
+            } catch (Exception e) {}
+            throw new RuntimeException("Error persisting tag", exe);
+        } finally {
+            em.close();
+        }
+        return tag;
     }
     
     
     public List<Tag> getTagsInChunk(int start, int chunkSize) {
         EntityManager em = emf.createEntityManager();
-        Query query = em.createQuery("SELECT t FROM Tag t ORDER BY t.tag");
+        Query query = em.createQuery("SELECT t FROM Tag t ORDER BY t.refCount DESC, t.tag");
         List<Tag> tags = query.setFirstResult(start).setMaxResults(chunkSize).getResultList();
         em.close();
         return tags;
     }
 
+    
     public Tag getTag(String sxTag) {
         Tag tag=null;
         EntityManager em = emf.createEntityManager();
@@ -353,6 +409,39 @@ public class CatalogFacade implements ServletContextListener {
             tag=tags.get(0);
         }
         return tag;
+    }
+
+
+    private void indexItem(IndexDocument indexDoc) {
+        // Add document to index
+        Indexer indexer=null;
+        try {
+            indexer=new Indexer(PetstoreConstants.PETSTORE_INDEX_DIRECTORY, false);
+            getLogger().log(Level.FINE, "Adding document to index: " + indexDoc.toString());
+            indexer.addDocument(indexDoc);
+        } catch (Exception e) {
+            getLogger().log(Level.WARNING, "index.exception", e);
+            e.printStackTrace();
+        } finally {
+            try {
+                // must close file or will not be able to reindex
+                indexer.close();
+            } catch (Exception ee) {
+                ee.printStackTrace();
+            }
+        }
+    }
+    
+    /**
+     * Method getLogger
+     *
+     * @return Logger - logger for the NodeAgent
+     */
+    public Logger getLogger() {
+        if (_logger == null) {
+            _logger=PetstoreUtil.getBaseLogger();
+        }
+        return _logger;
     }
     
 }

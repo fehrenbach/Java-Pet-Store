@@ -1,9 +1,9 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: Item.java,v 1.19 2006-09-18 16:16:12 basler Exp $ */
+$Id: Item.java,v 1.20 2006-09-20 17:02:18 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.model;
 
-import static javax.persistence.CascadeType.REMOVE;
+import static javax.persistence.CascadeType.ALL;
 import java.util.Collection;
 import java.util.Vector;
 import javax.persistence.CascadeType;
@@ -151,7 +151,7 @@ public class Item implements java.io.Serializable {
         this.numberOfVotes = numberOfVotes;
     }
     
-    @ManyToMany(cascade = REMOVE, mappedBy = "items")
+    @ManyToMany(mappedBy = "items")
     public Collection<Tag> getTags() {
         return tags;
     }
@@ -184,7 +184,17 @@ public class Item implements java.io.Serializable {
         }
         return sbTags.toString().trim();
     }
-    
+
+    public boolean containsTag(String sxTag) {
+        boolean bRet=false;
+        for(Tag tag : getTags()) {
+            if(tag.getTag().equals(sxTag)) {
+                bRet=true;
+                break;
+            }
+        }
+        return bRet;
+    }
 }
 
 

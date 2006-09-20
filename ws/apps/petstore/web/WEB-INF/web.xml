@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--  Copyright 2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: web.xml,v 1.22 2006-09-14 01:53:12 basler Exp $ -->
+ $Id: web.xml,v 1.23 2006-09-20 17:02:19 basler Exp $ -->
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
     <display-name>Petstore</display-name>
@@ -127,6 +127,10 @@
     <servlet-mapping>
         <servlet-name>ControllerServlet</servlet-name>
         <url-pattern>/ImageServlet/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControllerServlet</servlet-name>
+        <url-pattern>/TagServlet/*</url-pattern>
     </servlet-mapping>
     <resource-ref>
         <res-ref-name>jdbc/PetstoreDB</res-ref-name>

@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: Tag.java,v 1.2 2006-09-15 23:07:42 basler Exp $ */
+$Id: Tag.java,v 1.3 2006-09-20 17:02:18 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.model;
 
@@ -18,7 +18,7 @@ import javax.persistence.TableGenerator;
 @Entity
 public class Tag implements java.io.Serializable {
 
-    private int tagID;
+    private int tagID=-1;
     private Collection<Item> items=new Vector();
     private String tag;
     private int refCount=0;
@@ -64,7 +64,7 @@ public class Tag implements java.io.Serializable {
     }
     
     
-    @ManyToMany(cascade = REMOVE)
+    @ManyToMany
     @JoinTable(name = "TAG_ITEM", joinColumns = @JoinColumn(name = "TAGID", referencedColumnName = "TAGID")
     , inverseJoinColumns = @JoinColumn(name = "ITEMID", referencedColumnName = "ITEMID")
     )
@@ -78,7 +78,6 @@ public class Tag implements java.io.Serializable {
     public boolean itemExists(Item item) {
         return this.getItems().contains(item);
     }
-
 }
 
 

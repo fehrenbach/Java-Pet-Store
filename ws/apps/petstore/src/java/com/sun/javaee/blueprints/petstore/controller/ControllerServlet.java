@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: ControllerServlet.java,v 1.10 2006-09-15 21:34:52 yutayoshida Exp $ */
+$Id: ControllerServlet.java,v 1.11 2006-09-20 17:02:18 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -132,7 +132,6 @@ public class ControllerServlet extends HttpServlet {
             outData.close();
             
         } else if(request.getServletPath().endsWith("CaptchaServlet")) {
-            
             SimpleCaptcha captcha = new SimpleCaptcha();
             BufferedImage bimg = captcha.getCaptchaImageWithSession(request.getSession());
             
@@ -265,7 +264,7 @@ public class ControllerServlet extends HttpServlet {
             String command = request.getParameter("command");
             if ("category".equals(command)) {
                 String catid = request.getParameter("catid");
-                //System.out.println("Request for category with id: " + catid);
+                if(bDebug) System.out.println("Request for category with id: " + catid);
                 // set content-type header before accessing the Writer
                 response.setContentType("text/xml;charset=UTF-8");
                 PrintWriter out = response.getWriter();
@@ -334,7 +333,7 @@ public class ControllerServlet extends HttpServlet {
                 }
                 out.close();
             } else if ("categories".equals(command)) {
-                //System.out.println("Request for categories.");
+                if(bDebug) System.out.println("Request for categories.");
                 String format = request.getParameter("format");
                 
                 //get response data in proper format
@@ -350,7 +349,7 @@ public class ControllerServlet extends HttpServlet {
                 out.close();
             } else if ("item".equals(command)) {
                 String targetId = request.getParameter("id");
-                //System.out.println("CatalogServlet: Request for item with id: " + targetId);
+                if(bDebug) System.out.println("CatalogServlet: Request for item with id: " + targetId);
                 String str = handleItem(targetId);
                 response.setContentType("text/xml;charset=UTF-8");
                 PrintWriter out = response.getWriter();
@@ -362,11 +361,11 @@ public class ControllerServlet extends HttpServlet {
             // original controller servlet
             request.setCharacterEncoding("UTF-8");
             String command = request.getParameter("command");
-            //System.out.println("ControllerServlet : command=" + command);
+            if(bDebug) System.out.println("ControllerServlet : command=" + command);
             
             if ("content".equals(command)) {
                 String target = request.getParameter("target");
-                //System.out.println("ControllerServlet : target=" + target);
+                if(bDebug) System.out.println("ControllerServlet : target=" + target);
                 if (target != null) target = target.trim();
                 response.setContentType("text/html;charset=UTF-8");
                 PrintWriter out = response.getWriter();
@@ -374,6 +373,28 @@ public class ControllerServlet extends HttpServlet {
                 out.write(content.toString());
                 out.close();
             }
+        } else if(request.getServletPath().endsWith("TagServlet")) {
+            // original controller servlet
+            response.setContentType("text/xml;charset=UTF-8");
+            PrintWriter out=response.getWriter();
+            String itemId=request.getParameter("itemId");
+            String sxTags=request.getParameter("tags");
+            if(bDebug) System.out.println("Have tagServlet " + itemId + " - " + sxTags);
+            try {
+                cf.addTagsToItemId(sxTags, itemId);
+            } catch (Exception ee) {
+                ee.printStackTrace();
+            }
+            out.println("<response>");
+            out.print("<itemId>");
+            out.print(itemId);
+            out.println("</itemId>");
+            out.print("<tags>");
+            out.print(cf.getItem(itemId).tagsAsString());
+            out.println("</tags>");
+            out.println("</response>");
+            out.close();
+            
         } else {
             getLogger().log(Level.SEVERE, "Servlet '" + request.getServletPath() + "' not registered in ControllerServlet!!");
             HttpServletResponse httpResponse=(HttpServletResponse)response;
@@ -477,7 +498,7 @@ public class ControllerServlet extends HttpServlet {
         StringBuffer sb = new StringBuffer();
         // then write the data of the response
         sb.append("<items>\n");
-        //System.out.println("**** Items length=" + items.size());
+        if(bDebug) System.out.println("**** Items length=" + items.size());
         Iterator<Item> it = items.iterator();
         NumberFormat formatter = new DecimalFormat("00.00");
         while (it.hasNext()) {

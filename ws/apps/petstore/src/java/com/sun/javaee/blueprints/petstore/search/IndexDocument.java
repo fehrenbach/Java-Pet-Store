@@ -1,12 +1,14 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: IndexDocument.java,v 1.7 2006-09-15 23:07:43 basler Exp $ */
+$Id: IndexDocument.java,v 1.8 2006-09-20 17:02:19 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.search;
 
+import com.sun.javaee.blueprints.petstore.model.Item;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
 import java.text.NumberFormat;
+import java.util.Date;
 
 /**
  * This class is a simple stuctured used to hold petstore indexed info for indexing and search
@@ -30,6 +32,19 @@ public class IndexDocument {
         this.image=image;
     }
 
+    public IndexDocument(Item item) {
+        this.uid=item.getItemID();
+        this.pageURL=item.getItemID();
+        this.image=item.getImageURL();
+        this.price=Float.toString(item.getPrice());
+        this.product=item.getProductID();
+        this.modifiedDate=new Date().toString();
+        this.contents=item.getName() + " " + item.getDescription();
+        this.title=item.getName();
+        this.summary=item.getDescription();
+        this.tag=item.tagsAsString();        
+    }
+    
     public String getUID() {
         return this.uid;
     }

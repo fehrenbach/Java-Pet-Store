@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: searchTest.jsp,v 1.1 2006-09-13 17:31:21 basler Exp $ --%>
+$Id: searchTest.jsp,v 1.2 2006-09-20 17:02:20 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -44,7 +44,7 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
         if(submitTag != null && tagKeywords != null) {
             String docId=request.getParameter("docId");
             UpdateIndex update=new UpdateIndex();
-            update.updateDocTag(indexDirectory, "tag" , tagKeywords, docId);
+            update.updateDocTag(indexDirectory, "tag" , tagKeywords, docId, UpdateIndex.APPEND_FIELD);
         }
         
 %>

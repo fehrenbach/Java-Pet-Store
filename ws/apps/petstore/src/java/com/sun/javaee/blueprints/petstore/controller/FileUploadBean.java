@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: FileUploadBean.java,v 1.38 2006-09-14 01:53:09 basler Exp $ */
+$Id: FileUploadBean.java,v 1.39 2006-09-20 17:02:18 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -29,8 +29,8 @@ import com.sun.javaee.blueprints.petstore.model.Category;
 import com.sun.javaee.blueprints.petstore.model.Product;
 import com.sun.javaee.blueprints.petstore.model.FileUploadResponse;
 import com.sun.javaee.blueprints.petstore.model.Item;
-import com.sun.javaee.blueprints.petstore.model.SellerContactInfo;
 import com.sun.javaee.blueprints.petstore.model.Tag;
+import com.sun.javaee.blueprints.petstore.model.SellerContactInfo;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Hashtable;
@@ -271,34 +271,23 @@ public class FileUploadBean {
                     Map<String,Object> contextMap = context.getExternalContext().getApplicationMap();
                     this.catalogFacade = (CatalogFacade)contextMap.get("CatalogFacade");
                 }
-                String itemID = catalogFacade.addItem(item);
-                getLogger().log(Level.FINE, "Item " + name + " has been persisted");
                 
                 // now parse tags for item
                 StringTokenizer stTags=new StringTokenizer(tags, " ");
-                ArrayList arTags=new ArrayList();
-                arTags.add(item);
                 String tagx=null;
                 while(stTags.hasMoreTokens()) {
-                    tagx=stTags.nextToken();
+                    tagx=stTags.nextToken().toLowerCase();
+                    Tag tag=null;
                     if(bDebug) System.out.println("Adding TAG = " + tagx);
-                    catalogFacade.addTagToItem(tagx, item);
+                    // see if tag is already in item
+                    if(!item.containsTag(tagx)) {
+                        // add correct tag reference to item
+                        item.getTags().add(catalogFacade.addTag(tagx));
+                    }
                 }
                 
-                // index new item
-                itemId = item.getItemID();
-                IndexDocument indexDoc=new IndexDocument();
-                indexDoc.setUID(itemId);
-                indexDoc.setPageURL(itemId);
-                indexDoc.setImage(fileName);
-                indexDoc.setPrice(price);
-                indexDoc.setProduct(prodId);
-                indexDoc.setModifiedDate(new Date().toString());
-                indexDoc.setContents(name + " " + desc);
-                indexDoc.setTitle(name);
-                indexDoc.setSummary(desc);
-                indexDoc.setTag(tags);
-                indexItem(indexDoc);
+                String itemID = catalogFacade.addItem(item);
+                getLogger().log(Level.FINE, "Item " + name + " has been persisted");
                 
             } catch (RuntimeException re) {
                 getLogger().log(Level.SEVERE, "persist failed in addItem()", re);
@@ -389,27 +378,6 @@ public class FileUploadBean {
         }
         return thumbPath;
     }
-    
-    private void indexItem(IndexDocument indexDoc) {
-        // Add document to index
-        Indexer indexer=null;
-        try {
-            indexer=new Indexer(PetstoreConstants.PETSTORE_INDEX_DIRECTORY, false);
-            getLogger().log(Level.FINE, "Adding document to index: " + indexDoc.toString());
-            indexer.addDocument(indexDoc);
-        } catch (Exception e) {
-            getLogger().log(Level.WARNING, "index.exception", e);
-            e.printStackTrace();
-        } finally {
-            try {
-                // must close file or will not be able to reindex
-                indexer.close();
-            } catch (Exception ee) {
-                ee.printStackTrace();
-            }
-        }
-    }
-    
     
     private String getStringValue(Hashtable htUpload, String key)  {
         String sxTemp=(String)htUpload.get(key);

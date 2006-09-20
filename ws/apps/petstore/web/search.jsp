@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: search.jsp,v 1.25 2006-09-18 16:16:13 basler Exp $ --%>
+$Id: search.jsp,v 1.26 2006-09-20 17:02:19 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -16,16 +16,28 @@ $Id: search.jsp,v 1.25 2006-09-18 16:16:13 basler Exp $ --%>
         <title>Search Page</title>
         <style>
             .itemTable {
-            padding: 0.3cm;
-            width: 800px;
-            border-style: double; 
-            border-color: darkgreen; 
+                padding: 0.3cm;
+                width: 800px;
+                border-style: double; 
+                border-color: darkgreen; 
             }
             .itemCell {
-            border-style: solid; 
-            border-color: darkgreen; 
-            border-width: thin;
-            padding: 5px
+                border-style: solid; 
+                border-color: darkgreen; 
+                border-width: thin;
+                padding: 5px
+            }
+            .tagDiv {
+                border-style: groove; 
+                border-color: darkgreen; 
+                background-color: white;
+                border-width: thick;
+                padding: 5px;
+                visibility: hidden;
+                position:absolute;
+                left:0px;
+                top:0px;
+                z-index: 3;
             }
         </style>
     </head>
@@ -53,6 +65,71 @@ $Id: search.jsp,v 1.25 2006-09-18 16:16:13 basler Exp $ --%>
                     }
                     return false;
                 }
+                
+                function addTags(eventx, namex, itemIdx) {
+                    var xx=0;
+                    var yy=0;
+                    if (!eventx) var eventx=window.event;
+                    if (eventx.pageX || eventx.pageY){
+                        xx=eventx.pageX;
+                        yy=eventx.pageY;
+                    } else if (eventx.clientX || eventx.clientY) {
+                        xx=eventx.clientX + document.body.scrollLeft;
+                        yy=eventx.clientY + document.body.scrollTop;        
+                    }
+                    divId="addTags";
+                    document.getElementById("addTagsItemId").value=itemIdx;
+                    document.getElementById("addTagsTags").value="";
+                    document.getElementById("addTagsTags").focus();
+                    document.getElementById("addTagsTitle").innerHTML="<b>Add Tags to '" + namex + "'</b>";
+                    document.getElementById(divId).style.left=(xx - 170) + "px";
+                    document.getElementById(divId).style.top=(yy - 140) + "px";
+                    document.getElementById(divId).style.visibility='visible';
+                }
+                
+                function saveAddTags() {
+                    // get data and send to controller servlet
+                    itemIdx=document.getElementById("addTagsItemId").value;
+                    tagsx=document.getElementById("addTagsTags").value;
+                    var bindArgs = {
+                        url:        "../TagServlet?itemId=" + escape(itemIdx) + "&tags=" + escape(tagsx),
+                        mimetype:   "text/xml",
+                        error: function(type, errObj){
+                            // encountered an error
+                            alert("Error with tag update!");
+                        },
+                        load: function(type, data, evt){
+                            // check successful response
+                            if (evt.readyState == 4) {
+                                if (evt.status == 200) {
+                                    // get results and replace dom elements
+                                    var resultx=data.getElementsByTagName("response")[0];
+                                    itemIdx=resultx.getElementsByTagName("itemId")[0].childNodes[0].nodeValue;
+                                    
+                                    // change DOM data
+                                    document.getElementById("ITEMID_TAGS_" + itemIdx).innerHTML=resultx.getElementsByTagName("tags")[0].childNodes[0].nodeValue;
+
+                                } else if (evt.status == 204){
+                                    alert("204 return");
+                                }
+                            }
+                        }
+                    };
+
+                    dojo.io.bind(bindArgs);      
+                    // make sure it was updated
+                    
+                    // show messages if error
+                    
+                    // hide popup
+                    document.getElementById(divId).style.visibility='hidden';
+                }
+                
+                function cancelAddTags() {
+                    // hide popup
+                    document.getElementById(divId).style.visibility='hidden';
+                }
+                
             </script>        
   
             <f:view>
@@ -111,14 +188,14 @@ $Id: search.jsp,v 1.25 2006-09-18 16:16:13 basler Exp $ --%>
                         <tr>
                             <th class="itemCell">
                                 Map
-                            <br/>
-                            <img src="../images/check_all.gif" onclick="return checkAll()"/><img src="../images/uncheck_all.gif" onclick="return uncheckAll()"/>
-                            </th>
-                            <th class="itemCell">Name</th>
-                            <th class="itemCell">Description</th>
-                            <th class="itemCell">Tags</th>
-                            <th class="itemCell">Price</th>
-                        </tr>
+                                        <br/>
+                                        <img src="../images/check_all.gif" onclick="return checkAll()"/><img src="../images/uncheck_all.gif" onclick="return uncheckAll()"/>
+                                    </th>
+                                    <th class="itemCell">Name</th>
+                                    <th class="itemCell">Description</th>
+                                    <th class="itemCell">Tags</th>
+                                    <th class="itemCell">Price</th>
+                                </tr>
 <%
 SearchBean searchBean=(SearchBean)session.getAttribute("SearchBean");
 if(searchBean != null) {
@@ -126,21 +203,22 @@ if(searchBean != null) {
     if(hits != null) {
         for(IndexDocument indexDoc : hits) {
 %>                    
-                        <tr>
-                            <td class="itemCell">
-                                <input type="checkbox" name="mapSelectedItems" value="<%= indexDoc.getUID() %>"/>                        
-                            </td>
-                            <td class="itemCell">
-                                <a href="${pageContext.request.contextPath}/faces/catalog.jsp?pid=<%= indexDoc.getProduct() %>&itemId=<%= indexDoc.getUID() %>"
-                                    onmouseover="bpui.popup.show('pop1', event, '<%= indexDoc.getUID() %>')" onmouseout="bpui.popup.hide('pop1')">
-                                    <%= indexDoc.getTitle() %>
-                                </a>
-                            </td>
-                            <td class="itemCell">
-                                <%= indexDoc.getSummary() %>
-                            </td>
-                            <td class="itemCell">
-                                <%= (indexDoc.getTag().equals("") ? "&nbsp;" : indexDoc.getTag()) %>
+                                <tr>
+                                <td class="itemCell">
+                                    <input type="checkbox" name="mapSelectedItems" value="<%= indexDoc.getUID() %>"/>                        
+                                </td>
+                                <td class="itemCell">
+                                    <a href="${pageContext.request.contextPath}/faces/catalog.jsp?pid=<%= indexDoc.getProduct() %>&itemId=<%= indexDoc.getUID() %>"
+                                       onmouseover="bpui.popup.show('pop1', event, '<%= indexDoc.getUID() %>')" onmouseout="bpui.popup.hide('pop1')">
+                                        <%= indexDoc.getTitle() %>
+                                    </a>
+                                </td>
+                                <td class="itemCell">
+                                    <%= indexDoc.getSummary() %>
+                                </td>
+                                <td class="itemCell">
+                                <span id="ITEMID_TAGS_<%= indexDoc.getUID() %>"><%= (indexDoc.getTag().equals("") ? "&nbsp;" : indexDoc.getTag()) %></span>
+                                <br/><input type="button" value="Add Tags" onclick="addTags(event, '<%= indexDoc.getTitle() %>', '<%= indexDoc.getUID() %>')"/>
                             </td>
                             <td class="itemCell">
                                 <%= indexDoc.getPriceDisplay() %>
@@ -185,6 +263,28 @@ if(searchBean != null) {
                     <h:messages/>
                 </h:form>
                 <br/><br/><br/>
+                <div class="tagDiv" id="addTags">
+                    <form>
+                    <table>
+                            <tr>
+                                <td align="center">
+                                    <span id="addTagsTitle"><b>Tag Title</b></span><br/><i>(seperated by spaces)</i>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center">
+                                    <input id="addTagsTags" type="text" size="50"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center">
+                                    <input type="button" value="Save" onclick="saveAddTags()"/>&nbsp;&nbsp;<input type="button" value="Cancel" onclick="cancelAddTags()"/>
+                                </td>
+                            </tr>
+                    </table>
+                    <input type="hidden" id="addTagsItemId"/>
+                    </form>
+                </div>
             </f:view>
         </center>
         <jsp:include page="footer.jsp" />

@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: UpdateIndex.java,v 1.4 2006-06-02 16:42:54 basler Exp $ */
+$Id: UpdateIndex.java,v 1.5 2006-09-20 17:02:19 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.search;
 
@@ -26,13 +26,15 @@ public class UpdateIndex {
     
     private static final boolean bDebug=false;
     private Logger _logger;
-    
+    public static final String REPLACE_FIELD="replace_field";
+    public static final String APPEND_FIELD="append_field";
+            
     /** Creates a new instance of UpdateIndex */
     public UpdateIndex() {
     }
     
     
-    public void updateDocTag(String indexFile, String sxTagField, String tagString, String sxDocId) throws IOException {
+    public void updateDocTag(String indexFile, String sxTagField, String tagString, String sxDocId, String type) throws IOException {
         if(bDebug) System.out.println("Tagging document:" + sxDocId + " with \"" + sxTagField + " - " + tagString + "\"");
         
         // get document to update, so data can be added
@@ -61,7 +63,7 @@ public class UpdateIndex {
                     deleted++;
                 }
             }
-            System.out.println("Number of deleted items in the whole index:" + deleted);
+            if(bDebug) System.out.println("Number of deleted items in the whole index:" + deleted);
         }
         reader.close();
         
@@ -72,10 +74,11 @@ public class UpdateIndex {
         if(field == null) {
             // create new tag field
             field=new Field(sxTagField, tagString, Field.Store.YES, Field.Index.TOKENIZED);        
-
         } else {
-            // get existing field and append new tag
-            tagString=field.stringValue() + " " + tagString;
+            if(type.equals(APPEND_FIELD)) {
+                // get existing field and append new tag with space
+                tagString=field.stringValue() + " " + tagString;
+            }
             doc.removeField(sxTagField);
             field=new Field(sxTagField, tagString, Field.Store.YES, Field.Index.TOKENIZED);        
         }
@@ -113,7 +116,7 @@ public class UpdateIndex {
         UpdateIndex uix=new UpdateIndex();
         // use dummy default index file for unit tests
         try {
-            uix.updateDocTag("/tmp/tmp/index", "tag_uses",  "Not a good Cat for killing mice", "pet-001");
+            uix.updateDocTag("/tmp/tmp/index", "tag_uses",  "Not a good Cat for killing mice", "pet-001", APPEND_FIELD);
         } catch (Exception e) {
             e.printStackTrace();
         }
