@@ -1,12 +1,20 @@
 
 
-<project name="bp-catalog-client" default="ear" basedir=".">
+<project name="bp-catalog-client" default="default" basedir=".">
 
   <property name="is.war.module" value="true"/>
   <property file="../../petstore/setup/javadb.properties" />
   <property name="extra.classpath" value="../../petstore/build/catalog-persistence.jar"/>
 
   <import file="../../../bp-project/main.xml" />
+
+    <target name="-pre-compile">
+        <copy todir="${build.classes.dir}" overwrite="true">
+            <fileset dir="../../petstore/build/web/WEB-INF/classes">
+                <exclude name="META-INF/**"/>
+            </fileset>
+        </copy>
+    </target>
 </project>
 
 
