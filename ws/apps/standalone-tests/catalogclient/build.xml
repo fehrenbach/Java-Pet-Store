@@ -2,73 +2,11 @@
 
 <project name="bp-catalog-client" default="ear" basedir=".">
 
-  <property file="${user.home}/build.properties" />
-  <property file=".../../setup/derby.properties" />
-  
-  <import file="../../../main.xml" />
-
   <property name="is.war.module" value="true"/>
+  <property file="../../petstore/setup/javadb.properties" />
+  <property name="extra.classpath" value="../../petstore/build/catalog-persistence.jar"/>
 
-  <property name="web.docbase.dir" value="web" />
-  <property name="build.classes.dir" value="${build.dir}/classes" />
-  <property name="war.build.dir" value="${build.dir}/war" />
-
-    <!-- The classpath used for building the workspace. -->
-   <path id="petstore.classpath">
-     <path refid="classpath" />
-     <pathelement location="../../build/catalog-persistence.jar"/>
-   </path>
-
-  <target name="build" description="Compile petstore files." >
-    <mkdir dir="${build.classes.dir}" />
-    <javac srcdir="src/java" destdir="${build.classes.dir}">
-      <include name="**/*.java" />
-	  <classpath refid="petstore.classpath"/>
-	</javac>
-  </target>
-  
-   <target name="ejbjar" depends="build">
-    <delete dir="${ejb.build.dir}" quiet="true"/>
-    <mkdir dir="${ejb.build.dir}"/>
-    <mkdir dir="${ejb.build.dir}/META-INF"/>
-    <copy todir="${ejb.build.dir}">
-      <fileset dir="${build.classes.dir}">
-        <include name="**/ejb/**"/>
-      </fileset>
-    </copy>
-    <copy file="src/conf/sun-ejb-jar.xml"  todir="${ejb.build.dir}/META-INF" />
-    <jar jarfile="./build/bp-catalog-client-ejb.jar" basedir="${ejb.build.dir}" excludes="cvs"/>
-    <delete dir="${ejb.build.dir}" quiet="true"/>
-  </target> 
-
-   <target name="ear" depends="build,war,ejbjar">
-    <mkdir dir="${ear.build.dir}"/>
-    <mkdir dir="${ear.build.dir}/META-INF"/>
-    <copy file="src/conf/sun-application.xml" todir="${ear.build.dir}/META-INF/" failonerror="false" />
-    <copy file="src/conf/application.xml" todir="${ear.build.dir}/META-INF/" />
-    <copy file="./build/bp-catalog-client-ejb.jar" todir="${ear.build.dir}" failonerror="false" />
-    <copy file="./build/bp-catalog-client.war" todir="${ear.build.dir}" failonerror="false" />
-    <copy file="../../build/catalog-persistence.jar" todir="${ear.build.dir}" failonerror="false" />
-    <delete file="./build/bp-catalog-client.ear"/>
-    <jar jarfile="./build/bp-catalog-client.ear" basedir="${ear.build.dir}">
-      <manifest>
-        <attribute name="Class-Path" value="catalog-persistence.jar"/>
-      </manifest>
-    </jar>
-    <delete dir="${ear.build.dir}"/>
-  </target>
-<target name ="deploy-app">
-    <antcall target="deploy">
-      <param name="app.module"
-        value="./build/bp-catalog-client.ear" /> 
-    </antcall>
-
-</target>
-  <target name="clean" depends="build" description="Cleans up">
-    <delete dir="${dist.dir}"/>
-    <delete dir="${build.dir}"/>
-  </target>
-
+  <import file="../../../bp-project/main.xml" />
 </project>
 
 
