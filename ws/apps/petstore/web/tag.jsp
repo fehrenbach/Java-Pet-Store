@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: tag.jsp,v 1.5 2006-09-20 21:22:12 basler Exp $ --%>
+$Id: tag.jsp,v 1.6 2006-09-20 21:53:22 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -158,7 +158,7 @@ try {
     int refx=0, ii=0;
     for(Tag tag : tags) {
         refx=tag.getRefCount() / 5;
-        if(refx > 3) {
+        if(refx >= 3) {
             style="xxlarge";
         } else if(refx == 2) {
             style="xlarge";
