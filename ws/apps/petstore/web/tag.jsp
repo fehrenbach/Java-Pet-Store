@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: tag.jsp,v 1.4 2006-09-18 17:48:27 basler Exp $ --%>
+$Id: tag.jsp,v 1.5 2006-09-20 21:22:12 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -98,19 +98,18 @@ try {
                     display="<table class='itemTable'><tr><td class='itemCell' align='center' colspan='4'><h2>Tag: " + 
                         data.getElementsByTagName("tag")[0].childNodes[0].nodeValue + 
                         "</h2></td></tr><tr><th class='itemCell'>Name</th><th class='itemCell'>Description</th><th class='itemCell'>Tags</th><th class='itemCell'>Price</th></tr>"
-                    for(var ii=0; ii < itemsx.length; ii++) {
-                        item=itemsx[ii];
-                        display +="<tr>";
-                        display +="<td class='itemCell'><a href='./catalog.jsp?pid="+ item.getElementsByTagName("productID")[0].childNodes[0].nodeValue +"&itemId=" + 
-                            item.getElementsByTagName("itemID")[0].childNodes[0].nodeValue + "' onmouseover='bpui.popup.show(&quot;pop1&quot;, event, &quot;" + 
-                            item.getElementsByTagName("itemID")[0].childNodes[0].nodeValue + "&quot;)' onmouseout='bpui.popup.hide(&quot;pop1&quot;)'>" + 
-                            item.getElementsByTagName("name")[0].childNodes[0].nodeValue +"</a></td>";
-                        display +="<td class='itemCell'>" + item.getElementsByTagName("description")[0].childNodes[0].nodeValue +"</td>";
-                        display +="<td class='itemCell'>" + item.getElementsByTagName("tags")[0].childNodes[0].nodeValue +"</td>";
-                        display +="<td class='itemCell'>" + item.getElementsByTagName("price")[0].childNodes[0].nodeValue +"</td>";
+                    for(ii=0; ii < itemsx.length; ii++) {
+                        display += "<tr>";
+                        display +="<td class='itemCell'><a href='./catalog.jsp?pid="+ itemsx[ii].getElementsByTagName("productID")[0].childNodes[0].nodeValue +"&itemId=" + 
+                            itemsx[ii].getElementsByTagName("itemID")[0].childNodes[0].nodeValue + "' onmouseover='bpui.popup.show(&quot;pop1&quot;, event, &quot;" + 
+                            itemsx[ii].getElementsByTagName("itemID")[0].childNodes[0].nodeValue + "&quot;)' onmouseout='bpui.popup.hide(&quot;pop1&quot;)'>" + 
+                            itemsx[ii].getElementsByTagName("name")[0].childNodes[0].nodeValue +"</a></td>";
+                        display +="<td class='itemCell'>" + itemsx[ii].getElementsByTagName("description")[0].childNodes[0].nodeValue +"</td>";
+                        display +="<td class='itemCell'>" + itemsx[ii].getElementsByTagName("tags")[0].childNodes[0].nodeValue +"</td>";
+                        display +="<td class='itemCell'>" + itemsx[ii].getElementsByTagName("price")[0].childNodes[0].nodeValue +"</td>";
                         display +="</tr>";
                     }
-                    display+="</table>";
+                    display += "</table>";
                     document.getElementById(componentId).innerHTML=display;
                     document.getElementById(componentId).style.visibility='visible';
                 } else if (evt.status == 204){

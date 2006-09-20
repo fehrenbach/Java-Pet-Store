@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: MapBean.java,v 1.20 2006-08-07 18:28:29 basler Exp $ */
+$Id: MapBean.java,v 1.21 2006-09-20 21:22:11 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.mapviewer;
 
@@ -311,7 +311,7 @@ public class MapBean {
             getLogger().log(Level.FINE, "ZOOM - Lat and long  - " + zoomLevel + " - " + dLat + " - " + dLong);
             for(int ii=startPos; ii < items.size(); ii++) {
                 loc=items.get(ii);
-                if(loc.getAddress() != null && !loc.getAddress().equals("")) {
+                if(loc.getAddress() != null && !loc.getAddress().addressToString().equals("")) {
                     mm=new MapMarker();
                     mm.setLatitude(loc.getAddress().getLatitude());
                     mm.setLongitude(loc.getAddress().getLongitude());

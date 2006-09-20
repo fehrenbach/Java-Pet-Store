@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: search.jsp,v 1.26 2006-09-20 17:02:19 basler Exp $ --%>
+$Id: search.jsp,v 1.27 2006-09-20 21:22:12 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -80,11 +80,11 @@ $Id: search.jsp,v 1.26 2006-09-20 17:02:19 basler Exp $ --%>
                     divId="addTags";
                     document.getElementById("addTagsItemId").value=itemIdx;
                     document.getElementById("addTagsTags").value="";
-                    document.getElementById("addTagsTags").focus();
                     document.getElementById("addTagsTitle").innerHTML="<b>Add Tags to '" + namex + "'</b>";
                     document.getElementById(divId).style.left=(xx - 170) + "px";
                     document.getElementById(divId).style.top=(yy - 140) + "px";
                     document.getElementById(divId).style.visibility='visible';
+                    document.getElementById("addTagsTags").focus();
                 }
                 
                 function saveAddTags() {

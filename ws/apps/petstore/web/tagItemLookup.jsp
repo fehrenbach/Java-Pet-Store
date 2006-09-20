@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: tagItemLookup.jsp,v 1.1 2006-09-15 23:07:44 basler Exp $ --%>
+$Id: tagItemLookup.jsp,v 1.2 2006-09-20 21:22:12 basler Exp $ --%>
 
 <%@page contentType="text/xml"%>
 <%@page pageEncoding="UTF-8"%>
@@ -9,6 +9,10 @@ $Id: tagItemLookup.jsp,v 1.1 2006-09-15 23:07:44 basler Exp $ --%>
     String sxTag=request.getParameter("tag");
 
     try {
+        response.setHeader("Pragma", "No-Cache");
+        response.setHeader("Cache-Control", "no-cache,no-store,max-age=0");
+        response.setDateHeader("Expires", 1);        
+
         ServletContext context=config.getServletContext();
         CatalogFacade cf=(CatalogFacade)context.getAttribute("CatalogFacade");
         Tag tag=cf.getTag(sxTag);
