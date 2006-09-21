@@ -1,6 +1,5 @@
-
-
-<project name="bp-catalog-client" default="default" basedir=".">
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="catalogclient" default="default" basedir=".">
 
   <property name="is.war.module" value="true"/>
   <property file="../../petstore/setup/javadb.properties" />
@@ -16,8 +15,3 @@
         </copy>
     </target>
 </project>
-
-
-
-
-
