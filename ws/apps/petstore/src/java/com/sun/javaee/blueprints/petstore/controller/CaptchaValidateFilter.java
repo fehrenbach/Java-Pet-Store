@@ -1,13 +1,16 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CaptchaValidateFilter.java,v 1.13 2006-09-15 21:34:52 yutayoshida Exp $ */
+$Id: CaptchaValidateFilter.java,v 1.14 2006-09-22 20:25:24 yutayoshida Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
 import com.sun.javaee.blueprints.petstore.captcha.SimpleCaptcha;
+import com.sun.javaee.blueprints.components.ui.fileupload.FileUploadStatus;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Hashtable;
+import java.util.Date;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -143,6 +146,11 @@ public class CaptchaValidateFilter implements Filter {
              */
             HttpSession session = ((HttpServletRequest)request).getSession(true);
             session.setAttribute(INVALID_CAPTCHA, new Boolean(true));
+            FileUploadStatus fuStatus = new FileUploadStatus();
+            session.setAttribute("fileUploadStatus", fuStatus);
+            fuStatus.setUploadItems(new Hashtable());
+            fuStatus.setEndUploadDate(new Date());
+            fuStatus.setUploadError("Captchas Filter Error");
             //RequestDispatcher rd = request.getRequestDispatcher("/captchaerror.jsp");
             //rd.forward(request, response);
             // assuming this is a xmlhttprequest
