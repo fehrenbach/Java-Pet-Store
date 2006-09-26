@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CatalogFacade.java,v 1.48 2006-09-20 23:29:34 basler Exp $ */
+$Id: CatalogFacade.java,v 1.49 2006-09-26 18:29:43 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.model;
 
@@ -281,6 +281,7 @@ public class CatalogFacade implements ServletContextListener {
                 tag.getItems().add(item);
                 em.merge(tag);
             }
+            em.persist(item);
             utx.commit();
             // index item
             if(bDebug) System.out.println("\n***Item id of new item is : " + item.getItemID());
@@ -423,6 +424,7 @@ public class CatalogFacade implements ServletContextListener {
 
     private void indexItem(IndexDocument indexDoc) {
         // Add document to index
+        if(bDebug) System.out.println("\n*** document to index - " + indexDoc);
         Indexer indexer=null;
         try {
             indexer=new Indexer(PetstoreConstants.PETSTORE_INDEX_DIRECTORY, false);

@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: fileupload.jsp,v 1.43 2006-09-20 22:42:11 yutayoshida Exp $ --%>
+$Id: fileupload.jsp,v 1.44 2006-09-26 18:29:43 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -15,62 +15,33 @@ $Id: fileupload.jsp,v 1.43 2006-09-20 22:42:11 yutayoshida Exp $ --%>
         <title>Petstore Seller page</title>
         
 <script type="text/javascript">
-    var doneButton = null;
-    
-    function testRetFunction(type, data, evt){
-        var statusServlet = "http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.servletContext.contextPath}/FileUploadResponseServlet";
-        //because of iframeIO problem, initiate another ajax request to get the real response
-        var bindArgs = {
-            url: statusServlet,
-            mimeType: "text/json",
-            handle: function (type, json, http) {
-                processFUResponse(type, json, http);
-                }
-         };
-         dojo.io.bind(bindArgs);
-         
-        /***
-        // handle successful response here
-        var resultx = data.getElementsByTagName("response")[0];
-        var message;
-        var thumbpath;
-        if(resultx) {
-            message = resultx.getElementsByTagName("message")[0].childNodes[0].nodeValue;
-            thumbpath = resultx.getElementsByTagName("thumbnail")[0].childNodes[0].nodeValue;
-        } else {
-            // resultx is not set for IE, could be some problem in dojo.iframe, node upload
-            var name = document.getElementById("TestFileuploadForm:name").value;
-            var firstName = document.getElementById("TestFileuploadForm:firstName").value;
-            thumbpath = "";
-            message = firstName + ", Thank you for submitting your pet " + name;
-        }
-        location.href="fileuploadstatus.jsp?message=" + message + "&thumb=" + thumbpath;
-        ***/
-    }
-    
-    function processFUResponse(type, json, http) {
-        if (typeof json == "string") {
-            // in case json is not an object
-            json = eval('(' + json + ')');
-        }
-        var message = json.message;
-        var thumbpath = json.thumbnail;
-        var productId = json.productid;
-        var itemid = json.itemid;
-        if (http.status == 401) {
-            // captcha error
-            //doneButton.disabled = false;
-            alert("Authorization faild : please enter the correct captcha string");
-        } else if (http.status == 500) {
-            //doneButton.disabled = false;
-            alert("Persistence failed : please check if the address is valid");
-        } else {
-            // fileupload complete
-            var thumbpath = json.thumbnail;
-            location.href="fileuploadstatus.jsp?message=" + message + "&id=" + itemid + "&productId=" + productId + "&thumb=" + thumbpath;
-        }
-    }
 
+    function testRetFunction(type, data, evt){
+        if (evt.readyState == 4) {
+            if(evt.status == 500) {
+                // persistance error
+                alert("Persistence failed : please check if the address is valid");            
+                
+            } else if(evt.status == 200) {
+                // check for error
+                var resultx=data.getElementsByTagName("response")[0];
+                var message=resultx.getElementsByTagName("message")[0].childNodes[0].nodeValue;
+                if(message == "Captchas Filter Error") {
+                    // captcha error
+                    alert("Authorization failed : please enter the correct captcha string");
+                } else {
+                    // fileupload complete
+                    var thumbpath=resultx.getElementsByTagName("thumbnail")[0].childNodes[0].nodeValue;
+                    var productId=resultx.getElementsByTagName("productId")[0].childNodes[0].nodeValue;
+                    var itemid=resultx.getElementsByTagName("itemId")[0].childNodes[0].nodeValue;
+                    // forward to status page
+                    location.href="fileuploadstatus.jsp?message=" + message + "&id=" + itemid + "&productId=" + productId + "&thumb=" + thumbpath;
+                }
+            }
+        }
+    }
+    
+    
    function storeCookie() {
        currentcap = "j_captcha_response="+document.getElementById("TestFileuploadForm:captcharesponse").value;
        document.cookie = currentcap;

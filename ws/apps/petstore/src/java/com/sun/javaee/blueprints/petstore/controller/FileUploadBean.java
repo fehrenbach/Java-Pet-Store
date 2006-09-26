@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: FileUploadBean.java,v 1.40 2006-09-20 23:29:34 basler Exp $ */
+$Id: FileUploadBean.java,v 1.41 2006-09-26 18:29:42 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -286,7 +286,7 @@ public class FileUploadBean {
                     }
                 }
                 
-                String itemID = catalogFacade.addItem(item);
+                itemId=catalogFacade.addItem(item);
                 getLogger().log(Level.FINE, "Item " + name + " has been persisted");
                 
             } catch (RuntimeException re) {
@@ -346,6 +346,12 @@ public class FileUploadBean {
             sb.append("<thumbnail>");
             sb.append(thumbPath);
             sb.append("</thumbnail>");
+            sb.append("<itemId>");
+            sb.append(itemId);
+            sb.append("</itemId>");
+            sb.append("<productId>");
+            sb.append(prodId);
+            sb.append("</productId>");
             sb.append("</response>");
             if(bDebug) System.out.println("Response:\n" + sb);
             //response.getWriter().write(sb.toString());

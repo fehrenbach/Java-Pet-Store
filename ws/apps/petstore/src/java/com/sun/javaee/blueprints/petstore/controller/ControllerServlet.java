@@ -1,12 +1,11 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: ControllerServlet.java,v 1.12 2006-09-20 23:29:34 basler Exp $ */
+$Id: ControllerServlet.java,v 1.13 2006-09-26 18:29:42 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
 import com.sun.javaee.blueprints.petstore.captcha.SimpleCaptcha;
 import com.sun.javaee.blueprints.petstore.model.CatalogFacade;
 import com.sun.javaee.blueprints.petstore.model.Category;
-import com.sun.javaee.blueprints.petstore.model.FileUploadResponse;
 import com.sun.javaee.blueprints.petstore.model.Item;
 import com.sun.javaee.blueprints.petstore.model.Product;
 import com.sun.javaee.blueprints.petstore.util.PetstoreConstants;
@@ -38,8 +37,6 @@ import java.text.NumberFormat;
 import java.util.Iterator;
 import java.util.List;
 import javax.imageio.ImageIO;
-import javax.servlet.http.HttpSession;
-
 
 /**
  * This servlet is responsible for interacting with a client
@@ -58,8 +55,6 @@ public class ControllerServlet extends HttpServlet {
     private CatalogFacade cf;
     private static String CACHE = "controller_cache";
     private static String CACHE_TIMES = "controller_cache_times";
-    private static final String FILE_UL_RESPONSE = "fileuploadResponse";
-    private static final String PERSIST_FAILURE = "persist_failure";
     private static final boolean bDebug=false;
     
     
@@ -143,122 +138,7 @@ public class ControllerServlet extends HttpServlet {
             ImageIO.write(bimg, "jpeg", out);
             out.flush();
             out.close();
-            
-        } else if(request.getServletPath().endsWith("FileUploadResponseServlet")) {
-            
-            // xml or json
-            String reqContentType = request.getParameter("reqContentType");
-            
-            // there must be a session already, but just in case.
-            HttpSession session = request.getSession(true);
-            
-            Boolean cInvalid = (Boolean)session.getAttribute("captchaInvalid");
-            Boolean pFailure = (Boolean)session.getAttribute(PERSIST_FAILURE);
-            if (cInvalid == null) {
-                cInvalid = Boolean.valueOf(false);
-            }
-            if (pFailure == null) {
-                pFailure = Boolean.valueOf(false);
-            }
-            
-            if (reqContentType!=null && reqContentType.equals("xml")) {
-                response.setContentType("text/xml;charset=UTF-8");
-            } else {
-                response.setContentType("text/javascript");
-            }
-            response.setHeader("Pragma", "No-Cache");
-            response.setHeader("Cache-Control", "no-cache,no-store,max-age=0");
-            response.setDateHeader("Expires", 1);
-            PrintWriter writer = response.getWriter();
-            
-            StringBuffer sb=new StringBuffer();
-            if (cInvalid.booleanValue()) {
-                // captcha was invalid
-                response.setStatus(response.SC_UNAUTHORIZED);
-                if (reqContentType!=null && reqContentType.equals("xml")) {
-                    sb.append("<response>");
-                    sb.append("<message>");
-                    sb.append("Plase enter the correct captcha string");
-                    sb.append("</message>");
-                    sb.append("</response>");
-                } else {
-                    sb.append("{");
-                    sb.append(constructJsonEntry("message", "Please enter the correct captcha string"));
-                    sb.append("}");
-                }
-            } else if (pFailure.booleanValue()) {
-                response.setStatus(response.SC_INTERNAL_SERVER_ERROR );
-                if (reqContentType!=null && reqContentType.equals("xml")) {
-                    sb.append("<response>");
-                    sb.append("<message>");
-                    sb.append("Persistence failed. The entered address is invalid?");
-                    sb.append("</message>");
-                    sb.append("</response>");
-                } else {
-                    sb.append("{");
-                    sb.append(constructJsonEntry("message", "Persistence failed. The entered address is invalid?"));
-                    sb.append("}");
-                }
-            } else {
-                // captcha was valid
-                FileUploadResponse flr = (FileUploadResponse)session.getAttribute(FILE_UL_RESPONSE);
-                if (flr != null) {
-                    if (reqContentType!=null && reqContentType.equals("xml")) {
-                        sb.append("<response>");
-                        sb.append("<itemid>");
-                        sb.append(flr.getItemId());
-                        sb.append("</itemid>");
-                        sb.append("<productId>");
-                        sb.append(flr.getProductId());
-                        sb.append("</productId>");
-                        sb.append("<message>");
-                        sb.append(flr.getMessage());
-                        sb.append("</message>");
-                        sb.append("<status>");
-                        sb.append(flr.getStatus());
-                        sb.append("</status>");
-                        sb.append("<duration>");
-                        sb.append(flr.getDuration());
-                        sb.append("</duration>");
-                        sb.append("<duration_string>");
-                        sb.append(flr.getDurationString());
-                        sb.append("</duration_string>");
-                        sb.append("<start_date>");
-                        sb.append(flr.getStartDate());
-                        sb.append("</start_date>");
-                        sb.append("<end_date>");
-                        sb.append(flr.getEndDate());
-                        sb.append("</end_date>");
-                        sb.append("<upload_size>");
-                        sb.append(flr.getUploadSize());
-                        sb.append("</upload_size>");
-                        sb.append("<thumbnail>");
-                        sb.append(flr.getThumbnail());
-                        sb.append("</thumbnail>");
-                        sb.append("</response>");
-                    } else {
-                        sb.append("{");
-                        sb.append(constructJsonEntry("itemid", flr.getItemId()) + ",\n");
-                        sb.append(constructJsonEntry("productid", flr.getProductId()) + ",\n");
-                        sb.append(constructJsonEntry("message", flr.getMessage()) + ",\n");
-                        sb.append(constructJsonEntry("status", flr.getStatus()) + ",\n");
-                        sb.append(constructJsonEntry("duration", flr.getDuration()) + ",\n");
-                        sb.append(constructJsonEntry("duration_string", flr.getDurationString()) + ",\n");
-                        sb.append(constructJsonEntry("start_date", flr.getStartDate()) + ",\n");
-                        sb.append(constructJsonEntry("end_date", flr.getEndDate()) + ",\n");
-                        sb.append(constructJsonEntry("upload_size", flr.getUploadSize()) + ",\n");
-                        sb.append(constructJsonEntry("thumbnail", flr.getThumbnail()));
-                        sb.append("}");
-                    }
-                }
-            }
-            try {
-                writer.write(sb.toString());
-                writer.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            
+                        
         } else if(request.getServletPath().endsWith("catalog")) {
             request.setCharacterEncoding("UTF-8");
             String command = request.getParameter("command");
