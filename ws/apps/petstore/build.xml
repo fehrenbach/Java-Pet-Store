@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: build.xml,v 1.47 2006-07-31 22:46:57 basler Exp $ -->
+ $Id: build.xml,v 1.48 2006-09-27 00:26:01 yutayoshida Exp $ -->
  
 <project name="petstore" default="default" basedir=".">
     <description>Builds, tests, and runs the project petstore.</description>
@@ -33,6 +33,9 @@
             <fileset file="${file.reference.commons-fileupload-1.1.1.jar}"/>
             <fileset file="${file.reference.commons-io-1.2.jar}"/>
             <fileset file="${file.reference.commons-logging-1.1.jar}"/>
+            <fileset file="${file.reference.jdom.jar}"/>
+            <fileset file="${file.reference.rome-0.8.jar}"/>
+            <fileset file="${file.reference.rome-fetcher-0.7.jar}"/>
         </copy>        
         
         <copy file="src/conf/persistence.xml" todir="${build.web.dir}/WEB-INF/classes/META-INF"/>
