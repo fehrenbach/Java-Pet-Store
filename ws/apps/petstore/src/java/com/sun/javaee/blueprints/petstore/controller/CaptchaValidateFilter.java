@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CaptchaValidateFilter.java,v 1.14 2006-09-22 20:25:24 yutayoshida Exp $ */
+$Id: CaptchaValidateFilter.java,v 1.15 2006-09-28 23:20:39 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -148,22 +148,30 @@ public class CaptchaValidateFilter implements Filter {
             session.setAttribute(INVALID_CAPTCHA, new Boolean(true));
             FileUploadStatus fuStatus = new FileUploadStatus();
             session.setAttribute("fileUploadStatus", fuStatus);
-            fuStatus.setUploadItems(new Hashtable());
-            fuStatus.setEndUploadDate(new Date());
-            fuStatus.setUploadError("Captchas Filter Error");
+            //fuStatus.setUploadItems(new Hashtable());
+            //fuStatus.setEndUploadDate(new Date());
+            String errorx="Captchas Filter Error";
+            fuStatus.setMessage(errorx);
+            fuStatus.setStatus(errorx);
             //RequestDispatcher rd = request.getRequestDispatcher("/captchaerror.jsp");
             //rd.forward(request, response);
             // assuming this is a xmlhttprequest
+            /*
             response.setContentType("text/javascript");
             ((HttpServletResponse)response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             ((HttpServletResponse)response).setHeader("Cache-Control", "no-store");
             ((HttpServletResponse)response).setHeader("Pragma", "no-cache");
+            
             PrintWriter out = response.getWriter();
             out.println("{");
             out.println(constructJsonEntry("message", "Please enter the correct captcha string"));
             out.println("}");
             out.flush();
             out.close();
+            */
+            response.setContentType("text/plain");
+            ((HttpServletResponse)response).setHeader("Cache-Control", "no-store");
+            ((HttpServletResponse)response).setHeader("Pragma", "no-cache");
         }
     }
     
