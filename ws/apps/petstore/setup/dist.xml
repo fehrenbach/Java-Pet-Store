@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- Copyright 2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: dist.xml,v 1.11 2006-09-20 21:28:21 inder Exp $ -->
+ $Id: dist.xml,v 1.12 2006-09-30 00:35:49 yutayoshida Exp $ -->
 
 <project name="petstore-dist" default="dist" basedir="..">
 
@@ -44,6 +44,10 @@
     <antcall target="assemble-dist"/>
     <fixcrlf srcdir="${tmpdist}" tab="remove" tablength="2" eol="unix" includes="**/*.properties,**/*.jsp,**/*.html,**/*.sh,**/*.java,**/*.xml" excludes="**/ja/**" />
     <delete dir="${tmpdist}/ant-task"/>
+    <delete>
+      <fileset dir="${tmpdist}/setup" includes="**/sdk-*"/>
+    </delete>
+    <delete file="${tmpdist}/setup/manifest.mf"/>
     <antcall target="create-zip"/>
   </target>
 
