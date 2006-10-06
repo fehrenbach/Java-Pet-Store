@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: ControllerServlet.java,v 1.13 2006-09-26 18:29:42 basler Exp $ */
+$Id: ControllerServlet.java,v 1.14 2006-10-06 14:47:18 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -55,7 +55,7 @@ public class ControllerServlet extends HttpServlet {
     private CatalogFacade cf;
     private static String CACHE = "controller_cache";
     private static String CACHE_TIMES = "controller_cache_times";
-    private static final boolean bDebug=false;
+    private static final boolean bDebug=true;
     
     
     public void init(ServletConfig config) throws ServletException {
@@ -363,7 +363,7 @@ public class ControllerServlet extends HttpServlet {
             sb.append(" <product-id>" + i.getProductID() + "</product-id>\n");
             sb.append(" <rating>" + i.checkAverageRating() + "</rating>\n");
             sb.append(" <name>" + i.getName() + "</name>\n");
-            sb.append(" <description>" + i.getDescription() + "</description>\n");
+            sb.append(" <description><![CDATA[" + i.getDescription() + "]]></description>\n");
             sb.append(" <price>" + formatter.format(i.getPrice()) + "</price>\n");
             sb.append(" <image-url>" + baseURL + i.getImageURL() + "</image-url>\n");
             sb.append(" <image-tb-url>" + baseURL + i.getImageThumbURL() + "</image-tb-url>\n");
@@ -391,7 +391,7 @@ public class ControllerServlet extends HttpServlet {
             sb.append(" <cat-id>" + categoryId + "</cat-id>\n");
             sb.append(" <name>" + i.getName() + "</name>\n");
             sb.append(" <price>" + formatter.format(i.getPrice()) + "</price>\n");
-            sb.append(" <description>" + i.getDescription() + "</description>\n");
+            sb.append(" <description><![CDATA[" + i.getDescription() + "]]></description>\n");
             sb.append(" <image-url>" + i.getImageURL() + "</image-url>\n");
             sb.append("</item>\n");
         }
@@ -408,7 +408,7 @@ public class ControllerServlet extends HttpServlet {
         sb.append(" <id>" + i.getItemID() + "</id>\n");
         sb.append(" <cat-id>" + i.getProductID() + "</cat-id>\n");
         sb.append(" <name>" + i.getName() + "</name>\n");
-        sb.append(" <description>" + i.getDescription() + "</description>\n");
+        sb.append(" <description><![CDATA[" + i.getDescription() + "]]></description>\n");
         sb.append(" <image-url>" + i.getImageURL() + "</image-url>\n");
         sb.append(" <price>" + formatter.format(i.getPrice())  + "</price>\n");
         sb.append("</item>\n");
@@ -464,7 +464,7 @@ public class ControllerServlet extends HttpServlet {
                 sb.append(" <id>" + c.getCategoryID() + "</id>\n");
                 sb.append(" <cat-id>" + c.getCategoryID()+ "</cat-id>\n");
                 sb.append(" <name>" + c.getName() + "</name>\n");
-                sb.append(" <description>" +c.getDescription() + "</description>\n");
+                sb.append(" <description><![CDATA[" +c.getDescription() + "]]></description>\n");
                 sb.append(" <image-url>" + c.getImageURL() + "</image-url>\n");
                 sb.append("</category>\n");
             }

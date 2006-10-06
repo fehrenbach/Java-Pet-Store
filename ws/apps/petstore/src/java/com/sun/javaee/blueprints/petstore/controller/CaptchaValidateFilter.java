@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CaptchaValidateFilter.java,v 1.15 2006-09-28 23:20:39 basler Exp $ */
+$Id: CaptchaValidateFilter.java,v 1.16 2006-10-06 14:47:18 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -52,28 +52,6 @@ public class CaptchaValidateFilter implements Filter {
                 captchaString = cookie.getValue();
             }
         }
-        /* Multi part request
-        ServletRequestContext src = new ServletRequestContext(request);
-        
-        if (ServletFileUpload.isMultipartContent(src)) {
-            FileItemFactory factory = new DiskFileItemFactory();
-            ServletFileUpload upload = new ServletFileUpload(factory);
-            try {
-                List<FileItem> itemList = upload.parseRequest(request);
-                for (FileItem item : itemList) {
-                    if (item.isFormField()) {
-                        if (item.getFieldName().equals(CAPTCHA_FIELD_NAME)) {
-                            captchaString = item.getString();
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            captchaString = request.getParameter(CAPTCHA_FIELD_NAME);
-        }
-         */
         Boolean validResponse = Boolean.FALSE;
         if (captchaString == null) {
             return validResponse;
@@ -152,23 +130,6 @@ public class CaptchaValidateFilter implements Filter {
             //fuStatus.setEndUploadDate(new Date());
             String errorx="Captchas Filter Error";
             fuStatus.setMessage(errorx);
-            fuStatus.setStatus(errorx);
-            //RequestDispatcher rd = request.getRequestDispatcher("/captchaerror.jsp");
-            //rd.forward(request, response);
-            // assuming this is a xmlhttprequest
-            /*
-            response.setContentType("text/javascript");
-            ((HttpServletResponse)response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            ((HttpServletResponse)response).setHeader("Cache-Control", "no-store");
-            ((HttpServletResponse)response).setHeader("Pragma", "no-cache");
-            
-            PrintWriter out = response.getWriter();
-            out.println("{");
-            out.println(constructJsonEntry("message", "Please enter the correct captcha string"));
-            out.println("}");
-            out.flush();
-            out.close();
-            */
             response.setContentType("text/plain");
             ((HttpServletResponse)response).setHeader("Cache-Control", "no-store");
             ((HttpServletResponse)response).setHeader("Pragma", "no-cache");

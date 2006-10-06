@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: catalog.js,v 1.13 2006-05-31 19:13:03 basler Exp $ */
+$Id: catalog.js,v 1.14 2006-10-06 14:47:19 basler Exp $ */
 
 var ac;
 var is;
@@ -90,7 +90,7 @@ function CatalogController() {
   
   function setNodeText(t, text) {
       if (useDOMInjection) {
-            t.lastChild.nodeValue = text;
+          t.lastChild.nodeValue = text;
       } else {
           t.innerHTML = text;
       }

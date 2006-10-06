@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: fileupload.jsp,v 1.44 2006-09-26 18:29:43 basler Exp $ --%>
+$Id: fileupload.jsp,v 1.45 2006-10-06 14:47:19 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -15,15 +15,18 @@ $Id: fileupload.jsp,v 1.44 2006-09-26 18:29:43 basler Exp $ --%>
         <title>Petstore Seller page</title>
         
 <script type="text/javascript">
-
+    var submittingForm=false;
+    
     function testRetFunction(type, data, evt){
         if (evt.readyState == 4) {
             if(evt.status == 500) {
                 // persistance error
-                alert("Persistence failed : please check if the address is valid");            
+                alert("Persistence failed : please check if the address is valid");     
+                submittingForm=false;
                 
             } else if(evt.status == 200) {
                 // check for error
+                submittingForm=false;
                 var resultx=data.getElementsByTagName("response")[0];
                 var message=resultx.getElementsByTagName("message")[0].childNodes[0].nodeValue;
                 if(message == "Captchas Filter Error") {
@@ -65,10 +68,14 @@ $Id: fileupload.jsp,v 1.44 2006-09-26 18:29:43 basler Exp $ --%>
    }
    
    function fileuploadOnsubmit() {
-       //doneButton = this.parent.doneButton;
-       //doneButton.disabled = true;
-       storeCookie()
-       document.forms['TestFileuploadForm'].onsubmit();
+        if(!submittingForm) {
+            submittingForm=true;
+            // save rich text editor text to element
+            dojo.byId('description').value=dojo.widget.byId('rtEditor').getEditorContent()
+
+            storeCookie()
+           document.forms['TestFileuploadForm'].onsubmit();
+        }
    }
    
    function showFU() {
@@ -99,10 +106,18 @@ div.pane {
     font: 12px arial;
 }
 
+.nameCol {
+    width: 45%; 
+}
+.dataCol {
+    width: 55%; 
+}
+
 </style>
     </head>
     <body onload="showFU()">
         <jsp:include page="banner.jsp"/>
+        <script>dojo.require("dojo.widget.Editor");</script>        
         <br/>
         <div id="fucomponent" style="visibility:hidden;">
         <f:view>
@@ -112,7 +127,7 @@ div.pane {
                 retMimeType="text/xml" retFunction="testRetFunction" 
                 progressBarDivId="progress" progressBarSize="40">
                 <div id="pane2" class="pane" style="visibility: hidden;">
-                    <h:panelGrid columns="2" style="width: 80%">
+                    <h:panelGrid  border="0" columns="2" style="width: 100%" columnClasses="nameCol, dataCol">
                         <f:facet name="header">
                             <h:outputText value="Information about yourself"/>
                         </f:facet>
@@ -148,7 +163,7 @@ div.pane {
                     </h:panelGrid>
                 </div>
                 <div class="pane"style="position:absolute; top:125px;" id="pane1">
-                    <h:panelGrid columns="2" style="width: 80%">
+                    <h:panelGrid  border="0" columns="2" style="width: 100%" columnClasses="nameCol, dataCol">
                         <f:facet name="header">
                             <h:outputText value="Information about your pet"/>
                         </f:facet>
@@ -161,13 +176,13 @@ div.pane {
                         <h:outputText value="Pet's Name"/>
                         <h:inputText size="20" id="name"></h:inputText>
 
-                        <h:outputText value="Description"/>
-                        <h:inputTextarea id="description" cols="20" rows="5"></h:inputTextarea>
-                        <%--
-                        <ui14:richTextarea id="description"
-                                       items="textGroup;|;listGroup;|;colorGroup;"></ui14:richTextarea>   
-                         --%>
+                        <h:outputText value="Description (3 lines max display in catalog)"/>
+                        <div style="border-style:inset; border-width:thin; background-color:white">
+                        <textarea wrap="soft" dojoType="Editor" widgetId="rtEditor" id="description" name="TestFileuploadForm:description" 
+                        items="textGroup;|;colorGroup;"></textarea>
+                        </div>
 
+                        
                         <h:outputText value="Price"/>
                         <h:inputText size="20" id="price"></h:inputText>
 
