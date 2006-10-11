@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: SimpleCaptchaTest.java,v 1.1 2006-09-20 21:28:22 inder Exp $ */
+$Id: SimpleCaptchaTest.java,v 1.2 2006-10-11 23:27:11 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.captcha;
 
@@ -64,19 +64,6 @@ public class SimpleCaptchaTest extends TestCase {
     }
     
     /**
-     * Test of validateResponseWithSession method, of class com.sun.javaee.blueprints.petstore.captcha.SimpleCaptcha.
-     */
-    public void testValidateResponseWithSession() {
-        System.out.println("validateResponseWithSession");
-        
-        HttpSession session = null;
-        String text = TestUtil.getRandomString();
-        SimpleCaptcha instance = new SimpleCaptcha();
-        
-        assertTrue(instance.validateResponseWithSession(session, text));
-    }
-    
-    /**
      * Test of validateResponse method, of class com.sun.javaee.blueprints.petstore.captcha.SimpleCaptcha.
      */
     public void testValidateResponse() {
@@ -85,24 +72,8 @@ public class SimpleCaptchaTest extends TestCase {
         String id = TestUtil.getRandomString();
         String text = TestUtil.getRandomString();
         SimpleCaptcha instance = new SimpleCaptcha();
-        
+        instance.getCaptchaImageWithId(id);        
         assertTrue(instance.validateResponse(id, text));
-    }
-    
-    /**
-     * Test of getCaptchaImageWithSession method, of class com.sun.javaee.blueprints.petstore.captcha.SimpleCaptcha.
-     */
-    public void testGetCaptchaImageWithSession() {
-        System.out.println("getCaptchaImageWithSession");
-        
-        HttpSession session = null;
-        SimpleCaptcha instance = new SimpleCaptcha();
-        
-        BufferedImage result = instance.getCaptchaImageWithSession(session);
-        assertNotNull(result);
-        
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
     
     /**
