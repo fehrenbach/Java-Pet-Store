@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CaptchaValidateFilter.java,v 1.16 2006-10-06 14:47:18 basler Exp $ */
+$Id: CaptchaValidateFilter.java,v 1.17 2006-10-30 22:53:35 yutayoshida Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -21,6 +21,9 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+// for CAPTCHA_KEY and CAPTCHA_STRING
+import static com.sun.javaee.blueprints.petstore.controller.ControllerServlet.*;
 
 public class CaptchaValidateFilter implements Filter {
 
@@ -56,12 +59,11 @@ public class CaptchaValidateFilter implements Filter {
         if (captchaString == null) {
             return validResponse;
         }
-        try {
-            SimpleCaptcha captcha = new SimpleCaptcha();
-            validResponse = captcha.validateResponseWithSession(request.getSession(), captchaString);
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        // validation can be done within this method - no need to call captcha class
+        HttpSession session = request.getSession();
+        String storedString = ((String)session.getAttribute(CAPTCHA_STRING)).toLowerCase();
+        if (storedString != null && storedString.equals(captchaString.toLowerCase())) {
+            validResponse = Boolean.TRUE;
         }
         return validResponse.booleanValue();
     }

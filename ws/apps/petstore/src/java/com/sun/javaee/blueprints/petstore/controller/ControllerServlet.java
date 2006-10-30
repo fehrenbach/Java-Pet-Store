@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: ControllerServlet.java,v 1.14 2006-10-06 14:47:18 basler Exp $ */
+$Id: ControllerServlet.java,v 1.15 2006-10-30 22:53:35 yutayoshida Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -25,6 +25,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
@@ -50,6 +51,8 @@ public class ControllerServlet extends HttpServlet {
     public static final String GIF_SUFFIX = ".gif";
     public static final String JPG_SUFFIX = ".jpg";
     public static final String PNG_SUFFIX = ".png";
+    public static final String CAPTCHA_KEY = "captcha_key";
+    public static final String CAPTCHA_STRING = "captcha_string";
     private ServletContext ctx;
     private Logger _logger=null;
     private CatalogFacade cf;
@@ -128,7 +131,12 @@ public class ControllerServlet extends HttpServlet {
             
         } else if(request.getServletPath().endsWith("CaptchaServlet")) {
             SimpleCaptcha captcha = new SimpleCaptcha();
-            BufferedImage bimg = captcha.getCaptchaImageWithSession(request.getSession());
+            // just in case... not really necessary to store the session id here
+            HttpSession session = request.getSession();
+            session.setAttribute(CAPTCHA_KEY, session.getId());
+            String cstring = captcha.generateCaptchaString(5);
+            session.setAttribute(CAPTCHA_STRING, cstring);
+            BufferedImage bimg = captcha.getCaptchaImage(cstring);
             
             response.setHeader("Cache-Control", "no-store");
             response.setHeader("Pragma", "no-cache");
