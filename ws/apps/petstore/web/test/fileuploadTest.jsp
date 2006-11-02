@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: fileuploadTest.jsp,v 1.1 2006-09-13 17:31:20 basler Exp $ --%>
+$Id: fileuploadTest.jsp,v 1.2 2006-11-02 03:32:43 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -8,7 +8,6 @@ $Id: fileuploadTest.jsp,v 1.1 2006-09-13 17:31:20 basler Exp $ --%>
 <%@taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@taglib prefix="ui" uri="http://java.sun.com/blueprints/ui" %>
-<%@taglib prefix="ui14" uri="http://java.sun.com/blueprints/ui/14" %>
 
 <html>
     <head>
@@ -149,10 +148,6 @@ $Id: fileuploadTest.jsp,v 1.1 2006-09-13 17:31:20 basler Exp $ --%>
                             
                             <h:outputText value="Description"/>
                             <h:inputTextarea id="description" cols="20" rows="5"></h:inputTextarea>
-                            <%--
-                            <ui14:richTextarea id="description"
-                                           items="textGroup;|;listGroup;|;colorGroup;"></ui14:richTextarea>   
-                         --%>
                             
                             <h:outputText value="Price"/>
                             <h:inputText size="20" id="price"></h:inputText>
@@ -175,13 +170,13 @@ $Id: fileuploadTest.jsp,v 1.1 2006-09-13 17:31:20 basler Exp $ --%>
                             <h:outputText value="Street"/>
                             <h:inputText size="20" id="street1" onclick="alert('x,y=' + event.pageX + ',' + event.pageY)"></h:inputText>
                             <h:outputText value="City"/>
-                            <ui14:autoComplete size="20" maxlength="100" id="cityField"
+                            <ui:autoComplete size="20" maxlength="100" id="cityField"
                             completionMethod="#{AutocompleteBean.completeCity}"
                             value="#{AddressBean.city}" required="true"
                             ondisplay="function(item) { return extractCity(item); }"
                             onchoose="function(item) { return chooseCity(item); }" />
                             <h:outputText value="State"/>
-                            <ui14:autoComplete size="2"  maxlength="100" id="stateField" 
+                            <ui:autoComplete size="2"  maxlength="100" id="stateField" 
                             completionMethod="#{AutocompleteBean.completeState}" 
                             value="#{AddressBean.state}" required="true" />
                             <h:outputText value="Zip"/>
