@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: fileupload.jsp,v 1.45 2006-10-06 14:47:19 basler Exp $ --%>
+$Id: fileupload.jsp,v 1.46 2006-11-02 00:34:49 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -8,7 +8,6 @@ $Id: fileupload.jsp,v 1.45 2006-10-06 14:47:19 basler Exp $ --%>
 <%@taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@taglib prefix="ui" uri="http://java.sun.com/blueprints/ui" %>
-<%@taglib prefix="ui14" uri="http://java.sun.com/blueprints/ui/14" %>
 
 <html>
     <head>
@@ -140,13 +139,13 @@ div.pane {
                         <h:outputText value="Street"/>
                         <h:inputText size="20" id="street1"></h:inputText>
                         <h:outputText value="City"/>
-                        <ui14:autoComplete size="20" maxlength="100" id="cityField"
+                        <ui:autoComplete size="20" maxlength="100" id="cityField"
                         completionMethod="#{AutocompleteBean.completeCity}"
                         value="#{AddressBean.city}" required="true"
                         ondisplay="function(item) { return extractCity(item); }"
                         onchoose="function(item) { return chooseCity(item); }" />
                         <h:outputText value="State"/>
-                        <ui14:autoComplete size="2"  maxlength="100" id="stateField" 
+                        <ui:autoComplete size="2"  maxlength="100" id="stateField" 
                         completionMethod="#{AutocompleteBean.completeState}" 
                         value="#{AddressBean.state}" required="true" />
                         <h:outputText value="Zip"/>

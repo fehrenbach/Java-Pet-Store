@@ -1,14 +1,13 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: map.jsp,v 1.19 2006-09-15 23:07:43 basler Exp $ --%>
+$Id: map.jsp,v 1.20 2006-11-02 00:34:49 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
-<%@page import="com.sun.javaee.blueprints.petstore.model.CatalogFacade, com.sun.javaee.blueprints.petstore.model.Item, com.sun.javaee.blueprints.petstore.mapviewer.MapBean, com.sun.j2ee.blueprints.ui.mapviewer.MapMarker"%>
+<%@page import="com.sun.javaee.blueprints.petstore.model.CatalogFacade, com.sun.javaee.blueprints.petstore.model.Item, com.sun.javaee.blueprints.petstore.mapviewer.MapBean, com.sun.javaee.blueprints.components.ui.mapviewer.MapMarker"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
 <%@taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-<%@taglib prefix="ui" uri="http://java.sun.com/blueprints/ui/14" %>
-<%@taglib prefix="ui5" uri="http://java.sun.com/blueprints/ui" %>
+<%@taglib prefix="ui" uri="http://java.sun.com/blueprints/ui" %>
 
 <html>
     <head>
@@ -97,7 +96,7 @@ $Id: map.jsp,v 1.19 2006-09-15 23:07:43 basler Exp $ --%>
                     </td>
                     <td valign="top">
                         <f:view>
-                            <ui5:popupTag id="pop1" xmlHttpRequestURL="../lookup.jsp?itemId=" 
+                            <ui:popupTag id="pop1" xmlHttpRequestURL="../lookup.jsp?itemId=" 
                                 elementNamePairs="name=value1,description=value2,price=value3,image=imageId">
                                 <!-- Used as spaces to center the table, this could be done programmatically,
                                 but browser diff, so I left it in the hands of the component user.  The image is located 
@@ -121,7 +120,7 @@ $Id: map.jsp,v 1.19 2006-09-15 23:07:43 basler Exp $ --%>
                                         alt="[Loading Image...]" border="2"/><br/><br/></td>
                                     </tr>
                                 </table>                    
-                            </ui5:popupTag>            
+                            </ui:popupTag>            
                         
         
                             <ui:mapViewer id="mapViewerx" center="#{MapBean.mapPoint}" info="#{MapBean.mapMarker}"

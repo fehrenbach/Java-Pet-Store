@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: catalog.jsp,v 1.18 2006-10-06 14:47:19 basler Exp $ --%>
+$Id: catalog.jsp,v 1.19 2006-11-02 00:34:49 basler Exp $ --%>
 <script type="text/javascript" src="scroller.js"></script>
 <link rel="stylesheet" type="text/css" href="scroller.css"></link>
 <script type="text/javascript" src="accordion.js"></script>
@@ -8,7 +8,7 @@ $Id: catalog.jsp,v 1.18 2006-10-06 14:47:19 basler Exp $ --%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
 <%@taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-<%@taglib prefix="ui" uri="http://java.sun.com/blueprints/ui/14" %>
+<%@taglib prefix="ui" uri="http://java.sun.com/blueprints/ui" %>
 <body>
 <jsp:include page="banner.jsp" />
 <script type="text/javascript">

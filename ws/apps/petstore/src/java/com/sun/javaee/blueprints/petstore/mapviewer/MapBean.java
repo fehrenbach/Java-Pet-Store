@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: MapBean.java,v 1.21 2006-09-20 21:22:11 basler Exp $ */
+$Id: MapBean.java,v 1.22 2006-11-02 00:34:49 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.mapviewer;
 
@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.Map;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
-import com.sun.j2ee.blueprints.ui.geocoder.GeoCoder;
-import com.sun.j2ee.blueprints.ui.geocoder.GeoPoint;
-import com.sun.j2ee.blueprints.ui.mapviewer.MapMarker;
-import com.sun.j2ee.blueprints.ui.mapviewer.MapPoint;
+import com.sun.javaee.blueprints.components.ui.geocoder.GeoCoder;
+import com.sun.javaee.blueprints.components.ui.geocoder.GeoPoint;
+import com.sun.javaee.blueprints.components.ui.mapviewer.MapMarker;
+import com.sun.javaee.blueprints.components.ui.mapviewer.MapPoint;
 import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
 import com.sun.javaee.blueprints.petstore.model.CatalogFacade;
 import com.sun.javaee.blueprints.petstore.model.Item;

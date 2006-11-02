@@ -1,10 +1,10 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: PayPalBean.java,v 1.5 2006-06-08 22:57:49 basler Exp $ */
+$Id: PayPalBean.java,v 1.6 2006-11-02 00:34:49 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.model;
 
 import java.math.BigDecimal;
-import com.sun.j2ee.blueprints.ui.shopping.BuyNowPostData;
+import com.sun.javaee.blueprints.components.ui.shopping.BuyNowPostData;
 /**
  *
  * @author basler
