@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: fileupload.jsp,v 1.46 2006-11-02 00:34:49 basler Exp $ --%>
+$Id: fileupload.jsp,v 1.47 2006-11-13 23:19:59 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -116,7 +116,7 @@ div.pane {
     </head>
     <body onload="showFU()">
         <jsp:include page="banner.jsp"/>
-        <script>dojo.require("dojo.widget.Editor");</script>        
+        <script>dojo.require("dojo.widget.Editor2");</script>        
         <br/>
         <div id="fucomponent" style="visibility:hidden;">
         <f:view>
@@ -176,9 +176,16 @@ div.pane {
                         <h:inputText size="20" id="name"></h:inputText>
 
                         <h:outputText value="Description (3 lines max display in catalog)"/>
+                        <!--
+                        <div dojoType="Editor2" name="TestFileuploadForm:description" items="textGroup;|;colorGroup;"
+                        style="border-style:inset; border-width:thin; background-color:white">
+                        -->
+                        
                         <div style="border-style:inset; border-width:thin; background-color:white">
-                        <textarea wrap="soft" dojoType="Editor" widgetId="rtEditor" id="description" name="TestFileuploadForm:description" 
-                        items="textGroup;|;colorGroup;"></textarea>
+                        <textarea wrap="soft" dojoType="Editor2" widgetId="rtEditor" id="description" name="TestFileuploadForm:description" 
+                        items="bold;italic;underline;strikethrough;"
+                        toolbarTemplatePath="./rteToolBar.html"></textarea>
+                        
                         </div>
 
                         

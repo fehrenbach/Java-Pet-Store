@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: catalog.js,v 1.14 2006-10-06 14:47:19 basler Exp $ */
+$Id: catalog.js,v 1.15 2006-11-13 23:19:59 basler Exp $ */
 
 var ac;
 var is;
@@ -98,9 +98,10 @@ function CatalogController() {
   
   this.initialize = function() {
         // check whether the innerHTML changes can be used in the infopane
-      infoName.innerHTML = "   ";
-      if (!useDOMInjection && infoName.innerHTML != "   ") {
+      infoName.innerHTML = "&nbsp;";
+      if (!useDOMInjection && infoName.innerHTML != "&nbsp;") {
         useDOMInjection = true;
+
         infoName.appendChild(document.createTextNode("Name"));
         infoPrice.appendChild(document.createTextNode("$0.00"));
         infoShortDescription.appendChild(document.createTextNode("<description>"));
