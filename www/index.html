@@ -1,13 +1,22 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
+
+  
   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+
+  
   <title>Java Pet Store Reference Application</title>
 </head>
+
+
 <body>
+
 <img src="../../blueprints/www/petstore/images/ps-logo.jpg"> <br>
+
 <hr noshade="noshade">
 <h1>Java Pet Store 2.0 Reference Application, Early Access</h1>
+
 The Java Pet Store 2.0 Reference Application is a sample application
 brought to
 you by the <a href="http://blueprints.dev.java.net/">Java
@@ -18,7 +27,9 @@ can be used to develop an AJAX-enabled Web 2.0 application. The
 application comes with full source-code available under a&nbsp;
 BSD-style license, so you can experiment with it and use it in your own
 applications. <br>
+
 <br>
+
 The Java Pet Store 2.0 is the reference application for building AJAX
 web applications on Java EE 5. It illustrates BluePrints for using AJAX
 with Java, building AJAX-enabled JSF component libraries, using Java
@@ -26,35 +37,47 @@ Persistence APIs, applying MVC and other design patterns in an AJAX web
 app, using Mashups such as Google Maps service for location specific
 searches of pets and PayPal service for purchases, using an RSS feed as
 a data&nbsp; source, and lots more.<br>
+
 <br>
-<a href="../../blueprints/www/petstore/index.html#try">Download and Use
+
+<a href="https://blueprints.dev.java.net/petstore/index.html#try">Download and Use
 the Pet Store Demo</a><br>
-<a href="../../blueprints/www/petstore/index.html#learn">Learn more
+
+<a href="https://blueprints.dev.java.net/petstore/index.html#learn">Learn more
 about features in Java Pet Store</a><br>
+
 <a href="https://blueprints.dev.java.net/petstore/release_notes.html">See
 the release notes for more detail</a><br>
-<a href="../../blueprints/www/petstore/index.html#netbeans">Use
+
+<a href="https://blueprints.dev.java.net/petstore/index.html#netbeans">Use
 NetBeans IDE with Java Pet Store</a><br>
-<a href="../../blueprints/www/petstore/faq.html">Check out the FAQ for
+
+<a href="https://blueprints.dev.java.net/petstore/faq.html">Check out the FAQ for
 common questions</a><br>
-<a href="../../blueprints/www/petstore/index.html#contributors">Show
+
+<a href="https://blueprints.dev.java.net/petstore/index.html#contributors">Show
 appreciation for Pet Store
 image contributors</a><br>
-<a href="../../blueprints/www/petstore/index.html#about">About
+
+<a href="https://blueprints.dev.java.net/petstore/index.html#about">About
 BluePrints</a><br>
+
 <h2><a name="try"></a>Download and Use the Pet Store Demo</h2>
-You can <a
- href="https://blueprints.dev.java.net/servlets/ProjectDocumentList?folderID=5315&amp;expandFolder=5315&amp;folderID=0">download
+
+You can <a href="https://blueprints.dev.java.net/downloads.html">download
 the Java Petstore Demo</a>&nbsp; and try out the features.
 You can browse the catalog of pets for sale, sell your own pets on the
 store, search for pets by location using Google maps, view the RSS news
-bar for BluePrints news, and more. All the source code is included.<a
- href="file:///petstore/faces/index.jsp"><br>
+bar for BluePrints news, and more. All the source code is included.<a href="file:///petstore/faces/index.jsp"><br>
+
 </a>
 <h2><a name="learn"></a>Learn More About
 Features in Java Petstore</h2>
+
 <p>Here are some of the features of this application:&nbsp;</p>
+
 <ol>
+
   <li>Using AJAX for single-page interactive Web applications:
 The
 application is designed to be a single-page application where the user
@@ -62,90 +85,104 @@ never leaves the page. Different sections of the page are dynamically
 loaded based on the user actions. These sections are loaded
 asynchronously to avoid any browser refreshes, and to give a richer
 interactive user-experience.&nbsp;</li>
+
   <li>Mash-ups with Google maps: The petstore uses a mashup with
 Google's Map service, alongwith Yahoo's Geo-coder service to allow
 users to see the available pets in a neighborhood.&nbsp;</li>
+
   <li>Community-created content: The application allows a user to
 add a
 pet for sale or adoption on the Website. The seller uploads&nbsp;</li>
+
+  
   <ol>
+
     <li>Using Captchas to discourage spam in the community
 created
 content: Whenever a website allows its users to add content, it needs
 to build mechanisms to discourage placement of spurious content on its
 Website through automated mechanisms. We demonstrate how captchas can
 be used for this purpose.&nbsp;</li>
+
     <li>Community rated content: Each item in the petstore
 website can be rated by the users&nbsp;</li>
+
     <li>Payments through PayPal: The application provides a
 meeting ground for
 buyers and sellers of pets. The application uses the PayPal service to
 allow sellers to accept payments.</li>
+
+  
   </ol>
+
   <li>Integration of an RSS feed: The website integrates an RSS
 feed of news items coming out the Java BluePrints website. The </li>
+
   <li>Integration of &nbsp;a search engine: The application
 integrates Apache Lucene search engine to handle all website searches. </li>
+
 </ol>
+
 This application also demonstrate the use of various features
 of&nbsp; the Java EE 5 platform such as: <br>
+
 <ol>
+
   <li>JavaServer Faces: Many of the AJAX features are implemented
 as reusable JavaServer Faces components.&nbsp;</li>
+
   <li>Java Persistence API: The application uses Java Persistence
 APIs to create an object/relational mapping layer.&nbsp;</li>
+
   <li>Dependency Injection: The application uses dependency
 injection instead of deployment descriptors.</li>
+
 </ol>
-See the <a
- href="https://blueprints.dev.java.net/petstore/architecture.html">Pet
-Store Architecure document</a> for more detail. Also see the various
-blogs and news under <a
- href="https://blueprints.dev.java.net/servlets/ProjectNewsList">Java
+Also see the various
+blogs and news under <a href="https://blueprints.dev.java.net/servlets/ProjectNewsList">Java
 BluePrints Announcements</a> on the petstore for some technical
 insights. <br>
+
 <h2><a name="netbeans"></a>Use the Java Pet Store in NetBeans</h2>
+
 The Java Pet Store 2.0 is NetBeans-ready! Just open the petstore as a
 project in <a href="http://www.netbeans.org/">Netbeans</a>
 and build and deploy it. Or if you think of feature you would like to
 add to the Pet Store code? Use NetBeans Java EE 5 features and make a
-better Java Pet Store. You can check out the <a
- href="../../blueprints/www/petstore/netbeans.html">Java Pet Store page
+better Java Pet Store. You can check out the <a href="https://blueprints.dev.java.net/petstore/netbeans.html">Java Pet Store page
 for NetBeans</a> users for more detail.
 <h2><a name="contributors"></a>Show
 Appreciation for Pet Store Image Contributors</h2>
+
 <p>For many images in the Java Petstore, some organizations and
 people were kind enough to give us permission to photograph their
-animals or even give us photos to use in the Java Petstore. See the <a
- href="https://blueprints.dev.java.net/petstore/imagecontributors.html">
+animals or even give us photos to use in the Java Petstore. See the <a href="https://blueprints.dev.java.net/petstore/imagecontributors.html">
 image contributors </a> page for a more detail on these friends
 of the animals.&nbsp;
 </p>
+
 <h2><a name="about"></a>About Java BluePrints</h2>
+
 <p>The Java BluePrints program defines the application
 programming
-model for the Java EE™ platform. It provides best practice
+model for the Java EE&trade; platform. It provides best practice
 guidelines and
 architectural recommendations for real-world application scenarios to
 enable developers to build portable, scalable, and robust applications
 using the Java EE technologies.<br>
+
 <br>
-Some other popular projects from Java BluePrints are <a
- href="http://blueprints.dev.java.net/bpcatalog/">Java
-BluePrints Solutions Catalog</a>,&nbsp; <a target="_blank"
- href="https://blueprints.dev.java.net/adventurebuilder/">Java
-Adventure Builder Reference</a> application,&nbsp;<a target="_blank"
- href="http://java.sun.com/blueprints/guidelines/designing_webservices/">Designing
+
+Some other popular projects from Java BluePrints are <a href="https://blueprints.dev.java.net/bpcatalog/ee5/index.html">Java BluePrints Solutions Catalog for Java EE 5</a>,&nbsp; <a href="http://blueprints.dev.java.net/bpcatalog/">(also a Solutions Catalog for J2EE 1.4)</a>,&nbsp; <a target="_blank" href="https://blueprints.dev.java.net/adventurebuilder/">Java
+Adventure Builder Reference</a> application for J2EE 1.4,&nbsp;<a target="_blank" href="https://blueprints.dev.java.net/books.html">Designing
 Web Services with the J2EE(TM) 1.4 Platform : JAX-RPC, SOAP, and XML
-Technologies</a> book, and the <a target="_blank"
- href="http://java.sun.com/blueprints/guidelines/designing_enterprise_applications_2e/index.html"><span
- class="body"><span class="title">Designing
+Technologies</a> book, and the <a target="_blank" href="http://java.sun.com/blueprints/guidelines/designing_enterprise_applications_2e/index.html"><span class="body"><span class="title">Designing
 Enterprise Applications with the J2EE Platform, Second Edition</span></span></a>
 book. You can access these projects and other content from Java
-BluePrints by visiting the <a target="_blank"
- href="http://java.sun.com/reference/blueprints/index.html">Java
+BluePrints by visiting the <a target="_blank" href="http://java.sun.com/reference/blueprints/index.html">Java
 BluePrints website</a>. </p>
-<hr noshade="noshade">Copyright © 2006 Sun
+
+<hr noshade="noshade">Copyright &copy; 2006 Sun
 Microsystems,
 Inc. All Rights Reserved.
 </body>
