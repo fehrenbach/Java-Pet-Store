@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: ControllerServlet.java,v 1.16 2006-11-10 03:45:27 sean_brydon Exp $ */
+$Id: ControllerServlet.java,v 1.17 2006-11-14 18:30:15 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -54,7 +54,6 @@ public class ControllerServlet extends HttpServlet {
     public static final String CAPTCHA_KEY = "captcha_key";
     public static final String CAPTCHA_STRING = "captcha_string";
     private ServletContext ctx;
-    private Logger _logger=null;
     private CatalogFacade cf;
     private static String CACHE = "controller_cache";
     private static String CACHE_TIMES = "controller_cache_times";
@@ -96,7 +95,7 @@ public class ControllerServlet extends HttpServlet {
                 imageFile=new File(PetstoreConstants.PETSTORE_IMAGE_DIRECTORY + pathInfo);
                 if(bDebug) System.out.println("Image alter path = " + PetstoreConstants.PETSTORE_IMAGE_DIRECTORY + pathInfo);
                 if(!imageFile.exists()) {
-                    getLogger().log(Level.SEVERE, "image_does_not_exist", PetstoreConstants.PETSTORE_IMAGE_DIRECTORY + pathInfo);
+                    PetstoreUtil.getLogger().log(Level.SEVERE, "image_does_not_exist", PetstoreConstants.PETSTORE_IMAGE_DIRECTORY + pathInfo);
                     return;
                 }
             }
@@ -284,7 +283,7 @@ public class ControllerServlet extends HttpServlet {
             out.close();
             
         } else {
-            getLogger().log(Level.SEVERE, "Servlet '" + request.getServletPath() + "' not registered in ControllerServlet!!");
+            PetstoreUtil.getLogger().log(Level.SEVERE, "Servlet '" + request.getServletPath() + "' not registered in ControllerServlet!!");
             HttpServletResponse httpResponse=(HttpServletResponse)response;
             httpResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
@@ -333,7 +332,7 @@ public class ControllerServlet extends HttpServlet {
                 return getResource(con.getInputStream());
             }
         } catch (Exception e) {
-            getLogger().log(Level.SEVERE, "ControllerServlet:loadResource error: Could not load", resource + " - " + e.toString());
+            PetstoreUtil.getLogger().log(Level.SEVERE, "ControllerServlet:loadResource error: Could not load", resource + " - " + e.toString());
         }
         return null;
     }
@@ -348,7 +347,7 @@ public class ControllerServlet extends HttpServlet {
                 buffer.append(curLine + "\n");
             }
         } catch (IOException e) {
-            getLogger().log(Level.SEVERE, "ControllerServlet:loadResource from stream error", e);
+            PetstoreUtil.getLogger().log(Level.SEVERE, "ControllerServlet:loadResource from stream error", e);
         }
         return buffer;
     }
@@ -483,17 +482,5 @@ public class ControllerServlet extends HttpServlet {
         return (key + " : " + dq + value + dq);
     }
     
-    
-    /**
-     * Method getLogger
-     *
-     * @return Logger - logger for the NodeAgent
-     */
-    public Logger getLogger() {
-        if (_logger == null) {
-            _logger=PetstoreUtil.getBaseLogger();
-        }
-        return _logger;
-    }
     
 }

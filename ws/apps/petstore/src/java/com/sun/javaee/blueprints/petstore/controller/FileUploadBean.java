@@ -1,12 +1,11 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: FileUploadBean.java,v 1.42 2006-11-02 00:34:48 basler Exp $ */
+$Id: FileUploadBean.java,v 1.43 2006-11-14 18:30:16 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
 
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Logger;
 import java.util.logging.Level;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletResponse;
@@ -19,8 +18,6 @@ import com.sun.javaee.blueprints.petstore.util.PetstoreConstants;
 import com.sun.javaee.blueprints.petstore.util.ImageScaler;
 import com.sun.javaee.blueprints.components.ui.fileupload.FileUploadStatus;
 import com.sun.javaee.blueprints.components.ui.fileupload.FileUploadUtil;
-import com.sun.javaee.blueprints.petstore.search.IndexDocument;
-import com.sun.javaee.blueprints.petstore.search.Indexer;
 import com.sun.javaee.blueprints.components.ui.geocoder.GeoCoder;
 import com.sun.javaee.blueprints.components.ui.geocoder.GeoPoint;
 import com.sun.javaee.blueprints.petstore.model.Address;
@@ -32,7 +29,6 @@ import com.sun.javaee.blueprints.petstore.model.Item;
 import com.sun.javaee.blueprints.petstore.model.Tag;
 import com.sun.javaee.blueprints.petstore.model.SellerContactInfo;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -42,7 +38,6 @@ import java.util.StringTokenizer;
 
 public class FileUploadBean {
     private boolean bDebug=false;
-    private Logger _logger=null;
     private static final String comma=", ";
     private List<SelectItem> categories = null;
     private List<SelectItem> products = null;
@@ -222,7 +217,7 @@ public class FileUploadBean {
                 if(proxyHost != null && proxyPort != null) {
                     // set proxy host and port if it exists
                     // NOTE: This may require write permissions for java.util.PropertyPermission to be granted
-                    getLogger().log(Level.INFO, "Setting proxy to " + proxyHost + ":" + proxyPort + ".  Make sure server.policy is updated to allow setting System Properties");
+                    PetstoreUtil.getLogger().log(Level.INFO, "Setting proxy to " + proxyHost + ":" + proxyPort + ".  Make sure server.policy is updated to allow setting System Properties");
                     geoCoder.setProxyHost(proxyHost);
                     try {
                         geoCoder.setProxyPort(Integer.parseInt(proxyPort));
@@ -230,7 +225,7 @@ public class FileUploadBean {
                         ee.printStackTrace();
                     }
                 } else {
-                    getLogger().log(Level.INFO, "A \"proxyHost\" and \"proxyPort\" isn't set as a web.xml context-param. A proxy server may be necessary to reach the open internet.");
+                    PetstoreUtil.getLogger().log(Level.INFO, "A \"proxyHost\" and \"proxyPort\" isn't set as a web.xml context-param. A proxy server may be necessary to reach the open internet.");
                 }
                 
                 // use component to get points based on location (this uses Yahoo's map service
@@ -241,9 +236,9 @@ public class FileUploadBean {
                     try {
                         GeoPoint points[]=geoCoder.geoCode(totAddr);
                         if ((points == null) || (points.length < 1)) {
-                            getLogger().log(Level.INFO, "No addresses for location - " + totAddr);
+                            PetstoreUtil.getLogger().log(Level.INFO, "No addresses for location - " + totAddr);
                         } else if(points.length > 1) {
-                            getLogger().log(Level.INFO, "Matched " + points.length + " locations, taking the first one");
+                            PetstoreUtil.getLogger().log(Level.INFO, "Matched " + points.length + " locations, taking the first one");
                         }
                         
                         if(points.length > 0) {
@@ -252,7 +247,7 @@ public class FileUploadBean {
                             longitude = points[0].getLongitude();
                         }
                     } catch (Exception ee) {
-                        getLogger().log(Level.WARNING, "geocoder.lookup.exception", ee);
+                        PetstoreUtil.getLogger().log(Level.WARNING, "geocoder.lookup.exception", ee);
                     }
                 }
                 Float priceF;
@@ -260,7 +255,7 @@ public class FileUploadBean {
                     priceF=new Float(price);
                 } catch (NumberFormatException nf) {
                     priceF=new Float(0);
-                    getLogger().log(Level.INFO, "Price isn't in a proper number - " + price);
+                    PetstoreUtil.getLogger().log(Level.INFO, "Price isn't in a proper number - " + price);
                 }
                 Address addr = new Address(street1,"",city,state,zip,
                         latitude,longitude);
@@ -287,14 +282,14 @@ public class FileUploadBean {
                 }
                 
                 itemId=catalogFacade.addItem(item);
-                getLogger().log(Level.FINE, "Item " + name + " has been persisted");
+                PetstoreUtil.getLogger().log(Level.FINE, "Item " + name + " has been persisted");
                 
             } catch (RuntimeException re) {
-                getLogger().log(Level.SEVERE, "persist failed in addItem()", re);
+                PetstoreUtil.getLogger().log(Level.SEVERE, "persist failed in addItem()", re);
                 // store the info for later use
                 session.setAttribute(PERSIST_FAILRE, Boolean.valueOf(true));
             } catch (Exception ex) {
-                getLogger().log(Level.SEVERE, "fileupload.persist.exception", ex);
+                PetstoreUtil.getLogger().log(Level.SEVERE, "fileupload.persist.exception", ex);
             }
             if (session.getAttribute(PERSIST_FAILRE)!=null) {
                 session.removeAttribute(PERSIST_FAILRE);
@@ -359,7 +354,7 @@ public class FileUploadBean {
             writer.flush();
             
         } catch (IOException iox) {
-            getLogger().log(Level.SEVERE, "FileUploadPhaseListener error writting AJAX response", iox);
+            PetstoreUtil.getLogger().log(Level.SEVERE, "FileUploadPhaseListener error writting AJAX response", iox);
         }
     }
     
@@ -380,7 +375,7 @@ public class FileUploadBean {
             imgScaler.keepAspectWithWidth();
             imgScaler.resizeWithGraphics(thumbPath);
         } catch (Exception e) {
-            getLogger().log(Level.SEVERE, "ERROR in generating thumbnail", e);
+            PetstoreUtil.getLogger().log(Level.SEVERE, "ERROR in generating thumbnail", e);
         }
         return thumbPath;
     }
@@ -397,17 +392,5 @@ public class FileUploadBean {
         return PetstoreConstants.PETSTORE_IMAGE_DIRECTORY + "/images";
     }
     
-    
-    /**
-     * Method getLogger
-     *
-     * @return Logger - logger for the NodeAgent
-     */
-    public Logger getLogger() {
-        if (_logger == null) {
-            _logger=PetstoreUtil.getBaseLogger();
-        }
-        return _logger;
-    }
     
 }

@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CatalogFacade.java,v 1.49 2006-09-26 18:29:43 basler Exp $ */
+$Id: CatalogFacade.java,v 1.50 2006-11-14 18:30:18 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.model;
 
@@ -22,7 +22,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.transaction.UserTransaction;
-import java.util.logging.Logger;
 import java.util.logging.Level;
 
 
@@ -30,7 +29,6 @@ public class CatalogFacade implements ServletContextListener {
     
     @PersistenceUnit(unitName="PetstorePu") private EntityManagerFactory emf;
     @Resource UserTransaction utx;
-    private Logger _logger=null;
     private static final boolean bDebug=false;
     
     public CatalogFacade(){ }
@@ -428,10 +426,10 @@ public class CatalogFacade implements ServletContextListener {
         Indexer indexer=null;
         try {
             indexer=new Indexer(PetstoreConstants.PETSTORE_INDEX_DIRECTORY, false);
-            getLogger().log(Level.FINE, "Adding document to index: " + indexDoc.toString());
+            PetstoreUtil.getLogger().log(Level.FINE, "Adding document to index: " + indexDoc.toString());
             indexer.addDocument(indexDoc);
         } catch (Exception e) {
-            getLogger().log(Level.WARNING, "index.exception", e);
+            PetstoreUtil.getLogger().log(Level.WARNING, "index.exception", e);
             e.printStackTrace();
         } finally {
             try {
@@ -443,18 +441,6 @@ public class CatalogFacade implements ServletContextListener {
                 ee.printStackTrace();
             }
         }
-    }
-    
-    /**
-     * Method getLogger
-     *
-     * @return Logger - logger for the NodeAgent
-     */
-    public Logger getLogger() {
-        if (_logger == null) {
-            _logger=PetstoreUtil.getBaseLogger();
-        }
-        return _logger;
     }
     
 }

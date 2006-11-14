@@ -11,7 +11,6 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.StringTokenizer;
-import java.util.logging.Logger;
 import java.util.logging.Level;
 
 import javax.servlet.Filter;
@@ -38,7 +37,6 @@ public class EntryFilter implements Filter {
     // configured.
     private FilterConfig filterConfig = null;
     private String[] entryPages=null;
-    private Logger _logger=null;
     private static final boolean bDebug=false;
     
     public EntryFilter() {
@@ -69,7 +67,7 @@ public class EntryFilter implements Filter {
             HttpServletRequest httpRequest=(HttpServletRequest)request;
             if(!httpRequest.isRequestedSessionIdValid()) {
                 // not a valid session, make sure pages are entry pages or access images
-                getLogger().log(Level.FINE,"Do not have Session, have page " + httpRequest.getPathInfo());
+                PetstoreUtil.getLogger().log(Level.FINE,"Do not have Session, have page " + httpRequest.getPathInfo());
                 boolean foundx=false;
                 String pagex=httpRequest.getPathInfo();
                 // if null page then using default welcome mechanism, assume it is an accessable page.
@@ -221,18 +219,5 @@ public class EntryFilter implements Filter {
             stackTrace = sw.getBuffer().toString();
         } catch(Exception ex) {}
         return stackTrace;
-    }
-    
-    
-    /**
-     * Method getLogger
-     *
-     * @return Logger - logger for the NodeAgent
-     */
-    public Logger getLogger() {
-        if (_logger == null) {
-            _logger=PetstoreUtil.getBaseLogger();
-        }
-        return _logger;
     }
 }

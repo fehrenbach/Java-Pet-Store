@@ -1,10 +1,9 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: MapBean.java,v 1.22 2006-11-02 00:34:49 basler Exp $ */
+$Id: MapBean.java,v 1.23 2006-11-14 18:30:17 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.mapviewer;
 
 import java.util.ArrayList;
-import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +30,6 @@ public class MapBean {
     private MapPoint mapPoint=new MapPoint();
     List<Item> items=null;
     private int zoomLevel=5, radius=30;
-    private Logger _logger=null;
     private String category="CATS", centerAddress=null;
     private String[] itemIds=new String[0];
     private static final boolean bDebug=false;
@@ -308,7 +306,7 @@ public class MapBean {
             Item loc=null;
             double dLat=calculateLatitudeRadius(radius);
             double dLong=calculateLongitudeRadius(radius);
-            getLogger().log(Level.FINE, "ZOOM - Lat and long  - " + zoomLevel + " - " + dLat + " - " + dLong);
+            PetstoreUtil.getLogger().log(Level.FINE, "ZOOM - Lat and long  - " + zoomLevel + " - " + dLat + " - " + dLong);
             for(int ii=startPos; ii < items.size(); ii++) {
                 loc=items.get(ii);
                 if(loc.getAddress() != null && !loc.getAddress().addressToString().equals("")) {
@@ -345,7 +343,7 @@ public class MapBean {
         GeoCoder geoCoder=new GeoCoder();
         if(proxyHost != null && proxyPort != null) {
             // set proxy host and port if it exists
-            getLogger().log(Level.INFO, "Setting proxy to " + proxyHost + ":" + proxyPort + ".  Make sure server.policy is updated to allow setting System Properties");
+            PetstoreUtil.getLogger().log(Level.INFO, "Setting proxy to " + proxyHost + ":" + proxyPort + ".  Make sure server.policy is updated to allow setting System Properties");
             geoCoder.setProxyHost(proxyHost);
             try {
                 geoCoder.setProxyPort(Integer.parseInt(proxyPort));
@@ -353,7 +351,7 @@ public class MapBean {
                 ee.printStackTrace();
             }
         } else {
-            getLogger().log(Level.INFO, "A \"proxyHost\" and \"proxyPort\" isn't set as a web.xml context-param. A proxy server may be necessary to reach the open internet.");
+            PetstoreUtil.getLogger().log(Level.INFO, "A \"proxyHost\" and \"proxyPort\" isn't set as a web.xml context-param. A proxy server may be necessary to reach the open internet.");
         }
         
         // use component to get points based on location (this uses Yahoo's map service
@@ -362,7 +360,7 @@ public class MapBean {
             String centerx=getCenterAddress();
             points=geoCoder.geoCode(centerx);
             if ((points == null) || (points.length < 1)) {
-                getLogger().log(Level.INFO, "No addresses for location - " + centerx);
+                PetstoreUtil.getLogger().log(Level.INFO, "No addresses for location - " + centerx);
                 // invalid address, need to set to something or erase center point
                 // decided that putting in dummy coord and notifying user best approach
                 points=new GeoPoint[]{ new GeoPoint() };
@@ -371,11 +369,11 @@ public class MapBean {
                 setCenterAddress(getCenterAddress() + " <i><small>(Invalid address, using default!)</small></i>");
                 
             } else if(points.length > 1) {
-                getLogger().log(Level.INFO, "Matched " + points.length + " locations, taking the first one");
+                PetstoreUtil.getLogger().log(Level.INFO, "Matched " + points.length + " locations, taking the first one");
             }
             
         } catch (Exception ee) {
-            getLogger().log(Level.WARNING, "geocoder.lookup.exception", ee);
+            PetstoreUtil.getLogger().log(Level.WARNING, "geocoder.lookup.exception", ee);
         }
         return points;
     }
@@ -396,17 +394,4 @@ public class MapBean {
     public String changeSpaces(String text) {
         return text.replaceAll(" ", "&nbsp;");
     }
-    
-    /**
-     * Method getLogger
-     *
-     * @return Logger - logger for the NodeAgent
-     */
-    public Logger getLogger() {
-        if (_logger == null) {
-            _logger=PetstoreUtil.getBaseLogger();
-        }
-        return _logger;
-    }
-    
 }

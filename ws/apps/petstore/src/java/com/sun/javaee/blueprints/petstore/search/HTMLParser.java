@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: HTMLParser.java,v 1.4 2006-05-05 20:15:25 inder Exp $ */
+$Id: HTMLParser.java,v 1.5 2006-11-14 18:30:19 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.search;
 
@@ -8,7 +8,6 @@ import javax.swing.text.html.parser.ParserDelegator;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.HTML;
 import javax.swing.text.MutableAttributeSet;
-import java.util.logging.Logger;
 import java.util.logging.Level;
 import org.apache.lucene.document.DateField;
 import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
@@ -33,7 +32,6 @@ import java.util.Vector;
 public class HTMLParser {
     
     private static final boolean bDebug=false;
-    private Logger _logger=null;
     
     public static void main(String[] args) {
         HTMLParser hp=new HTMLParser();
@@ -123,11 +121,11 @@ public class HTMLParser {
                         indexer.addDocument(indexDoc);
                     }
                 } catch(Exception ee) {
-                    getLogger().log(Level.SEVERE, "Inner Exception" + ee);
+                    PetstoreUtil.getLogger().log(Level.SEVERE, "Inner Exception" + ee);
                 }
             }
         } catch (Exception e) {
-            getLogger().log(Level.SEVERE, "Outer Exception" + e);
+            PetstoreUtil.getLogger().log(Level.SEVERE, "Outer Exception" + e);
         } finally {
             try {
                 indexer.close();
@@ -154,7 +152,7 @@ public class HTMLParser {
                 }
             }
         } catch(Exception e) {
-            getLogger().log(Level.SEVERE, "Exception" + e);
+            PetstoreUtil.getLogger().log(Level.SEVERE, "Exception" + e);
             
             vtRobots=null;
         } finally {
@@ -331,21 +329,7 @@ public class HTMLParser {
                 return sbSummary.toString();
             }
         }
-        
     }
- 
-    /**
-     * Method getLogger
-     *
-     * @return Logger - logger for the NodeAgent
-     */
-    public Logger getLogger() {
-        if (_logger == null) {
-            _logger=PetstoreUtil.getBaseLogger();
-        }
-        return _logger;
-    }
-    
 }
 
 

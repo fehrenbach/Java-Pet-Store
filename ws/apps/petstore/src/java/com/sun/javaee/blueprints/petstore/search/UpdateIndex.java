@@ -1,10 +1,8 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: UpdateIndex.java,v 1.6 2006-09-20 23:29:34 basler Exp $ */
+$Id: UpdateIndex.java,v 1.7 2006-11-14 18:30:23 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.search;
 
-import java.util.logging.Logger;
-import java.util.Vector;
 import java.io.IOException;
 
 import org.apache.lucene.document.Document;
@@ -16,8 +14,6 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.search.Hits;
 
-import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
-
 /**
  *
  * @author basler
@@ -25,7 +21,6 @@ import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
 public class UpdateIndex {
     
     private static final boolean bDebug=false;
-    private Logger _logger;
     public static final String REPLACE_FIELD="replace_field";
     public static final String APPEND_FIELD="append_field";
             
@@ -97,18 +92,6 @@ public class UpdateIndex {
         writer.close();
     }
 
-    
-    /**
-    * Method getLogger
-    *
-    * @return Logger - logger for the NodeAgent
-    */
-    public Logger getLogger() {
-        if (_logger == null) {
-            _logger=PetstoreUtil.getBaseLogger();
-        }
-        return _logger;
-    }
     
     
     public static void main(String[] args) {

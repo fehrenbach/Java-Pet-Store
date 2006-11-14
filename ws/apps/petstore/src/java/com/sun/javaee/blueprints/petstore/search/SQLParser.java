@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: SQLParser.java,v 1.8 2006-09-20 23:29:34 basler Exp $ */
+$Id: SQLParser.java,v 1.9 2006-11-14 18:30:20 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.search;
 
@@ -9,7 +9,6 @@ import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.ResultSet;
 import java.util.Properties;
-import java.util.logging.Logger;
 import java.util.logging.Level;
 import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
 import java.sql.PreparedStatement;
@@ -21,7 +20,6 @@ import java.sql.PreparedStatement;
 public class SQLParser {
 
     private static final boolean bDebug=false;
-    private Logger _logger=null;
 
     /** Creates a new instance of SQLParser */
     public SQLParser() {
@@ -29,7 +27,7 @@ public class SQLParser {
     
     
     public void runSQL(String sxIndexFile, Connection conn, String sql, String tagSql) {
-        getLogger().log(Level.INFO, "index.sql.statement", sql);
+        PetstoreUtil.getLogger().log(Level.INFO, "index.sql.statement", sql);
         
         Indexer indexer=null;
         IndexDocument indexDoc=null;
@@ -78,14 +76,14 @@ public class SQLParser {
                     }
                 }
                 indexDoc.setTag(sbTags.toString().trim());
-                getLogger().log(Level.INFO, "Adding document to index: " + indexDoc.toString());
+                PetstoreUtil.getLogger().log(Level.INFO, "Adding document to index: " + indexDoc.toString());
 
                 // add doc to index
                 indexer.addDocument(indexDoc);
             }
 
         } catch (Exception e) {
-            getLogger().log(Level.WARNING, "index.exception", e);
+            PetstoreUtil.getLogger().log(Level.WARNING, "index.exception", e);
             e.printStackTrace();
         } finally {
             try {
@@ -98,20 +96,6 @@ public class SQLParser {
             }
         }
     }
-    
-    
-    /**
-    * Method getLogger
-    *
-    * @return Logger - logger for the NodeAgent
-    */
-    public Logger getLogger() {
-        if (_logger == null) {
-            _logger=PetstoreUtil.getBaseLogger();
-        }
-        return _logger;
-    }
-    
     
     public static void main(String[] args) {
         // used for unit tests

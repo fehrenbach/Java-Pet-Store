@@ -1,10 +1,9 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: IndexDocument.java,v 1.8 2006-09-20 17:02:19 basler Exp $ */
+$Id: IndexDocument.java,v 1.9 2006-11-14 18:30:19 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.search;
 
 import com.sun.javaee.blueprints.petstore.model.Item;
-import java.util.logging.Logger;
 import java.util.logging.Level;
 import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
 import java.text.NumberFormat;
@@ -18,7 +17,6 @@ public class IndexDocument {
     
     public String uid="", pageURL="", title="", summary="", image="";
     public String modifiedDate="", contents="", price="0", product="", tag="";
-    private Logger _logger=null;
     
     
     /** Creates a new instance of indexDocuments */
@@ -100,7 +98,7 @@ public class IndexDocument {
         try {
             fPrice=Float.parseFloat(price);
         } catch (NumberFormatException nfe) {
-            getLogger().log(Level.SEVERE, "Invalid Price " + nfe);
+            PetstoreUtil.getLogger().log(Level.SEVERE, "Invalid Price " + nfe);
         }
         return fPrice;
     }
@@ -139,17 +137,4 @@ public class IndexDocument {
                 
     }
 
-    /**
-     * Method getLogger
-     *
-     * @return Logger - logger for the NodeAgent
-     */
-    public Logger getLogger() {
-        if (_logger == null) {
-            _logger=PetstoreUtil.getBaseLogger();
-        }
-        return _logger;
-    }
-    
-    
 }

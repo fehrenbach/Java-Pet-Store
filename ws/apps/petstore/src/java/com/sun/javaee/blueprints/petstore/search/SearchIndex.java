@@ -1,11 +1,10 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: SearchIndex.java,v 1.8 2006-06-02 16:38:20 basler Exp $ */
+$Id: SearchIndex.java,v 1.9 2006-11-14 18:30:20 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.search;
 
 
 import java.io.IOException;
-import java.util.logging.Logger;
 import java.util.logging.Level;
 
 import org.apache.lucene.analysis.Analyzer;
@@ -31,8 +30,6 @@ public class SearchIndex {
     private static final boolean bDebug=false;
     private Vector<IndexDocument> vtHits=new Vector();
     private Hits hits=null;
-    private static Logger _logger=null;
-    
     
     /** Creates a new instance of SearchIndex */
     public SearchIndex() {
@@ -53,11 +50,11 @@ public class SearchIndex {
             queryParser.setDefaultOperator(QueryParser.Operator.AND);
             Query query=queryParser.parse(searchString);
             
-            getLogger().log(Level.INFO, "search.string", searchString);
+            PetstoreUtil.getLogger().log(Level.INFO, "search.string", searchString);
 
             // execute search
             hits=searcher.search(query);
-            getLogger().log(Level.INFO, "search.results", String.valueOf(hits.length()));
+            PetstoreUtil.getLogger().log(Level.INFO, "search.results", String.valueOf(hits.length()));
             Document indexDoc;
             Enumeration enumx;
             Field fieldx;
@@ -134,7 +131,7 @@ public class SearchIndex {
                 vtHits.add(indexDocument);
             }
         } catch(Exception e) {
-            getLogger().log(Level.WARNING, "search.exception", e);
+            PetstoreUtil.getLogger().log(Level.WARNING, "search.exception", e);
             e.printStackTrace();
         } finally {
             if(searcher != null) {
@@ -157,20 +154,6 @@ public class SearchIndex {
     public Hits getHitsNative() {
             return hits;
     }
-    
-    
-    /**
-    * Method getLogger
-    *
-    * @return Logger - logger for the NodeAgent
-    */
-    public Logger getLogger() {
-        if (_logger == null) {
-            _logger=PetstoreUtil.getBaseLogger();
-        }
-        return _logger;
-    }
-    
     
     public static void main(String[] args) {
         // used for unit tests
