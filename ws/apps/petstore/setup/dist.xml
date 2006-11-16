@@ -1,111 +1,135 @@
 <?xml version="1.0"?>
 <!-- Copyright 2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: dist.xml,v 1.12 2006-09-30 00:35:49 yutayoshida Exp $ -->
+ $Id: dist.xml,v 1.13 2006-11-16 00:20:40 basler Exp $ -->
 
 <project name="petstore-dist" default="dist" basedir="..">
-
-  <target name="sdk">
-    <property file="setup/sdk-dist.properties"/>
-    <property name="tmpdist" value="dist/${release.dirname}"/>
-    <antcall target="sdk-dist"/>
-    <antcall target="compact-jars"/>
-    <delete dir="${tmpdist}/ant-task"/>
-    <antcall target="create-zip"/>
-  </target>
-  <target name="sdk-download">
-    <property file="setup/sdk-dist.properties"/>
-    <property name="tmpdist" value="dist/${release.dirname}"/>
-    <antcall target="sdk-dist"/>
-    <delete dir="${tmpdist}/ant-task"/>
-    <antcall target="create-zip"/>
-  </target>
-  <target name="sdk-dist">
-    <property file="setup/sdk-dist.properties"/>
-    <property name="tmpdist" value="dist/${release.dirname}"/>
-    <antcall target="clean"/>
-    <antcall target="assemble-dist"/>
-    <delete file="dist/petstore/bp-project.xml"/>
-    <copy tofile="dist/petstore/bp-project.xml" file="setup/sdk-bp-project.xml"/>
-    <copy todir="dist/petstore/lib">
-      <fileset dir="../../lib">
-        <include name="dojo/**"/>
-        <include name="js/**"/>
-      </fileset>
-    </copy>
-    <delete dir="dist/petstore/bp-project"/>
-  </target>
-
-
-  <target name="dist">
-    <property file="setup/dist.properties"/>
-    <property name="tmpdist" value="dist/${release.dirname}"/>
-    <antcall target="clean"/>
-    <antcall target="assemble-dist"/>
-    <fixcrlf srcdir="${tmpdist}" tab="remove" tablength="2" eol="unix" includes="**/*.properties,**/*.jsp,**/*.html,**/*.sh,**/*.java,**/*.xml" excludes="**/ja/**" />
-    <delete dir="${tmpdist}/ant-task"/>
-    <delete>
-      <fileset dir="${tmpdist}/setup" includes="**/sdk-*"/>
-    </delete>
-    <delete file="${tmpdist}/setup/manifest.mf"/>
-    <antcall target="create-zip"/>
-  </target>
-
-  <target name="clean">
-    <delete dir="dist"/>
-    <ant target="clean" inheritAll="false" inheritRefs="false"/>
-  </target>
-
-  <target name="assemble-dist">
-    <echo message="Creating ${release.dirname} distribution..."/>
-    <property name="tmpdist" value="dist/${release.dirname}"/>
-    <mkdir dir="${tmpdist}"/>
-    <copy file="lib/3RD-PARTY-LICENSE.txt" todir="${tmpdist}"/>
-  
-    <copy todir="${tmpdist}">
-      <fileset dir=".">
-        <exclude name="dist/**"/>
-        <exclude name="**/build/**"/>
-        <exclude name="**/dist/**"/>
-        <exclude name="**/test/**"/>
-        <exclude name="**/nbproject/private/**"/>
-        <exclude name="**/nbproject/build-impl.xml"/>
-        <exclude name="**/nbproject/private.properties"/>
-        <exclude name="**/nbproject/genfiles.properties"/>
-        <exclude name="developers/**"/>
-        <exclude name="setup/dist*"/>
-        <exclude name="setup/installer.*"/>
-      </fileset>
-    </copy>
-    <copy todir="${tmpdist}/lib">
-      <fileset dir="../../lib">
-        <include name="dojo/**"/>
-        <include name="js/**"/>
-      </fileset>
-    </copy>
-    <copy todir="${tmpdist}">
-      <fileset dir="../..">
-        <include name="bp-project/**"/>
-      </fileset>
-    </copy>
-    <delete file="${tmpdist}/bp-project.xml"/>
-    <copy file="setup/dist-bp-project.xml" tofile="${tmpdist}/bp-project.xml"/>
-    <copy tofile="${tmpdist}/bp-project/build.properties" file="${tmpdist}/bp-project/build.properties.sample"/>
-    <delete file="${tmpdist}/bp-project/build.properties.sample"/>
-  </target>
-
-   <target name="fix-permissions">
-    <!-- Change permissions for executables -->
-    <chmod perm="ugo+rx">
-      <fileset dir="${tmpdist}">
-        <include name="**/*.sh"/>
-        <include name="**/*.exe"/>
-      </fileset>
-    </chmod>
-   </target>
-
-   <target name="create-zip" depends="fix-permissions">
-    <zip zipfile="${release.zipfile}" basedir="dist"
-       includes="${release.dirname}/**" update="true" />
-  </target>    
+    
+    <!-- The directory from where to get the libraries that the installer needs -->
+    <property name="poormans-installer.home" value="./lib/poormans-installer"/>
+    
+    <target name="sdk">
+        <property file="setup/sdk-dist.properties"/>
+        <property name="tmpdist" value="dist/${release.dirname}"/>
+        <antcall target="sdk-dist"/>
+        <antcall target="compact-jars"/>
+        <delete dir="${tmpdist}/ant-task"/>
+        <delete dir="${tmpdist}/lib/poormans-installer"/>
+        <antcall target="create-zip"/>
+    </target>
+    <target name="sdk-download">
+        <property file="setup/sdk-dist.properties"/>
+        <property name="tmpdist" value="dist/${release.dirname}"/>
+        <antcall target="sdk-dist"/>
+        <delete dir="${tmpdist}/ant-task"/>
+        <delete dir="${tmpdist}/lib/poormans-installer"/>
+        <antcall target="create-zip"/>
+    </target>
+    <target name="sdk-dist">
+        <property file="setup/sdk-dist.properties"/>
+        <property name="tmpdist" value="dist/${release.dirname}"/>
+        <antcall target="clean"/>
+        <antcall target="assemble-dist"/>
+        <delete file="dist/petstore/bp-project.xml"/>
+        <copy tofile="dist/petstore/bp-project.xml" file="setup/sdk-bp-project.xml"/>
+        <copy todir="dist/petstore/lib">
+            <fileset dir="../../lib">
+                <include name="dojo/**"/>
+                <include name="js/**"/>
+            </fileset>
+        </copy>
+        <delete dir="dist/petstore/bp-project"/>
+    </target>
+    
+    
+    <target name="dist">
+        <property file="setup/dist.properties"/>
+        <property name="tmpdist" value="dist/${release.dirname}"/>
+        <antcall target="clean"/>
+        <antcall target="assemble-dist"/>
+        <fixcrlf srcdir="${tmpdist}" tab="remove" tablength="2" eol="unix" includes="**/*.properties,**/*.jsp,**/*.html,**/*.sh,**/*.java,**/*.xml" excludes="**/ja/**" />
+        <delete dir="${tmpdist}/ant-task"/>
+        <delete dir="${tmpdist}/lib/poormans-installer"/>
+        <delete>
+            <fileset dir="${tmpdist}/setup" includes="**/sdk-*"/>
+        </delete>
+        <delete file="${tmpdist}/setup/manifest.mf"/>
+        <antcall target="create-zip"/>
+        <antcall target="create-installer"/>
+    </target>
+    
+    <target name="clean">
+        <delete dir="dist"/>
+        <ant target="clean" inheritAll="false" inheritRefs="false"/>
+    </target>
+    
+    <target name="assemble-dist">
+        <echo message="Creating ${release.dirname} distribution..."/>
+        <property name="tmpdist" value="dist/${release.dirname}"/>
+        <mkdir dir="${tmpdist}"/>
+        <copy file="lib/3RD-PARTY-LICENSE.txt" todir="${tmpdist}"/>
+        
+        <copy todir="${tmpdist}">
+            <fileset dir=".">
+                <exclude name="dist/**"/>
+                <exclude name="**/build/**"/>
+                <exclude name="**/dist/**"/>
+                <exclude name="**/test/**"/>
+                <exclude name="**/nbproject/private/**"/>
+                <exclude name="**/nbproject/build-impl.xml"/>
+                <exclude name="**/nbproject/private.properties"/>
+                <exclude name="**/nbproject/genfiles.properties"/>
+                <exclude name="developers/**"/>
+                <exclude name="setup/dist*"/>
+                <exclude name="setup/installer.*"/>
+            </fileset>
+        </copy>
+        <copy todir="${tmpdist}/lib">
+            <fileset dir="../../lib">
+                <include name="dojo/**"/>
+                <include name="js/**"/>
+            </fileset>
+        </copy>
+        <copy todir="${tmpdist}">
+            <fileset dir="../..">
+                <include name="bp-project/**"/>
+            </fileset>
+        </copy>
+        <delete file="${tmpdist}/bp-project.xml"/>
+        <copy file="setup/dist-bp-project.xml" tofile="${tmpdist}/bp-project.xml"/>
+        <copy tofile="${tmpdist}/bp-project/build.properties" file="${tmpdist}/bp-project/build.properties.sample"/>
+        <delete file="${tmpdist}/bp-project/build.properties.sample"/>
+    </target>
+    
+    <target name="fix-permissions">
+        <!-- Change permissions for executables -->
+        <chmod perm="ugo+rx">
+            <fileset dir="${tmpdist}">
+                <include name="**/*.sh"/>
+                <include name="**/*.exe"/>
+            </fileset>
+        </chmod>
+    </target>
+    
+    <target name="create-zip" depends="fix-permissions">
+        <zip zipfile="${release.zipfile}" basedir="dist"
+             includes="${release.dirname}/**" update="true" />
+    </target>    
+    
+    <taskdef name="installerBuilder" classname="org.jvnet.poormans_installer.builder.BuilderTask">
+        <classpath>
+            <fileset dir="${poormans-installer.home}" includes="*.jar"/>
+        </classpath>
+    </taskdef>
+    
+    <target name="create-installer">
+        <mkdir dir="dist/classes"/>
+        <echo message="Creating an installer..."/>
+        <installerBuilder
+            licenseFile="../../../www/LICENSE.txt"
+            zipFile="${release.zipfile}"
+            classFile="dist/classes/petstore.class"/>
+        <jar jarfile="dist/${release.fullname}-installer.jar" basedir="dist/classes" manifest="setup/manifest.mf"/>
+        <delete dir="dist/classes"/>
+    </target>
 </project>
