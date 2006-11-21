@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: ControllerServlet.java,v 1.17 2006-11-14 18:30:15 basler Exp $ */
+$Id: ControllerServlet.java,v 1.18 2006-11-21 23:31:39 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -17,7 +17,6 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
-import java.util.logging.Logger;
 import java.util.logging.Level;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -28,11 +27,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
 import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.OutputStream;
+import java.nio.channels.Channels;
+import java.nio.channels.FileChannel;
+import java.nio.channels.WritableByteChannel;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Iterator;
@@ -100,33 +100,24 @@ public class ControllerServlet extends HttpServlet {
                 }
             }
             
-            DataOutputStream outData=null;
-            BufferedInputStream inData=null;
-            int byteCnt=0;
-            byte[] buffer=new byte[4096];
+            FileChannel in = null;
+            WritableByteChannel out = null;
             
             // serve up image from proper location
             try {
-                outData=new DataOutputStream(response.getOutputStream());
-                inData=new BufferedInputStream(new FileInputStream(imageFile));
-                
-                // loop through and read/write bytes
-                while ((byteCnt=inData.read(buffer)) != -1) {
-                    if (outData != null && byteCnt > 0) {
-                        outData.write(buffer, 0, byteCnt);
-                    }
-                }
-                
+                in = new FileInputStream(imageFile).getChannel();
+                out = Channels.newChannel(response.getOutputStream());
+                in.transferTo(0, in.size(), out);
             } catch (IOException e) {
                 throw e;
             } finally {
                 try {
-                    if(inData != null) {
-                        inData.close();
+                    if(in != null) {
+                        in.close();
                     }
                 } catch (IOException ioe) {}
             }
-            outData.close();
+            out.close();
             
         } else if(request.getServletPath().endsWith("CaptchaServlet")) {
             SimpleCaptcha captcha = new SimpleCaptcha();
