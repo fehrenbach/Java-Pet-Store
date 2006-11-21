@@ -2,7 +2,7 @@
 
 <!-- Copyright 2005-2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: app-server-ant.xml,v 1.14 2006-05-03 19:00:53 inder Exp $ -->
+ $Id: app-server-ant.xml,v 1.15 2006-11-21 23:11:17 inder Exp $ -->
 
 <!-- This file defines various Java EE SDK specific tasks. 
      This file is not meant to be included in a project directly. 
@@ -120,7 +120,7 @@ AS_ADMIN_PASSWORD=${AS_ADMIN_PASSWORD}</echo>
         <arg line=" create-file-user"/>
         <arg line=" --user ${javaee.server.username}" />
         <arg line=" --passwordfile ${user.password.file}" />
-        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --host ${javaee.adminserver.name}" />
         <arg line=" --port ${javaee.adminserver.port}" />
         <arg line=" --groups ${app.groups}"/>
         <arg line=" ${app.user}"/>
@@ -136,7 +136,7 @@ AS_ADMIN_PASSWORD=${AS_ADMIN_PASSWORD}</echo>
         <arg line=" delete-file-user"/>
         <arg line=" --user ${javaee.server.username}" />
         <arg line=" --passwordfile ${javaee.server.passwordfile}" />
-        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --host ${javaee.adminserver.name}" />
         <arg line=" --port ${javaee.adminserver.port}" />
         <arg line=" ${app.user}"/>
    </exec>
@@ -164,7 +164,7 @@ AS_ADMIN_PASSWORD=${AS_ADMIN_PASSWORD}</echo>
         <arg line=" create-jdbc-connection-pool"/>
         <arg line=" --user ${javaee.server.username}" />
         <arg line=" --passwordfile ${javaee.server.passwordfile}" />
-        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --host ${javaee.adminserver.name}" />
         <arg line=" --port ${javaee.adminserver.port}" />
         <arg line=" --datasourceclassname ${db.datasource}" />
         <arg line=" --restype javax.sql.XADataSource " />
@@ -181,7 +181,7 @@ AS_ADMIN_PASSWORD=${AS_ADMIN_PASSWORD}</echo>
         <arg line="create-jdbc-resource"/>
         <arg line=" --user ${javaee.server.username}" />
         <arg line=" --passwordfile ${javaee.server.passwordfile}" />
-        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --host ${javaee.adminserver.name}" />
         <arg line=" --port ${javaee.adminserver.port}" />
         <arg line=" --connectionpoolid ${pool.name}" />
         <arg line=" --enabled=true" />
@@ -195,7 +195,7 @@ AS_ADMIN_PASSWORD=${AS_ADMIN_PASSWORD}</echo>
         <arg line="create-persistence-resource"/>
         <arg line=" --user ${javaee.server.username}" />
         <arg line=" --passwordfile ${javaee.server.passwordfile}" />
-        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --host ${javaee.adminserver.name}" />
         <arg line=" --port ${javaee.adminserver.port}" />
         <arg line=" --factoryclass com.sun.jdo.spi.persistence.support.sqlstore.impl.PersistenceManagerFactoryImpl" />
         <arg line=" --jdbcjndiname ${jdbc.resource.name}" />
@@ -209,7 +209,7 @@ AS_ADMIN_PASSWORD=${AS_ADMIN_PASSWORD}</echo>
         <arg line="create-jms-resource"/>
         <arg line=" --user ${javaee.server.username}" />
         <arg line=" --passwordfile ${javaee.server.passwordfile}" />
-        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --host ${javaee.adminserver.name}" />
         <arg line=" --port ${javaee.adminserver.port}" />
         <arg line=" --restype ${jms.restype}" />
         <arg line=" --enabled=true" />
@@ -224,7 +224,7 @@ AS_ADMIN_PASSWORD=${AS_ADMIN_PASSWORD}</echo>
         <arg line="create-jms-resource"/>
         <arg line=" --user ${javaee.server.username}" />
         <arg line=" --passwordfile ${javaee.server.passwordfile}" />
-        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --host ${javaee.adminserver.name}" />
         <arg line=" --port ${javaee.adminserver.port}" />
         <arg line=" --restype ${jms.restype}" />
         <arg line=" --enabled=true" />
@@ -238,7 +238,7 @@ AS_ADMIN_PASSWORD=${AS_ADMIN_PASSWORD}</echo>
         <arg line="create-jms-resource"/>
         <arg line=" --user ${javaee.server.username}" />
         <arg line=" --passwordfile ${javaee.server.passwordfile}" />
-        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --host ${javaee.adminserver.name}" />
         <arg line=" --port ${javaee.adminserver.port}" />
         <arg line=" --restype ${jms.restype}" />
         <arg line=" --enabled=true" />
@@ -252,7 +252,7 @@ AS_ADMIN_PASSWORD=${AS_ADMIN_PASSWORD}</echo>
         <arg line="create-jms-resource"/>
         <arg line=" --user ${javaee.server.username}" />
         <arg line=" --passwordfile ${javaee.server.passwordfile}" />
-        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --host ${javaee.adminserver.name}" />
         <arg line=" --port ${javaee.adminserver.port}" />
         <arg line=" --restype ${jms.restype}" />
         <arg line=" --enabled=true" />
@@ -267,7 +267,7 @@ AS_ADMIN_PASSWORD=${AS_ADMIN_PASSWORD}</echo>
         <arg line="create-javamail-resource"/>
         <arg line=" --user ${javaee.server.username}" />
         <arg line=" --passwordfile ${javaee.server.passwordfile}" />
-        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --host ${javaee.adminserver.name}" />
         <arg line=" --port ${javaee.adminserver.port}" />
         <arg line=" --mailhost ${mail.host}" />
         <arg line=" --mailuser ${mail.username}" />
@@ -282,7 +282,7 @@ AS_ADMIN_PASSWORD=${AS_ADMIN_PASSWORD}</echo>
         <arg line="delete-javamail-resource"/>
         <arg line=" --user ${javaee.server.username}" />
         <arg line=" --passwordfile ${javaee.server.passwordfile}" />
-        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --host ${javaee.adminserver.name}" />
         <arg line=" --port ${javaee.adminserver.port}" />
         <arg line=" ${javamail.resource.name}" />
     </exec>
@@ -293,7 +293,7 @@ AS_ADMIN_PASSWORD=${AS_ADMIN_PASSWORD}</echo>
         <arg line="list-jmsdest"/>
         <arg line=" --user ${javaee.server.username}" />
         <arg line=" --passwordfile ${javaee.server.passwordfile}" />
-        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --host ${javaee.adminserver.name}" />
         <arg line=" --port ${javaee.adminserver.port}" />
     </exec>
   </target>
@@ -304,7 +304,7 @@ AS_ADMIN_PASSWORD=${AS_ADMIN_PASSWORD}</echo>
         <arg line="delete-persistence-resource"/>
         <arg line=" --user ${javaee.server.username}" />
         <arg line=" --passwordfile ${javaee.server.passwordfile}" />
-        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --host ${javaee.adminserver.name}" />
         <arg line=" --port ${javaee.adminserver.port}" />
        <arg line=" ${pm.resource.name}" />
     </exec>
@@ -317,7 +317,7 @@ AS_ADMIN_PASSWORD=${AS_ADMIN_PASSWORD}</echo>
         <arg line="delete-jdbc-resource"/>
        <arg line=" --user ${javaee.server.username}" />
         <arg line=" --passwordfile ${javaee.server.passwordfile}" />
-        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --host ${javaee.adminserver.name}" />
         <arg line=" --port ${javaee.adminserver.port}" />
         <arg line="${jdbc.resource.name}" />
     </exec>
@@ -330,7 +330,7 @@ AS_ADMIN_PASSWORD=${AS_ADMIN_PASSWORD}</echo>
         <arg line="delete-jdbc-connection-pool"/>
         <arg line=" --user ${javaee.server.username}" />
         <arg line=" --passwordfile ${javaee.server.passwordfile}" />
-        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --host ${javaee.adminserver.name}" />
         <arg line=" --port ${javaee.adminserver.port}" />
         <arg line="${pool.name}" />
     </exec>
@@ -342,7 +342,7 @@ AS_ADMIN_PASSWORD=${AS_ADMIN_PASSWORD}</echo>
         <arg line="delete-jms-resource"/>
         <arg line=" --user ${javaee.server.username}" />
         <arg line=" --passwordfile ${javaee.server.passwordfile}" />
-        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --host ${javaee.adminserver.name}" />
         <arg line=" --port ${javaee.adminserver.port}" />
         <arg line=" ${jms.resource.name}" />
     </exec>
@@ -355,7 +355,8 @@ AS_ADMIN_PASSWORD=${AS_ADMIN_PASSWORD}</echo>
         <arg line="undeploy"/>
         <arg line=" --user ${javaee.server.username}" />
         <arg line=" --passwordfile ${javaee.server.passwordfile}" />
-        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --host ${javaee.adminserver.name}" />
+        <arg line=" --host ${javaee.adminserver.port}" />
         <arg line=" ${module.name} " />
     </exec> 
   </target>
@@ -379,7 +380,7 @@ AS_ADMIN_PASSWORD=${AS_ADMIN_PASSWORD}</echo>
         <arg line=" deploy "/>
         <arg line=" --user ${javaee.server.username}" />
         <arg line=" --passwordfile ${javaee.server.passwordfile}" />
-        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --host ${javaee.adminserver.name}" />
         <arg line=" --port ${javaee.adminserver.port}" />
         <arg line=" --name ${module.name}"/>
         <arg line=" --force=true "/>
@@ -395,12 +396,12 @@ AS_ADMIN_PASSWORD=${AS_ADMIN_PASSWORD}</echo>
    <echo message="Application Deployed at: ${app.url}"/>
   </target>
 
-  <target name="client-jar">
+  <target name="client-jar" depends="tools">
     <exec executable="${asadmin}" failonerror="${failonerror}">
         <arg line=" get-client-stubs "/>
         <arg line=" --user ${javaee.server.username}" />
         <arg line=" --passwordfile ${javaee.server.passwordfile}" />
-        <arg line=" --host ${javaee.server.name}" />
+        <arg line=" --host ${javaee.adminserver.name}" />
         <arg line=" --port ${javaee.adminserver.port}" />
         <arg line=" --appname ${module.name}"/>
         <arg line="${client.jar.dir}" />

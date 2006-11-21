@@ -2,7 +2,7 @@
 
 <!-- Copyright 2005-2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: command-line-ant-tasks.xml,v 1.14 2006-05-11 20:49:04 inder Exp $ -->
+ $Id: command-line-ant-tasks.xml,v 1.15 2006-11-21 23:11:20 inder Exp $ -->
 
 
 <!-- command-line-ant-tasks.xml: This file defines various targets needed for 
@@ -58,7 +58,6 @@
     <dirname property="antfile.dir" file="${ant.file}"/>
     <path id="classpath">
         <fileset dir="${javaee.home}" includes="lib/javaee.jar, lib/appserv-rt.jar, lib/appserv-ws.jar"/>
-        <fileset dir="lib" includes="**/*.jar" /> 
         <pathelement location="${build.classes.dir}"/>
         <pathelement path="${javac.classpath}"/>
         <pathelement path="${extra.classpath}"/>
@@ -140,7 +139,8 @@
     <target name="init"/>
     <target name="-pre-compile"/>
     <target name="-post-compile"/>
-    <target name="-pre-setup"/>
+    <target name="-pre-setup" description="pre-setup"/>
+    <target name="-post-unsetup"/>
 
     <target name="default" depends="default-ear,default-not-ear"
     description="compiles and packages the archive"/>
