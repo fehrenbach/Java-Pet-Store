@@ -158,13 +158,14 @@ also onthe web tier, and on the model tier. Here is what we did.</p>
 
   <p>We followed MVC and used other patterns such as Vlaue List Handler, Facade, etc in order to follow established best practices.</p>
 
-  <li>put choice here</li>
+  <li>Used NIO Channels instead of input and output streams<p>Channel has 
+	convenient methods (FileChannel.transferTo) to copy an input stream into an 
+	output stream without requiring tedious copying of reading and inputstream 
+	in a for loop in a buffer and copying it to the output stream. </p>
 
-  <p>put explanation here</p>
-
-  <li>put choice here</li>
-
-  <p>put explanation here</p>
+  <li>Using Java SE 5 enhanced for loop<p>Using the new foreach constructs saves 
+	us from creating an iterator and a regular for loop and is much easier to 
+	understand because of fewer lines</p>
 
   <li>put choice here</li>
 
