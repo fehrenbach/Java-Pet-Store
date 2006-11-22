@@ -1,0 +1,294 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+  <title>PetstoreChoices</title>
+
+
+</head>
+<body>
+
+<h2>100 Design Choices and Tips we made when designing,
+implementing,
+refactoring the java petstore.
+</h2>
+
+<br>
+
+Here are 100 design choices we made when making petstore. These are
+brief and may refer to other docs for details. Lets capture briefly
+those choices and elaborate later
+<br>
+
+<ol>
+
+  <li>Use project conventions</li>
+
+  <p>
+By choosing some conventions for directory structure of the workspace
+and building of the project you save a lot of team discussion time and
+. Over time these conventions get better.
+  <br>
+
+--choosing conventions for packaging?? snce not everything is mandated
+by packaging rules, some things are up to you to choose, like where to
+store JS files?
+  </p>
+
+  <li>Pre-compile</li>
+
+  <p>We use the pre-compile option</p>
+
+  <li>Externalize app server environment properties</li>
+
+  <p>The application code may need access to an environment
+property, and
+often this ends up in your code someowhere as a contsant or as a piece
+of code using System property lookups. For deployment environment
+properties that the code needs, use env-entires instead.
+  </p>
+
+  <li>Chose a exception flow handling convention</li>
+
+  <p>We chose an exception handling design on client side for
+Javascript, on web server tier, and on model tier. So that exceptions
+flow though the system and we catch them when we can do something. We
+use chaining to save information about original causes. See this [link]
+doc for more details.</p>
+
+  <li>Choosing Logging conventions</li>
+
+  <p>Since logging will be used throughout you application its is
+a good practice to choose a convention so that it is handled
+consistently throughtout the application.</p>
+
+  <li>Consider portability as an architectural issue</li>
+
+  <p>To avoid being bound to any application server as much as
+posisble. We externalized properties, mentioned above, we used standard
+mechanism for icluding thrid-party libraries, etc.&nbsp;
+You want to minimize dependencies of your application code from the
+environment and factors such as the particular datbase, appserver, OS,
+etc.&nbsp;
+Use env entries, where to store image files in a portable location, how
+to include third-party
+jars, use Java Persistence Query language since it enhances portable
+queries, and any others? </p>
+
+  <li>Use an existing Javascript Ajax library</li>
+
+  <p>Instead of reinventing all your own javscreipt and Ajax
+code, we chose to leverage an existingWe chose to use DOJO tolkit</p>
+
+  <li>Use Junit</li>
+
+  <p>We used Junit for some unit testing.</p>
+
+  <li>Chose a cnovention for our Constants files.</li>
+
+  <p>We use a private constructor to avoid folks tinkering and
+made public static final. See petstoreConstants.java for
+example.&nbsp;</p>
+
+  <li>Use Java SE 5 Features</li>
+
+  <p>Java SE 5 has lots of feautres that are a godd practice to
+adopt using them. For example, auto-boxing, Generics, and forloops etc.
+  <a href="#Java_SE">See the section below</a>&nbsp;</p>
+
+  <li>Choose Javascript Conventions</li>
+
+  <p>Choose some conventions for Javascript object style etc so
+that code works togethre on the same page and has some conssitency and
+is easier to maintain.</p>
+
+  <li>Choose a Java serverside web framework architecture</li>
+
+  <p>There are many web app frameworks for Java apps. We chose to
+use JSF as a web framework since it is standard. We chose to use a
+hybrid of JSF and some of our own custom controller code so it is not
+totally JSF-centric.</p>
+
+  <li>Choose to move some functionality into a JSF library</li>
+
+  <p>For som eof the PS funstionality we chose to wrap that
+functionality into a set of JSF components an dthen use that library.</p>
+
+  <li>Choose to use Java Persistence</li>
+
+  <p>There are many persitence mechanisms for Java applications,
+for example standard APIs such as JDBC and the new Java Persistence
+APIs, as well as many frameworks. We chose to use Java Persistence APIs
+for our domain model. It is standard on all Java EE 5 application
+servers and provides a noce ORM mapping facility.</p>
+
+  <li>Choose a web-only architecture</li>
+
+  <p>Java EE 5 applications have many technologies to choose from
+and many packaging options (ear files, war files, ejb-modules). We
+chose to have a web-only architecture and not use any EJBs. We chose to
+package the application as just a war file.</p>
+
+  <li>Choose to cache application-scoped resources for re-use</li>
+
+  <p>Since some resources in the application can be shared among all
+clients, its a good practice to hold onto them and resuse them for
+subsequent requests. For example, the CatalogFacade was designed in a
+thread safe manner so could be held for reuse. Resources such as
+factories like UserTransaction and EntityManagerFactory are designed to
+be thread-safe so can be re-used by multiple clients.</p>
+
+  <li>Choose to cache some application-scoped data for re-ues</li>
+
+  <p>Some data in PS was ame for all clients and could be shared by the
+application. For example the RSS news shown in th emnews bar and in the
+news page was the same for all clients, Also this data didnt change a
+lot so could be peridically refereshed to get any latest news. So we
+were able to cache it in application-scope and re-sue it for other
+cleinets, thus avoiding the need to go to the RSS feed on blueprints
+for each cleint request and save some time.</p>
+
+  <li>Choose to Validate at all tiers</li>
+
+  <p>Its a good practice to validate onthe cleint side with Javascript,
+also onthe web tier, and on the model tier. Here is what we did.</p>
+
+  <li>Choose to implement some patterns</li>
+
+  <p>We followed MVC and used other patterns such as Vlaue List Handler, Facade, etc in order to follow established best practices.</p>
+
+  <li>put choice here</li>
+
+  <p>put explanation here</p>
+
+  <li>put choice here</li>
+
+  <p>put explanation here</p>
+
+  <li>put choice here</li>
+
+  <p>put explanation here</p>
+
+</ol>
+
+<br>
+
+<br>
+
+As you can see the petstore has a lot of design choices so maybe this
+list can help you as a checklist on your own application<br>
+
+<h3><a name="Java_SE"></a>Java SE 5 Conventions</h3>
+
+here are some of the Java SE 5 conventions we chose to use
+<ol>
+
+  <li>Prefer using the new for loop</li>
+
+  <p>
+Here is an example of a refactoring to use new for loop
+  <table style="text-align: left; width: 901px; height: 300px;" border="1" cellpadding="2" cellspacing="2">
+
+    <tbody>
+
+      <tr>
+
+        <td>Code
+Before</td>
+
+        <td>Code After Using new for loop&nbsp;</td>
+
+      </tr>
+
+      <tr>
+
+        <td> <code></code><code>public void someMethod()...<br>
+
+{ <br>
+
+...<br>
+
+//processing a collection<br>
+
+if ( ...) {<br>
+
+&nbsp;&nbsp;Some iterator code here<br>
+
+&nbsp;&nbsp;</code><code><span style="font-weight: bold;"></span><br>
+
+&nbsp;&nbsp;}<br>
+
+...</code></td>
+
+        <td> <code><br>
+
+public c</code><code>void someMethod()</code><code> ...<br>
+
+        </code><code></code><code><br>
+
+...<br>
+
+//processing a collection<br>
+
+if ()) {<br>
+
+&nbsp; nice new for loop here</code><code style="font-weight: bold;"></code><code><br>
+}<br>
+
+        </code> </td>
+
+      </tr>
+
+    </tbody>
+  </table>
+
+  <span style="font-weight: bold;">Code Example&nbsp;:
+Refactoring to use new for loop from SE 5</span><br>
+
+  <br>
+
+  </p>
+
+  <li>Prefer using Generics</li>
+
+  <p>Generics are supported by the Java Psersistence APis so your
+model tier can return a collection of generics, and you can use
+generics all the way through your apps. For example, a web page showing
+a list that was retireved from the DB can get a collection of generics
+fromn DB and iterate through it.</p>
+
+  <li>put choice here</li>
+
+  <p>put explanation here</p>
+
+  <li>put choice here</li>
+
+  <p>put explanation here</p>
+
+  <li>put choice here</li>
+
+  <p>put explanation here</p>
+
+  <li>put choice here</li>
+
+  <p>put explanation here</p>
+
+  <li>put choice here</li>
+
+  <p>put explanation here</p>
+
+  <li>put choice here</li>
+
+  <p>put explanation here</p>
+
+</ol>
+
+<ol>
+
+  <p></p>
+
+</ol>
+
+</body>
+</html>
