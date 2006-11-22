@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: HTMLParser.java,v 1.5 2006-11-14 18:30:19 basler Exp $ */
+$Id: HTMLParser.java,v 1.6 2006-11-22 18:32:18 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.search;
 
@@ -17,10 +17,9 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.Vector;
-
+import java.util.List;
 
 /**
  * This class can crawl a web site indexing appropriate data as best as possible
@@ -50,36 +49,23 @@ public class HTMLParser {
         if(bDebug) System.out.println("WEB Path");
         
         // use hashset to remove like items
-        Vector vtURLs=new Vector();
+        List<String> vtURLs = new ArrayList<String>();
         
         // see if robots.txt file exist
-        Vector vtRobots=getRobots(beginURL, contextRoot);
+        List<String> vtRobots = getRobots(beginURL, contextRoot);
         
-        
-        String sxURL="/" + contextRoot + "/" + pageURI;
-        vtURLs.add(sxURL);
-        int iPos=0;
+        vtURLs.add("/" + contextRoot + "/" + pageURI);
         Indexer indexer=null;
         IndexDocument indexDoc=null;
-        try {
-            // get indexer
-            indexer=new Indexer("/tmp/tmp/index");
-            
-            while(iPos < vtURLs.size()) {
-                //while(iPos < 1) {
-                sxURL=(String)vtURLs.elementAt(iPos);
+        try {            
+            indexer = new Indexer("/tmp/tmp/index");    // get indexer            
+            for (String sxURL : vtURLs) {
                 if(bDebug) System.out.println("\n\n*** INDEXING " + sxURL);
-                iPos++;
-                
-                
                 if(bDebug) System.out.println("Have - " + sxURL);
                 // check robots file
                 boolean bIndexPage=true;
                 if(vtRobots != null) {
-                    Iterator itx=vtRobots.iterator();
-                    String sxRobotURL=null;
-                    while(itx.hasNext()) {
-                        sxRobotURL=(String)itx.next();
+                    for (String sxRobotURL : vtRobots) {
                         if(bDebug) System.out.println("Comparing to - " + sxRobotURL);
                         if(sxURL.startsWith(sxRobotURL)) {
                             // found url
@@ -134,12 +120,11 @@ public class HTMLParser {
             }
         }
     }
-    
-    
-    private Vector getRobots(String beginURL, String contextRoot) {
-        Vector vtRobots=new Vector();
+        
+    private List<String> getRobots(String beginURL, String contextRoot) {
+        List<String> vtRobots = new ArrayList<String> ();
         // read in robots.txt file
-       BufferedReader bfReader=null;
+        BufferedReader bfReader=null;
         try {
             URL urlx=new URL(beginURL + "/" + contextRoot + "/" + "robots.txt");
             URLConnection urlConn=urlx.openConnection();
@@ -162,7 +147,7 @@ public class HTMLParser {
                 }
             } catch(Exception ee) {}
         }
-
+        
         return vtRobots;
     }
     
@@ -173,7 +158,7 @@ public class HTMLParser {
     
     private class CallbackHandler extends HTMLEditorKit.ParserCallback {
         private String beginURL, contextRoot;
-        private Vector vtURLs;
+        private List<String> vtURLs;
         private StringBuffer sbText=new StringBuffer();
         private StringBuffer sbTitle=new StringBuffer();
         private StringBuffer sbSummary=new StringBuffer();
@@ -181,7 +166,7 @@ public class HTMLParser {
         private boolean bSummary=false, bIndexPage=false;
         private String tag=null;
         
-        CallbackHandler(Vector vtURLs, boolean bIndexPage, String beginURL, String contextRoot) {
+        CallbackHandler(List<String> vtURLs, boolean bIndexPage, String beginURL, String contextRoot) {
             super();
             this.beginURL=beginURL;
             this.contextRoot=contextRoot;
@@ -199,10 +184,10 @@ public class HTMLParser {
                         sxName=sxName.toLowerCase();
                         if(sxName.equals("summary") || sxName.equals("description")) {
                             String sxContent=((String)a.getAttribute(HTML.Attribute.CONTENT));
-
+                            
                             // set so default summary algorythm (text on top of page) doesn't get invoked
                             bSummary=true;
-
+                            
                             // check to make sure summary isn't too big
                             if(sbSummary.length() < iSummaryMax) {
                                 if(bDebug) System.out.println("add summary - " + sxContent);
@@ -245,14 +230,14 @@ public class HTMLParser {
                             // found session
                             sxURL=sxURL.substring(0, iPos1) + sxURL.substring(iPos2);
                         }
-
-
+                        
+                        
                         // check to see if url is relative or absolute
                         if(!sxURL.startsWith("/")) {
                             // relative
                             sxURL="/" + contextRoot + "/" + sxURL;
                         }
-
+                        
                         // see if page already in crawler list
                         if(!vtURLs.contains(sxURL)) {
                             // local url that isn't already in list, add to crawler
@@ -286,7 +271,7 @@ public class HTMLParser {
                         //System.out.println("Tag - Text - " + tag + " - -->" + new String(data) + "<-- - " + pos);
                         sbText.append(cleanData);
                         sbText.append(" ");
-
+                        
                         // add summary ???
                         if(!bSummary && sbSummary.length() < iSummaryMax) {
                             sbSummary.append(cleanData.substring(0, cleanData.length() > iSummaryMax ? iSummaryMax - sbSummary.length() : cleanData.length()));
