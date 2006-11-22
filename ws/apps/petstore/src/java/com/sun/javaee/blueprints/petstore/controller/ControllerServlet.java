@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: ControllerServlet.java,v 1.18 2006-11-21 23:31:39 inder Exp $ */
+$Id: ControllerServlet.java,v 1.19 2006-11-22 00:29:35 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -348,10 +348,8 @@ public class ControllerServlet extends HttpServlet {
         // then write the data of the response
         sb.append("<items>\n");
         if(bDebug) System.out.println("**** Items length=" + items.size());
-        Iterator<Item> it = items.iterator();
         NumberFormat formatter = new DecimalFormat("00.00");
-        while (it.hasNext()) {
-            Item i = it.next();
+        for (Item i : (List<Item>) items) {
             sb.append("<item>\n");
             sb.append(" <id>" + i.getItemID() + "</id>\n");
             sb.append(" <product-id>" + i.getProductID() + "</product-id>\n");
@@ -374,11 +372,8 @@ public class ControllerServlet extends HttpServlet {
         sb.append("<cat-id>" + categoryId + "</cat-id>\n");
         sb.append("<cat-name>" + cf.getCategory(categoryId).getName()  + "</cat-name>\n");
         sb.append("<items>\n");
-        List items = cf.getAllItemsFromCategory(categoryId);
-        Iterator<Item> it = items.iterator();
         NumberFormat formatter = new DecimalFormat("00.00");
-        while (it.hasNext()) {
-            Item i = it.next();
+        for (Item i : cf.getAllItemsFromCategory(categoryId)) {
             sb.append("<item>\n");
             sb.append(" <id>" + i.getItemID() + "</id>\n");
             sb.append(" <prod-id>" + i.getProductID() + "</prod-id>\n");
@@ -450,10 +445,7 @@ public class ControllerServlet extends HttpServlet {
             sb.append("\n]");
         } else {
             sb.append("<categories>\n");
-            List categories = cf.getCategories();
-            Iterator<Category> it = categories.iterator();
-            while (it.hasNext()) {
-                Category c = it.next();
+            for (Category c : cf.getCategories()) {
                 sb.append("<category>\n");
                 sb.append(" <id>" + c.getCategoryID() + "</id>\n");
                 sb.append(" <cat-id>" + c.getCategoryID()+ "</cat-id>\n");
