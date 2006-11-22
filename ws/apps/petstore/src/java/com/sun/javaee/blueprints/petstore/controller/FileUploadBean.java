@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: FileUploadBean.java,v 1.43 2006-11-14 18:30:16 basler Exp $ */
+$Id: FileUploadBean.java,v 1.44 2006-11-22 17:50:38 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -30,10 +30,8 @@ import com.sun.javaee.blueprints.petstore.model.Tag;
 import com.sun.javaee.blueprints.petstore.model.SellerContactInfo;
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.StringTokenizer;
 
 public class FileUploadBean {
@@ -133,10 +131,8 @@ public class FileUploadBean {
             HttpSession session = (HttpSession)context.getExternalContext().getSession(true);
             try{
                 String fileNameKey = null;
-                Set keySet = htUpload.keySet();
-                Iterator iter = keySet.iterator();
-                while(iter.hasNext()){
-                    String key = iter.next().toString();
+                for (Object key1 : htUpload.keySet()) {
+                    String key = key1.toString();
                     if(key.startsWith("fileLocation_")) {
                         fileNameKey = key;
                         break;
