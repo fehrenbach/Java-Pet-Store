@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CatalogFacade.java,v 1.50 2006-11-14 18:30:18 basler Exp $ */
+$Id: CatalogFacade.java,v 1.51 2006-11-22 18:04:19 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.model;
 
@@ -10,7 +10,6 @@ import com.sun.javaee.blueprints.petstore.util.PetstoreConstants;
 import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 import javax.annotation.Resource;
@@ -81,10 +80,10 @@ public class CatalogFacade implements ServletContextListener {
         int index = 0;
         while (true) {
             items = query.setParameter("pID",pID).setFirstResult(index++ * chunkSize).setMaxResults(chunkSize).getResultList();
-            if ((items == null) || items.size() <= 0) break;
-            Iterator<Item> it = items.iterator();
-            while ((it != null) && it.hasNext()) {
-                Item i = it.next();
+            if ((items == null) || items.size() <= 0) {
+                break;
+            }
+            for (Item i : items) {
                 // return this chunck if it contains the id we are looking for
                 if (i.getItemID().equals(iID)) {
                     em.close();
