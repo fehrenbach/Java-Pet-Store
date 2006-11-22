@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: ControllerServlet.java,v 1.19 2006-11-22 00:29:35 inder Exp $ */
+$Id: ControllerServlet.java,v 1.20 2006-11-22 00:37:18 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -35,7 +35,6 @@ import java.nio.channels.FileChannel;
 import java.nio.channels.WritableByteChannel;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.Iterator;
 import java.util.List;
 import javax.imageio.ImageIO;
 
@@ -136,7 +135,7 @@ public class ControllerServlet extends HttpServlet {
             ImageIO.write(bimg, "jpeg", out);
             out.flush();
             out.close();
-                        
+            
         } else if(request.getServletPath().endsWith("catalog")) {
             request.setCharacterEncoding("UTF-8");
             String command = request.getParameter("command");
@@ -408,10 +407,13 @@ public class ControllerServlet extends HttpServlet {
         StringBuffer sb = new StringBuffer();
         if ((format != null) && format.toLowerCase().equals("json")) {
             sb.append("[\n");
-            List categories = cf.getCategories();
-            Iterator<Category> it = categories.iterator();
-            while (it.hasNext()) {
-                Category c = it.next();
+            boolean first = true;
+            for (Category c : cf.getCategories()) {
+                if (first) {
+                    first = false;
+                } else {
+                    sb.append(",\n");
+                }                
                 String catid = c.getCategoryID() + "";
                 sb.append("{");
                 sb.append("\"id\":\"" + c.getCategoryID() + "\",");
@@ -421,10 +423,13 @@ public class ControllerServlet extends HttpServlet {
                 sb.append("\"imageURL\":\"" + c.getImageURL() + "\",");
                 sb.append("\"products\": [");
                 // get the products in that category
-                List products = cf.getProducts(catid);
-                Iterator<Product> pit = products.iterator();
-                while (pit.hasNext()) {
-                    Product p = pit.next();
+                boolean first1 = true;
+                for (Product p : cf.getProducts(catid)) {
+                    if (first1) {
+                        first1 = false;
+                    } else {
+                        sb.append(",");
+                    }
                     sb.append("{");
                     sb.append("\"id\":\"" + p.getProductID() + "\",");
                     sb.append("\"catid\":\"" + catid + "\",");
@@ -432,16 +437,10 @@ public class ControllerServlet extends HttpServlet {
                     sb.append("\"description\":\"" + p.getDescription() + "\",");
                     sb.append("\"imageURL\":\"" + p.getImageURL() + "\"");
                     sb.append("}");
-                    if (pit.hasNext()) {
-                        sb.append(",");
-                    }
                 }
                 sb.append("]");
                 sb.append("}");
-                if (it.hasNext()) {
-                    sb.append(",\n");
-                }
-            }//end while loop
+            }
             sb.append("\n]");
         } else {
             sb.append("<categories>\n");
