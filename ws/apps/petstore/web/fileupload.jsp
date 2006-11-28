@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: fileupload.jsp,v 1.47 2006-11-13 23:19:59 basler Exp $ --%>
+$Id: fileupload.jsp,v 1.48 2006-11-28 17:16:17 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -183,7 +183,6 @@ div.pane {
                         
                         <div style="border-style:inset; border-width:thin; background-color:white">
                         <textarea wrap="soft" dojoType="Editor2" widgetId="rtEditor" id="description" name="TestFileuploadForm:description" 
-                        items="bold;italic;underline;strikethrough;"
                         toolbarTemplatePath="./rteToolBar.html"></textarea>
                         
                         </div>
