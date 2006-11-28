@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: ControllerServlet.java,v 1.20 2006-11-22 00:37:18 inder Exp $ */
+$Id: ControllerServlet.java,v 1.21 2006-11-28 01:14:42 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -71,169 +71,11 @@ public class ControllerServlet extends HttpServlet {
     
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if(request.getServletPath().endsWith("ImageServlet")) {
-            if(bDebug) System.out.println(" pathinfo " + request.getPathInfo());
-            String pathInfo=request.getPathInfo();
-            
-            // set proper contentType
-            if (pathInfo.endsWith(GIF_SUFFIX)) {
-                response.setContentType("image/gif");
-            } else if (pathInfo.endsWith(JPG_SUFFIX)) {
-                response.setContentType("image/jpeg");
-            } else if (pathInfo.endsWith(PNG_SUFFIX)) {
-                response.setContentType("image/x-png");
-            }
-            
-            
-            // look for file in default location
-            String imagePath=getServletContext().getRealPath(pathInfo);
-            if(bDebug) System.out.println("Image path = " + imagePath);
-            File imageFile=new File(imagePath);
-            if(!imageFile.exists()) {
-                
-                // not in default location, look in upload location
-                imageFile=new File(PetstoreConstants.PETSTORE_IMAGE_DIRECTORY + pathInfo);
-                if(bDebug) System.out.println("Image alter path = " + PetstoreConstants.PETSTORE_IMAGE_DIRECTORY + pathInfo);
-                if(!imageFile.exists()) {
-                    PetstoreUtil.getLogger().log(Level.SEVERE, "image_does_not_exist", PetstoreConstants.PETSTORE_IMAGE_DIRECTORY + pathInfo);
-                    return;
-                }
-            }
-            
-            FileChannel in = null;
-            WritableByteChannel out = null;
-            
-            // serve up image from proper location
-            try {
-                in = new FileInputStream(imageFile).getChannel();
-                out = Channels.newChannel(response.getOutputStream());
-                in.transferTo(0, in.size(), out);
-            } catch (IOException e) {
-                throw e;
-            } finally {
-                try {
-                    if(in != null) {
-                        in.close();
-                    }
-                } catch (IOException ioe) {}
-            }
-            out.close();
-            
+            serveImage(request, response);
         } else if(request.getServletPath().endsWith("CaptchaServlet")) {
-            SimpleCaptcha captcha = new SimpleCaptcha();
-            // just in case... not really necessary to store the session id here
-            HttpSession session = request.getSession();
-            session.setAttribute(CAPTCHA_KEY, session.getId());
-            String cstring = captcha.generateCaptchaString(5);
-            session.setAttribute(CAPTCHA_STRING, cstring);
-            BufferedImage bimg = captcha.getCaptchaImage(cstring);
-            
-            response.setHeader("Cache-Control", "no-store");
-            response.setHeader("Pragma", "no-cache");
-            response.setDateHeader("Expires", 0);
-            response.setContentType("image/jpeg");
-            OutputStream out = response.getOutputStream();
-            ImageIO.write(bimg, "jpeg", out);
-            out.flush();
-            out.close();
-            
+            serveCaptcha(request, response);
         } else if(request.getServletPath().endsWith("catalog")) {
-            request.setCharacterEncoding("UTF-8");
-            String command = request.getParameter("command");
-            if ("category".equals(command)) {
-                String catid = request.getParameter("catid");
-                if(bDebug) System.out.println("Request for category with id: " + catid);
-                // set content-type header before accessing the Writer
-                response.setContentType("text/xml;charset=UTF-8");
-                PrintWriter out = response.getWriter();
-                String str = handleCategory(catid);
-                out.println(str);
-                out.close();
-            } else if ("items".equals(command)) {
-                String pid = request.getParameter("pid");
-                String startString = request.getParameter("start");
-                int start = 0;
-                if (startString != null) {
-                    try {
-                        start = Integer.parseInt(startString);
-                    } catch (NumberFormatException nfe) {
-                        // defaults start to 0
-                    }
-                }
-                String lengthString = request.getParameter("length");
-                int length = 10;
-                if (lengthString != null) {
-                    try {
-                        length = Integer.parseInt(lengthString);
-                    } catch (NumberFormatException nfe) {
-                        // defaults length to 10
-                    }
-                }
-                // set content-type header before accessing the Writer
-                response.setContentType("text/xml;charset=UTF-8");
-                // leave these headers here for development - remove for deploy
-                response.setHeader("Cache-Control", "no-cache");
-                response.setHeader("Pragma", "no-cache");
-                PrintWriter out = response.getWriter();
-                String baseURL = "http://" + request.getServerName() + ":" + request.getServerPort() + "/" + request.getContextPath() + "/ImageServlet/";
-                List items = cf.getItemsVLH(pid, start, length);
-                //get response data
-                String str = handleItems(items, baseURL);
-                out.println(str);
-                out.close();
-            } else if ("itemInChunck".equals(command)) {
-                String pid = request.getParameter("pid");
-                String itemId = request.getParameter("itemId");
-                int start = 0;
-                String lengthString = request.getParameter("length");
-                int length = 10;
-                if (lengthString != null) {
-                    try {
-                        length = Integer.parseInt(lengthString);
-                    } catch (NumberFormatException nfe) {
-                        // defaults length to 10
-                    }
-                }
-                // set content-type header before accessing the Writer
-                response.setContentType("text/xml;charset=UTF-8");
-                // leave these headers here for development - remove for deploy
-                response.setHeader("Cache-Control", "no-cache");
-                response.setHeader("Pragma", "no-cache");
-                PrintWriter out = response.getWriter();
-                String baseURL = "http://" + request.getServerName() + ":" + request.getServerPort() + "/" + request.getContextPath() + "/ImageServlet/";
-                List items = cf.getItemInChunckVLH(pid, itemId, length);
-                //get response data
-                if (items != null) {
-                    String str = handleItems(items, baseURL);
-                    out.println(str);
-                } else {
-                    out.println("<items></items>");
-                }
-                out.close();
-            } else if ("categories".equals(command)) {
-                if(bDebug) System.out.println("Request for categories.");
-                String format = request.getParameter("format");
-                
-                //get response data in proper format
-                String str = handleCategories(format);
-                
-                if ((format != null) && format.toLowerCase().equals("json")) {
-                    response.setContentType("text/javascript;charset=UTF-8");
-                } else {
-                    response.setContentType("text/xml;charset=UTF-8");
-                }
-                PrintWriter out = response.getWriter();
-                out.println(str);
-                out.close();
-            } else if ("item".equals(command)) {
-                String targetId = request.getParameter("id");
-                if(bDebug) System.out.println("CatalogServlet: Request for item with id: " + targetId);
-                String str = handleItem(targetId);
-                response.setContentType("text/xml;charset=UTF-8");
-                PrintWriter out = response.getWriter();
-                out.println(str);
-                out.close();
-            }
-            
+            serveCatalogXML(request, response);
         } else if(request.getServletPath().endsWith("controller")) {
             // original controller servlet
             request.setCharacterEncoding("UTF-8");
@@ -251,27 +93,7 @@ public class ControllerServlet extends HttpServlet {
                 out.close();
             }
         } else if(request.getServletPath().endsWith("TagServlet")) {
-            // original controller servlet
-            response.setContentType("text/xml;charset=UTF-8");
-            PrintWriter out=response.getWriter();
-            String itemId=request.getParameter("itemId");
-            String sxTags=request.getParameter("tags");
-            if(bDebug) System.out.println("Have tagServlet " + itemId + " - " + sxTags);
-            try {
-                cf.addTagsToItemId(sxTags, itemId);
-            } catch (Exception ee) {
-                ee.printStackTrace();
-            }
-            out.println("<response>");
-            out.print("<itemId>");
-            out.print(itemId);
-            out.println("</itemId>");
-            out.print("<tags>");
-            out.print(cf.getItem(itemId).tagsAsString());
-            out.println("</tags>");
-            out.println("</response>");
-            out.close();
-            
+            serveTagsXML(request, response);
         } else {
             PetstoreUtil.getLogger().log(Level.SEVERE, "Servlet '" + request.getServletPath() + "' not registered in ControllerServlet!!");
             HttpServletResponse httpResponse=(HttpServletResponse)response;
@@ -279,6 +101,197 @@ public class ControllerServlet extends HttpServlet {
         }
     }
     
+    private void serveImage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if(bDebug) System.out.println(" pathinfo " + request.getPathInfo());
+        String pathInfo=request.getPathInfo();
+        
+        // set proper contentType
+        if (pathInfo.endsWith(GIF_SUFFIX)) {
+            response.setContentType("image/gif");
+        } else if (pathInfo.endsWith(JPG_SUFFIX)) {
+            response.setContentType("image/jpeg");
+        } else if (pathInfo.endsWith(PNG_SUFFIX)) {
+            response.setContentType("image/x-png");
+        }
+        
+        // look for file in default location
+        String imagePath=getServletContext().getRealPath(pathInfo);
+        if(bDebug) System.out.println("Image path = " + imagePath);
+        File imageFile=new File(imagePath);
+        if(!imageFile.exists()) {
+            
+            // not in default location, look in upload location
+            imageFile=new File(PetstoreConstants.PETSTORE_IMAGE_DIRECTORY + pathInfo);
+            if(bDebug) System.out.println("Image alter path = " + PetstoreConstants.PETSTORE_IMAGE_DIRECTORY + pathInfo);
+            if(!imageFile.exists()) {
+                PetstoreUtil.getLogger().log(Level.SEVERE, "image_does_not_exist", PetstoreConstants.PETSTORE_IMAGE_DIRECTORY + pathInfo);
+                return;
+            }
+        }
+        
+        FileChannel in = null;
+        WritableByteChannel out = null;
+        
+        // serve up image from proper location
+        try {
+            in = new FileInputStream(imageFile).getChannel();
+            out = Channels.newChannel(response.getOutputStream());
+            in.transferTo(0, in.size(), out);
+        } catch (IOException e) {
+            throw e;
+        } finally {
+            try {
+                if(in != null) {
+                    in.close();
+                }
+            } catch (IOException ioe) {}
+            try {
+                if(out != null) {
+                    out.close();
+                }
+            } catch (IOException ioe) {}
+        }
+    }
+    
+    private void serveTagsXML(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/xml;charset=UTF-8");
+        PrintWriter out=response.getWriter();
+        String itemId=request.getParameter("itemId");
+        String sxTags=request.getParameter("tags");
+        if(bDebug) System.out.println("Have tagServlet " + itemId + " - " + sxTags);
+        try {
+            cf.addTagsToItemId(sxTags, itemId);
+        } catch (Exception ee) {
+            ee.printStackTrace();
+        }
+        out.println("<response>");
+        out.print("<itemId>");
+        out.print(itemId);
+        out.println("</itemId>");
+        out.print("<tags>");
+        out.print(cf.getItem(itemId).tagsAsString());
+        out.println("</tags>");
+        out.println("</response>");
+        out.close();
+    }
+    
+    private void serveCaptcha(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        SimpleCaptcha captcha = new SimpleCaptcha();
+        // just in case... not really necessary to store the session id here
+        HttpSession session = request.getSession();
+        session.setAttribute(CAPTCHA_KEY, session.getId());
+        String cstring = captcha.generateCaptchaString(5);
+        session.setAttribute(CAPTCHA_STRING, cstring);
+        BufferedImage bimg = captcha.getCaptchaImage(cstring);
+        
+        response.setHeader("Cache-Control", "no-store");
+        response.setHeader("Pragma", "no-cache");
+        response.setDateHeader("Expires", 0);
+        response.setContentType("image/jpeg");
+        OutputStream out = response.getOutputStream();
+        ImageIO.write(bimg, "jpeg", out);
+        out.flush();
+        out.close();
+    }
+    
+    private void serveCatalogXML(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        String command = request.getParameter("command");
+        if ("category".equals(command)) {
+            String catid = request.getParameter("catid");
+            if(bDebug) System.out.println("Request for category with id: " + catid);
+            // set content-type header before accessing the Writer
+            response.setContentType("text/xml;charset=UTF-8");
+            PrintWriter out = response.getWriter();
+            String str = handleCategory(catid);
+            out.println(str);
+            out.close();
+        } else if ("items".equals(command)) {
+            String pid = request.getParameter("pid");
+            String startString = request.getParameter("start");
+            int start = 0;
+            if (startString != null) {
+                try {
+                    start = Integer.parseInt(startString);
+                } catch (NumberFormatException nfe) {
+                    // defaults start to 0
+                }
+            }
+            String lengthString = request.getParameter("length");
+            int length = 10;
+            if (lengthString != null) {
+                try {
+                    length = Integer.parseInt(lengthString);
+                } catch (NumberFormatException nfe) {
+                    // defaults length to 10
+                }
+            }
+            // set content-type header before accessing the Writer
+            response.setContentType("text/xml;charset=UTF-8");
+            // leave these headers here for development - remove for deploy
+            response.setHeader("Cache-Control", "no-cache");
+            response.setHeader("Pragma", "no-cache");
+            PrintWriter out = response.getWriter();
+            String baseURL = "http://" + request.getServerName() + ":" + request.getServerPort() + "/" + request.getContextPath() + "/ImageServlet/";
+            List items = cf.getItemsVLH(pid, start, length);
+            //get response data
+            String str = handleItems(items, baseURL);
+            out.println(str);
+            out.close();
+        } else if ("itemInChunck".equals(command)) {
+            String pid = request.getParameter("pid");
+            String itemId = request.getParameter("itemId");
+            int start = 0;
+            String lengthString = request.getParameter("length");
+            int length = 10;
+            if (lengthString != null) {
+                try {
+                    length = Integer.parseInt(lengthString);
+                } catch (NumberFormatException nfe) {
+                    // defaults length to 10
+                }
+            }
+            // set content-type header before accessing the Writer
+            response.setContentType("text/xml;charset=UTF-8");
+            // leave these headers here for development - remove for deploy
+            response.setHeader("Cache-Control", "no-cache");
+            response.setHeader("Pragma", "no-cache");
+            PrintWriter out = response.getWriter();
+            String baseURL = "http://" + request.getServerName() + ":" + request.getServerPort() + "/" + request.getContextPath() + "/ImageServlet/";
+            List items = cf.getItemInChunckVLH(pid, itemId, length);
+            //get response data
+            if (items != null) {
+                String str = handleItems(items, baseURL);
+                out.println(str);
+            } else {
+                out.println("<items></items>");
+            }
+            out.close();
+        } else if ("categories".equals(command)) {
+            if(bDebug) System.out.println("Request for categories.");
+            String format = request.getParameter("format");
+            
+            //get response data in proper format
+            String str = handleCategories(format);
+            
+            if ((format != null) && format.toLowerCase().equals("json")) {
+                response.setContentType("text/javascript;charset=UTF-8");
+            } else {
+                response.setContentType("text/xml;charset=UTF-8");
+            }
+            PrintWriter out = response.getWriter();
+            out.println(str);
+            out.close();
+        } else if ("item".equals(command)) {
+            String targetId = request.getParameter("id");
+            if(bDebug) System.out.println("CatalogServlet: Request for item with id: " + targetId);
+            String str = handleItem(targetId);
+            response.setContentType("text/xml;charset=UTF-8");
+            PrintWriter out = response.getWriter();
+            out.println(str);
+            out.close();
+        }
+    }
     
     public StringBuffer getResource(String resource, boolean fromWeb, boolean cacheContent) {
         InputStream stream = null;
@@ -413,7 +426,7 @@ public class ControllerServlet extends HttpServlet {
                     first = false;
                 } else {
                     sb.append(",\n");
-                }                
+                }
                 String catid = c.getCategoryID() + "";
                 sb.append("{");
                 sb.append("\"id\":\"" + c.getCategoryID() + "\",");
