@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: FileUploadBean.java,v 1.44 2006-11-22 17:50:38 inder Exp $ */
+$Id: FileUploadBean.java,v 1.45 2006-12-01 03:30:29 sean_brydon Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -18,8 +18,11 @@ import com.sun.javaee.blueprints.petstore.util.PetstoreConstants;
 import com.sun.javaee.blueprints.petstore.util.ImageScaler;
 import com.sun.javaee.blueprints.components.ui.fileupload.FileUploadStatus;
 import com.sun.javaee.blueprints.components.ui.fileupload.FileUploadUtil;
-import com.sun.javaee.blueprints.components.ui.geocoder.GeoCoder;
-import com.sun.javaee.blueprints.components.ui.geocoder.GeoPoint;
+//import com.sun.javaee.blueprints.components.ui.geocoder.GeoCoder;
+//import com.sun.javaee.blueprints.components.ui.geocoder.GeoPoint;
+import com.sun.javaee.blueprints.petstore.proxy.GeoCoder;
+import com.sun.javaee.blueprints.petstore.proxy.GeoPoint;
+
 import com.sun.javaee.blueprints.petstore.model.Address;
 import com.sun.javaee.blueprints.petstore.model.CatalogFacade;
 import com.sun.javaee.blueprints.petstore.model.Category;
