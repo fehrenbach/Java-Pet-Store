@@ -417,19 +417,51 @@ INSERT INTO item VALUES('417', 'reptile02', 'Green Iguana', 'This is one proud a
 INSERT INTO item VALUES('418', 'reptile02', 'Iguana', 'My iguana needs a home. His tail is really long. He is very nice.', 'images/lizard2.gif','images/lizard2.gif', 500,'101','101', 15, 5);
 INSERT INTO item VALUES('419', 'reptile02', 'Frog', 'This little green frog was rescued from the chef in the kitchen of a french restaurant. If I had not acted quickly, his legs would have been appetizers. Now for just a small fee you can buy him as your pet.', 'images/frog1.gif','images/frog1.gif', 1500,'102','102', 15, 3);
 
-INSERT INTO tag VALUES(1,'awesome',3);
+INSERT INTO tag VALUES(1,'awesome',5);
 INSERT INTO tag VALUES(2,'interesting',2);
-INSERT INTO tag VALUES(3,'cool',1);
+INSERT INTO tag VALUES(3,'cool',10);
+INSERT INTO tag VALUES(4,'excellent',20);
 
 INSERT INTO tag_item VALUES(1, '1');
 INSERT INTO tag_item VALUES(1, '2');
 INSERT INTO tag_item VALUES(1, '3');
+INSERT INTO tag_item VALUES(1, '4');
+INSERT INTO tag_item VALUES(1, '5');
 INSERT INTO tag_item VALUES(2, '1');
 INSERT INTO tag_item VALUES(2, '2');
 INSERT INTO tag_item VALUES(3, '1');
+INSERT INTO tag_item VALUES(3, '2');
+INSERT INTO tag_item VALUES(3, '3');
+INSERT INTO tag_item VALUES(3, '4');
+INSERT INTO tag_item VALUES(3, '5');
+INSERT INTO tag_item VALUES(3, '6');
+INSERT INTO tag_item VALUES(3, '7');
+INSERT INTO tag_item VALUES(3, '8');
+INSERT INTO tag_item VALUES(3, '9');
+INSERT INTO tag_item VALUES(3, '10');
+INSERT INTO tag_item VALUES(4, '8');
+INSERT INTO tag_item VALUES(4, '9');
+INSERT INTO tag_item VALUES(4, '10');
+INSERT INTO tag_item VALUES(4, '11');
+INSERT INTO tag_item VALUES(4, '12');
+INSERT INTO tag_item VALUES(4, '13');
+INSERT INTO tag_item VALUES(4, '14');
+INSERT INTO tag_item VALUES(4, '15');
+INSERT INTO tag_item VALUES(4, '16');
+INSERT INTO tag_item VALUES(4, '17');
+INSERT INTO tag_item VALUES(4, '18');
+INSERT INTO tag_item VALUES(4, '19');
+INSERT INTO tag_item VALUES(4, '20');
+INSERT INTO tag_item VALUES(4, '21');
+INSERT INTO tag_item VALUES(4, '22');
+INSERT INTO tag_item VALUES(4, '23');
+INSERT INTO tag_item VALUES(4, '24');
+INSERT INTO tag_item VALUES(4, '25');
+INSERT INTO tag_item VALUES(4, '26');
+INSERT INTO tag_item VALUES(4, '27');
 
 INSERT INTO id_gen VALUES('ITEM_ID',419);
 INSERT INTO id_gen VALUES('ADDRESS_ID',102);
 INSERT INTO id_gen VALUES('CONTACT_INFO_ID',102);
-INSERT INTO id_gen VALUES('TAG_ID',3);
+INSERT INTO id_gen VALUES('TAG_ID',4);
 
