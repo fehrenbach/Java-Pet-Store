@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: scroller.js,v 1.29 2006-12-01 21:38:40 basler Exp $ */
+$Id: scroller.js,v 1.30 2006-12-01 22:11:04 basler Exp $ */
 
 /**
 * ImageScroller - A multipurpose item brower
@@ -384,7 +384,7 @@ function ImageScroller() {
     
     function scrollRight() {
         isScrollingRight = true;
-        if (index >= tiles.length) {
+        if ( (index + 4) >= tiles.length) {
             // hide the rightButton
             rightButton.style.visibility="hidden";
             return;
