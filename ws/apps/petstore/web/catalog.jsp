@@ -1,5 +1,6 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: catalog.jsp,v 1.19 2006-11-02 00:34:49 basler Exp $ --%>
+$Id: catalog.jsp,v 1.20 2006-12-01 21:38:40 basler Exp $ --%>
+<script type="text/javascript" src="common.js"></script>
 <script type="text/javascript" src="scroller.js"></script>
 <link rel="stylesheet" type="text/css" href="scroller.css"></link>
 <script type="text/javascript" src="accordion.js"></script>
@@ -80,7 +81,7 @@ $Id: catalog.jsp,v 1.19 2006-11-02 00:34:49 basler Exp $ --%>
 </tr>
 </table>
 </div>
-<div id="status"></div> <div id="status_2"></div>
+<div id="status" style="text-align:left"></div> <div id="status_2"></div>
 <div id="dstatus"></div>
 <div id="injection_point"></div>
 </center>

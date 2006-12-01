@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: catalog.js,v 1.15 2006-11-13 23:19:59 basler Exp $ */
+$Id: catalog.js,v 1.16 2006-12-01 21:38:40 basler Exp $ */
 
 var ac;
 var is;
@@ -20,7 +20,6 @@ function initCatalog() {
     // wire in a listener for the rating component
     dojo.event.connect("before", bpui.rating, "doClick", controller, "modifyState");
     controller.initialize();    
-
 }
 
 function CatalogController() {
@@ -29,7 +28,7 @@ function CatalogController() {
   // this object structure contains a list of the products and chunks that have been loaded
   var pList = new ProductList();
   
-  var CHUNK_SIZE=5;
+  var CHUNK_SIZE=7;
   var initalRating;
   var initalItem;
   var originalURL;
@@ -68,12 +67,15 @@ function CatalogController() {
             initalItem = args.id;
             initalRating = args.rating;
         }
-      } else if (args.type == "getChunck") {
-          getChunck(args);
+      } else if (args.type == "getChunk") {
+          populateItems(args.id, args.index, args.currentChunk, false);
+
       } else if (args.type == "showItemDetails") {
           showProductDetails(args.productId, args.itemId);
+
       }  else if (args.type == "showProducts") {
-          this.setProducts(args.productId);
+          is.reset();
+          populateItems(args.productId, 0, 0, true);
       }
   }
   
@@ -125,6 +127,7 @@ function CatalogController() {
       is.getItems().get(itemId).rating  = rating;
   }
   
+
   function loadAccordion () {
        
         // go out and get the categories
@@ -145,7 +148,7 @@ function CatalogController() {
         originalURL = decodeURIComponent(window.location.href);
         var params = {};
         // look for the params
-         if (originalURL.indexOf("#") != -1) {
+        if (originalURL.indexOf("#") != -1) {
             var qString = originalURL.split('#')[1];
             var args = qString.split(',');
             originalURL = originalURL.split('#')[0];
@@ -173,37 +176,19 @@ function CatalogController() {
         	} else if (typeof params.catid != 'undefined') {
             	ac.showCategory(params.catid);
         	}
-      	 // nothing is selected
         } else {
+            // nothing is selected
             ac.showFirstCategory();
         }
     }
   
-  this.setProducts = function(pid) {
-        is.reset();
-        is.showProgressIndicator();
-        if (pList.hasChunck(pid, 0)) {
-            var items = pList.getChunck(pid, 0);
-            is.addItems(items);
-            is.setGroupId(pid);
-            is.showImage(items[0].id);
-        } else {
-            var bindArgs = {
-                url:  applicationContextRoot + "/catalog?command=items&pid=" + pid + "&start=" + 0 + "&length=" + CHUNK_SIZE,
-                mimetype: "text/xml",
-                load: function(type,data,postProcessHandler) {
-                    processProductData(data,true, pid, null,0);
-                }
-            };
-            dojo.io.bind(bindArgs);
-        }    
-    }
-    
+
+
     function showProductDetails(pid, itemId) {
         is.reset();
         is.showProgressIndicator();
         var bindArgs = {
-            url:  applicationContextRoot + "/catalog?command=itemInChunck&pid=" + pid + "&itemId=" + itemId + "&length=" + CHUNK_SIZE,
+            url:  applicationContextRoot + "/catalog?command=itemInChunk&pid=" + pid + "&itemId=" + itemId + "&length=" + CHUNK_SIZE,
             mimetype: "text/xml",
             load: function(type,data,postProcessHandler) {
                processProductData(data,true, pid, itemId);
@@ -213,33 +198,51 @@ function CatalogController() {
         };
         dojo.io.bind(bindArgs);          
     }
-  
-  // do the value list pre-emptive fetching
-  function getChunck(args) {           
-      is.showProgressIndicator(); 
-      if (typeof debug != 'undefined') {
-          document.getElementById("status").innerHTML = "url=" + applicationContextRoot + "/catalog?command=items&pid=" + args.id + "&start=" +  args.index + "&length=" + CHUNK_SIZE;
-      }
-      // load the chunck data if we have it
-      if (pList.hasChunck(args.id, args.currentChunck)) {
-            if (typeof debug != 'undefined') {
-                document.getElementById("status").innerHTML = "chunck from cache=" + args.id + "&currentChunck=" +  args.currentChunck;
-            }
-            is.addItems(pList.getChunck(args.id, args.currentChunck));
-            is.setGroupId(args.id);
-      } else {
-          var bindArgs = {
-                url:  applicationContextRoot + "/catalog?command=items&pid=" + args.id + "&start=" +  args.index + "&length=" + CHUNK_SIZE,
-                mimetype: "text/xml",
-                load: function(type,data,postProcessHandler) {
-                    processProductData(data,false, args.id, null, args.currentChunck);
+
+
+
+    function populateItems(pid, index, neededChunk, showImage) {
+        is.showProgressIndicator(); 
+        is.setGroupId(pid);
+        printDebug("populateItems - need to make sure displaying - pid=" + pid + " Chunk=" +  neededChunk);
+
+        // check to see if relevant scroller page is already loaded
+        if(!is.containsChunk(pid + "_" + neededChunk)) {
+
+            // not loaded, so see if it is in the cache
+            if (pList.hasChunk(pid, neededChunk)) {
+                // in cache, so add chunk to scroller
+                printDebug("**** adding chunk from cache - pid=" + pid + " Chunk=" +  neededChunk);
+                is.addChunk(pid + "_" + neededChunk);
+                is.addItems(pList.getChunk(pid, neededChunk));
+                
+                // show first image if you have it
+                if(showImage && is.getScrollerItems().length > 0) {
+                    is.showImage(is.getScrollerItems()[0].id);
                 }
-          };
-          dojo.io.bind(bindArgs);
-      }
-   }
-  
-   function processProductData(responseXML, showImage, pid, iId, chunckId) {
+
+            } else {
+                // not in cache so load it
+                startRetIndex=(index * CHUNK_SIZE);
+
+                printDebug("**** retrieving chunk from server - pid=" + pid + " index " + startRetIndex + " Chunk=" +  neededChunk);
+                var bindArgs = {
+                    url:  applicationContextRoot + "/catalog?command=items&pid=" + pid + "&start=" + startRetIndex + "&length=" + CHUNK_SIZE,
+                    mimetype: "text/xml",
+                    load: function(type,data,postProcessHandler) {
+                        processProductData(data, showImage, pid, null, neededChunk);
+                    }
+                };
+                dojo.io.bind(bindArgs);
+            }
+        } else {
+            printDebug("*** items already showing");
+        }
+
+    }
+
+
+   function processProductData(responseXML, showImage, pid, iId, chunkId) {
         var items = [];
         var count = responseXML.getElementsByTagName("item").length;
         for (var loop=0; loop < count ; loop++) {
@@ -261,11 +264,12 @@ function CatalogController() {
             var i = {id: itemId, name: name, image: imageURL, thumbnail: thumbURL, shortDescription: shortDescription, description: description, price:price, rating: rating};
             items.push(i);
         }
-        // cache the chuncks 
-        if (typeof chunckId != 'undefined') {
-            pList.addChunck(pid, chunckId, items);
-        }
+
+        // cache the chunks 
+        pList.addChunk(pid, chunkId, items);
         is.addItems(items);
+        is.addChunk(pid + "_" + chunkId);
+
         if (showImage && iId == null) {
             is.setGroupId(pid);
             is.showImage(items[0].id);
@@ -280,52 +284,20 @@ function CatalogController() {
         var _plist = this;
         var map = new Map();
         
-        this.addChunck = function(pid, chunkNumber, items) {
+        this.addChunk = function(pid, chunkNumber, items) {
             map.put(pid + "_" + chunkNumber, items, true);  
         }
         
-        this.getChunck = function(pid, chunkNumber) {
+        this.getChunk = function(pid, chunkNumber) {
             return map.get(pid + "_" + chunkNumber);  
         }
         
-        this.hasChunck = function(pid, chunkNumber) {
+        this.hasChunk = function(pid, chunkNumber) {
             return (map.get(pid + "_" + chunkNumber) != null);  
         }
-
-    }
-    
-    function Map() {
         
-        var size = 0;
-        var keys = [];
-        var values = [];
-        
-        this.put = function(key,value, replace) {
-            if (this.get(key) == null) {
-                keys[size] = key; values[size] = value;
-                size++;
-            } else if (replace) {
-                for (i=0; i < size; i++) {
-                    if (keys[i] == key) {
-                        values[i] = value;
-                    }
-                }
-            }
-        }
-        
-        this.get = function(key) {
-            for (i=0; i < size; i++) {
-                if (keys[i] == key) {
-                    return values[i];
-                }
-            }
-            return null;
-        }
-        
-        this.clear = function() {
-            size = 0;
-            keys = [];
-            values = [];
+        this.contents = function() {
+            return map.contents();
         }
     }
 }

@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: ControllerServlet.java,v 1.21 2006-11-28 01:14:42 inder Exp $ */
+$Id: ControllerServlet.java,v 1.22 2006-12-01 21:38:39 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -238,7 +238,7 @@ public class ControllerServlet extends HttpServlet {
             String str = handleItems(items, baseURL);
             out.println(str);
             out.close();
-        } else if ("itemInChunck".equals(command)) {
+        } else if ("itemInChunk".equals(command)) {
             String pid = request.getParameter("pid");
             String itemId = request.getParameter("itemId");
             int start = 0;
@@ -258,7 +258,7 @@ public class ControllerServlet extends HttpServlet {
             response.setHeader("Pragma", "no-cache");
             PrintWriter out = response.getWriter();
             String baseURL = "http://" + request.getServerName() + ":" + request.getServerPort() + "/" + request.getContextPath() + "/ImageServlet/";
-            List items = cf.getItemInChunckVLH(pid, itemId, length);
+            List items = cf.getItemInChunkVLH(pid, itemId, length);
             //get response data
             if (items != null) {
                 String str = handleItems(items, baseURL);

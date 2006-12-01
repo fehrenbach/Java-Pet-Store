@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CatalogFacade.java,v 1.51 2006-11-22 18:04:19 inder Exp $ */
+$Id: CatalogFacade.java,v 1.52 2006-12-01 21:38:39 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.model;
 
@@ -71,7 +71,7 @@ public class CatalogFacade implements ServletContextListener {
      * @param chunkSize the maximum number of results to retrieve
      * @returns a List of Item objects
      */
-    public List<Item> getItemInChunckVLH(String pID, String iID, int chunkSize){
+    public List<Item> getItemInChunkVLH(String pID, String iID, int chunkSize){
         EntityManager em = emf.createEntityManager();
         //make Java Persistence query
         Query query = em.createQuery("SELECT i FROM Item i WHERE i.productID = :pID");
@@ -84,7 +84,7 @@ public class CatalogFacade implements ServletContextListener {
                 break;
             }
             for (Item i : items) {
-                // return this chunck if it contains the id we are looking for
+                // return this chunk if it contains the id we are looking for
                 if (i.getItemID().equals(iID)) {
                     em.close();
                     return items;

@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: scroller.js,v 1.28 2006-05-31 19:13:04 basler Exp $ */
+$Id: scroller.js,v 1.29 2006-12-01 21:38:40 basler Exp $ */
 
 /**
 * ImageScroller - A multipurpose item brower
@@ -29,8 +29,8 @@ function ImageScroller() {
     var THUMB_WIDTH = Math.round(VIEWPORT_WIDTH / 5);;
     var THUMB_HEIGHT = Math.round(VIEWPORT_WIDTH / 6.67);
     
-    var CHUNK_SIZE=5;
-    var PREFETCH_THRESHHOLD = 4;
+    var CHUNK_SIZE = 7;
+    var PREFETCH_THRESHHOLD = 5;
     
     var IMAGE_PANE_ID = "imagePane";
     var IMAGE_PANE_BUFFER_ID = "imageBufferPane";
@@ -89,6 +89,8 @@ function ImageScroller() {
     
     // a growing list of items;
     var items = [];
+    // cached chunks that are already in the items array
+    var loadedChunks = [];
     
     // used for debugging when debug is true
     var debug = false;
@@ -103,7 +105,7 @@ function ImageScroller() {
 
     
     var pid;
-    var currentChunck;
+    var currentChunk;
      // this map contains all the items 
     var map;
     // this is the main container div
@@ -113,6 +115,11 @@ function ImageScroller() {
         return map;
     }
     
+    this.getScrollerItems = function() {
+        return items;
+    }
+
+
     this.getGroupId = function() {
         return pid;
     }
@@ -122,7 +129,9 @@ function ImageScroller() {
         tiles = [];
         index = 0;
         offset = 0;
-        currentChunck = 0;
+        currentChunk = 0;
+        items = [];
+        loadedChunks = [];
     }
     
     function resetTitles() {
@@ -146,17 +155,35 @@ function ImageScroller() {
     
      // do the value list pre-emptive fetching
     function prefetch() {
+        //printDebug("** scoller index = " + index);
         if (isScrollingRight && (index + PREFETCH_THRESHHOLD) % CHUNK_SIZE == 0) {
-            if ((index / CHUNK_SIZE) != currentChunck) {
-                currentChunck = index / CHUNK_SIZE;
+
+            if ((Math.round(index / CHUNK_SIZE)) >= currentChunk) {
+                currentChunk = Math.round(index / CHUNK_SIZE) + 1;
                 // fire an event
-                dojo.event.topic.publish("/catalog", {type:"getChunck", id: pid, index: index, currentChunck: currentChunck});
+                dojo.event.topic.publish("/catalog", {type:"getChunk", id: pid, index: index, currentChunk: currentChunk});
             }
         }
     }
     
     this.setGroupId = function(id) {
         pid = id;
+    }
+
+    this.containsChunk = function(chunkId) {
+        printDebug("containsChunk = " + loadedChunks);
+        ret=false;
+        for(ii=0; ii < loadedChunks.length; ii++) {
+            if(chunkId == loadedChunks[ii]) {
+                ret=true;
+                break;
+            }
+        }
+        return ret;
+    }
+
+    this.addChunk = function(chunkId) {
+        loadedChunks.push(chunkId);
     }
 
     this.addItems = function(inItems) {
@@ -612,40 +639,5 @@ function ImageScroller() {
         } else if (element.x)
             l += element.x;
         return l;
-    }
-       
-    function Map() {
-        
-        var size = 0;
-        var keys = [];
-        var values = [];
-        
-        this.put = function(key,value, replace) {
-            if (this.get(key) == null) {
-                keys[size] = key; values[size] = value;
-                size++;
-            } else if (replace) {
-                for (i=0; i < size; i++) {
-                    if (keys[i] == key) {
-                        values[i] = value;
-                    }
-                }
-            }
-        }
-        
-        this.get = function(key) {
-            for (i=0; i < size; i++) {
-                if (keys[i] == key) {
-                    return values[i];
-                }
-            }
-            return null;
-        }
-        
-        this.clear = function() {
-            size = 0;
-            keys = [];
-            values = [];
-        }
     }
 }
