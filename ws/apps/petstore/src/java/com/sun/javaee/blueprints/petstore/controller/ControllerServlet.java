@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: ControllerServlet.java,v 1.22 2006-12-01 21:38:39 basler Exp $ */
+$Id: ControllerServlet.java,v 1.23 2006-12-02 00:23:58 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -233,7 +233,7 @@ public class ControllerServlet extends HttpServlet {
             response.setHeader("Pragma", "no-cache");
             PrintWriter out = response.getWriter();
             String baseURL = "http://" + request.getServerName() + ":" + request.getServerPort() + "/" + request.getContextPath() + "/ImageServlet/";
-            List items = cf.getItemsVLH(pid, start, length);
+            List<Item> items = cf.getItemsVLH(pid, start, length);
             //get response data
             String str = handleItems(items, baseURL);
             out.println(str);
@@ -258,7 +258,7 @@ public class ControllerServlet extends HttpServlet {
             response.setHeader("Pragma", "no-cache");
             PrintWriter out = response.getWriter();
             String baseURL = "http://" + request.getServerName() + ":" + request.getServerPort() + "/" + request.getContextPath() + "/ImageServlet/";
-            List items = cf.getItemInChunkVLH(pid, itemId, length);
+            List<Item> items = cf.getItemInChunkVLH(pid, itemId, length);
             //get response data
             if (items != null) {
                 String str = handleItems(items, baseURL);
@@ -306,11 +306,11 @@ public class ControllerServlet extends HttpServlet {
                 con = url.openConnection();
             }
             if (cacheContent) {
-                HashMap cache = (HashMap)ctx.getAttribute(CACHE);
-                HashMap cacheTimes = (HashMap)ctx.getAttribute(CACHE_TIMES);
+                HashMap<String, StringBuffer> cache = (HashMap<String, StringBuffer>)ctx.getAttribute(CACHE);
+                HashMap<String, Long> cacheTimes = (HashMap<String, Long>)ctx.getAttribute(CACHE_TIMES);
                 if (cache == null) {
-                    cache = new HashMap();
-                    cacheTimes = new HashMap();
+                    cache = new HashMap<String, StringBuffer>();
+                    cacheTimes = new HashMap<String, Long>();
                     ctx.setAttribute(CACHE, cache);
                     ctx.setAttribute(CACHE_TIMES, cacheTimes);
                 }
@@ -355,13 +355,13 @@ public class ControllerServlet extends HttpServlet {
         return buffer;
     }
     
-    private String handleItems(List items, String baseURL) {
+    private String handleItems(List<Item> items, String baseURL) {
         StringBuffer sb = new StringBuffer();
         // then write the data of the response
         sb.append("<items>\n");
         if(bDebug) System.out.println("**** Items length=" + items.size());
         NumberFormat formatter = new DecimalFormat("00.00");
-        for (Item i : (List<Item>) items) {
+        for (Item i : items) {
             sb.append("<item>\n");
             sb.append(" <id>" + i.getItemID() + "</id>\n");
             sb.append(" <product-id>" + i.getProductID() + "</product-id>\n");
