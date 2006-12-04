@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: tag.jsp,v 1.6 2006-09-20 21:53:22 basler Exp $ --%>
+$Id: tag.jsp,v 1.7 2006-12-04 21:34:10 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -14,6 +14,7 @@ $Id: tag.jsp,v 1.6 2006-09-20 21:53:22 basler Exp $ --%>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Tag Page</title>
+        <script type="text/javascript" src="common.js"></script>
 <%
 try {
     CatalogFacade cf = (CatalogFacade)config.getServletContext().getAttribute("CatalogFacade");
@@ -80,7 +81,8 @@ try {
                 // url when using the jsp to serve the ajax request
                 url: "../tagItemLookup.jsp?tag=" + escape(tag),
                 mimetype: "text/xml",
-                handle: returnFunctionx};
+                load: returnFunctionx,
+                error: ajaxBindError};
 
             // dispatch the request
             dojo.io.bind(bindArgs);      

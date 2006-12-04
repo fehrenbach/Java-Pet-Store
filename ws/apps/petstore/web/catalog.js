@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: catalog.js,v 1.16 2006-12-01 21:38:40 basler Exp $ */
+$Id: catalog.js,v 1.17 2006-12-04 21:34:10 basler Exp $ */
 
 var ac;
 var is;
@@ -138,7 +138,8 @@ function CatalogController() {
             load: function(type,json) {
                ac.load(json);
                processURLParameters();
-             }
+             },
+             error: ajaxBindError
         };
         dojo.io.bind(bindArgs);
     }
@@ -194,7 +195,8 @@ function CatalogController() {
                processProductData(data,true, pid, itemId);
                showItemDetails(itemId);
                is.doMaximize();
-             }
+             },
+             error: ajaxBindError 
         };
         dojo.io.bind(bindArgs);          
     }
@@ -231,7 +233,8 @@ function CatalogController() {
                     mimetype: "text/xml",
                     load: function(type,data,postProcessHandler) {
                         processProductData(data, showImage, pid, null, neededChunk);
-                    }
+                    },
+                    error: ajaxBindError
                 };
                 dojo.io.bind(bindArgs);
             }

@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: search.jsp,v 1.27 2006-09-20 21:22:12 basler Exp $ --%>
+$Id: search.jsp,v 1.28 2006-12-04 21:34:10 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -40,6 +40,7 @@ $Id: search.jsp,v 1.27 2006-09-20 21:22:12 basler Exp $ --%>
                 z-index: 3;
             }
         </style>
+        <script type="text/javascript" src="common.js"></script>
     </head>
     <body>   
         <jsp:include page="banner.jsp" />
@@ -94,10 +95,7 @@ $Id: search.jsp,v 1.27 2006-09-20 21:22:12 basler Exp $ --%>
                     var bindArgs = {
                         url:        "../TagServlet?itemId=" + escape(itemIdx) + "&tags=" + escape(tagsx),
                         mimetype:   "text/xml",
-                        error: function(type, errObj){
-                            // encountered an error
-                            alert("Error with tag update!");
-                        },
+                        error: ajaxBindError,
                         load: function(type, data, evt){
                             // check successful response
                             if (evt.readyState == 4) {

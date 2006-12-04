@@ -1,4 +1,20 @@
-    
+
+    function ajaxBindError(type, errObj) {
+        window.location="./systemerror.jsp?message=" + errObj.message;
+    }
+
+
+    function debugProperties(namex) {
+        var listx="";
+        var ob=namex;
+        for(xx in ob) {
+            listx += xx + " = " + ob[xx] + "<br/>"
+        }
+        //document.write(listx);
+        alert(listx);
+    }
+
+
     function printDebug(argx) {
         if (typeof debug != 'undefined') {
             document.getElementById("status").innerHTML = argx  + "<br\>" + document.getElementById("status").innerHTML;
