@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: tag.jsp,v 1.7 2006-12-04 21:34:10 basler Exp $ --%>
+$Id: tag.jsp,v 1.8 2006-12-06 22:44:38 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -14,7 +14,8 @@ $Id: tag.jsp,v 1.7 2006-12-04 21:34:10 basler Exp $ --%>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Tag Page</title>
-        <script type="text/javascript" src="common.js"></script>
+        <script type="text/javascript" src="./common.js"></script>
+        <link type="text/css" rel="stylesheet" href="./tag.css"/>
 <%
 try {
     CatalogFacade cf = (CatalogFacade)config.getServletContext().getAttribute("CatalogFacade");
@@ -27,54 +28,6 @@ try {
         }
     });    
 %>
-    <style>
-        .itemTable {
-            padding: 0.3cm;
-            border-style: double; 
-            width: 800px; 
-            border-color: darkgreen; 
-        }
-        .itemCell {
-            border-style: solid; 
-            border-color: darkgreen; 
-            border-width: thin;
-            padding: 5px
-        }
-        .tagCell {
-            padding: 0.3cm;
-        }
-        .xxlarge 
-        {
-            font-size: xx-large;
-            color: red;
-            cursor: pointer;
-            text-decoration: underline;
-        }
-        .xlarge 
-        {
-            font-size: x-large;
-            color: blue;
-            cursor: pointer;
-            text-decoration: underline;
-        }
-        .large
-        {
-            font-size: large;
-            color: green;
-            cursor: pointer;
-            text-decoration: underline;
-        }
-        .medium 
-        {
-            font-size: medium;
-            cursor: pointer;
-            text-decoration: underline;
-        }
-        .items 
-        {
-            visibility: hidden;
-        }
-    </style>
     <script language="javascript">
         function retrieveItems(tag) {
             var bindArgs = {

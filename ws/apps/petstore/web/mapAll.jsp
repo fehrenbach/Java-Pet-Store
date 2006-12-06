@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: mapAll.jsp,v 1.13 2006-11-02 00:34:50 basler Exp $ --%>
+$Id: mapAll.jsp,v 1.14 2006-12-06 22:44:37 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -12,8 +12,6 @@ $Id: mapAll.jsp,v 1.13 2006-11-02 00:34:50 basler Exp $ --%>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Map Viewer Page</title>
-        
-        <script type="text/javascript" src="../dojo.js"></script>
     </head>        
     <body>
         <jsp:include page="banner.jsp" />

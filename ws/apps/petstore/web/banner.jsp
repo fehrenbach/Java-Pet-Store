@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: banner.jsp,v 1.25 2006-09-28 21:08:59 basler Exp $ --%>
+$Id: banner.jsp,v 1.26 2006-12-06 22:44:37 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -9,7 +9,7 @@ $Id: banner.jsp,v 1.25 2006-09-28 21:08:59 basler Exp $ --%>
 <%@taglib prefix="ui" uri="http://java.sun.com/blueprints/ui" %>
 
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles.css"></link>
-<script type="text/javascript" src="${pageContext.request.contextPath}/dojo.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/faces/static/META-INF/dojo/bpcatalog/dojo.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/faces/static/META-INF/rss/rssbar.js"></script>
 <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/faces/static/META-INF/rss/rssbar.css" />
 <style type="text/css">
