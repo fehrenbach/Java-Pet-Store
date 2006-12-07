@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: SearchIndex.java,v 1.9 2006-11-14 18:30:20 basler Exp $ */
+$Id: SearchIndex.java,v 1.10 2006-12-07 01:43:34 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.search;
 
@@ -18,7 +18,9 @@ import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.document.Field;
 
 import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -28,18 +30,18 @@ import java.util.Vector;
 public class SearchIndex {
     
     private static final boolean bDebug=false;
-    private Vector<IndexDocument> vtHits=new Vector();
+    private List<IndexDocument> hitsList=new ArrayList<IndexDocument>();
     private Hits hits=null;
     
     /** Creates a new instance of SearchIndex */
     public SearchIndex() {
     }
     
-    public Vector<IndexDocument> query(String indexFile, String searchString) {
+    public List<IndexDocument> query(String indexFile, String searchString) {
         return query(indexFile, searchString, "contents");
     }
         
-    public Vector<IndexDocument> query(String indexFile, String searchString, String searchField) {
+    public List<IndexDocument> query(String indexFile, String searchString, String searchField) {
         
         Searcher searcher=null;
         try {
@@ -128,7 +130,7 @@ public class SearchIndex {
                     System.out.println(outx);
                 }
                 
-                vtHits.add(indexDocument);
+                hitsList.add(indexDocument);
             }
         } catch(Exception e) {
             PetstoreUtil.getLogger().log(Level.WARNING, "search.exception", e);
@@ -144,11 +146,11 @@ public class SearchIndex {
             }
         }
         
-        return vtHits;
+        return hitsList;
     }
     
-    public Vector<IndexDocument> getHits() {
-            return vtHits;
+    public List<IndexDocument> getHits() {
+            return hitsList;
     }
     
     public Hits getHitsNative() {

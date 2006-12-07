@@ -1,9 +1,9 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: searchTest.jsp,v 1.2 2006-09-20 17:02:20 basler Exp $ --%>
+$Id: searchTest.jsp,v 1.3 2006-12-07 01:43:34 inder Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
-<%@page import="java.util.*, com.sun.javaee.blueprints.petstore.search.SearchIndex, com.sun.javaee.blueprints.petstore.search.IndexDocument, com.sun.javaee.blueprints.petstore.search.UpdateIndex, com.sun.javaee.blueprints.petstore.util.PetstoreConstants"%>
+<%@page import="java.util.*, com.sun.javaee.blueprints.petstore.search.SearchIndex, com.sun.javaee.blueprints.petstore.search.IndexDocument, com.sun.javaee.blueprints.petstore.search.IndexDocument, com.sun.javaee.blueprints.petstore.search.UpdateIndex, com.sun.javaee.blueprints.petstore.util.PetstoreConstants"%>
 
 <%--
 The taglib directive below imports the JSTL library. If you uncomment it,
@@ -34,7 +34,7 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
             if(searchTags != null && searchTags.equals("true") && searchString.indexOf(":") < 0) {
                 searchxx="contents:" + searchString + " OR tag:" + searchString;
             }
-            Vector vtHits=si.query(indexDirectory, searchxx);
+            List<IndexDocument> vtHits=si.query(indexDirectory, searchxx);
             request.setAttribute("searchStringx", searchxx);
             request.setAttribute("numberOfHits", vtHits.size());
             request.setAttribute("hitsx", vtHits);

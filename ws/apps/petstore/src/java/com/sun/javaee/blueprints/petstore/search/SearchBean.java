@@ -1,10 +1,11 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: SearchBean.java,v 1.4 2006-05-05 20:15:25 inder Exp $ */
+$Id: SearchBean.java,v 1.5 2006-12-07 01:43:34 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.search;
 
 import java.util.Vector;
 import com.sun.javaee.blueprints.petstore.util.PetstoreConstants;
+import java.util.List;
 
 /**
  *
@@ -14,7 +15,7 @@ public class SearchBean {
     
     private String searchString="cat";
     private boolean searchTags=true, showResults=false;
-    private Vector<IndexDocument> vtHits=null;
+    private List<IndexDocument> hitsList=null;
     
     /** Creates a new instance of SearchBean */
     public SearchBean() {
@@ -42,8 +43,8 @@ public class SearchBean {
         return showResults;
     }
     
-    public Vector<IndexDocument> getHits() {
-        return vtHits;
+    public List<IndexDocument> getHits() {
+        return hitsList;
     }
     
     
@@ -58,7 +59,7 @@ public class SearchBean {
             if(searchTags && searchString.indexOf(":") < 0) {
                 searchxx="contents:" + searchString + " OR tag:" + searchString;
             }
-            vtHits=si.query(PetstoreConstants.PETSTORE_INDEX_DIRECTORY, searchxx);
+            hitsList=si.query(PetstoreConstants.PETSTORE_INDEX_DIRECTORY, searchxx);
             setShowResults(true);
         } catch (Exception e) {
             e.printStackTrace();

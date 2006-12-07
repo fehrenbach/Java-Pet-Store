@@ -7,7 +7,7 @@
 
 package com.sun.javaee.blueprints.petstore.search;
 
-import java.util.Vector;
+import java.util.List;
 import junit.framework.*;
 
 /**
@@ -48,7 +48,7 @@ public class IndexerTest extends TestCase {
             // open searchIndex to see if newly added item exists
             SearchIndex si=new SearchIndex();
             // use dummy default index file for unit tests
-            Vector<IndexDocument> items=si.query("/tmp/petstoreIndexTest", "PetstoreIndexTest");
+            List<IndexDocument> items=si.query("/tmp/petstoreIndexTest", "PetstoreIndexTest");
             if(items.size() != 1) {
                 // fail test if exactly one isn't returned
                 fail("Index or Search test failed!! The number of items that was returned is = " + items.size());
