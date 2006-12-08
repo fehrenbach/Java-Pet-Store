@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: footer.jsp,v 1.6 2006-11-30 22:12:25 inder Exp $ --%>
+$Id: footer.jsp,v 1.7 2006-12-08 22:45:43 yutayoshida Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -7,11 +7,6 @@ $Id: footer.jsp,v 1.6 2006-11-30 22:12:25 inder Exp $ --%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
    "http://www.w3.org/TR/html4/loose.dtd">
 
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    </head>
-    <body>
         <hr/>
         <center>
             If you have any questions or suggestions, please use the <a
@@ -20,5 +15,4 @@ $Id: footer.jsp,v 1.6 2006-11-30 22:12:25 inder Exp $ --%>
             <a href="http://blueprints.dev.java.net/" target="petstore">Java BluePrints</a> |
             <a href="http://sun.com/" target="petstore">Sun Microsystems</a> &copy; 2006 Sun Microsystems Inc. All rights reserved. Use is subject to license terms.
         </center>
-    </body>
-</html>
+
