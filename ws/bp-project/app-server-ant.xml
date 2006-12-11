@@ -2,7 +2,7 @@
 
 <!-- Copyright 2005-2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: app-server-ant.xml,v 1.15 2006-11-21 23:11:17 inder Exp $ -->
+ $Id: app-server-ant.xml,v 1.16 2006-12-11 19:32:33 inder Exp $ -->
 
 <!-- This file defines various Java EE SDK specific tasks. 
      This file is not meant to be included in a project directly. 
@@ -356,7 +356,7 @@ AS_ADMIN_PASSWORD=${AS_ADMIN_PASSWORD}</echo>
         <arg line=" --user ${javaee.server.username}" />
         <arg line=" --passwordfile ${javaee.server.passwordfile}" />
         <arg line=" --host ${javaee.adminserver.name}" />
-        <arg line=" --host ${javaee.adminserver.port}" />
+        <arg line=" --port ${javaee.adminserver.port}" />
         <arg line=" ${module.name} " />
     </exec> 
   </target>
