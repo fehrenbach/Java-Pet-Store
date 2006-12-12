@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- Copyright 2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: dist.xml,v 1.13 2006-11-16 00:20:40 basler Exp $ -->
+ $Id: dist.xml,v 1.14 2006-12-12 18:27:19 basler Exp $ -->
 
 <project name="petstore-dist" default="dist" basedir="..">
     
@@ -12,7 +12,9 @@
         <property file="setup/sdk-dist.properties"/>
         <property name="tmpdist" value="dist/${release.dirname}"/>
         <antcall target="sdk-dist"/>
+        <!--
         <antcall target="compact-jars"/>
+        -->
         <delete dir="${tmpdist}/ant-task"/>
         <delete dir="${tmpdist}/lib/poormans-installer"/>
         <antcall target="create-zip"/>
@@ -34,7 +36,6 @@
         <copy tofile="dist/petstore/bp-project.xml" file="setup/sdk-bp-project.xml"/>
         <copy todir="dist/petstore/lib">
             <fileset dir="../../lib">
-                <include name="dojo/**"/>
                 <include name="js/**"/>
             </fileset>
         </copy>
@@ -86,7 +87,6 @@
         </copy>
         <copy todir="${tmpdist}/lib">
             <fileset dir="../../lib">
-                <include name="dojo/**"/>
                 <include name="js/**"/>
             </fileset>
         </copy>

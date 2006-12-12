@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: build.xml,v 1.51 2006-12-06 22:44:35 basler Exp $ -->
+ $Id: build.xml,v 1.52 2006-12-12 18:27:18 basler Exp $ -->
  
 <project name="petstore" default="default" basedir=".">
     <description>Builds, tests, and runs the project petstore.</description>
@@ -12,7 +12,6 @@
     <import file="bp-project.xml" />
 
     <property name="commons.script" value="${commons.script.home}/ajax-commons.js" /> 
-    <property name="dojo.zip" value="${dojo.home}/dojo-0.4.0-ajax.zip" />
 
     <target name="-post-compile">
         <!-- copy property files into build directory -->
@@ -42,11 +41,6 @@
         <!-- Copy in the content -->
         <copy file="${commons.script}" todir="${build.web.dir}" />
         <antcall target="insert-proxy-settings"/>
-        
-        <!--
-        <available file="${build.web.dir}/dojo.js" type="file" property="dojo.already.exists"/>        
-        <antcall target="dojo" />
-        -->
     </target>
     
     <target name="insert-proxy-settings">
@@ -62,18 +56,6 @@
             <replacefilter token="@@proxy.host@@" property="proxy.host"/>
             <replacefilter token="@@proxy.port@@" property="proxy.port"/>
         </replace>        
-    </target>
-    
-    <target name="dojo" unless="dojo.already.exists" description="Unzips the dojo.zip to the right place">
-        <echo message="Unzipping dojo framework..."/>
-        <mkdir dir="${build.web.dir}"/>
-        <unzip src="${dojo.zip}" dest="${build.web.dir}" >
-            <patternset>
-                <include name="**/dojo.js"/>
-                <include name="**/iframe_history.html"/>
-                <include name="**/src/**"/>
-            </patternset>
-        </unzip>
     </target>
     
     <target name="unzipIndexes">
