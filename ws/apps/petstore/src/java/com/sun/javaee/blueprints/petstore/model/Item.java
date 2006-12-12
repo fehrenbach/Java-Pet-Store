@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: Item.java,v 1.20 2006-09-20 17:02:18 basler Exp $ */
+$Id: Item.java,v 1.21 2006-12-12 23:24:38 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.model;
 
@@ -44,7 +44,7 @@ public class Item implements java.io.Serializable {
     private SellerContactInfo contactInfo;
     private int totalScore;
     private int numberOfVotes;
-    private Collection<Tag> tags=new Vector();
+    private Collection<Tag> tags=new Vector<Tag>();
 
       
     public Item() { }

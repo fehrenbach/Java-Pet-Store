@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: tag.jsp,v 1.8 2006-12-06 22:44:38 basler Exp $ --%>
+$Id: tag.jsp,v 1.9 2006-12-12 23:24:39 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -19,7 +19,7 @@ $Id: tag.jsp,v 1.8 2006-12-06 22:44:38 basler Exp $ --%>
 <%
 try {
     CatalogFacade cf = (CatalogFacade)config.getServletContext().getAttribute("CatalogFacade");
-    List<Tag> tags=cf.getTagsInChunk(0, 18);
+    List<Tag> tags=cf.getTagsInChunk(0, 90);
     // since top 20 come from database or desending refCount order, need to reorder by tag name
     Collections.sort(tags, new Comparator() {
         public int compare(Object one, Object two) {
@@ -61,7 +61,7 @@ try {
                             itemsx[ii].getElementsByTagName("name")[0].childNodes[0].nodeValue +"</a></td>";
                         display +="<td class='itemCell'>" + itemsx[ii].getElementsByTagName("description")[0].childNodes[0].nodeValue +"</td>";
                         display +="<td class='itemCell'>" + itemsx[ii].getElementsByTagName("tags")[0].childNodes[0].nodeValue +"</td>";
-                        display +="<td class='itemCell'>" + itemsx[ii].getElementsByTagName("price")[0].childNodes[0].nodeValue +"</td>";
+                        display +="<td class='itemCell' style='text-align: right'>" + itemsx[ii].getElementsByTagName("price")[0].childNodes[0].nodeValue +"</td>";
                         display +="</tr>";
                     }
                     display += "</table>";
@@ -72,10 +72,20 @@ try {
                 }
             }
         }
+    
         
+        function checkQueryString() {
+            <!-- add script to check for tag in query string, if exists then retrieve data -->
+            var iPos=window.location.href.indexOf("?tag=");
+            if(iPos > -1) {
+                // have tag so retrieve items
+                retrieveItems(window.location.href.substr(iPos + 5));
+            }
+        }
+
     </script>
     </head>
-    <body>   
+    <body onload="checkQueryString();">   
         <jsp:include page="banner.jsp" />
         <f:view>
             
@@ -137,6 +147,7 @@ try {
         </f:view>
         <br/><br/><br/><br/>
         <jsp:include page="footer.jsp" />
+        
     </body>
 </html>
 
