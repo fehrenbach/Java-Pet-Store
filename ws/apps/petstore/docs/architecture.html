@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+  <title>architecture</title>
+</head>
+<body>
+<h2>Petstore 2.0 Architecture</h2>
+<br>
+This document will outline som eof the key choices made for the
+petstore application, including exporation of various subsystems.<br>
+<br>
+<h3>Web application </h3>
+Chose to make it a pure web application<br>
+<br>
+<h3>Patterns to structure application</h3>
+Used MVC to structure the application<br>
+<br>
+<h3>Ajax UI</h3>
+Usd an Ajax UI so used Dojo and custom JS. Plus decided to create a set of JSF components.<br>
+<br>
+<h3>Page is the Application Architecture</h3>
+How many pages, really just one?<br>
+<br>
+<h3>Security</h3>
+security considerations were like any classic web app, plus had to deal
+with JS security model, masup with other services, user uploaded content<br>
+<br>
+<h3>Mashups</h3>
+Three styles of mashup were used in PS. Proxy, service delegation, and client library<br>
+<br>
+<h3>Model Tier</h3>
+Used Java Persistence APIs to build the model. Used JTA. Used Facade patterm to encapsulate.
+</body>
+</html>
