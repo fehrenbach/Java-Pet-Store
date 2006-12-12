@@ -7,6 +7,8 @@
 
 
 </head>
+
+
 <body>
 
 <h2>100 Design Choices and Tips we made when designing,
@@ -25,16 +27,14 @@ those choices and elaborate later
 
   <li>Use project conventions</li>
 
-  <p>
-By choosing some conventions for directory structure of the workspace
+  <p>By choosing some conventions for directory structure of the
+workspace
 and building of the project you save a lot of team discussion time and
-. Over time these conventions get better.
-  <br>
+. Over time these conventions get better. <br>
 
 --choosing conventions for packaging?? snce not everything is mandated
 by packaging rules, some things are up to you to choose, like where to
-store JS files?
-  </p>
+store JS files? </p>
 
   <li>Pre-compile</li>
 
@@ -46,8 +46,7 @@ store JS files?
 property, and
 often this ends up in your code someowhere as a contsant or as a piece
 of code using System property lookups. For deployment environment
-properties that the code needs, use env-entires instead.
-  </p>
+properties that the code needs, use env-entires instead. </p>
 
   <li>Chose a exception flow handling convention</li>
 
@@ -132,7 +131,8 @@ package the application as just a war file.</p>
 
   <li>Choose to cache application-scoped resources for re-use</li>
 
-  <p>Since some resources in the application can be shared among all
+  <p>Since some resources in the application can be shared among
+all
 clients, its a good practice to hold onto them and resuse them for
 subsequent requests. For example, the CatalogFacade was designed in a
 thread safe manner so could be held for reuse. Resources such as
@@ -141,7 +141,8 @@ be thread-safe so can be re-used by multiple clients.</p>
 
   <li>Choose to cache some application-scoped data for re-ues</li>
 
-  <p>Some data in PS was ame for all clients and could be shared by the
+  <p>Some data in PS was ame for all clients and could be shared
+by the
 application. For example the RSS news shown in th emnews bar and in the
 news page was the same for all clients, Also this data didnt change a
 lot so could be peridically refereshed to get any latest news. So we
@@ -151,21 +152,114 @@ for each cleint request and save some time.</p>
 
   <li>Choose to Validate at all tiers</li>
 
-  <p>Its a good practice to validate onthe cleint side with Javascript,
+  <p>Its a good practice to validate onthe cleint side with
+Javascript,
 also onthe web tier, and on the model tier. Here is what we did.</p>
 
   <li>Choose to implement some patterns</li>
 
-  <p>We followed MVC and used other patterns such as Vlaue List Handler, Facade, etc in order to follow established best practices.</p>
+  <p>We followed MVC and used other patterns such as Vlaue List
+Handler, Facade, etc in order to follow established best practices.</p>
 
-  <li>Used NIO Channels instead of input and output streams<p>Channel has 
-	convenient methods (FileChannel.transferTo) to copy an input stream into an 
-	output stream without requiring tedious copying of reading and inputstream 
-	in a for loop in a buffer and copying it to the output stream. </p>
+  <li>Used NIO Channels instead of input and output streams
+    <p>Channel has convenient methods (FileChannel.transferTo) to
+copy an input stream into an output stream without requiring tedious
+copying of reading and inputstream in a for loop in a buffer and
+copying it to the output stream. </p>
 
-  <li>Using Java SE 5 enhanced for loop<p>Using the new foreach constructs saves 
-	us from creating an iterator and a regular for loop and is much easier to 
-	understand because of fewer lines</p>
+  </li>
+
+  <li>Mark Session state as transient or make sure its serializable</li>
+
+  <p>Make sure all class attributes/fields are maked as Transient or
+Serializable. This will help support session failover features if they
+are ever used.</p>
+  <p>What about marking servlets as distributable??</p>
+
+  <li>XHTML or HTML, and Doctype?</li>
+
+  <p>put XHTML is the new standard for pages, but many authors prefer
+HTML or XHTML-like-HTML(well form HTML). In addtion, HTML doctypes can
+be strict or loose? What did we choose in petstpore and why? Are we
+consistent.?</p>
+  <p>Do we agree with <a class="moz-txt-link-freetext" href="http://webkit.org/blog/?p=68">http://webkit.org/blog/?p=68</a> or what, it basically says</p>
+  <p>"On today's web, the best thing to do is to make your document HTML4 all 
+the way. Full XHTML processing is not an option, so the best choice is 
+to stick consistently with HTML4. Here's the best way to do that:
+  <br>
+
+  <br>
+&nbsp;1. Use an HTML4 doctype declaration <a class="moz-txt-link-rfc2396E" href="http://webkit.org/blog/?p=68">&lt;http://webkit.org/blog/?p=68&gt;</a>,
+  <br>
+&nbsp;&nbsp;&nbsp; ideally one that will trigger "standards mode" in web browsers.
+  <br>
+&nbsp;&nbsp;&nbsp; One example of an HTML4 standards mode doctype is |&lt;!DOCTYPE HTML
+  <br>
+&nbsp;&nbsp;&nbsp; PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  <br>
+&nbsp;&nbsp;&nbsp; <a class="moz-txt-link-rfc2396E" href="http://www.w3.org/TR/html4/loose.dtd">"http://www.w3.org/TR/html4/loose.dtd"</a>&gt;|
+  <br>
+&nbsp;2. Serve your content with the <code class="moz-txt-verticalline"><span class="moz-txt-tag">|</span>text/html<span class="moz-txt-tag">|</span></code> MIME type, or for local
+  <br>
+&nbsp;&nbsp;&nbsp; content give it a |.html| or |.htm| suffix. This will lead
+  <br>
+&nbsp;&nbsp;&nbsp; browsers, search engines, and other apps to properly process your
+  <br>
+&nbsp;&nbsp;&nbsp; content as HTML.
+" [EndQuote]<br>
+  </p>
+  <p>Mark, mentioned, For popup, had some problems. Be cognizant of the
+effect different HTML Document Type Definitions (DOCTYPE) have on your
+component.&nbsp; In the case of the Popup Balloon, we ran into a
+problem when the http://www.w3.org/TR/html4/loose.dtd DOCTYPE
+interfered with the positioning algorithm in certain browsers.</p>
+
+  <li>put choice here</li>
+
+  <p>put explanation here</p>
+
+  <li>put choice here</li>
+
+  <p>put explanation here</p>
+
+  <li>put choice here</li>
+
+  <p>put explanation here</p>
+
+  <li>put choice here</li>
+
+  <p>put explanation here</p>
+
+  <li>put choice here</li>
+
+  <p>put explanation here</p>
+
+  <li>put choice here</li>
+
+  <p>put explanation here</p>
+
+  <li>put choice here</li>
+
+  <p>put explanation here</p>
+
+  <li>put choice here</li>
+
+  <p>put explanation here</p>
+
+  <li>put choice here</li>
+
+  <p>put explanation here</p>
+
+  <li>put choice here</li>
+
+  <p>put explanation here</p>
+
+  <li>Using Java SE 5 enhanced for loop
+    <p>Using the new foreach constructs saves us from creating an
+iterator and a regular for loop and is much easier to understand
+because of fewer lines</p>
+
+  </li>
 
   <li>put choice here</li>
 
@@ -187,8 +281,7 @@ here are some of the Java SE 5 conventions we chose to use
 
   <li>Prefer using the new for loop</li>
 
-  <p>
-Here is an example of a refactoring to use new for loop
+  <p>Here is an example of a refactoring to use new for loop
   <table style="text-align: left; width: 901px; height: 300px;" border="1" cellpadding="2" cellspacing="2">
 
     <tbody>
@@ -204,7 +297,8 @@ Before</td>
 
       <tr>
 
-        <td> <code></code><code>public void someMethod()...<br>
+        <td> <code></code><code>public void
+someMethod()...<br>
 
 { <br>
 
@@ -224,7 +318,8 @@ if ( ...) {<br>
 
         <td> <code><br>
 
-public c</code><code>void someMethod()</code><code> ...<br>
+public c</code><code>void someMethod()</code><code>
+...<br>
 
         </code><code></code><code><br>
 
@@ -235,6 +330,7 @@ public c</code><code>void someMethod()</code><code> ...<br>
 if ()) {<br>
 
 &nbsp; nice new for loop here</code><code style="font-weight: bold;"></code><code><br>
+
 }<br>
 
         </code> </td>
