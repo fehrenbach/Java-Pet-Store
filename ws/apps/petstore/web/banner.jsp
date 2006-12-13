@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: banner.jsp,v 1.26 2006-12-06 22:44:37 basler Exp $ --%>
+$Id: banner.jsp,v 1.27 2006-12-13 19:50:46 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -59,7 +59,7 @@ $Id: banner.jsp,v 1.26 2006-12-06 22:44:37 basler Exp $ --%>
     <a class="menuLink" onmouseover="this.className='menuLinkHover';" onmouseout="this.className='menuLink';" href="${pageContext.request.contextPath}/faces/catalog.jsp">Catalog</a> <span class="menuItem">|</span>
     <a class="menuLink" onmouseover="this.className='menuLinkHover';" onmouseout="this.className='menuLink';" href="${pageContext.request.contextPath}/faces/mapAll.jsp">Map</a> <span class="menuItem">|</span>
     <a class="menuLink" onmouseover="this.className='menuLinkHover';" onmouseout="this.className='menuLink';" href="${pageContext.request.contextPath}/faces/tag.jsp">Tags</a> <span class="menuItem">|</span>
-    <a class="menuLink" onmouseover="this.className='menuLinkHover';" onmouseout="this.className='menuLink';" href="${pageContext.request.contextPath}/index.jsp">Home</a>
+    <a class="menuLink" onmouseover="this.className='menuLinkHover';" onmouseout="this.className='menuLink';" href="${pageContext.request.contextPath}/faces/index.jsp">Home</a>
   </td>
   </tr>
  </tr>

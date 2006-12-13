@@ -16,9 +16,6 @@
                     <file>${file.reference.jdom.jar}</file>
                 </library>
                 <library files="1">
-                    <file>${file.reference.ajax-wrapper-comp.jar}</file>
-                </library>
-                <library files="1">
                     <file>${file.reference.shale-remoting.jar}</file>
                 </library>
                 <library files="1">
@@ -35,13 +32,6 @@
                 </library>
                 <library files="1">
                     <file>${file.reference.rome-fetcher-0.7.jar}</file>
-                </library>
-                <library files="1">
-                    <file>${file.reference.bp-dynamic-text-comp.jar}</file>
-                </library>
-                <library files="1">
-                    <file>${file.reference.petstoreIndexes.zip}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
             </web-module-libraries>
             <web-module-additional-libraries/>

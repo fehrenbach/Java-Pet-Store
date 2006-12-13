@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: index.jsp,v 1.15 2006-12-12 23:24:39 basler Exp $ --%>
+$Id: index.jsp,v 1.16 2006-12-13 19:50:46 basler Exp $ --%>
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
 <%@page import="java.util.*, com.sun.javaee.blueprints.petstore.model.CatalogFacade, com.sun.javaee.blueprints.petstore.model.Tag"%>
@@ -131,7 +131,7 @@ try {
         }
 
         if((ii % 2) == 0) out.println("</tr>\n<tr>");
-        out.println("<td class='tagCell' style='text-align: center'><a href='./faces/tag.jsp?tag=" + 
+        out.println("<td class='tagCell' style='text-align: center'><a href='./tag.jsp?tag=" + 
             tag.getTag() + "'><span class='" + style +"'>" +  tag.getTag() + "</span></a></td>");
         ii++;
     }

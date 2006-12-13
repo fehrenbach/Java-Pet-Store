@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: build.xml,v 1.52 2006-12-12 18:27:18 basler Exp $ -->
+ $Id: build.xml,v 1.53 2006-12-13 19:50:44 basler Exp $ -->
  
 <project name="petstore" default="default" basedir=".">
     <description>Builds, tests, and runs the project petstore.</description>
@@ -10,8 +10,6 @@
     <property name="default.javac.target" value="1.5"/>
     <property name="default.javac.source" value="1.5"/>
     <import file="bp-project.xml" />
-
-    <property name="commons.script" value="${commons.script.home}/ajax-commons.js" /> 
 
     <target name="-post-compile">
         <!-- copy property files into build directory -->
@@ -22,8 +20,6 @@
         </copy>
         <mkdir dir="${build.web.dir}/WEB-INF/lib"/>
         <copy todir="${build.web.dir}/WEB-INF/lib">
-            <fileset file="lib/ajax-wrapper-comp.jar"/>
-            <fileset file="lib/bp-dynamic-text-comp.jar"/>
             <fileset file="./build/catalog-persistence.jar"/>
             <fileset file="${file.reference.lucene-core-2.0.0.jar}"/>
             <fileset file="${file.reference.bp-ui-5.jar}"/>
@@ -38,8 +34,6 @@
         
         <copy file="src/conf/persistence.xml" todir="${build.web.dir}/WEB-INF/classes/META-INF"/>
     
-        <!-- Copy in the content -->
-        <copy file="${commons.script}" todir="${build.web.dir}" />
         <antcall target="insert-proxy-settings"/>
     </target>
     
