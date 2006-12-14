@@ -1,6 +1,10 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: systemerror.jsp,v 1.1 2006-11-10 03:45:27 sean_brydon Exp $ --%>
-
+$Id: systemerror.jsp,v 1.2 2006-12-14 02:34:36 basler Exp $ --%>
+<%@ page isErrorPage="true" %>
+<%@ page import="com.sun.javaee.blueprints.petstore.util.PetstoreUtil, java.util.logging.Level" %>
+<%
+    PetstoreUtil.getLogger().log(Level.INFO, "Encountered a Runtime Exception and being transferred the the systemerror page", exception);
+%>
 <html>
  <head>
   <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
@@ -11,10 +15,10 @@ $Id: systemerror.jsp,v 1.1 2006-11-10 03:45:27 sean_brydon Exp $ --%>
 <jsp:include page="banner.jsp" />
 
   <h2>System Error !</h2>
-   <p>We had problems processing your request. We had a system error 
-      so perhaps your application was not set up or deployed properly.</p>
+   <p>We had problems processing your request. An exception has been caught, 
+   so perhaps your application was not set up or deployed properly.</p>
        
-      Need to obtain error message and print out something here.
+   The Exception that was thrown is:<b> <%= exception.toString() %></b>.  The server log will contain the stack trace of the exception.
       
    <p><a href="${pageContext.request.contextPath}/faces/index.jsp">Go back to sample application home</a></p>
  <br/><br/>
