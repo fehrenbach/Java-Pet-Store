@@ -1,10 +1,11 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: AutocompleteBean.java,v 1.8 2006-11-02 00:34:48 basler Exp $ */
+$Id: AutocompleteBean.java,v 1.9 2006-12-14 00:24:05 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
 import javax.faces.context.FacesContext;
 import com.sun.javaee.blueprints.components.ui.autocomplete.CompletionResult;
+import com.sun.javaee.blueprints.components.ui.autocomplete.AutoCompleteUtilities;
 import com.sun.javaee.blueprints.petstore.model.CatalogFacade;
 import com.sun.javaee.blueprints.petstore.model.ZipLocation;
 import java.util.List;
@@ -13,10 +14,17 @@ import java.util.Map;
 public class AutocompleteBean {
     
     static final boolean bDebug=false;
-    private static final int ITEMCOUNT = 20;
+    private static final int ITEMCOUNT = 10;
     private String[] cities = null;
     private String[] zips = null;
-    private String[] states = null;
+    private String[] states =
+        new String[] {
+            "AK", "AL", "AR", "AZ", "CA", "CO", "CT", "DC", "DE", "FL", "GA", "HI", "IA", "ID", "IL",
+            "IN", "KS", "KY", "LA", "MA", "MD", "ME", "MI", "MN", "MO", "MS", "MT", "NC", "ND", "NE",
+            "NH", "NJ", "NM", "NV", "NY", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT",
+            "VA", "VT", "WA", "WI", "WV", "WY"
+        };
+
     private CatalogFacade catalogFacade = null;
     
     /** Creates a new instance of AutocompleteBean */
@@ -24,7 +32,6 @@ public class AutocompleteBean {
         FacesContext context=FacesContext.getCurrentInstance();
         Map<String, Object> contextMap = context.getExternalContext().getApplicationMap();
         this.catalogFacade = (CatalogFacade)contextMap.get("CatalogFacade");
-        //initCities("a", ITEMCOUNT);
     }
     
     /**
@@ -48,18 +55,15 @@ public class AutocompleteBean {
         if (zipLocations == null) {
             cities =new String[]{"Init Failed"};
             zips =new String[]{"Init Failed"};
-            states =new String[]{"Init Failed"};
             return null;
         }
         
         cities = new String[itemCount];
         zips = new String[itemCount];
-        states = new String[itemCount];
         int i=0;
         for (ZipLocation zl : zipLocations) {
             cities[i] = zl.getCity()+", "+zl.getState()+" "+Integer.toString(zl.getZipCode());
             zips[i] = Integer.toString(zl.getZipCode());
-            states[i] = zl.getState();
             i++;
         }
         return decodedStr;
@@ -86,25 +90,12 @@ public class AutocompleteBean {
             prefix = "a";
         }
         initCities(prefix, ITEMCOUNT);
-        //String decodedStr = initCities(prefix, ITEMCOUNT);
-        // add items directly rather than calling autocompleteutilities
-        //if (decodedStr == null) decodedStr = "a";
-        //AutoCompleteUtilities.addMatchingItems(cities, decodedStr, result);
-        
         result.addItems(cities);
     }
     
     public void completeState(FacesContext context, String prefix, CompletionResult result) {
-        if (bDebug) System.out.println("Completing State - " + prefix);
-        if (prefix == null || prefix.equals("")) {
-            prefix = "a";
-        }
-        initCities(prefix, ITEMCOUNT);
-        //String decodedStr = initCities(prefix, ITEMCOUNT);
-        // add items directly rather than calling autocompleteutilities
-        //if (decodedStr == null) decodedStr = "a";
-        //AutoCompleteUtilities.addMatchingItems(states, decodedStr, result);
-        
-        result.addItems(states);
+        if(bDebug) System.out.println("Completing state - " + prefix);
+        AutoCompleteUtilities.addMatchingItems(states, prefix, result);
     }
+    
 }

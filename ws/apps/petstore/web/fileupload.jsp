@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: fileupload.jsp,v 1.49 2006-12-12 18:27:19 basler Exp $ --%>
+$Id: fileupload.jsp,v 1.50 2006-12-14 00:24:05 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -139,13 +139,13 @@ div.pane {
                         <h:outputText value="Street"/>
                         <h:inputText size="20" id="street1"></h:inputText>
                         <h:outputText value="City"/>
-                        <ui:autoComplete size="20" maxlength="100" id="cityField"
+                        <ui:autoComplete size="20" maxlength="10" id="cityField"
                         completionMethod="#{AutocompleteBean.completeCity}"
                         value="#{AddressBean.city}" required="true"
                         ondisplay="function(item) { return extractCity(item); }"
                         onchoose="function(item) { return chooseCity(item); }" />
                         <h:outputText value="State"/>
-                        <ui:autoComplete size="2"  maxlength="100" id="stateField" 
+                        <ui:autoComplete size="2"  maxlength="10" id="stateField" 
                         completionMethod="#{AutocompleteBean.completeState}" 
                         value="#{AddressBean.state}" required="true" />
                         <h:outputText value="Zip"/>
