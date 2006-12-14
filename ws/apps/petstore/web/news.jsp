@@ -2,7 +2,7 @@
 All rights reserved. You may not modify, use, reproduce, or distribute
 this software except in compliance with the terms of the License at:
 http://developer.sun.com/berkeley_license.html
-$Id: news.jsp,v 1.1 2006-12-09 01:59:56 yutayoshida Exp $ --%>
+$Id: news.jsp,v 1.2 2006-12-14 01:04:50 yutayoshida Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -33,6 +33,18 @@ $Id: news.jsp,v 1.1 2006-12-09 01:59:56 yutayoshida Exp $ --%>
     <body>
         <jsp:include page="banner.jsp" />
         <h2><a href="http://blueprints.dev.java.net">BluePrints News</a></h2>
+        <center>
+            <table border="0" width="95%">
+                <tr>
+                    <td>
+                        <button id="previous" type="button">&lt;&lt; Previous</button>
+                    </td>
+                    <td>
+                        <button id="next" type="button">Next &gt&gt</button>
+                    </td>
+                </tr>
+            </table>
+        </center>
         <div id="news"></div>
         <jsp:include page="footer.jsp" />
     </body>

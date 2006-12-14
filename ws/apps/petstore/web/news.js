@@ -1,5 +1,6 @@
 
 dojo.require("dojo.io.*");
+dojo.require("dojo.event.*");
 
 var bpuinews;
 if (typeof bpuinews == "undefined") {
@@ -9,8 +10,19 @@ if (typeof bpuinews == "undefined") {
 bpuinews.RSS = function() {
     var currentItem = 0;
     var limitCharNum = 75;
+    var itemNum=0;
+    var rssData = null;
+    var prev;
+    var next;
+    var prevHit=false;
     
     this.getRssInJson = function (method, uri) {
+        prev = document.getElementById("previous");
+        next = document.getElementById("next");
+        dojo.event.connect(prev, "onclick", function(evt) {showPrevious();});
+        dojo.event.connect(next, "onclick", function (evt) {showNext();});
+        prev.disabled=true;
+
         var encodedURI = encodeURI(method + "?style=json&itemCount=0&url="+uri);
         var bindArgs = {
                     url: encodedURI,
@@ -27,21 +39,62 @@ bpuinews.RSS = function() {
     }
 
     function handleJsonRss(json) {
-        var elm = document.getElementById("news");
-        var cp = insertItem(json);
-        elm.innerHTML = cp;
+        rssData = json;
+        itemNum = json.channel.item.length;
+        showNext();
     }
 
-    function insertItem(json) {
+    function createUl(skip) {
         var i;
         var cp="<ul>\n";
-        for (i = currentItem; i<currentItem+5; i++) {
-            cp += "<li><b>"+decodeURL(json.channel.item[i].title)+"</b>\n";
-            cp += "<p>" + decodeURL(json.channel.item[i].description) + "</p>\n</li>\n";
+        for (i = currentItem; i<currentItem + skip; i++) {
+            cp += "<li><b>"+decodeURL(rssData.channel.item[i].title)+"</b>\n";
+            cp += "<p>" + decodeURL(rssData.channel.item[i].description) + "</p>\n</li>\n";
         }
         cp += "</ul>\n";
         return cp;
     }
+
+   // Following funcs(showNext, showPrevious) should be connected to the button
+   // by dojo.event.connect.
+   function showNext() {
+        var skip = 5;
+        if (prevHit) {
+            currentItem = currentItem + skip;
+            prevHit = false;
+        }
+        var nextCurrentItem = currentItem + skip;
+        if (nextCurrentItem >= itemNum) {
+            skip = itemNum - currentItem;
+            // deactivate "next" button
+            next.disabled=true;
+            nextCurrentItem = currentItem;
+        }
+        // activate "previous" button
+        if (currentItem != 0) {
+            prev.disabled=false;
+        }
+        var cp = createUl(skip);
+        var elm = document.getElementById("news");
+        elm.innerHTML = cp;
+        currentItem = nextCurrentItem;
+    }
+
+    function showPrevious() {
+        prevHit = true;
+        var skip = 5;
+        currentItem = currentItem - skip;
+        if (currentItem <= 0) {
+            currentItem = 0;
+            // deactivate "previous" button
+            prev.disabled=true;
+        }
+        next.disabled=false;
+        var cp = createUl(skip);
+        var elm = document.getElementById("news");
+        elm.innerHTML = cp;
+    }
+
 
     /* Compatible function to java.net.URLDecoder.decode().
      * (decodeURI() is not compatible)
