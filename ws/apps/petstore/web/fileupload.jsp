@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: fileupload.jsp,v 1.50 2006-12-14 00:24:05 basler Exp $ --%>
+$Id: fileupload.jsp,v 1.51 2006-12-15 22:56:59 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -68,12 +68,71 @@ $Id: fileupload.jsp,v 1.50 2006-12-14 00:24:05 basler Exp $ --%>
    
    function fileuploadOnsubmit() {
         if(!submittingForm) {
-            submittingForm=true;
+            var valMess="";
             // save rich text editor text to element
-            dojo.byId('description').value=dojo.widget.byId('rtEditor').getEditorContent()
+            var descx=dojo.widget.byId('rtEditor').getEditorContent()
+            var lowDescx=descx.toLowerCase();
 
-            storeCookie()
-           document.forms['TestFileuploadForm'].onsubmit();
+            // START: check validation
+            if(dojo.byId("TestFileuploadForm:name").value == "") {
+                valMess += "Error: Pet Name is required.\n";
+            }
+            
+            // make sure there isn't a script/link tag in the description
+            if(lowDescx.indexOf("<script") > -1 || lowDescx.indexOf("<link") > -1) {
+                valMess="Error: The Description field can't have a '<script>' and/or a '<link>' tag in it\n";
+            }
+
+            // make sure price is a number
+            var pricex=dojo.byId("TestFileuploadForm:price").value;
+            if(pricex == "" || isNaN(parseInt(pricex))) {
+                // price should be a number
+                valMess += "Error: Price should should exist and be a number.\n";
+            }
+            
+            // make sure the upload file ends in an suffix
+            var filex=dojo.byId("fileToUploadId").value;
+            var lengthx=filex.length;
+            var suffix=filex.substr(lengthx-4).toLowerCase();
+            if(lengthx < 1 || (suffix != ".jpg" && suffix != ".gif" && suffix != ".png")) {
+                // not a proper upload so error
+                valMess += "Error: The image upload file must exist and be of type .jpg, .gif or .png\n";
+            }
+            
+
+            // make sure make and address is entered
+            if(dojo.byId("TestFileuploadForm:firstName").value == "") {
+                // price should be a number
+                valMess += "Error: First Name is required.\n";
+            }
+            if(dojo.byId("TestFileuploadForm:lastName").value == "") {
+                valMess += "Error: Last Name is required.\n";
+            }
+            if(dojo.byId("TestFileuploadForm:street1").value == "") {
+                valMess += "Error: Street is required.\n";
+            }
+            if(dojo.byId("TestFileuploadForm:cityField").value == "") {
+                valMess += "Error: City is required.\n";
+            }
+            if(dojo.byId("TestFileuploadForm:stateField").value == "") {
+                valMess += "Error: State is required.\n";
+            }
+            if(dojo.byId("TestFileuploadForm:zipField").value == "") {
+                valMess += "Error: Zip Code is required.\n";
+            }
+            
+            if(valMess != "") {
+                // error, show message
+                alert(valMess + "\nPlease addresses the error(s) and re-submit your entry!");
+            } else {
+                // no validation errors, so submit form
+                submittingForm=true;
+                // set description
+                dojo.byId('description').value=descx;
+
+                storeCookie()
+               document.forms['TestFileuploadForm'].onsubmit();
+           }
         }
    }
    
@@ -130,25 +189,25 @@ div.pane {
                         <f:facet name="header">
                             <h:outputText value="Information about yourself"/>
                         </f:facet>
-                        <h:outputText value="First Name"/>
+                        <h:outputText value="*First Name"/>
                         <h:inputText size="20" id="firstName"></h:inputText>
-                        <h:outputText value="Last Name"/>
+                        <h:outputText value="*Last Name"/>
                         <h:inputText size="20" id="lastName"></h:inputText>
                         <h:outputText value="Seller Email"/>
                         <h:inputText size="20" id="email"></h:inputText>
-                        <h:outputText value="Street"/>
+                        <h:outputText value="*Street"/>
                         <h:inputText size="20" id="street1"></h:inputText>
-                        <h:outputText value="City"/>
+                        <h:outputText value="*City"/>
                         <ui:autoComplete size="20" maxlength="10" id="cityField"
                         completionMethod="#{AutocompleteBean.completeCity}"
                         value="#{AddressBean.city}" required="true"
                         ondisplay="function(item) { return extractCity(item); }"
                         onchoose="function(item) { return chooseCity(item); }" />
-                        <h:outputText value="State"/>
+                        <h:outputText value="*State"/>
                         <ui:autoComplete size="2"  maxlength="10" id="stateField" 
                         completionMethod="#{AutocompleteBean.completeState}" 
                         value="#{AddressBean.state}" required="true" />
-                        <h:outputText value="Zip"/>
+                        <h:outputText value="*Zip Code"/>
                         <h:inputText size="5" id="zipField" value="#{AddressBean.zip}" required="true" />
 
                         <h:outputText value="Enter the text as it is shown below (case insensitive)"/>
@@ -172,27 +231,20 @@ div.pane {
                             <f:selectItems value="#{FileUploadBean.products}"/>
                         </h:selectOneMenu>
 
-                        <h:outputText value="Pet's Name"/>
+                        <h:outputText value="*Pet's Name"/>
                         <h:inputText size="20" id="name"></h:inputText>
 
                         <h:outputText value="Description (3 lines max display in catalog)"/>
-                        <!--
-                        <div dojoType="Editor2" name="TestFileuploadForm:description" items="textGroup;|;colorGroup;"
-                        style="border-style:inset; border-width:thin; background-color:white">
-                        -->
                         
                         <div style="border-style:inset; border-width:thin; background-color:white">
-                        <textarea wrap="soft" dojoType="Editor2" widgetId="rtEditor" id="description" name="TestFileuploadForm:description" 
-                        toolbarTemplatePath="${pageContext.request.contextPath}/rteToolBar.html"></textarea>
-                        
-                        
+                            <textarea wrap="soft" dojoType="Editor2" widgetId="rtEditor" id="description" name="TestFileuploadForm:description" 
+                            toolbarTemplatePath="${pageContext.request.contextPath}/rteToolBar.html"></textarea>
                         </div>
-
                         
-                        <h:outputText value="Price"/>
+                        <h:outputText value="*Price"/>
                         <h:inputText size="20" id="price"></h:inputText>
 
-                        <h:outputText value="Image File"/>                 
+                        <h:outputText value="*Image File"/>                 
                         <input type="file" size="20" name="fileToUpload" id="fileToUploadId"/>
 
                         <h:outputText value="Custom Tag Keywords (seperated by spaces)"/>
@@ -200,6 +252,7 @@ div.pane {
                     </h:panelGrid>
                     <br/><span class="button" onclick="switchPanes('pane1', 'pane2');">Next &gt;&gt;</span>
                 </div>
+                Required fields are designated by a *
             </ui:fileUploadTag>        
         </f:view>
         </div>
