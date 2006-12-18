@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: tag.jsp,v 1.9 2006-12-12 23:24:39 basler Exp $ --%>
+$Id: tag.jsp,v 1.10 2006-12-18 00:38:45 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -23,8 +23,7 @@ try {
     // since top 20 come from database or desending refCount order, need to reorder by tag name
     Collections.sort(tags, new Comparator() {
         public int compare(Object one, Object two) {
-             int cc=((Tag)two).getTag().compareTo(((Tag)one).getTag());
-             return (cc < 0 ? 1 : cc > 0 ? -1 : 0);
+             return ((Tag)one).getTag().compareTo(((Tag)two).getTag());
         }
     });    
 %>
