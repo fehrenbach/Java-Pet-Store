@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CatalogFacade.java,v 1.52 2006-12-01 21:38:39 basler Exp $ */
+$Id: CatalogFacade.java,v 1.53 2007-01-03 23:09:46 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.model;
 
@@ -120,7 +120,7 @@ public class CatalogFacade implements ServletContextListener {
      */
     public List<Item> getItemsByItemID(String[] itemIDs){
         EntityManager em = emf.createEntityManager();
-        List<Item>  items = new ArrayList();
+        List<Item>  items = new ArrayList<Item>();
         StringBuffer sbItemIDs=new StringBuffer();
         if(itemIDs.length !=0) {
             for(int i=0; i < itemIDs.length; ++i){
@@ -148,7 +148,7 @@ public class CatalogFacade implements ServletContextListener {
     public List<Item> getItemsByItemIDByRadius(String[] itemIDs, double fromLat,
             double toLat, double fromLong, double toLong){
         EntityManager em = emf.createEntityManager();
-        List<Item>  items = new ArrayList();
+        List<Item> items = new ArrayList<Item>();
         StringBuffer sbItemIDs=new StringBuffer();
         if(itemIDs.length !=0) {
             for(int i=0;i<itemIDs.length;++i){
