@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: HTMLParser.java,v 1.6 2006-11-22 18:32:18 inder Exp $ */
+$Id: HTMLParser.java,v 1.7 2007-01-06 00:02:25 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.search;
 
@@ -57,8 +57,8 @@ public class HTMLParser {
         vtURLs.add("/" + contextRoot + "/" + pageURI);
         Indexer indexer=null;
         IndexDocument indexDoc=null;
-        try {            
-            indexer = new Indexer("/tmp/tmp/index");    // get indexer            
+        try {
+            indexer = new Indexer("/tmp/tmp/index");    // get indexer
             for (String sxURL : vtURLs) {
                 if(bDebug) System.out.println("\n\n*** INDEXING " + sxURL);
                 if(bDebug) System.out.println("Have - " + sxURL);
@@ -114,13 +114,15 @@ public class HTMLParser {
             PetstoreUtil.getLogger().log(Level.SEVERE, "Outer Exception" + e);
         } finally {
             try {
-                indexer.close();
+                if (indexer != null) {
+                    indexer.close();
+                }
             } catch (Exception ee) {
                 ee.printStackTrace();
             }
         }
     }
-        
+    
     private List<String> getRobots(String beginURL, String contextRoot) {
         List<String> vtRobots = new ArrayList<String> ();
         // read in robots.txt file
