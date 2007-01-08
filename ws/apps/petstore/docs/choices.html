@@ -454,9 +454,12 @@ copy an input stream into an output stream without requiring tedious
 copying of reading and inputstream in a for loop in a buffer and
 copying it to the output stream.</p>
 
-  <li>put choice here</li>
+  <li>If the result needs to be stored in a double value, cast integers to 
+	double before dividing to retain precision</li>
 
-  <p>put explanation here</p>
+  <p>Otherwise, int divided by int will be saved as int losing precision. The 
+	result will then be assigned to a double value which will have no effect on 
+	the precision itself. </p>
 
   <li>put choice here</li>
 
