@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: DefaultControllerAction.java,v 1.1 2007-01-04 03:22:06 inder Exp $ */
+$Id: DefaultControllerAction.java,v 1.2 2007-01-08 23:05:42 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller.actions;
 
@@ -26,6 +26,17 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class DefaultControllerAction implements ControllerAction {
     
+    // We use @SuppressWarnings annotation to supress the following kind of warning:
+    // petstore/src/java/com/sun/javaee/blueprints/petstore/controller/actions/DefaultControllerAction.java:64: warning: [unchecked] unchecked cast
+    // found   : java.lang.Object
+    // required: java.util.HashMap<java.lang.String,java.lang.StringBuffer>
+    //                HashMap<String, StringBuffer> cache = (HashMap<String, StringBuffer>) context.getAttribute(CACHE);
+    //
+    // This is needed because the context.getAttribute() does not returns a generics version of objects.
+    // But since we are expecting a generic version (for example, HashMap<String, StringBuffer>), we need to
+    // typecast the result appropriately. However, since generics information is lost at the runtime,
+    // there is no way to avoid a warning. Hence we use SuppressWarnings in this case.
+    
     private static String CACHE = "controller_cache";
     private static String CACHE_TIMES = "controller_cache_times";
     private final ServletContext context;
@@ -46,9 +57,10 @@ public class DefaultControllerAction implements ControllerAction {
             StringBuffer content = getResource(target, true, true);
             out.write(content.toString());
             out.close();
-        }    
+        }
     }
-        public StringBuffer getResource(String resource, boolean fromWeb, boolean cacheContent) {
+    
+    @SuppressWarnings("unchecked") public StringBuffer getResource(String resource, boolean fromWeb, boolean cacheContent) {
         InputStream stream = null;
         URLConnection con;
         try {
@@ -108,5 +120,5 @@ public class DefaultControllerAction implements ControllerAction {
             PetstoreUtil.getLogger().log(Level.SEVERE, "ControllerServlet:loadResource from stream error", e);
         }
         return buffer;
-    }        
+    }
 }

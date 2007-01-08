@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: HTMLParser.java,v 1.7 2007-01-06 00:02:25 inder Exp $ */
+$Id: HTMLParser.java,v 1.8 2007-01-08 23:05:42 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.search;
 
@@ -43,7 +43,6 @@ public class HTMLParser {
     /** Creates a new instance of HTMLParser */
     public HTMLParser() {
     }
-    
     
     public void runWeb(String beginURL, String contextRoot, String pageURI) {
         if(bDebug) System.out.println("WEB Path");

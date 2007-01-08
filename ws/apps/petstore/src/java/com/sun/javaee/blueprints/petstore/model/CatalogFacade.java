@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CatalogFacade.java,v 1.53 2007-01-03 23:09:46 inder Exp $ */
+$Id: CatalogFacade.java,v 1.54 2007-01-08 23:05:42 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.model;
 
@@ -25,6 +25,17 @@ import java.util.logging.Level;
 
 
 public class CatalogFacade implements ServletContextListener {
+    // This class uses @SuppressWarnings annotation to supress the following kind of warnings: 
+    // 
+    // petstore/src/java/com/sun/javaee/blueprints/petstore/model/CatalogFacade.java:240: warning: [unchecked] unchecked conversion
+    // found   : java.util.List
+    // required: java.util.List<com.sun.javaee.blueprints.petstore.model.Product>
+    //    .setParameter("categoryID", catID).getResultList();
+    //
+    // This is needed because the Query.getResultList() does not returns a generics version of objects. 
+    // But since we are expecting a generic version (for example, List<Categories>), we need to
+    // typecast the result appropriately. However, since generics information is lost at the runtime, 
+    // there is no way to avoid a warning. Hence we use SuppressWarnings in this case
     
     @PersistenceUnit(unitName="PetstorePu") private EntityManagerFactory emf;
     @Resource UserTransaction utx;
@@ -42,21 +53,21 @@ public class CatalogFacade implements ServletContextListener {
         context.setAttribute("CatalogFacade", this);
     }
     
-    public List<Category> getCategories(){
+   @SuppressWarnings("unchecked") public List<Category> getCategories(){
         EntityManager em = emf.createEntityManager();
         List<Category> categories = em.createQuery("SELECT c FROM Category c").getResultList();
         em.close();
         return categories;
     }
     
-    public List<Product> getProducts(){
+    @SuppressWarnings("unchecked") public List<Product> getProducts(){
         EntityManager em = emf.createEntityManager();
         List<Product> products = em.createQuery("SELECT p FROM Product p").getResultList();
         em.close();
         return products;
     }
     
-    public List<Item> getAllItemsFromCategory(String catID){
+    @SuppressWarnings("unchecked") public List<Item> getAllItemsFromCategory(String catID){
         EntityManager em = emf.createEntityManager();
         List<Item> items = em.createQuery("SELECT i FROM Item i, Product p WHERE i.productID = p.productID AND p.categoryID LIKE :categoryID")
         .setParameter("categoryID", catID).getResultList();
@@ -71,6 +82,7 @@ public class CatalogFacade implements ServletContextListener {
      * @param chunkSize the maximum number of results to retrieve
      * @returns a List of Item objects
      */
+    @SuppressWarnings("unchecked") 
     public List<Item> getItemInChunkVLH(String pID, String iID, int chunkSize){
         EntityManager em = emf.createEntityManager();
         //make Java Persistence query
@@ -102,7 +114,7 @@ public class CatalogFacade implements ServletContextListener {
      * @param chunkSize the maximum number of results to retrieve
      * @returns a List of Item objects
      */
-    public List<Item> getItemsVLH(String pID, int start, int chunkSize){
+    @SuppressWarnings("unchecked") public List<Item> getItemsVLH(String pID, int start, int chunkSize){
         EntityManager em = emf.createEntityManager();
         
         //make Java Persistence query
@@ -118,7 +130,7 @@ public class CatalogFacade implements ServletContextListener {
      * @param IDs is an array of item ids for specific items that need to be returned
      * @returns a List of Item objects
      */
-    public List<Item> getItemsByItemID(String[] itemIDs){
+    @SuppressWarnings("unchecked") public List<Item> getItemsByItemID(String[] itemIDs){
         EntityManager em = emf.createEntityManager();
         List<Item>  items = new ArrayList<Item>();
         StringBuffer sbItemIDs=new StringBuffer();
@@ -145,7 +157,7 @@ public class CatalogFacade implements ServletContextListener {
      * @param IDs is an array of item ids for specific items that need to be returned
      * @returns a List of Item objects
      */
-    public List<Item> getItemsByItemIDByRadius(String[] itemIDs, double fromLat,
+    @SuppressWarnings("unchecked") public List<Item> getItemsByItemIDByRadius(String[] itemIDs, double fromLat,
             double toLat, double fromLong, double toLong){
         EntityManager em = emf.createEntityManager();
         List<Item> items = new ArrayList<Item>();
@@ -183,7 +195,7 @@ public class CatalogFacade implements ServletContextListener {
      * @param chunkSize the maximum number of results to retrieve
      * @returns a List of Item objects
      */
-    public List<Item> getItemsByCategoryVLH(String catID, int start,
+    @SuppressWarnings("unchecked") public List<Item> getItemsByCategoryVLH(String catID, int start,
             int chunkSize){
         EntityManager em = emf.createEntityManager();
         Query query = em.createQuery("SELECT i FROM Item i, Product p WHERE " +
@@ -200,7 +212,7 @@ public class CatalogFacade implements ServletContextListener {
      * @param chunkSize the maximum number of results to retrieve
      * @returns a List of Item objects
      */
-    public List<Item> getItemsByCategoryByRadiusVLH(String catID, int start,
+    @SuppressWarnings("unchecked") public List<Item> getItemsByCategoryByRadiusVLH(String catID, int start,
             int chunkSize,double fromLat,double toLat,double fromLong,
             double toLong){
         EntityManager em = emf.createEntityManager();
@@ -225,7 +237,7 @@ public class CatalogFacade implements ServletContextListener {
      * and held as member field of facade.
      * @returns a List of ZipLocation objects
      */
-    public List<ZipLocation> getZipCodeLocations(String city, int start, int chunkSize){
+    @SuppressWarnings("unchecked") public List<ZipLocation> getZipCodeLocations(String city, int start, int chunkSize){
         EntityManager em = emf.createEntityManager();
         String pattern = "'"+city.toUpperCase()+"%'";
         Query query = em.createQuery("SELECT  z FROM ZipLocation z where UPPER(z.city) LIKE "+pattern);
@@ -234,7 +246,7 @@ public class CatalogFacade implements ServletContextListener {
         return zipCodeLocations;
     }
     
-    public List<Product> getProducts(String catID){
+    @SuppressWarnings("unchecked") public List<Product> getProducts(String catID){
         EntityManager em = emf.createEntityManager();
         List<Product> products = em.createQuery("SELECT p FROM Product p WHERE p.categoryID LIKE :categoryID")
         .setParameter("categoryID", catID).getResultList();
@@ -242,7 +254,7 @@ public class CatalogFacade implements ServletContextListener {
         return products;
     }
     
-    public List<Item> getItems(String prodID){
+    @SuppressWarnings("unchecked") public List<Item> getItems(String prodID){
         EntityManager em = emf.createEntityManager();
         List<Item> items = em.createQuery("SELECT i FROM Item i WHERE i.productID LIKE :productID")
         .setParameter("productID", prodID).getResultList();
@@ -368,7 +380,7 @@ public class CatalogFacade implements ServletContextListener {
     }
     
     
-    public Tag addTag(String sxTag){
+    @SuppressWarnings("unchecked") public Tag addTag(String sxTag){
         EntityManager em = emf.createEntityManager();
         Tag tag=null;
         try {
@@ -398,7 +410,7 @@ public class CatalogFacade implements ServletContextListener {
     }
     
     
-    public List<Tag> getTagsInChunk(int start, int chunkSize) {
+    @SuppressWarnings("unchecked") public List<Tag> getTagsInChunk(int start, int chunkSize) {
         EntityManager em = emf.createEntityManager();
         Query query = em.createQuery("SELECT t FROM Tag t ORDER BY t.refCount DESC, t.tag");
         List<Tag> tags = query.setFirstResult(start).setMaxResults(chunkSize).getResultList();
@@ -407,7 +419,7 @@ public class CatalogFacade implements ServletContextListener {
     }
 
     
-    public Tag getTag(String sxTag) {
+    @SuppressWarnings("unchecked") public Tag getTag(String sxTag) {
         Tag tag=null;
         EntityManager em = emf.createEntityManager();
         List<Tag> tags=em.createQuery("SELECT t FROM Tag t WHERE t.tag = :tag").setParameter("tag", sxTag).getResultList();
