@@ -1,11 +1,12 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: PetstoreUtil.java,v 1.5 2007-01-09 19:02:11 basler Exp $ */
+$Id: PetstoreUtil.java,v 1.6 2007-01-09 19:24:09 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.util;
 
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.PropertyResourceBundle;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -16,7 +17,8 @@ import java.util.logging.Logger;
 public class PetstoreUtil {
     
     private static final Logger _logger=getBaseLogger();
-    private static final PropertyResourceBundle _resBundle=null;
+    private static final PropertyResourceBundle _resBundle=getBaseBundle();
+    
 
     /** Creates a new instance of PetstoreUtil */
     public PetstoreUtil() {
@@ -36,6 +38,16 @@ public class PetstoreUtil {
        return Logger.getLogger(PetstoreConstants.PETSTORE_BASE_LOGGER, PetstoreConstants.PETSTORE_BASE_LOG_STRINGS);
     }
     
+    private static PropertyResourceBundle getBaseBundle() {
+        try {
+            return new PropertyResourceBundle(PetstoreUtil.class.getResourceAsStream("MessageStrings.properties"));
+        } catch(IOException io) {
+            getLogger().log(Level.WARNING, "resource_bundle_does_not_exist", io);
+            return null;
+        }
+
+    }
+    
 
     public static String getMessage(String key) {
         return getMessage(key, (Object[])null);
@@ -45,23 +57,19 @@ public class PetstoreUtil {
     /**
      * This method uses the default message strings property file to resolve
      * resultant string to show to an end user
+     * @param Key to use in MessageString.properties file
      *
      * @return Formated message for external display
      */
     public static String getMessage(String key, Object... arguments) {
         String sxRet=null;
-        try {
-            // get resource bundle and retrive message
-            PropertyResourceBundle res=new PropertyResourceBundle(PetstoreUtil.class.getResourceAsStream("MessageStrings.properties"));
-            sxRet=res.getString(key);
+        // get resource bundle and retrive message
+        sxRet=_resBundle.getString(key);
 
-            // see if the message needs to be formatted
-            if(arguments != null) {
-                // format message
-                sxRet=MessageFormat.format(sxRet, arguments);
-            }
-        } catch(IOException io) {
-            sxRet="Resource Bundle Error retrieving key " + key;
+        // see if the message needs to be formatted
+        if(arguments != null) {
+            // format message
+            sxRet=MessageFormat.format(sxRet, arguments);
         }
         return sxRet;
     }
