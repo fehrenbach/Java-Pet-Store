@@ -1,8 +1,10 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: Address.java,v 1.9 2006-05-08 18:31:55 basler Exp $ */
+$Id: Address.java,v 1.10 2007-01-09 19:02:11 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.model;
 
+import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
+import java.util.ArrayList;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -105,6 +107,31 @@ public class Address implements java.io.Serializable {
         if(state != null) sb.append(COMMA + state);
         if(zip != null) sb.append(COMMA + zip);
         return sb.toString();
+    }
+
+    
+    /**
+     * This method checks to make sure the class values are valid
+     *
+     * @return Message(s) of validation errors or and empty array (zero length) if class is valid
+     */
+    public String[] validateWithMessage() {
+        ArrayList<String> valMess=new ArrayList<String>();
+        
+        if(street1 == null || street1.equals("")) {
+            valMess.add(PetstoreUtil.getMessage("invalid_address_street1"));
+        }
+        if(city == null || city.equals("")) {
+            valMess.add(PetstoreUtil.getMessage("invalid_address_city"));
+        }
+        if(state == null || state.equals("")) {
+            valMess.add(PetstoreUtil.getMessage("invalid_address_state"));
+        }
+        if(zip == null || zip.equals("")) {
+            valMess.add(PetstoreUtil.getMessage("invalid_address_zip"));
+        }
+            
+        return valMess.toArray(new String[valMess.size()]);
     }
     
 }

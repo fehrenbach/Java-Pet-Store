@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: fileupload.jsp,v 1.51 2006-12-15 22:56:59 basler Exp $ --%>
+$Id: fileupload.jsp,v 1.52 2007-01-09 19:02:12 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -12,18 +12,12 @@ $Id: fileupload.jsp,v 1.51 2006-12-15 22:56:59 basler Exp $ --%>
 <html>
     <head>
         <title>Petstore Seller page</title>
-        
-<script type="text/javascript">
+    <script type="text/javascript">
     var submittingForm=false;
     
     function testRetFunction(type, data, evt){
         if (evt.readyState == 4) {
-            if(evt.status == 500) {
-                // persistance error
-                alert("Persistence failed : please check if the address is valid");     
-                submittingForm=false;
-                
-            } else if(evt.status == 200) {
+            if(evt.status == 200) {
                 // check for error
                 submittingForm=false;
                 var resultx=data.getElementsByTagName("response")[0];
@@ -31,6 +25,8 @@ $Id: fileupload.jsp,v 1.51 2006-12-15 22:56:59 basler Exp $ --%>
                 if(message == "Captchas Filter Error") {
                     // captcha error
                     alert("Authorization failed : please enter the correct captcha string");
+                } else if(message == "Validation Error") {
+                    alert("Validation failed on the Server :\n" + resultx.getElementsByTagName("detail")[0].childNodes[0].nodeValue);     
                 } else {
                     // fileupload complete
                     var thumbpath=resultx.getElementsByTagName("thumbnail")[0].childNodes[0].nodeValue;
@@ -39,6 +35,11 @@ $Id: fileupload.jsp,v 1.51 2006-12-15 22:56:59 basler Exp $ --%>
                     // forward to status page
                     location.href="fileuploadstatus.jsp?message=" + message + "&id=" + itemid + "&productId=" + productId + "&thumb=" + thumbpath;
                 }
+            } else {
+                // server error, send to error page
+                // can't forward to errorpage because null pointer gets thrown on lookup of status code ("javax.servlet.error.status_code")
+                //ajaxBindError(type, data.message);
+                alert("Persistence failed : Please check if the server logs for more information!")
             }
         }
     }
@@ -69,6 +70,7 @@ $Id: fileupload.jsp,v 1.51 2006-12-15 22:56:59 basler Exp $ --%>
    function fileuploadOnsubmit() {
         if(!submittingForm) {
             var valMess="";
+            
             // save rich text editor text to element
             var descx=dojo.widget.byId('rtEditor').getEditorContent()
             var lowDescx=descx.toLowerCase();
@@ -79,8 +81,8 @@ $Id: fileupload.jsp,v 1.51 2006-12-15 22:56:59 basler Exp $ --%>
             }
             
             // make sure there isn't a script/link tag in the description
-            if(lowDescx.indexOf("<script") > -1 || lowDescx.indexOf("<link") > -1) {
-                valMess="Error: The Description field can't have a '<script>' and/or a '<link>' tag in it\n";
+            if(lowDescx == "" || lowDescx.indexOf("<script") > -1 || lowDescx.indexOf("<link") > -1) {
+            valMess += "Error: The Description must exist and the field can't have a '<script>' and/or a '<link>' tag in it\n";
             }
 
             // make sure price is a number
@@ -234,7 +236,7 @@ div.pane {
                         <h:outputText value="*Pet's Name"/>
                         <h:inputText size="20" id="name"></h:inputText>
 
-                        <h:outputText value="Description (3 lines max display in catalog)"/>
+                        <h:outputText value="*Description (3 lines max display in catalog)"/>
                         
                         <div style="border-style:inset; border-width:thin; background-color:white">
                             <textarea wrap="soft" dojoType="Editor2" widgetId="rtEditor" id="description" name="TestFileuploadForm:description" 

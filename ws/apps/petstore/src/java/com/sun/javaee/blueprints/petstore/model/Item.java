@@ -1,8 +1,11 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: Item.java,v 1.21 2006-12-12 23:24:38 basler Exp $ */
+$Id: Item.java,v 1.22 2007-01-09 19:02:11 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.model;
 
+import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
+import java.util.ArrayList;
+import java.util.Arrays;
 import static javax.persistence.CascadeType.ALL;
 import java.util.Collection;
 import java.util.Vector;
@@ -11,8 +14,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.NamedQueries;
@@ -195,7 +196,44 @@ public class Item implements java.io.Serializable {
         }
         return bRet;
     }
+    
+    
+    /**
+     * This method checks to make sure the class values are valid
+     *
+     * @return Message(s) of validation errors or and empty array (zero length) if class is valid
+     */
+    public String[] validateWithMessage() {
+        ArrayList<String> valMess=new ArrayList<String>();
+        
+        if(name == null || name.equals("")) {
+            valMess.add(PetstoreUtil.getMessage("invalid_item_name"));
+        }
+
+        // make sure there isn't a script/link tag in the description
+        if(description == null || description.length() < 1 || description.indexOf("<script") > -1 || description.indexOf("<link") > -1) {
+            valMess.add(PetstoreUtil.getMessage("invalid_item_description"));
+        }
+
+        // make sure price is a number
+        if(price < 0) {
+            valMess.add(PetstoreUtil.getMessage("invalid_item_price"));
+        }
+
+        if(imageURL == null || (!imageURL.endsWith(".jpg") && !imageURL.endsWith(".gif") && imageURL.endsWith(".png"))) {
+            // not a proper upload so error
+           valMess.add(PetstoreUtil.getMessage("invalid_item_imageurl"));
+        }
+        
+        // to make sure item is valid, have to check address and contact also
+        valMess.addAll(Arrays.asList(contactInfo.validateWithMessage()));
+        valMess.addAll(Arrays.asList(address.validateWithMessage()));
+        
+        return valMess.toArray(new String[valMess.size()]);
+    }
+    
 }
+
 
 
 

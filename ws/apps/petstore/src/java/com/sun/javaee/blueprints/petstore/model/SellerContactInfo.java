@@ -1,8 +1,10 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: SellerContactInfo.java,v 1.4 2006-05-05 20:15:25 inder Exp $ */
+$Id: SellerContactInfo.java,v 1.5 2007-01-09 19:02:11 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.model;
 
+import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
+import java.util.ArrayList;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -60,6 +62,27 @@ public class SellerContactInfo implements java.io.Serializable {
     }
     public void setFirstName(String firstName) {
         this.firstName = firstName;
+    }
+
+    
+    /**
+     * This method checks to make sure the class values are valid
+     *
+     * @return Message(s) of validation errors or and empty array (zero length) if class is valid
+     */
+    public String[] validateWithMessage() {
+        ArrayList<String> valMess=new ArrayList<String>();
+        
+        // make sure make and address is entered
+        if(firstName == null || firstName.equals("")) {
+            // price should be a number
+            valMess.add(PetstoreUtil.getMessage("invalid_contact_firstname"));
+        }
+        if(lastName == null || lastName.equals("")) {
+            valMess.add(PetstoreUtil.getMessage("invalid_contact_lastname"));
+        }
+            
+        return valMess.toArray(new String[valMess.size()]);
     }
     
 }

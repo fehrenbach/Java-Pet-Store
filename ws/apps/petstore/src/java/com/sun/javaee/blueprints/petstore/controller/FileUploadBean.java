@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: FileUploadBean.java,v 1.45 2006-12-01 03:30:29 sean_brydon Exp $ */
+$Id: FileUploadBean.java,v 1.46 2007-01-09 19:02:10 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -54,8 +54,6 @@ public class FileUploadBean {
      * session attribute to contain the fileupload status
      */
     private static final String FILE_UL_RESPONSE = "fileuploadResponse";
-    
-    private static final String PERSIST_FAILRE = "persist_failure";
     
     /** Creates a new instance of FileUploadBean */
     public FileUploadBean() {
@@ -132,7 +130,7 @@ public class FileUploadBean {
             String firstName = null;
             String prodId = null;
             HttpSession session = (HttpSession)context.getExternalContext().getSession(true);
-            try{
+            try {
                 String fileNameKey = null;
                 for (Object key1 : htUpload.keySet()) {
                     String key = key1.toString();
@@ -141,6 +139,12 @@ public class FileUploadBean {
                         break;
                     }
                 }
+                if(fileNameKey == null) {
+                    // error, you must have and upload file
+                    sendErrorResponse(response, writer, PetstoreUtil.getMessage("invalid_item_imageurl"));
+                    return;
+                }
+                
                 String absoluteFileName=getStringValue(htUpload, fileNameKey);
                 if(bDebug) System.out.println("Abs name: "+ absoluteFileName);
                 String fileName = null;
@@ -167,9 +171,8 @@ public class FileUploadBean {
                 name=getStringValue(htUpload, compName+":name");
                 String desc=getStringValue(htUpload, compName+":description");
                 String price=getStringValue(htUpload, compName+":price");
-                if(name.length() == 0) name="Default Monster";
-                if(desc.length() == 0) desc="No description available";
-                if(price.length() == 0) price="0";
+                // set to negative to trigger validation message for price
+                if(price.length() == 0) price="-1";
                 String tags=getStringValue(htUpload, compName+":tags");
                 if(tags == null) tags="";
                 
@@ -179,34 +182,27 @@ public class FileUploadBean {
                 String city=getStringValue(htUpload, compName+":cityField");
                 String state=getStringValue(htUpload, compName+":stateField");
                 String zip=getStringValue(htUpload, compName+":zipField");
-                if (street1.length() == 0) street1 = "11 Main Steet";
-                if (city.length() == 0) city = "Milpitas";
-                if (state.length() == 0) state = "California";
-                if (zip.length() == 0) zip = "95035";
                 
                 // Contact info
                 firstName = getStringValue(htUpload, compName+":firstName");
                 String lastName = getStringValue(htUpload, compName+":lastName");
                 String email = getStringValue(htUpload, compName+":email");
-                if (firstName.length() == 0) firstName = "Duke";
-                if (lastName.length() == 0) lastName = "Duke";
-                if (email.length() == 0) email = "aaa@bbb.ccc";
                 
-                if(street1.length() > 0) {
+                if(street1 != null && street1.length() > 0) {
                     addressx.append(street1);
                 }
                 
-                if(city.length() > 0) {
+                if(city != null && city.length() > 0) {
                     addressx.append(comma);
                     addressx.append(city);
                 }
                 
-                if(state.length() > 0) {
+                if(state != null && state.length() > 0) {
                     addressx.append(comma);
                     addressx.append(state);
                 }
                 
-                if(zip.length() > 0) {
+                if(zip != null && zip.length() > 0) {
                     addressx.append(comma);
                     addressx.append(zip);
                 }
@@ -240,7 +236,8 @@ public class FileUploadBean {
                             PetstoreUtil.getLogger().log(Level.INFO, "Matched " + points.length + " locations, taking the first one");
                         }
                         
-                        if(points.length > 0) {
+                        // grab first address in more that one came back
+                        if(points != null && points.length > 0) {
                             // set values to used for map location
                             latitude = points[0].getLatitude();
                             longitude = points[0].getLongitude();
@@ -251,16 +248,32 @@ public class FileUploadBean {
                 }
                 Float priceF;
                 try {
-                    priceF=new Float(price);
+                    priceF=Float.valueOf(price);
                 } catch (NumberFormatException nf) {
-                    priceF=new Float(0);
+                    priceF=Float.valueOf(-1);
                     PetstoreUtil.getLogger().log(Level.INFO, "Price isn't in a proper number - " + price);
                 }
                 Address addr = new Address(street1,"",city,state,zip,
                         latitude,longitude);
                 SellerContactInfo contactInfo = new SellerContactInfo(firstName, lastName, email);
-                Item item = new Item(prodId,name,desc,fileName, thumbPath, priceF,
+                Item item = new Item(prodId,name,desc,fileName, thumbPath, priceF.floatValue(),
                         addr,contactInfo,0,0);
+                
+                // validate item
+                String[] errors=item.validateWithMessage();
+                if(bDebug) System.out.println("*** validation errors = " + errors.length);
+                if(errors.length > 0) {
+                    // some validation errors have been hit through an exception
+                    StringBuilder sbMess=new StringBuilder();
+                    for(String mesg : errors) {
+                        sbMess.append(mesg);
+                        sbMess.append("\n");
+                    }
+                    
+                    sendErrorResponse(response, writer, sbMess.toString());
+                    return;
+                }
+                
                 if (catalogFacade == null) {
                     Map<String,Object> contextMap = context.getExternalContext().getApplicationMap();
                     this.catalogFacade = (CatalogFacade)contextMap.get("CatalogFacade");
@@ -283,16 +296,14 @@ public class FileUploadBean {
                 itemId=catalogFacade.addItem(item);
                 PetstoreUtil.getLogger().log(Level.FINE, "Item " + name + " has been persisted");
                 
-            } catch (RuntimeException re) {
-                PetstoreUtil.getLogger().log(Level.SEVERE, "persist failed in addItem()", re);
-                // store the info for later use
-                session.setAttribute(PERSIST_FAILRE, Boolean.valueOf(true));
             } catch (Exception ex) {
+                // since this method is access through an ajax call, must send back a message
+                // so the client can forward the user to the systemerror page
                 PetstoreUtil.getLogger().log(Level.SEVERE, "fileupload.persist.exception", ex);
+                response.sendError(response.SC_INTERNAL_SERVER_ERROR, ex.toString());
+                return;
             }
-            if (session.getAttribute(PERSIST_FAILRE)!=null) {
-                session.removeAttribute(PERSIST_FAILRE);
-            }
+            
             String responseMessage = firstName+", Thank you for submitting your pet "+name+" !";
             FileUploadResponse fuResponse = new FileUploadResponse(
                     itemId,
@@ -348,7 +359,6 @@ public class FileUploadBean {
             sb.append("</productId>");
             sb.append("</response>");
             if(bDebug) System.out.println("Response:\n" + sb);
-            //response.getWriter().write(sb.toString());
             writer.write(sb.toString());
             writer.flush();
             
@@ -380,6 +390,8 @@ public class FileUploadBean {
     }
     
     private String getStringValue(Hashtable htUpload, String key)  {
+        if(key == null) return null;
+        
         String sxTemp=(String)htUpload.get(key);
         if(sxTemp == null) {
             sxTemp="";
@@ -389,6 +401,21 @@ public class FileUploadBean {
     
     public String getUploadImageDirectory() {
         return PetstoreConstants.PETSTORE_IMAGE_DIRECTORY + "/images";
+    }
+    
+    private void sendErrorResponse(HttpServletResponse response, ResponseWriter writer, String mess) throws IOException {
+        response.setContentType("text/xml;charset=UTF-8");
+        response.setHeader("Pragma", "No-Cache");
+        response.setHeader("Cache-Control", "no-cache,no-store,max-age=0");
+        response.setDateHeader("Expires", 1);
+        writer.write("<response>");
+        writer.write("<message>");
+        writer.write("Validation Error");
+        writer.write("</message>");
+        writer.write("<detail>");
+        writer.write(mess);
+        writer.write("</detail>");
+        writer.write("</response>");
     }
     
     
