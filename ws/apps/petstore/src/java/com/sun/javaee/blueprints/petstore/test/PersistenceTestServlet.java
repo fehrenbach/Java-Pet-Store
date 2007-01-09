@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: PersistenceTestServlet.java,v 1.1 2006-09-08 22:50:20 basler Exp $ */
+$Id: PersistenceTestServlet.java,v 1.2 2007-01-09 22:53:44 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.test;
 
@@ -24,17 +24,17 @@ public class PersistenceTestServlet extends HttpServlet {
     private CatalogFacade cf;
     private ServletContext context;
 
-    public void init(ServletConfig config) throws ServletException {
+    @Override public void init(ServletConfig config) throws ServletException {
         
         context = config.getServletContext();
         cf = (CatalogFacade)context.getAttribute("CatalogFacade");
     }
     
-    public void destroy() {
+    @Override public void destroy() {
         cf = null;
     }   
     
-    public void doGet(HttpServletRequest request,
+    @Override public void doGet(HttpServletRequest request,
             HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html");

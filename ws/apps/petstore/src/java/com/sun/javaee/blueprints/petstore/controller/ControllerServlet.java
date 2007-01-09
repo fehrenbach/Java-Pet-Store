@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: ControllerServlet.java,v 1.24 2007-01-04 03:22:02 inder Exp $ */
+$Id: ControllerServlet.java,v 1.25 2007-01-09 22:53:43 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -33,7 +33,7 @@ public class ControllerServlet extends HttpServlet {
     private static final boolean bDebug=true;
     private static HashMap<String, ControllerAction> actionMap = new HashMap<String, ControllerAction>();
     
-    public void init(ServletConfig config) throws ServletException {
+    @Override public void init(ServletConfig config) throws ServletException {
         super.init(config);
         ServletContext context = config.getServletContext();
         CatalogFacade cf = (CatalogFacade) context.getAttribute("CatalogFacade");
@@ -47,11 +47,11 @@ public class ControllerServlet extends HttpServlet {
     public ControllerAction findAction(String servletPath) {
         return actionMap.get(servletPath);
     }
-    public void destroy() {
+    @Override public void destroy() {
         actionMap = null;
     }
     
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    @Override public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String servletPath = request.getServletPath();
         if(bDebug) System.out.println(" ServletPath: " + servletPath + ", pathinfo: " + request.getPathInfo());
         ControllerAction action = actionMap.get(servletPath);
