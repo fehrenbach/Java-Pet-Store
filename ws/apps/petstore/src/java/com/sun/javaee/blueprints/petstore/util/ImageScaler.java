@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: ImageScaler.java,v 1.6 2007-01-10 20:52:07 inder Exp $ */
+$Id: ImageScaler.java,v 1.7 2007-01-10 21:48:01 yutayoshida Exp $ */
 
 package com.sun.javaee.blueprints.petstore.util;
 
@@ -15,7 +15,6 @@ import javax.imageio.ImageIO;
 
 public class ImageScaler {
     
-    private boolean keepAspect = false;
     private int thumbWidth = 133;
     private int thumbHeight = 100;
     private String format = "jpg";
@@ -39,11 +38,9 @@ public class ImageScaler {
      * when it is necessary to keep the aspect ratio
      */
     public void keepAspectWithWidth() {
-        this.keepAspect = true;
         this.thumbHeight = this.image.getHeight() * this.thumbWidth / this.image.getWidth();
     }
     public void keepAspectWithHeight() {
-        this.keepAspect = true;
         this.thumbWidth = this.image.getWidth() * this.thumbHeight / this.image.getHeight();
     }
     /* Using getScaledInstance

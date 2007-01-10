@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CaptchaValidateFilter.java,v 1.21 2007-01-10 21:21:13 inder Exp $ */
+$Id: CaptchaValidateFilter.java,v 1.22 2007-01-10 21:48:01 yutayoshida Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -65,10 +65,6 @@ public class CaptchaValidateFilter implements Filter {
         return validResponse;
     }
     
-    private String constructJsonEntry(String key, String value) {
-        String dq = "\"";
-        return (dq + key + dq + " : " + dq + value + dq);
-    }
     
     /**
      *
