@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: FileUploadBean.java,v 1.46 2007-01-09 19:02:10 basler Exp $ */
+$Id: FileUploadBean.java,v 1.47 2007-01-10 17:48:18 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -101,9 +101,7 @@ public class FileUploadBean {
             String name = null;
             String categoryId = null;
             for (Category cat : tmpCat) {
-                name = cat.getName();
-                categoryId = cat.getCategoryID();
-                SelectItem si = new SelectItem(categoryId, name);
+                SelectItem si = new SelectItem(cat.getCategoryID(), cat.getName());
                 categories.add(si);
             }
         }
