@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: SimpleCaptcha.java,v 1.11 2006-10-30 22:53:35 yutayoshida Exp $ */
+$Id: SimpleCaptcha.java,v 1.12 2007-01-10 18:10:51 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.captcha;
 
@@ -18,15 +18,15 @@ import java.util.Random;
 public class SimpleCaptcha {
     
     private Random rd = null;
-    private final int width = 200;
-    private final int height = 60;
+    private static final int WIDTH = 200;
+    private static final int HEIGHT = 60;
     private Color background = new Color(Integer.parseInt("c0c0c0", 16));
     
     protected void drawMessage(Graphics g, String message) {
         g.setFont(new Font("Arial", Font.BOLD | Font.ITALIC, 30));
         g.setColor(Color.GRAY);
         int len = message.length();
-        int wgap = width/len;
+        int wgap = WIDTH/len;
         int startX = 10;
         int startY = 20;
         for (int i = 0; i<len; i++) {
@@ -59,7 +59,7 @@ public class SimpleCaptcha {
     }
     
     public BufferedImage getCaptchaImage(String message) {
-        return getCaptchaImage(message, this.width, this.height);
+        return getCaptchaImage(message, WIDTH, HEIGHT);
     }
     
     public BufferedImage getCaptchaImage(String message, int w, int h) {
@@ -88,12 +88,8 @@ public class SimpleCaptcha {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (g != null) {
-                g.dispose();
-            }
-            if (g2 != null) {
-                g2.dispose();
-            }
+            if (g != null) g.dispose();
+            if (g2 != null) g2.dispose();
         }
         return lastBimg;
     }    
