@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CaptchaValidateFilter.java,v 1.20 2007-01-10 18:06:52 inder Exp $ */
+$Id: CaptchaValidateFilter.java,v 1.21 2007-01-10 21:21:13 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -23,7 +23,7 @@ import javax.servlet.http.HttpSession;
 import static com.sun.javaee.blueprints.petstore.controller.actions.CaptchaAction.*;
 
 public class CaptchaValidateFilter implements Filter {
-
+    
     private static final boolean debug = false;
     private static final String CAPTCHA_FIELD_NAME = "j_captcha_response";
     private static final String INVALID_CAPTCHA = "captchaInvalid";
@@ -91,18 +91,17 @@ public class CaptchaValidateFilter implements Filter {
         if (correctCaptcha) {
             // if there's previous set session attribute, remove it
             HttpSession session = ((HttpServletRequest)request).getSession(true);
-            session.removeAttribute (INVALID_CAPTCHA);
+            session.removeAttribute(INVALID_CAPTCHA);
             try {
                 chain.doFilter(request, response);
-            }
-            catch(Throwable t) {
-            //
-            // If an exception is thrown somewhere down the filter chain,
-            // we still want to execute our after processing, and then
-            // rethrow the problem after that.
-            //
-              problem = t;
-              t.printStackTrace();
+            } catch(Throwable t) {
+                //
+                // If an exception is thrown somewhere down the filter chain,
+                // we still want to execute our after processing, and then
+                // rethrow the problem after that.
+                //
+                problem = t;
+                t.printStackTrace();
             }
             
             // possible "after-do" process here
@@ -164,12 +163,9 @@ public class CaptchaValidateFilter implements Filter {
      *
      */
     public void init(FilterConfig filterConfig) {
-        
         this.filterConfig = filterConfig;
-        if (filterConfig != null) {
-            if (debug) {
-                log("CaptchaValidateFilter:Initializing filter");
-            }
+        if (debug && filterConfig != null) {
+            log("CaptchaValidateFilter:Initializing filter");
         }
     }
     
@@ -216,7 +212,7 @@ public class CaptchaValidateFilter implements Filter {
                 ps.close();
                 response.getOutputStream().close();;
             } catch(Exception ex){ }
-}
+        }
     }
     
     public static String getStackTrace(Throwable t) {

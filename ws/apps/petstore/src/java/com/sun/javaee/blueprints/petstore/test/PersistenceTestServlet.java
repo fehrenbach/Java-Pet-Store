@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: PersistenceTestServlet.java,v 1.2 2007-01-09 22:53:44 inder Exp $ */
+$Id: PersistenceTestServlet.java,v 1.3 2007-01-10 21:21:12 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.test;
 
@@ -87,8 +87,8 @@ public class PersistenceTestServlet extends HttpServlet {
                 out.println("<br>"+ "Image URL: " +item.getImageURL());
                 out.close();
             }
-            if (action.equals("findallitems")) {
-               /* PrintWriter out = response.getWriter();
+/*            if (action.equals("findallitems")) {
+                PrintWriter out = response.getWriter();
                 Collection items = cf.getItems();
                 out.println("Here are the Items: ");
                 Iterator it = items.iterator();
@@ -100,8 +100,8 @@ public class PersistenceTestServlet extends HttpServlet {
                     out.println("<br>"+ ""Price: " +item.getPrice());
                     out.println("<br>"+ "Image URL: " +item.getImageURL());
                 }
-                out.close(); */
-            }
+                out.close(); 
+            } */
         } catch (Exception exe) {
             System.out.println("PersistenceTestServlet error: "+exe);
             request.setAttribute("error_message", exe);            
