@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: FileUploadBean.java,v 1.47 2007-01-10 17:48:18 inder Exp $ */
+$Id: FileUploadBean.java,v 1.48 2007-01-10 18:04:09 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -64,22 +64,14 @@ public class FileUploadBean {
     }
     public List<SelectItem> getProducts() {
         if (catalogFacade == null) {
-            FacesContext context=FacesContext.getCurrentInstance();
-            Map<String,Object> contextMap = context.getExternalContext().getApplicationMap();
+            Map<String,Object> contextMap = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
             this.catalogFacade = (CatalogFacade)contextMap.get("CatalogFacade");
         }
             //get the catalog facade
         if (products == null) {
-            products = new ArrayList<SelectItem>();
-        
-            List<Product> tmpPd = catalogFacade.getProducts();
-            String name = null;
-            String productId = null;
-            for (Product pd : tmpPd) {
-                name = pd.getName();
-                productId = pd.getProductID();
-                SelectItem si = new SelectItem(productId, name);
-                products.add(si);
+            products = new ArrayList<SelectItem>();        
+            for (Product pd : catalogFacade.getProducts()) {
+                products.add(new SelectItem(pd.getProductID(), pd.getName()));
             }
         }
         return this.products;
@@ -89,20 +81,14 @@ public class FileUploadBean {
     }
     public List<SelectItem> getCategories() {
         if (catalogFacade == null) {
-            FacesContext context=FacesContext.getCurrentInstance();
-            Map<String,Object> contextMap = context.getExternalContext().getApplicationMap();
+            Map<String,Object> contextMap = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
             this.catalogFacade = (CatalogFacade)contextMap.get("CatalogFacade");
         }
-            //get the catalog facade
+        //get the catalog facade
         if (categories == null) {
             categories = new ArrayList<SelectItem>();
-        
-            List<Category> tmpCat = catalogFacade.getCategories();
-            String name = null;
-            String categoryId = null;
-            for (Category cat : tmpCat) {
-                SelectItem si = new SelectItem(cat.getCategoryID(), cat.getName());
-                categories.add(si);
+            for (Category cat : catalogFacade.getCategories()) {
+                categories.add(new SelectItem(cat.getCategoryID(), cat.getName()));
             }
         }
         return this.categories;
