@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: PersistenceTestServlet.java,v 1.3 2007-01-10 21:21:12 inder Exp $ */
+$Id: PersistenceTestServlet.java,v 1.4 2007-01-10 21:26:04 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.test;
 
@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 public class PersistenceTestServlet extends HttpServlet {
     private CatalogFacade cf;
     private ServletContext context;
-
+    
     @Override public void init(ServletConfig config) throws ServletException {
         
         context = config.getServletContext();
@@ -32,11 +32,10 @@ public class PersistenceTestServlet extends HttpServlet {
     
     @Override public void destroy() {
         cf = null;
-    }   
+    }
     
     @Override public void doGet(HttpServletRequest request,
-            HttpServletResponse response)
-            throws ServletException, IOException {
+    HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
         String action = request.getParameter("action");
         System.out.println("action="+action);
@@ -45,15 +44,15 @@ public class PersistenceTestServlet extends HttpServlet {
                 String desc = request.getParameter("item_desc");
                 String name = request.getParameter("item_name");
                 String listPrice = request.getParameter("item_price");
-
+                
                 PrintWriter out = response.getWriter();
                 Item item = new Item();
                 item.setName(name);
                 item.setDescription(desc);
                 item.setPrice(new Float(listPrice));
                 item.setImageURL("test.gif");
-        item.setProductID("canine01");
-
+                item.setProductID("canine01");
+                
                 Address addr = new Address();
                 //TO-DO: Add address fields and extract data
                 addr.setStreet1("street1");
@@ -69,14 +68,13 @@ public class PersistenceTestServlet extends HttpServlet {
                 contactInfo.setFirstName("duke");
                 contactInfo.setLastName("duke");
                 contactInfo.setEmail("abc@abc.xyz");
-
-        item.setAddress(addr);
+                
+                item.setAddress(addr);
                 item.setContactInfo(contactInfo);
                 cf.addItem(item);
                 out.println("The item has been added. Here is the Item id: "+item.getItemID());
                 out.close();
-            }
-            if (action.equals("search")) {
+            } else if (action.equals("search")) {
                 String id = request.getParameter("item_id");
                 PrintWriter out = response.getWriter();
                 Item item = cf.getItem(id);
@@ -87,7 +85,7 @@ public class PersistenceTestServlet extends HttpServlet {
                 out.println("<br>"+ "Image URL: " +item.getImageURL());
                 out.close();
             }
-/*            if (action.equals("findallitems")) {
+/*            else if (action.equals("findallitems")) {
                 PrintWriter out = response.getWriter();
                 Collection items = cf.getItems();
                 out.println("Here are the Items: ");
@@ -100,11 +98,11 @@ public class PersistenceTestServlet extends HttpServlet {
                     out.println("<br>"+ ""Price: " +item.getPrice());
                     out.println("<br>"+ "Image URL: " +item.getImageURL());
                 }
-                out.close(); 
+                out.close();
             } */
         } catch (Exception exe) {
             System.out.println("PersistenceTestServlet error: "+exe);
-            request.setAttribute("error_message", exe);            
+            request.setAttribute("error_message", exe);
         }
     }
 }
