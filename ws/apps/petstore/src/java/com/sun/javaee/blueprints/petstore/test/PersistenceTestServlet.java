@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: PersistenceTestServlet.java,v 1.4 2007-01-10 21:26:04 inder Exp $ */
+$Id: PersistenceTestServlet.java,v 1.5 2007-01-10 23:32:31 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.test;
 
@@ -9,6 +9,7 @@ import com.sun.javaee.blueprints.petstore.model.Item;
 import com.sun.javaee.blueprints.petstore.model.SellerContactInfo;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -23,19 +24,23 @@ import javax.servlet.http.HttpServletResponse;
 public class PersistenceTestServlet extends HttpServlet {
     private CatalogFacade cf;
     private ServletContext context;
-    
-    @Override public void init(ServletConfig config) throws ServletException {
+
+    @Override 
+    public void init(ServletConfig config) throws ServletException {
         
         context = config.getServletContext();
         cf = (CatalogFacade)context.getAttribute("CatalogFacade");
     }
     
-    @Override public void destroy() {
+    @Override 
+    public void destroy() {
         cf = null;
     }
     
-    @Override public void doGet(HttpServletRequest request,
-    HttpServletResponse response) throws ServletException, IOException {
+    @Override 
+    public void doGet(HttpServletRequest request,
+            HttpServletResponse response)
+            throws ServletException, IOException {
         response.setContentType("text/html");
         String action = request.getParameter("action");
         System.out.println("action="+action);
@@ -49,7 +54,7 @@ public class PersistenceTestServlet extends HttpServlet {
                 Item item = new Item();
                 item.setName(name);
                 item.setDescription(desc);
-                item.setPrice(new Float(listPrice));
+                item.setPrice(new BigDecimal(listPrice));
                 item.setImageURL("test.gif");
                 item.setProductID("canine01");
                 

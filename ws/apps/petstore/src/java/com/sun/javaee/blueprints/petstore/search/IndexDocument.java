@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: IndexDocument.java,v 1.9 2006-11-14 18:30:19 basler Exp $ */
+$Id: IndexDocument.java,v 1.10 2007-01-10 23:32:31 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.search;
 
@@ -34,7 +34,7 @@ public class IndexDocument {
         this.uid=item.getItemID();
         this.pageURL=item.getItemID();
         this.image=item.getImageURL();
-        this.price=Float.toString(item.getPrice());
+        this.price=item.getPrice().toString();
         this.product=item.getProductID();
         this.modifiedDate=new Date().toString();
         this.contents=item.getName() + " " + item.getDescription();

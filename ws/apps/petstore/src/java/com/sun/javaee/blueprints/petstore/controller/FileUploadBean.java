@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: FileUploadBean.java,v 1.48 2007-01-10 18:04:09 inder Exp $ */
+$Id: FileUploadBean.java,v 1.49 2007-01-10 23:32:29 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -18,8 +18,6 @@ import com.sun.javaee.blueprints.petstore.util.PetstoreConstants;
 import com.sun.javaee.blueprints.petstore.util.ImageScaler;
 import com.sun.javaee.blueprints.components.ui.fileupload.FileUploadStatus;
 import com.sun.javaee.blueprints.components.ui.fileupload.FileUploadUtil;
-//import com.sun.javaee.blueprints.components.ui.geocoder.GeoCoder;
-//import com.sun.javaee.blueprints.components.ui.geocoder.GeoPoint;
 import com.sun.javaee.blueprints.petstore.proxy.GeoCoder;
 import com.sun.javaee.blueprints.petstore.proxy.GeoPoint;
 
@@ -31,6 +29,7 @@ import com.sun.javaee.blueprints.petstore.model.FileUploadResponse;
 import com.sun.javaee.blueprints.petstore.model.Item;
 import com.sun.javaee.blueprints.petstore.model.Tag;
 import com.sun.javaee.blueprints.petstore.model.SellerContactInfo;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -79,6 +78,7 @@ public class FileUploadBean {
     public void setCategories(List<SelectItem> categories) {
         this.categories = categories;
     }
+    
     public List<SelectItem> getCategories() {
         if (catalogFacade == null) {
             Map<String,Object> contextMap = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
@@ -230,17 +230,17 @@ public class FileUploadBean {
                         PetstoreUtil.getLogger().log(Level.WARNING, "geocoder.lookup.exception", ee);
                     }
                 }
-                Float priceF;
+                BigDecimal pricex;
                 try {
-                    priceF=Float.valueOf(price);
+                    pricex=new BigDecimal(price);
                 } catch (NumberFormatException nf) {
-                    priceF=Float.valueOf(-1);
+                    pricex=BigDecimal.valueOf(-1);
                     PetstoreUtil.getLogger().log(Level.INFO, "Price isn't in a proper number - " + price);
                 }
                 Address addr = new Address(street1,"",city,state,zip,
                         latitude,longitude);
                 SellerContactInfo contactInfo = new SellerContactInfo(firstName, lastName, email);
-                Item item = new Item(prodId,name,desc,fileName, thumbPath, priceF.floatValue(),
+                Item item = new Item(prodId,name,desc,fileName, thumbPath, pricex,
                         addr,contactInfo,0,0);
                 
                 // validate item

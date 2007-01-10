@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: catalog.js,v 1.17 2006-12-04 21:34:10 basler Exp $ */
+$Id: catalog.js,v 1.18 2007-01-10 23:32:31 basler Exp $ */
 
 var ac;
 var is;
@@ -82,7 +82,7 @@ function CatalogController() {
   function showItemDetails(id) {
       var i = is.getItems().get(id);
       setNodeText(infoName, i.name);
-      setNodeText(infoPrice, "$" + i.price);
+      setNodeText(infoPrice, i.price);
       setNodeText(infoShortDescription, i.shortDescription);
       setNodeText(infoDescription, i.description);
       // update the paypal

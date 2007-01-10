@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: MapBean.java,v 1.23 2006-11-14 18:30:17 basler Exp $ */
+$Id: MapBean.java,v 1.24 2007-01-10 23:32:30 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.mapviewer;
 
@@ -173,14 +173,14 @@ public class MapBean {
                             "\n lat=" + (dLatitude - dLatRadius) + " to " + (dLatitude + dLatRadius) +
                             "\n long=" + (dLongitude - dLongRadius) + " to " + (dLongitude + dLongRadius));
                 }
-                items=cf.getItemsByCategoryByRadiusVLH(category, 0, 25, dLatitude - dLatRadius,
+                items=cf.getItemsByCategoryByRadiusVLH(category, 0, 100, dLatitude - dLatRadius,
                         dLatitude + dLatRadius, dLongitude - dLongRadius, dLongitude + dLongRadius);
             }
         }
         
         if(geoCenterPoint == null) {
             // no center point or center point error so look up just ids
-            items=cf.getItemsByCategoryVLH(category, 0, 25);
+            items=cf.getItemsByCategoryVLH(category, 0, 100);
         }
         if(bDebug) {
             if(items != null) {

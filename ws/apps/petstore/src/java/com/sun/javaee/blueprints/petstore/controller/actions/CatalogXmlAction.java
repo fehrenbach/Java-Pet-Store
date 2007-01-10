@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CatalogXmlAction.java,v 1.1 2007-01-04 03:22:05 inder Exp $ */
+$Id: CatalogXmlAction.java,v 1.2 2007-01-10 23:32:29 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller.actions;
 
@@ -10,7 +10,6 @@ import com.sun.javaee.blueprints.petstore.model.Item;
 import com.sun.javaee.blueprints.petstore.model.Product;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -130,7 +129,6 @@ public class CatalogXmlAction implements ControllerAction {
         // then write the data of the response
         sb.append("<items>\n");
         //if(bDebug) System.out.println("**** Items length=" + items.size());
-        NumberFormat formatter = new DecimalFormat("00.00");
         for (Item i : items) {
             sb.append("<item>\n");
             sb.append(" <id>" + i.getItemID() + "</id>\n");
@@ -138,7 +136,7 @@ public class CatalogXmlAction implements ControllerAction {
             sb.append(" <rating>" + i.checkAverageRating() + "</rating>\n");
             sb.append(" <name>" + i.getName() + "</name>\n");
             sb.append(" <description><![CDATA[" + i.getDescription() + "]]></description>\n");
-            sb.append(" <price>" + formatter.format(i.getPrice()) + "</price>\n");
+            sb.append(" <price>" + NumberFormat.getCurrencyInstance().format(i.getPrice()) + "</price>\n");
             sb.append(" <image-url>" + baseURL + i.getImageURL() + "</image-url>\n");
             sb.append(" <image-tb-url>" + baseURL + i.getImageThumbURL() + "</image-tb-url>\n");
             sb.append("</item>\n");
@@ -154,14 +152,13 @@ public class CatalogXmlAction implements ControllerAction {
         sb.append("<cat-id>" + categoryId + "</cat-id>\n");
         sb.append("<cat-name>" + cf.getCategory(categoryId).getName()  + "</cat-name>\n");
         sb.append("<items>\n");
-        NumberFormat formatter = new DecimalFormat("00.00");
         for (Item i : cf.getAllItemsFromCategory(categoryId)) {
             sb.append("<item>\n");
             sb.append(" <id>" + i.getItemID() + "</id>\n");
             sb.append(" <prod-id>" + i.getProductID() + "</prod-id>\n");
             sb.append(" <cat-id>" + categoryId + "</cat-id>\n");
             sb.append(" <name>" + i.getName() + "</name>\n");
-            sb.append(" <price>" + formatter.format(i.getPrice()) + "</price>\n");
+            sb.append(" <price>" + NumberFormat.getCurrencyInstance().format(i.getPrice()) + "</price>\n");
             sb.append(" <description><![CDATA[" + i.getDescription() + "]]></description>\n");
             sb.append(" <image-url>" + i.getImageURL() + "</image-url>\n");
             sb.append("</item>\n");
@@ -172,7 +169,6 @@ public class CatalogXmlAction implements ControllerAction {
     }
     
     private String handleItem(String targetId){
-        NumberFormat formatter = new DecimalFormat("00.00");
         Item i = cf.getItem(targetId);
         StringBuffer sb = new StringBuffer();
         sb.append("<item>\n");
@@ -181,7 +177,7 @@ public class CatalogXmlAction implements ControllerAction {
         sb.append(" <name>" + i.getName() + "</name>\n");
         sb.append(" <description><![CDATA[" + i.getDescription() + "]]></description>\n");
         sb.append(" <image-url>" + i.getImageURL() + "</image-url>\n");
-        sb.append(" <price>" + formatter.format(i.getPrice())  + "</price>\n");
+        sb.append(" <price>" + NumberFormat.getCurrencyInstance().format(i.getPrice())  + "</price>\n");
         sb.append("</item>\n");
         return sb.toString();
     }

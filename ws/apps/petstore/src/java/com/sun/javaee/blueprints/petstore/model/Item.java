@@ -1,9 +1,10 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: Item.java,v 1.22 2007-01-09 19:02:11 basler Exp $ */
+$Id: Item.java,v 1.23 2007-01-10 23:32:30 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.model;
 
 import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import static javax.persistence.CascadeType.ALL;
@@ -40,7 +41,7 @@ public class Item implements java.io.Serializable {
     private String description;
     private String imageURL;
     private String imageThumbURL;
-    private float price;
+    private BigDecimal price;
     private Address address;
     private SellerContactInfo contactInfo;
     private int totalScore;
@@ -50,7 +51,7 @@ public class Item implements java.io.Serializable {
       
     public Item() { }
     public Item(String productID, String name, String description,
-            String imageURL, String imageThumbURL, float price,
+            String imageURL, String imageThumbURL, BigDecimal price,
             Address address, SellerContactInfo contactInfo,
             int totalScore, int numberOfVotes ) {
         this.productID = productID;
@@ -89,7 +90,7 @@ public class Item implements java.io.Serializable {
         return description;
     }
 
-    public float getPrice() {
+    public BigDecimal getPrice() {
        return price;
     }
         
@@ -136,7 +137,7 @@ public class Item implements java.io.Serializable {
     public void setImageThumbURL(String imageThumbURL) {
         this.imageThumbURL = imageThumbURL;
     }
-    public void setPrice(float price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
     public void setAddress(Address address) {
@@ -216,7 +217,7 @@ public class Item implements java.io.Serializable {
         }
 
         // make sure price is a number
-        if(price < 0) {
+        if(price.intValue() < 0) {
             valMess.add(PetstoreUtil.getMessage("invalid_item_price"));
         }
 

@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: HTMLParser.java,v 1.11 2007-01-10 21:07:34 inder Exp $ */
+$Id: HTMLParser.java,v 1.12 2007-01-10 23:32:30 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.search;
 
@@ -175,7 +175,8 @@ public class HTMLParser {
             this.vtURLs=vtURLs;
         }
         
-        @Override public void handleSimpleTag(HTML.Tag t, MutableAttributeSet a, int pos) {
+        @Override 
+        public void handleSimpleTag(HTML.Tag t, MutableAttributeSet a, int pos) {
             if(bIndexPage) {
                 if(t.toString().toLowerCase().equals("meta")) {
                     // meta tag look for description or summary
@@ -206,7 +207,8 @@ public class HTMLParser {
             }
         }
         
-        @Override public void handleStartTag(HTML.Tag t, MutableAttributeSet a, int pos) {
+        @Override 
+        public void handleStartTag(HTML.Tag t, MutableAttributeSet a, int pos) {
             
             // if the tag is a link "<a href", if the url doesn't go off site, store it for later indexing
             tag=t.toString().toLowerCase();
@@ -251,13 +253,15 @@ public class HTMLParser {
         }
         
         
-        @Override public void handleEndTag(HTML.Tag t, int pos) {
+        @Override 
+        public void handleEndTag(HTML.Tag t, int pos) {
             // System.out.println("End Tag = " + t + "  - pos " + pos);
             tag=null;
         }
         
         
-        @Override public void handleText(char[] data, int pos) {
+        @Override 
+        public void handleText(char[] data, int pos) {
             // System.out.println("Tag - Text - " + tag + " - -->" + new String(data) + "<-- - " + pos);
             // all text should be index against this page
             if(bIndexPage) {
