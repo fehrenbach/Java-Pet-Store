@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: HTMLParser.java,v 1.10 2007-01-10 20:49:20 inder Exp $ */
+$Id: HTMLParser.java,v 1.11 2007-01-10 21:07:34 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.search;
 
@@ -83,7 +83,7 @@ public class HTMLParser {
                 
                 // parse, index and get forwarding urls
                 ParserDelegator pd=new ParserDelegator();
-                CallbackHandler cb=new CallbackHandler(vtURLs, bIndexPage, contextRoot);
+                CallbackHandler cb=new CallbackHandler(vtURLs, bIndexPage,  beginURL, contextRoot);
                 try {
                     URLConnection urlConn=new URL(sxURL).openConnection();
                     urlConn.setUseCaches(false);
@@ -158,7 +158,7 @@ public class HTMLParser {
     //********************************************************************************************
     
     private class CallbackHandler extends HTMLEditorKit.ParserCallback {
-        private String contextRoot;
+        private String beginURL, contextRoot;
         private List<String> vtURLs;
         private StringBuffer sbText=new StringBuffer();
         private StringBuffer sbTitle=new StringBuffer();
@@ -167,8 +167,9 @@ public class HTMLParser {
         private boolean bSummary=false, bIndexPage=false;
         private String tag=null;
         
-        CallbackHandler(List<String> vtURLs, boolean bIndexPage, String contextRoot) {
+        CallbackHandler(List<String> vtURLs, boolean bIndexPage, String beginURL, String contextRoot) {
             super();
+            this.beginURL=beginURL;
             this.contextRoot=contextRoot;
             this.bIndexPage=bIndexPage;
             this.vtURLs=vtURLs;
