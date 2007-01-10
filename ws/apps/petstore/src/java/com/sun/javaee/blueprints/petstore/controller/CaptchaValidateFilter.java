@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CaptchaValidateFilter.java,v 1.19 2007-01-04 03:22:03 inder Exp $ */
+$Id: CaptchaValidateFilter.java,v 1.20 2007-01-10 18:06:52 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -58,11 +58,11 @@ public class CaptchaValidateFilter implements Filter {
         }
         // validation can be done within this method - no need to call captcha class
         HttpSession session = request.getSession();
-        String storedString = ((String)session.getAttribute(CAPTCHA_STRING)).toLowerCase();
-        if (storedString != null && storedString.equals(captchaString.toLowerCase())) {
+        String storedString = (String) session.getAttribute(CAPTCHA_STRING);
+        if (storedString != null && storedString.toLowerCase().equals(captchaString.toLowerCase())) {
             validResponse = Boolean.TRUE;
         }
-        return validResponse.booleanValue();
+        return validResponse;
     }
     
     private String constructJsonEntry(String key, String value) {
@@ -122,7 +122,7 @@ public class CaptchaValidateFilter implements Filter {
              * for the next request
              */
             HttpSession session = ((HttpServletRequest)request).getSession(true);
-            session.setAttribute(INVALID_CAPTCHA, new Boolean(true));
+            session.setAttribute(INVALID_CAPTCHA, Boolean.TRUE);
             FileUploadStatus fuStatus = new FileUploadStatus();
             session.setAttribute("fileUploadStatus", fuStatus);
             //fuStatus.setUploadItems(new Hashtable());
