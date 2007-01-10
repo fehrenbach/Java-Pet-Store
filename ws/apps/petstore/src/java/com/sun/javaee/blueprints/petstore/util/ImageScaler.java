@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: ImageScaler.java,v 1.5 2007-01-10 19:21:03 yutayoshida Exp $ */
+$Id: ImageScaler.java,v 1.6 2007-01-10 20:52:07 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.util;
 
@@ -19,7 +19,6 @@ public class ImageScaler {
     private int thumbWidth = 133;
     private int thumbHeight = 100;
     private String format = "jpg";
-    private String aspectType = "width";
     BufferedImage image = null;
     
     /** Creates a new instance of ImageScaler */
