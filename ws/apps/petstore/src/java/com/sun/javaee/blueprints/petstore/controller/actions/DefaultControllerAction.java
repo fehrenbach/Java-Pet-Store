@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: DefaultControllerAction.java,v 1.3 2007-01-10 23:32:29 basler Exp $ */
+$Id: DefaultControllerAction.java,v 1.4 2007-01-11 22:37:56 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller.actions;
 
@@ -62,17 +62,9 @@ public class DefaultControllerAction implements ControllerAction {
     
     @SuppressWarnings("unchecked") 
     public StringBuffer getResource(String resource, boolean fromWeb, boolean cacheContent) {
-        InputStream stream = null;
-        URLConnection con;
         try {
-            if (!fromWeb) {
-                URL url = ControllerServlet.class.getResource(resource);
-                con = url.openConnection();
-            } else {
-                // check the time stamp on the resource
-                URL url = context.getResource(resource);
-                con = url.openConnection();
-            }
+            URL url = fromWeb ? context.getResource(resource) : ControllerServlet.class.getResource(resource);
+            URLConnection con = url.openConnection();
             if (cacheContent) {
                 HashMap<String, StringBuffer> cache = (HashMap<String, StringBuffer>) context.getAttribute(CACHE);
                 HashMap<String, Long> cacheTimes = (HashMap<String, Long>)context.getAttribute(CACHE_TIMES);
