@@ -147,23 +147,15 @@ public class EntryFilter implements Filter {
         String entryPagesParam=filterConfig.getServletContext().getInitParameter("entryPages");
         if(bDebug) System.out.println("\n*** entry String = " + entryPagesParam);
         // loop through pages to see if
-        try {
-            StringTokenizer stPages=new StringTokenizer(entryPagesParam, "|");
-            int countx=stPages.countTokens();
-            entryPages=new String[countx];
-            for(int ii=0; ii < countx; ii++) {
-                entryPages[ii]=stPages.nextToken();
-            }
-        } catch(Exception ee) {
-            ee.printStackTrace();
+        StringTokenizer stPages=new StringTokenizer(entryPagesParam, "|");
+        int countx=stPages.countTokens();
+        entryPages=new String[countx];
+        for(int ii=0; ii < countx; ii++) {
+            entryPages[ii]=stPages.nextToken();
         }
     }
     
-    /**
-     * Return a String representation of this object.
-     */
     public String toString() {
-        
         if (filterConfig == null) return ("EntryFilter()");
         StringBuffer sb = new StringBuffer("EntryFilter(");
         sb.append(filterConfig);
@@ -190,34 +182,26 @@ public class EntryFilter implements Filter {
                 pw.print("<h1>The resource did not process correctly</h1>\n<pre>\n");
                 pw.print(stackTrace);
                 pw.print("</pre></body>\n</html>"); //NOI18N
-                pw.close();
-                ps.close();
-                response.getOutputStream().close();;
-            }
-            
-            catch(Exception ex){ }
+                PetstoreUtil.closeIgnoringException(pw);
+                PetstoreUtil.closeIgnoringException(ps);
+                PetstoreUtil.closeIgnoringException(response.getOutputStream());
+            } catch(IOException ex){ }
         } else {
             try {
                 PrintStream ps = new PrintStream(response.getOutputStream());
                 t.printStackTrace(ps);
-                ps.close();
-                response.getOutputStream().close();;
-            } catch(Exception ex){ }
+                PetstoreUtil.closeIgnoringException(ps);
+                PetstoreUtil.closeIgnoringException(response.getOutputStream());
+            } catch(IOException ex){ }
         }
     }
     
     public static String getStackTrace(Throwable t) {
-        
-        String stackTrace = null;
-        
-        try {
-            StringWriter sw = new StringWriter();
-            PrintWriter pw = new PrintWriter(sw);
-            t.printStackTrace(pw);
-            pw.close();
-            sw.close();
-            stackTrace = sw.getBuffer().toString();
-        } catch(Exception ex) {}
-        return stackTrace;
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        t.printStackTrace(pw);
+        PetstoreUtil.closeIgnoringException(pw);
+        PetstoreUtil.closeIgnoringException(sw);
+        return sw.getBuffer().toString();
     }
 }

@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CaptchaValidateFilter.java,v 1.22 2007-01-10 21:48:01 yutayoshida Exp $ */
+$Id: CaptchaValidateFilter.java,v 1.23 2007-01-11 23:52:10 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -21,6 +21,7 @@ import javax.servlet.http.HttpSession;
 
 // for CAPTCHA_KEY and CAPTCHA_STRING
 import static com.sun.javaee.blueprints.petstore.controller.actions.CaptchaAction.*;
+import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
 
 public class CaptchaValidateFilter implements Filter {
     
@@ -33,13 +34,7 @@ public class CaptchaValidateFilter implements Filter {
     // configured.
     private FilterConfig filterConfig = null;
     
-    public CaptchaValidateFilter() {
-    }
-    
     /**
-     * @param request httpservlet request
-     * @param response httpservlet response
-     *
      * @return boolean true if captcha is correct
      */
     private Boolean isCaptchaCorrect(HttpServletRequest request, HttpServletResponse response) {
@@ -67,11 +62,6 @@ public class CaptchaValidateFilter implements Filter {
     
     
     /**
-     *
-     * @param request The servlet request we are processing
-     * @param result The servlet response we are creating
-     * @param chain The filter chain we are processing
-     *
      * @exception IOException if an input/output error occurs
      * @exception ServletException if a servlet error occurs
      */
@@ -147,17 +137,9 @@ public class CaptchaValidateFilter implements Filter {
         this.filterConfig = filterConfig;
     }
     
-    /**
-     * Destroy method for this filter
-     *
-     */
     public void destroy() {
     }
     
-    /**
-     * Init method for this filter
-     *
-     */
     public void init(FilterConfig filterConfig) {
         this.filterConfig = filterConfig;
         if (debug && filterConfig != null) {
@@ -165,11 +147,7 @@ public class CaptchaValidateFilter implements Filter {
         }
     }
     
-    /**
-     * Return a String representation of this object.
-     */
-    public String toString() {
-        
+    public String toString() {        
         if (filterConfig == null) return ("CaptchaValidateFilter()");
         StringBuffer sb = new StringBuffer("CaptchaValidateFilter(");
         sb.append(filterConfig);
@@ -180,12 +158,9 @@ public class CaptchaValidateFilter implements Filter {
     
     private void sendProcessingError(Throwable t, ServletResponse response) {
         
-        String stackTrace = getStackTrace(t);
-        
-        if(stackTrace != null && !stackTrace.equals("")) {
-            
-            try {
-                
+        String stackTrace = getStackTrace(t);        
+        if(stackTrace != null && !stackTrace.equals("")) {            
+            try {                
                 response.setContentType("text/html");
                 PrintStream ps = new PrintStream(response.getOutputStream());
                 PrintWriter pw = new PrintWriter(ps);
@@ -195,35 +170,27 @@ public class CaptchaValidateFilter implements Filter {
                 pw.print("<h1>The resource did not process correctly</h1>\n<pre>\n");
                 pw.print(stackTrace);
                 pw.print("</pre></body>\n</html>"); //NOI18N
-                pw.close();
-                ps.close();
-                response.getOutputStream().close();;
-            }
-            
-            catch(Exception ex){ }
+                PetstoreUtil.closeIgnoringException(pw);
+                PetstoreUtil.closeIgnoringException(ps);
+                PetstoreUtil.closeIgnoringException(response.getOutputStream());
+            } catch(IOException ex){ }
         } else {
             try {
                 PrintStream ps = new PrintStream(response.getOutputStream());
                 t.printStackTrace(ps);
-                ps.close();
-                response.getOutputStream().close();;
-            } catch(Exception ex){ }
+                PetstoreUtil.closeIgnoringException(ps);
+                PetstoreUtil.closeIgnoringException(response.getOutputStream());
+            } catch(IOException ex){ }
         }
     }
     
     public static String getStackTrace(Throwable t) {
-        
-        String stackTrace = null;
-        
-        try {
-            StringWriter sw = new StringWriter();
-            PrintWriter pw = new PrintWriter(sw);
-            t.printStackTrace(pw);
-            pw.close();
-            sw.close();
-            stackTrace = sw.getBuffer().toString();
-        } catch(Exception ex) {}
-        return stackTrace;
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        t.printStackTrace(pw);
+        PetstoreUtil.closeIgnoringException(pw);
+        PetstoreUtil.closeIgnoringException(sw);
+        return sw.getBuffer().toString();
     }
     
     public void log(String msg) {
