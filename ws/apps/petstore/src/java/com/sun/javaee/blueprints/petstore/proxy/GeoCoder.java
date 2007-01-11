@@ -5,7 +5,7 @@
  *
  *   http://developer.sun.com/berkeley_license.html
  *
- * $Id: GeoCoder.java,v 1.1 2006-12-01 03:30:11 sean_brydon Exp $
+ * $Id: GeoCoder.java,v 1.2 2007-01-11 22:49:25 inder Exp $
  */
 
 package com.sun.javaee.blueprints.petstore.proxy;
@@ -35,18 +35,18 @@ import org.xml.sax.SAXException;
  * http://developer.yahoo.net/maps/rest/V1/geocode.html</a>.</p>
  */
 public class GeoCoder {
-
+    
     private String applicationId = APPLICATION_ID;
     private Logger logger =
             Logger.getLogger("com.sun.javaee.blueprints.components.ui.GeoCoder",
-                             "com.sun.javaee.blueprints.components.ui.MessageStrings");
+            "com.sun.javaee.blueprints.components.ui.MessageStrings");
     private String proxyHost = null;
     private int proxyPort = 0;
     private boolean proxySet = false;
-
-
+    
+    
     // ------------------------------------------------------ Manifest Constants
-
+    
     /**
      * <p>The default application identifier required by the geocoding
      * service.  This may be overridden by setting the <code>applicationId</code>
@@ -54,17 +54,17 @@ public class GeoCoder {
      */
     static final String APPLICATION_ID =
             "com.sun.javaee.blueprints.components.ui.geocoder";
-
-
+    
+    
     /**
      * <p>The URL of the geocoding service we will be using.</p>
      */
     private static final String SERVICE_URL =
             "http://api.local.yahoo.com/MapsService/V1/geocode";
-
-
+    
+    
     // -------------------------------------------------------------- Properties
-
+    
     /**
      * <p>Return the application identifier to be passed to the geocoding
      * service.</p>
@@ -72,7 +72,7 @@ public class GeoCoder {
     public String getApplicationId() {
         return this.applicationId;
     }
-
+    
     /**
      * <p>Set the application identifier to be passed to the geocoding
      * service.</p>
@@ -85,7 +85,7 @@ public class GeoCoder {
         }
         this.applicationId = applicationId;
     }
-
+    
     /**
      * <p>Return the proxy host to use for network connections, or <code>null</code>
      * if the default proxy host for the application server's JVM should be
@@ -94,7 +94,7 @@ public class GeoCoder {
     public String getProxyHost() {
         return this.proxyHost;
     }
-
+    
     /**
      * Set the proxy host to use for network connections, or <code>null</code>
      * to use the default proxy host for the application server's JVM.</p>
@@ -105,7 +105,7 @@ public class GeoCoder {
         this.proxyHost = proxyHost;
         this.proxySet = false;
     }
-
+    
     /**
      * <p>Return the proxy port to use for network connections, or <code>0</code>
      * if the default proxy port for the application server's JVM should be
@@ -114,7 +114,7 @@ public class GeoCoder {
     public int getProxyPort() {
         return this.proxyPort;
     }
-
+    
     /**
      * Set the proxy port to use for network connections, or <code>0</code>
      * to use the default proxy port for the application server's JVM.</p>
@@ -125,11 +125,11 @@ public class GeoCoder {
         this.proxyPort = proxyPort;
         this.proxySet = false;
     }
-
-
+    
+    
     // ---------------------------------------------------------- Public Methods
-
-
+    
+    
     /**
      * <p>Return an array of zero or more {@link GeoPoint} instances for results
      * that match a search for the specified location string.  This string can
@@ -150,18 +150,18 @@ public class GeoCoder {
      * @exception NullPointerException if <code>location</code> is <code>null</code>
      */
     public GeoPoint[] geoCode(String location) {
-
+        
         // Bail out immediately if no location was specified
         if (location == null) {
             return null;
         }
-
+        
         // Set the proxy configuration (if necessary)
         if (!proxySet) {
             setProxyConfiguration();
             proxySet = false;
         }
-
+        
         // URL encode the specified location
         String applicationId = getApplicationId();
         try {
@@ -172,7 +172,7 @@ public class GeoCoder {
             }
             throw new IllegalArgumentException(e.getMessage());
         }
-
+        
         // URL encode the specified location
         try {
             location = URLEncoder.encode(location, "ISO-8859-1");
@@ -182,7 +182,7 @@ public class GeoCoder {
             }
             throw new IllegalArgumentException(e.getMessage());
         }
-
+        
         // Perform the actual service call and parse the response XML document,
         // then format and return the results
         Document document = null;
@@ -205,7 +205,7 @@ public class GeoCoder {
         }
         return null; // FIXME
     }
-
+    
     /**
      * <p>Convert the parsed XML results into the appropriate output from
      * our <code>geoCode()</code> method.  If there were no results (and no
@@ -218,30 +218,30 @@ public class GeoCoder {
      *  is encountered
      */
     private GeoPoint[] convertResults(Document document) {
-
+        
         List<GeoPoint> results = new ArrayList<GeoPoint>();
         GeoPoint point = null;
-
+        
         // Acquire and validate the top level "ResultSet" element
         Element root = document.getDocumentElement();
         if (!"ResultSet".equals(root.getTagName())) {
             throw new IllegalArgumentException(root.getTagName());
         }
-
+        
         // Iterate over the child "Result" components, creating a new
         // GeoPoint instance for each of them
         NodeList outerList = root.getChildNodes();
         for (int i = 0; i < outerList.getLength(); i++) {
-
+            
             // Validate the outer "Result" element
             Node outer = outerList.item(i);
             if (!"Result".equals(outer.getNodeName())) {
                 throw new IllegalArgumentException(outer.getNodeName());
             }
-
+            
             // Create a new GeoPoint for this element
             point = new GeoPoint();
-
+            
             // Iterate over the inner elements to set properties
             NodeList innerList = outer.getChildNodes();
             for (int j = 0; j < innerList.getLength(); j++) {
@@ -284,8 +284,8 @@ public class GeoCoder {
         // Return the accumulated point information
         return (GeoPoint[]) results.toArray(new GeoPoint[results.size()]);
     }
-
-
+    
+    
     /**
      * <p>Parse the XML content at the specified URL into an XML
      * <code>Document</code>, which can be further processed to extract
@@ -303,21 +303,18 @@ public class GeoCoder {
      * @exception SAXException if a parsing error occurs
      */
     private Document parseResponse(String url)
-        throws IOException, MalformedURLException, ParserConfigurationException, SAXException {
-
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
+    throws IOException, MalformedURLException, ParserConfigurationException, SAXException {
+        
+        DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         InputStream stream = null;
         try {
             stream = new URL(url).openStream();
             return db.parse(stream);
         } finally {
-            if (stream != null) {
-                try { stream.close(); } catch (Exception e) {}
-            }
+            try { if (stream != null) stream.close(); } catch (IOException e) {}
         }
     }
-
+    
     /**
      * <p>Attempt to set the system properties related to the HTTP proxy host
      * and port to be used, but swallow security exceptions if the security
@@ -326,14 +323,14 @@ public class GeoCoder {
      * and deal with this on a per-connection basis.  Until then, oh well.</p>
      */
     private synchronized void setProxyConfiguration() {
-
+        
         // NOTE - the system properties API gives no way to unset properties
         // after they have been set.  Therefore, only attempt to set things
         // if we have values for both proxyHost and proxyPort
         if ((proxyHost == null) || (proxyPort == 0)) {
             return;
         }
-
+        
         // Log and swallow any security exception that occurs when attempting
         // to set these system properties.  The subsequent connection failure
         // will be ugly enough
