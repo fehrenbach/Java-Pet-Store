@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: DefaultControllerAction.java,v 1.4 2007-01-11 22:37:56 inder Exp $ */
+$Id: DefaultControllerAction.java,v 1.5 2007-01-11 23:27:47 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller.actions;
 
@@ -102,10 +102,9 @@ public class DefaultControllerAction implements ControllerAction {
     
     private StringBuffer getResource(InputStream stream) {
         StringBuffer buffer = new StringBuffer();
-        BufferedReader bufReader = null;
-        String curLine = null;
         try {
-            bufReader = new BufferedReader(new InputStreamReader(stream));
+            BufferedReader bufReader = new BufferedReader(new InputStreamReader(stream));
+            String curLine;
             while (null != (curLine = bufReader.readLine())) {
                 buffer.append(curLine + "\n");
             }
