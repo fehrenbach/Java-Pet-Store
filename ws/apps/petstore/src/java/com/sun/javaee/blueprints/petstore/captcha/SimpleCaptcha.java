@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: SimpleCaptcha.java,v 1.12 2007-01-10 18:10:51 inder Exp $ */
+$Id: SimpleCaptcha.java,v 1.13 2007-01-11 02:44:46 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.captcha;
 
@@ -85,8 +85,6 @@ public class SimpleCaptcha {
             lastBimg = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
             g2 = lastBimg.getGraphics();
             g2.drawImage(filteredImg, 0, 0, null);
-        } catch (Exception e) {
-            e.printStackTrace();
         } finally {
             if (g != null) g.dispose();
             if (g2 != null) g2.dispose();
