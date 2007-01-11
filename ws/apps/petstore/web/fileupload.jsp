@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: fileupload.jsp,v 1.54 2007-01-11 01:04:30 basler Exp $ --%>
+$Id: fileupload.jsp,v 1.55 2007-01-11 17:45:26 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -243,7 +243,7 @@ div.pane {
                             toolbarTemplatePath="${pageContext.request.contextPath}/rteToolBar.html"></textarea>
                         </div>
                         
-                        <h:outputText value="*Price"/>
+                        <h:outputText value="*Price (is US dollars)"/>
                         <h:inputText size="20" id="price"></h:inputText>
 
                         <h:outputText value="*Image File"/>                 

@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: HTMLParser.java,v 1.12 2007-01-10 23:32:30 basler Exp $ */
+$Id: HTMLParser.java,v 1.13 2007-01-11 17:45:26 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.search;
 
@@ -9,7 +9,6 @@ import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.HTML;
 import javax.swing.text.MutableAttributeSet;
 import java.util.logging.Level;
-import org.apache.lucene.document.DateField;
 import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -83,7 +82,7 @@ public class HTMLParser {
                 
                 // parse, index and get forwarding urls
                 ParserDelegator pd=new ParserDelegator();
-                CallbackHandler cb=new CallbackHandler(vtURLs, bIndexPage,  beginURL, contextRoot);
+                CallbackHandler cb=new CallbackHandler(vtURLs, bIndexPage,  contextRoot);
                 try {
                     URLConnection urlConn=new URL(sxURL).openConnection();
                     urlConn.setUseCaches(false);
@@ -99,7 +98,7 @@ public class HTMLParser {
                         indexDoc=new IndexDocument();
                         indexDoc.setUID(sxURL + modDate.toString());
                         indexDoc.setPageURL(sxURL);
-                        indexDoc.setModifiedDate(DateField.dateToString(modDate));
+                        indexDoc.setModifiedDate(modDate.toString());
                         indexDoc.setContents(cb.getText());
                         indexDoc.setTitle(cb.getTitle());
                         indexDoc.setSummary(cb.getSummary());
@@ -167,9 +166,8 @@ public class HTMLParser {
         private boolean bSummary=false, bIndexPage=false;
         private String tag=null;
         
-        CallbackHandler(List<String> vtURLs, boolean bIndexPage, String beginURL, String contextRoot) {
+        CallbackHandler(List<String> vtURLs, boolean bIndexPage, String contextRoot) {
             super();
-            this.beginURL=beginURL;
             this.contextRoot=contextRoot;
             this.bIndexPage=bIndexPage;
             this.vtURLs=vtURLs;
