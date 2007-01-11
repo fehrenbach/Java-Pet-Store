@@ -5,11 +5,12 @@
  *
  *   http://developer.sun.com/berkeley_license.html
  *
- * $Id: GeoCoder.java,v 1.2 2007-01-11 22:49:25 inder Exp $
+ * $Id: GeoCoder.java,v 1.3 2007-01-11 23:04:53 inder Exp $
  */
 
 package com.sun.javaee.blueprints.petstore.proxy;
 
+import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -311,7 +312,7 @@ public class GeoCoder {
             stream = new URL(url).openStream();
             return db.parse(stream);
         } finally {
-            try { if (stream != null) stream.close(); } catch (IOException e) {}
+            PetstoreUtil.closeIgnoringException(stream);
         }
     }
     

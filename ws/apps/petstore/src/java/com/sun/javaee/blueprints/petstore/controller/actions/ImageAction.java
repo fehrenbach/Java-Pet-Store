@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: ImageAction.java,v 1.3 2007-01-11 02:45:32 inder Exp $ */
+$Id: ImageAction.java,v 1.4 2007-01-11 23:04:53 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller.actions;
 
@@ -71,9 +71,9 @@ public class ImageAction implements ControllerAction {
             out = Channels.newChannel(response.getOutputStream());
             in.transferTo(0, in.size(), out);
         } finally {
-            try { if(in != null) in.close(); } catch (IOException ioe) {}
-            try { if(fis != null) fis.close(); } catch (IOException ioe) {}
-            try { if(out != null) out.close(); } catch (IOException ioe) {}
+            PetstoreUtil.closeIgnoringException(in);
+            PetstoreUtil.closeIgnoringException(fis);
+            PetstoreUtil.closeIgnoringException(out);
         }
     }
 }
