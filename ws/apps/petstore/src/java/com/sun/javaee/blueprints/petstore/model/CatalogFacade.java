@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CatalogFacade.java,v 1.55 2007-01-10 23:32:30 basler Exp $ */
+$Id: CatalogFacade.java,v 1.56 2007-01-11 01:04:30 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.model;
 
@@ -37,8 +37,12 @@ public class CatalogFacade implements ServletContextListener {
     // typecast the result appropriately. However, since generics information is lost at the runtime, 
     // there is no way to avoid a warning. Hence we use SuppressWarnings in this case
     
-    @PersistenceUnit(unitName="PetstorePu") private EntityManagerFactory emf;
-    @Resource UserTransaction utx;
+    @PersistenceUnit(unitName="PetstorePu") 
+    private EntityManagerFactory emf;
+    
+    @Resource 
+    private UserTransaction utx;
+    
     private static final boolean bDebug=false;
     
     public CatalogFacade(){ }

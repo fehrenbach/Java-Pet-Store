@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: FileUploadBean.java,v 1.49 2007-01-10 23:32:29 basler Exp $ */
+$Id: FileUploadBean.java,v 1.50 2007-01-11 01:04:29 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -30,6 +30,7 @@ import com.sun.javaee.blueprints.petstore.model.Item;
 import com.sun.javaee.blueprints.petstore.model.Tag;
 import com.sun.javaee.blueprints.petstore.model.SellerContactInfo;
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -157,6 +158,7 @@ public class FileUploadBean {
                 String price=getStringValue(htUpload, compName+":price");
                 // set to negative to trigger validation message for price
                 if(price.length() == 0) price="-1";
+                
                 String tags=getStringValue(htUpload, compName+":tags");
                 if(tags == null) tags="";
                 
@@ -232,7 +234,7 @@ public class FileUploadBean {
                 }
                 BigDecimal pricex;
                 try {
-                    pricex=new BigDecimal(price);
+                    pricex=new BigDecimal(price).setScale(2, BigDecimal.ROUND_HALF_UP);
                 } catch (NumberFormatException nf) {
                     pricex=BigDecimal.valueOf(-1);
                     PetstoreUtil.getLogger().log(Level.INFO, "Price isn't in a proper number - " + price);

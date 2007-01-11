@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: fileupload.jsp,v 1.53 2007-01-09 19:24:09 basler Exp $ --%>
+$Id: fileupload.jsp,v 1.54 2007-01-11 01:04:30 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -89,7 +89,7 @@ $Id: fileupload.jsp,v 1.53 2007-01-09 19:24:09 basler Exp $ --%>
             var pricex=dojo.byId("TestFileuploadForm:price").value;
             if(pricex == "" || isNaN(parseInt(pricex))) {
                 // price should be a number
-                valMess += "Error: Price should should exist and be a number.\n";
+                valMess += "Error: Price should should exist and be a number in American Dollars in the format '*.00'.\n";
             }
             
             // make sure the upload file ends in an suffix
