@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: scroller.js,v 1.30 2006-12-01 22:11:04 basler Exp $ */
+$Id: scroller.js,v 1.31 2007-01-13 23:27:10 basler Exp $ */
 
 /**
 * ImageScroller - A multipurpose item brower
@@ -155,7 +155,7 @@ function ImageScroller() {
     
      // do the value list pre-emptive fetching
     function prefetch() {
-        //printDebug("** scoller index = " + index);
+        printDebug("** scoller index = " + index);
         if (isScrollingRight && (index + PREFETCH_THRESHHOLD) % CHUNK_SIZE == 0) {
 
             if ((Math.round(index / CHUNK_SIZE)) >= currentChunk) {

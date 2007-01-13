@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: catalog.js,v 1.18 2007-01-10 23:32:31 basler Exp $ */
+$Id: catalog.js,v 1.19 2007-01-13 23:27:09 basler Exp $ */
 
 var ac;
 var is;
@@ -225,9 +225,9 @@ function CatalogController() {
 
             } else {
                 // not in cache so load it
-                startRetIndex=(index * CHUNK_SIZE);
+                startRetIndex=(neededChunk * CHUNK_SIZE);
 
-                printDebug("**** retrieving chunk from server - pid=" + pid + " index " + startRetIndex + " Chunk=" +  neededChunk);
+                printDebug("**** retrieving chunk from server - pid=" + pid + " currentIndex=" + index + " startIndex=" + startRetIndex + " Chunk=" +  neededChunk);
                 var bindArgs = {
                     url:  applicationContextRoot + "/catalog?command=items&pid=" + pid + "&start=" + startRetIndex + "&length=" + CHUNK_SIZE,
                     mimetype: "text/xml",
