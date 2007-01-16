@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: FileUploadBean.java,v 1.50 2007-01-11 01:04:29 basler Exp $ */
+$Id: FileUploadBean.java,v 1.51 2007-01-16 22:48:28 inder Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -67,9 +67,9 @@ public class FileUploadBean {
             Map<String,Object> contextMap = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
             this.catalogFacade = (CatalogFacade)contextMap.get("CatalogFacade");
         }
-            //get the catalog facade
+        //get the catalog facade
         if (products == null) {
-            products = new ArrayList<SelectItem>();        
+            products = new ArrayList<SelectItem>();
             for (Product pd : catalogFacade.getProducts()) {
                 products.add(new SelectItem(pd.getProductID(), pd.getName()));
             }
@@ -151,7 +151,7 @@ public class FileUploadBean {
                     thumbPath = "images/dragon-iron-thumb.jpg ";
                 }
                 
-                String compName=getStringValue(htUpload, FileUploadUtil.COMPONENT_NAME);                               
+                String compName=getStringValue(htUpload, FileUploadUtil.COMPONENT_NAME);
                 prodId=getStringValue(htUpload, compName+":product");
                 name=getStringValue(htUpload, compName+":name");
                 String desc=getStringValue(htUpload, compName+":description");
@@ -202,7 +202,7 @@ public class FileUploadBean {
                     geoCoder.setProxyHost(proxyHost);
                     try {
                         geoCoder.setProxyPort(Integer.parseInt(proxyPort));
-                    } catch (Exception ee) {
+                    } catch (NumberFormatException ee) {
                         ee.printStackTrace();
                     }
                 } else {
