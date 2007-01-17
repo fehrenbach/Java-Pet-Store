@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: ControllerServlet.java,v 1.27 2007-01-11 02:40:38 inder Exp $ */
+$Id: ControllerServlet.java,v 1.28 2007-01-17 18:00:06 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -30,7 +30,7 @@ import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
  */
 public class ControllerServlet extends HttpServlet {
     
-    private static final boolean bDebug=true;
+    private static final boolean bDebug=false;
     private HashMap<String, ControllerAction> actionMap = new HashMap<String, ControllerAction>();
     
     @Override 

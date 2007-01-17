@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: Item.java,v 1.23 2007-01-10 23:32:30 basler Exp $ */
+$Id: Item.java,v 1.24 2007-01-17 18:00:07 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.model;
 
@@ -24,7 +24,7 @@ import javax.persistence.TableGenerator;
 @NamedQueries(
  {  @NamedQuery(
       name="Item.getItemsPerProductCategory",
-      query="SELECT i FROM Item i WHERE i.productID = :pID"
+      query="SELECT i FROM Item i WHERE i.productID = :pID and i.disabled = 0"
     ), 
     @NamedQuery(
       name="Item.getAllZipCityState",
@@ -46,6 +46,7 @@ public class Item implements java.io.Serializable {
     private SellerContactInfo contactInfo;
     private int totalScore;
     private int numberOfVotes;
+    private int disabled;
     private Collection<Tag> tags=new Vector<Tag>();
 
       
@@ -64,6 +65,7 @@ public class Item implements java.io.Serializable {
         this.contactInfo = contactInfo;
         this.totalScore = totalScore;
         this.numberOfVotes = numberOfVotes;                    
+        this.disabled = 0;                    
     }
     
     @TableGenerator(name="ITEM_ID_GEN",
@@ -118,6 +120,9 @@ public class Item implements java.io.Serializable {
     public int getNumberOfVotes() {
         return numberOfVotes;
     } 
+    public int getDisabled() {
+        return disabled;
+    } 
     
     public void setItemID(String itemID) {
         this.itemID = itemID;
@@ -151,6 +156,9 @@ public class Item implements java.io.Serializable {
     }
     public void setNumberOfVotes(int numberOfVotes) {
         this.numberOfVotes = numberOfVotes;
+    }
+    public void setDisabled(int disabled) {
+        this.disabled = disabled;
     }
     
     @ManyToMany(mappedBy = "items")

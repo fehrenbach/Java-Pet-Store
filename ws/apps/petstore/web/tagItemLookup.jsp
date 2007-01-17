@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: tagItemLookup.jsp,v 1.2 2006-09-20 21:22:12 basler Exp $ --%>
+$Id: tagItemLookup.jsp,v 1.3 2007-01-17 18:00:09 basler Exp $ --%>
 
 <%@page contentType="text/xml"%>
 <%@page pageEncoding="UTF-8"%>
@@ -23,14 +23,16 @@ $Id: tagItemLookup.jsp,v 1.2 2006-09-20 21:22:12 basler Exp $ --%>
             out.println("<items>");
             Collection<Item> items=tag.getItems();
             for(Item item : items) {
-                out.println("<item>");
-                out.println("<itemID>" + item.getItemID() + "</itemID>");
-                out.println("<productID>" + item.getProductID() + "</productID>");
-                out.println("<name><![CDATA[" + item.getName() + "]]></name>");
-                out.println("<description><![CDATA[" + item.getDescription() + "]]></description>");
-                out.println("<tags><![CDATA[" + item.tagsAsString() + "]]></tags>");
-                out.println("<price><![CDATA[" + NumberFormat.getCurrencyInstance().format(item.getPrice()) + "]]></price>");
-                out.println("</item>");
+                if(item.getDisabled() == 0) {
+                    out.println("<item>");
+                    out.println("<itemID>" + item.getItemID() + "</itemID>");
+                    out.println("<productID>" + item.getProductID() + "</productID>");
+                    out.println("<name><![CDATA[" + item.getName() + "]]></name>");
+                    out.println("<description><![CDATA[" + item.getDescription() + "]]></description>");
+                    out.println("<tags><![CDATA[" + item.tagsAsString() + "]]></tags>");
+                    out.println("<price><![CDATA[" + NumberFormat.getCurrencyInstance().format(item.getPrice()) + "]]></price>");
+                    out.println("</item>");
+                }
             }
             out.println("</items>");
         }

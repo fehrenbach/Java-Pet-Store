@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: SearchBean.java,v 1.5 2006-12-07 01:43:34 inder Exp $ */
+$Id: SearchBean.java,v 1.6 2007-01-17 18:00:08 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.search;
 
@@ -57,7 +57,7 @@ public class SearchBean {
             // alter search string if tagged
             String searchxx=searchString;
             if(searchTags && searchString.indexOf(":") < 0) {
-                searchxx="contents:" + searchString + " OR tag:" + searchString;
+                searchxx="disabled:0 AND (contents:" + searchString + " OR tag:" + searchString + ")";
             }
             hitsList=si.query(PetstoreConstants.PETSTORE_INDEX_DIRECTORY, searchxx);
             setShowResults(true);

@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: SQLParser.java,v 1.9 2006-11-14 18:30:20 basler Exp $ */
+$Id: SQLParser.java,v 1.10 2007-01-17 18:00:08 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.search;
 
@@ -60,6 +60,7 @@ public class SQLParser {
                 indexDoc.setImage(result.getString("image"));
                 indexDoc.setPrice(result.getString("price"));
                 indexDoc.setProduct(result.getString("product"));
+                indexDoc.setDisabled(Integer.toString(result.getInt("disabled")));
                 indexDoc.setModifiedDate(result.getString("modifiedDate"));
                 indexDoc.setContents(title + " " + summary);
                 indexDoc.setTitle(title);

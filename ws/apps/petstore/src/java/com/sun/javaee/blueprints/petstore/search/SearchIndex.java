@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: SearchIndex.java,v 1.10 2006-12-07 01:43:34 inder Exp $ */
+$Id: SearchIndex.java,v 1.11 2007-01-17 18:00:08 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.search;
 
@@ -115,6 +115,11 @@ public class SearchIndex {
                 fieldx=indexDoc.getField("tag");
                 if(fieldx != null) {
                     indexDocument.setTag(fieldx.stringValue());
+                }
+
+                fieldx=indexDoc.getField("disabled");
+                if(fieldx != null) {
+                    indexDocument.setDisabled(fieldx.stringValue());
                 }
                 
                 // list all attributes indexed

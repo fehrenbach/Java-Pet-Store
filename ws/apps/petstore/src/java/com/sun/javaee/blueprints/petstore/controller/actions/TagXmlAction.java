@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: TagXmlAction.java,v 1.1 2007-01-04 03:22:05 inder Exp $ */
+$Id: TagXmlAction.java,v 1.2 2007-01-17 18:00:06 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller.actions;
 
@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * This action class serves up XML needed for user-created Tags.
+ * @author Mark Basler
  * @author Inderjeet Singh
  */
 public class TagXmlAction implements ControllerAction {

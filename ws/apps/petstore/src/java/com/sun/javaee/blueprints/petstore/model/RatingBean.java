@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: RatingBean.java,v 1.9 2006-05-05 20:15:25 inder Exp $ */
+$Id: RatingBean.java,v 1.10 2007-01-17 18:00:07 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.model;
 import javax.faces.context.FacesContext;
@@ -35,7 +35,7 @@ public class RatingBean {
                 //call the catalog facade to update rating
                 Item item = cf.getItem(itemId);
                 item.addRating(grade);
-                cf.updateRating(item);
+                cf.updateItem(item);
             }
         }
     }

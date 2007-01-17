@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CaptchaValidateFilter.java,v 1.23 2007-01-11 23:52:10 inder Exp $ */
+$Id: CaptchaValidateFilter.java,v 1.24 2007-01-17 18:00:05 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -70,11 +70,23 @@ public class CaptchaValidateFilter implements Filter {
             throws IOException, ServletException {
         
         if (debug) log("CaptchaValidateFilter:doFilter()");
-        
-        Boolean correctCaptcha = isCaptchaCorrect((HttpServletRequest)request, (HttpServletResponse)response);
+        HttpServletRequest httpRequest=(HttpServletRequest)request;
+        HttpServletResponse httpReponse=(HttpServletResponse)response;
+        Boolean correctCaptcha = isCaptchaCorrect((HttpServletRequest)request, httpReponse);
         
         Throwable problem = null;
         if (correctCaptcha) {
+            // check to make sure size of upload isn't too big, over 150kb
+            if(request.getContentLength() > 150000) {
+                FileUploadStatus fuStatus = new FileUploadStatus();
+                httpRequest.getSession(true).setAttribute("fileUploadStatus", fuStatus);
+                fuStatus.setMessage("Upload Size Error");
+                response.setContentType("text/plain");
+                httpReponse.setHeader("Cache-Control", "no-store");
+                httpReponse.setHeader("Pragma", "no-cache");
+                return;
+            }
+            
             // if there's previous set session attribute, remove it
             HttpSession session = ((HttpServletRequest)request).getSession(true);
             session.removeAttribute(INVALID_CAPTCHA);
@@ -106,17 +118,14 @@ public class CaptchaValidateFilter implements Filter {
              * it needs to set the "captcha invalid" status to the session attribute
              * for the next request
              */
-            HttpSession session = ((HttpServletRequest)request).getSession(true);
+            HttpSession session = httpRequest.getSession(true);
             session.setAttribute(INVALID_CAPTCHA, Boolean.TRUE);
             FileUploadStatus fuStatus = new FileUploadStatus();
             session.setAttribute("fileUploadStatus", fuStatus);
-            //fuStatus.setUploadItems(new Hashtable());
-            //fuStatus.setEndUploadDate(new Date());
-            String errorx="Captchas Filter Error";
-            fuStatus.setMessage(errorx);
+            fuStatus.setMessage("Captchas Filter Error");
             response.setContentType("text/plain");
-            ((HttpServletResponse)response).setHeader("Cache-Control", "no-store");
-            ((HttpServletResponse)response).setHeader("Pragma", "no-cache");
+            httpReponse.setHeader("Cache-Control", "no-store");
+            httpReponse.setHeader("Pragma", "no-cache");
         }
     }
     

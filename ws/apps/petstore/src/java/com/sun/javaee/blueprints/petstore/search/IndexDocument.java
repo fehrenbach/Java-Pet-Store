@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: IndexDocument.java,v 1.10 2007-01-10 23:32:31 basler Exp $ */
+$Id: IndexDocument.java,v 1.11 2007-01-17 18:00:07 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.search;
 
@@ -16,7 +16,7 @@ import java.util.Date;
 public class IndexDocument {
     
     public String uid="", pageURL="", title="", summary="", image="";
-    public String modifiedDate="", contents="", price="0", product="", tag="";
+    public String modifiedDate="", contents="", price="0", product="", tag="", disabled="0";
     
     
     /** Creates a new instance of indexDocuments */
@@ -41,6 +41,7 @@ public class IndexDocument {
         this.title=item.getName();
         this.summary=item.getDescription();
         this.tag=item.tagsAsString();        
+        this.disabled=Integer.toString(item.getDisabled());
     }
     
     public String getUID() {
@@ -127,12 +128,19 @@ public class IndexDocument {
         this.tag=tag;
     }
     
+    public String getDisabled() {
+        return this.disabled;
+    }
+    public void setDisabled(String disabled) {
+        this.disabled=disabled;
+    }
+    
     
     public String toString() {
         String sxRet=" UID=" + uid + " pageURL=" + pageURL + " title=" + title +
             " summary=" + summary + " image=" + image + 
             " modifiedDate=" + modifiedDate + " contents=" + contents +
-            " price=" + price + " product=" + product + " tag=" + tag;
+            " price=" + price + " product=" + product + " tag=" + tag + " disabled=" + disabled;
         return sxRet;
                 
     }

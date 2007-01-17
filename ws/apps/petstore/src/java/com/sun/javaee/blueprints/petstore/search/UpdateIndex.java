@@ -1,8 +1,9 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: UpdateIndex.java,v 1.7 2006-11-14 18:30:23 basler Exp $ */
+$Id: UpdateIndex.java,v 1.8 2007-01-17 18:00:08 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.search;
 
+import com.sun.javaee.blueprints.petstore.model.Item;
 import java.io.IOException;
 
 import org.apache.lucene.document.Document;
@@ -13,6 +14,7 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.search.Hits;
+
 
 /**
  *
@@ -31,7 +33,10 @@ public class UpdateIndex {
     
     public void updateDocTag(String indexFile, String sxTagField, String tagString, String sxDocId, String type) throws IOException {
         if(bDebug) System.out.println("Tagging document:" + sxDocId + " with \"" + sxTagField + " - " + tagString + "\"");
+        Document doc=deleteIndex(indexFile, sxDocId);
         
+        
+        /*
         // get document to update, so data can be added
         SearchIndex si=new SearchIndex();
         si.query(indexFile, sxDocId, "uid");
@@ -61,6 +66,11 @@ public class UpdateIndex {
             if(bDebug) System.out.println("Number of deleted items in the whole index:" + deleted);
         }
         reader.close();
+        */
+
+        
+        
+        
         
         // update document with tag information or add to tag that exists
         // NOTE: The tag information should be persisted in another place, 
@@ -91,7 +101,42 @@ public class UpdateIndex {
         if(bDebug) System.out.println("after add = " + writer.docCount());
         writer.close();
     }
-
+    
+    
+    public static Document deleteIndex(String indexFile, String sxDocId) throws IOException {
+        
+        // get document to update, so data can be added
+        SearchIndex si=new SearchIndex();
+        si.query(indexFile, sxDocId, "uid");
+        
+        Hits hits=si.getHitsNative();
+        // should only have one return
+        if(hits.length() > 1) {
+            // exception, should only be one
+           throw new IllegalStateException("Should only have one document in index with uid=" + sxDocId);
+        }
+        
+        Document doc=(Document)hits.doc(0);
+        if(bDebug) System.out.println("HAVE DOC " + doc);
+        
+        // Read index and delete targeted doc through a term
+        IndexReader reader=IndexReader.open(indexFile);
+        // delete document by term
+        int delcnt=reader.deleteDocuments(new Term("uid", sxDocId));
+        if(bDebug) {
+            System.out.println("return Number of items deleted:"  + delcnt);
+            int deleted=0;
+            for(int ii=0; ii < reader.numDocs(); ii++) {
+                if(reader.isDeleted(ii)) {
+                    deleted++;
+                }
+            }
+            if(bDebug) System.out.println("Number of deleted items in the whole index:" + deleted);
+        }
+        reader.close();
+        return doc;
+    }
+    
     
     
     public static void main(String[] args) {

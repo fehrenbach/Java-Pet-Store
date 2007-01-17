@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CatalogFacade.java,v 1.56 2007-01-11 01:04:30 basler Exp $ */
+$Id: CatalogFacade.java,v 1.57 2007-01-17 18:00:07 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.model;
 
@@ -76,7 +76,7 @@ public class CatalogFacade implements ServletContextListener {
     @SuppressWarnings("unchecked") 
     public List<Item> getAllItemsFromCategory(String catID){
         EntityManager em = emf.createEntityManager();
-        List<Item> items = em.createQuery("SELECT i FROM Item i, Product p WHERE i.productID = p.productID AND p.categoryID LIKE :categoryID")
+        List<Item> items = em.createQuery("SELECT i FROM Item i, Product p WHERE i.productID = p.productID AND p.categoryID LIKE :categoryID AND i.disabled = 0")
         .setParameter("categoryID", catID).getResultList();
         em.close();
         return items;
@@ -93,7 +93,7 @@ public class CatalogFacade implements ServletContextListener {
     public List<Item> getItemInChunkVLH(String pID, String iID, int chunkSize){
         EntityManager em = emf.createEntityManager();
         //make Java Persistence query
-        Query query = em.createQuery("SELECT i FROM Item i WHERE i.productID = :pID");
+        Query query = em.createQuery("SELECT i FROM Item i WHERE i.productID = :pID AND i.disabled = 0");
         List<Item>  items;
         // scroll through these till we find the set with the itemID we are loooking for
         int index = 0;
@@ -127,7 +127,7 @@ public class CatalogFacade implements ServletContextListener {
         
         //make Java Persistence query
         //Query query = em.createNamedQuery("Item.getItemsPerProductCategory");
-        Query query = em.createQuery("SELECT i FROM Item i WHERE i.productID = :pID");
+        Query query = em.createQuery("SELECT i FROM Item i WHERE i.productID = :pID AND i.disabled = 0");
         List<Item>  items = query.setParameter("pID",pID).setFirstResult(start).setMaxResults(chunkSize).getResultList();
         em.close();
         return items;
@@ -153,7 +153,7 @@ public class CatalogFacade implements ServletContextListener {
             String idString=sbItemIDs.toString();
             idString=idString.substring(0, idString.length() - 1);
             String queryString = "SELECT i FROM Item i WHERE " +
-                    "i.itemID IN (" + idString + ")";
+                    "i.itemID IN (" + idString + ")  AND i.disabled = 0";
             Query query = em.createQuery(queryString + " ORDER BY i.name");
             items = query.getResultList();
         }
@@ -186,7 +186,7 @@ public class CatalogFacade implements ServletContextListener {
                     "i.itemID IN (" +idString+"))";
             Query query = em.createQuery(queryString + " AND " +
                     " ((i.address.latitude BETWEEN :fromLatitude AND :toLatitude) AND " +
-                    "(i.address.longitude BETWEEN :fromLongitude AND :toLongitude )))" +
+                    "(i.address.longitude BETWEEN :fromLongitude AND :toLongitude ))) AND i.disabled = 0" +
                     "  ORDER BY i.name");
             query.setParameter("fromLatitude",fromLat);
             query.setParameter("toLatitude",toLat);
@@ -210,7 +210,7 @@ public class CatalogFacade implements ServletContextListener {
             int chunkSize){
         EntityManager em = emf.createEntityManager();
         Query query = em.createQuery("SELECT i FROM Item i, Product p WHERE " +
-                "i.productID=p.productID AND p.categoryID = :categoryID" +
+                "i.productID=p.productID AND p.categoryID = :categoryID AND i.disabled = 0" +
                 " ORDER BY i.name");
         List<Item>  items = query.setParameter("categoryID",catID).setFirstResult(start).setMaxResults(chunkSize).getResultList();
         em.close();
@@ -231,7 +231,7 @@ public class CatalogFacade implements ServletContextListener {
         Query query = em.createQuery("SELECT i FROM Item i, Product p WHERE " +
                 "i.productID=p.productID AND p.categoryID = :categoryID " +
                 "AND((i.address.latitude BETWEEN :fromLatitude AND :toLatitude) AND " +
-                "(i.address.longitude BETWEEN :fromLongitude AND :toLongitude ))" +
+                "(i.address.longitude BETWEEN :fromLongitude AND :toLongitude )) AND i.disabled = 0" +
                 "  ORDER BY i.name");
         query.setParameter("categoryID",catID);
         query.setParameter("fromLatitude",fromLat);
@@ -271,7 +271,7 @@ public class CatalogFacade implements ServletContextListener {
     @SuppressWarnings("unchecked") 
     public List<Item> getItems(String prodID){
         EntityManager em = emf.createEntityManager();
-        List<Item> items = em.createQuery("SELECT i FROM Item i WHERE i.productID LIKE :productID")
+        List<Item> items = em.createQuery("SELECT i FROM Item i WHERE i.productID LIKE :productID AND i.disabled = 0")
         .setParameter("productID", prodID).getResultList();
         em.close();
         return items;
@@ -322,12 +322,16 @@ public class CatalogFacade implements ServletContextListener {
         return item.getItemID();
     }
     
-    public void updateRating(Item item){
+    public void updateItem(Item item){
         EntityManager em = emf.createEntityManager();
         try{
             utx.begin();
             em.merge(item);
             utx.commit();
+
+            // update index using delete/insert method (only one available)
+            UpdateIndex.deleteIndex(PetstoreConstants.PETSTORE_INDEX_DIRECTORY, item.getItemID());
+            indexItem(new IndexDocument(item));
         } catch(Exception exe){
             try {
                 utx.rollback();
@@ -336,11 +340,14 @@ public class CatalogFacade implements ServletContextListener {
         } finally {
             em.close();
         }
+        
+
+        
     }
     
     public Collection doSearch(String querryString){
         EntityManager em = emf.createEntityManager();
-        Query searchQuery = em.createNativeQuery("SELECT * FROM Item WHERE (name LIKE ? OR description LIKE ?) " );
+        Query searchQuery = em.createNativeQuery("SELECT * FROM Item WHERE (name LIKE ? OR description LIKE ?) AND disabled = 0" );
         searchQuery.setParameter(1, "%"+querryString+"%");
         searchQuery.setParameter(2,"%"+querryString+"%");
         

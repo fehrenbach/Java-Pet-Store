@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: tag.jsp,v 1.10 2006-12-18 00:38:45 basler Exp $ --%>
+$Id: tag.jsp,v 1.11 2007-01-17 18:00:09 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -133,7 +133,8 @@ try {
         }
         
         if((ii % 6) == 0) out.println("</tr>\n<tr>");
-        out.println("<td class='tagCell'><span onclick=\"retrieveItems('" + tag.getTag() + "')\" class='" + style +"'>" +  tag.getTag() + "</span> (" + tag.getRefCount() + ")</td>");
+        //out.println("<td class='tagCell'><span onclick=\"retrieveItems('" + tag.getTag() + "')\" class='" + style +"'>" +  tag.getTag() + "</span> (" + tag.getRefCount() + ")</td>");
+        out.println("<td class='tagCell'><span onclick=\"retrieveItems('" + tag.getTag() + "')\" class='" + style +"'>" +  tag.getTag() + "</span></td>");
         ii++;
     }
 %>

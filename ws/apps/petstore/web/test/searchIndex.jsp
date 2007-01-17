@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: searchIndex.jsp,v 1.1 2006-09-13 17:31:21 basler Exp $ --%>
+$Id: searchIndex.jsp,v 1.2 2007-01-17 18:00:09 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -115,7 +115,7 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
                             <tr>
                                 <td align="left" colspan="2">
                                     <textarea rows="10" cols="70" wrap="soft" 
-                                    name="sqlStatement">select itemid "id", name "title", description "summary", imageurl "image", price "price", productid "product", '' tag,  CURRENT_TIMESTAMP "modifiedDate" from "APP"."ITEM"</textarea>
+                                    name="sqlStatement">select itemid "id", name "title", description "summary", imageurl "image", price "price", productid "product", disabled "disabled", '' tag,  CURRENT_TIMESTAMP "modifiedDate" from "APP"."ITEM"</textarea>
                                 </td>
                             </tr>
                             <tr>

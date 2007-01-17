@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: Indexer.java,v 1.8 2006-09-13 17:31:18 basler Exp $ */
+$Id: Indexer.java,v 1.9 2007-01-17 18:00:07 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.search;
 
@@ -54,6 +54,7 @@ public class Indexer {
         doc.add(new Field("title", indexDoc.getTitle(), Field.Store.YES, Field.Index.TOKENIZED));        
         doc.add(new Field("summary", indexDoc.getSummary(), Field.Store.YES, Field.Index.TOKENIZED));        
         doc.add(new Field("tag", indexDoc.getTag(), Field.Store.YES, Field.Index.TOKENIZED));        
+        doc.add(new Field("disabled", indexDoc.getDisabled(), Field.Store.YES, Field.Index.UN_TOKENIZED));        
         
         writer.addDocument(doc);
     }

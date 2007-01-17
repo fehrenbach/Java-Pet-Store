@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CatalogXmlAction.java,v 1.2 2007-01-10 23:32:29 basler Exp $ */
+$Id: CatalogXmlAction.java,v 1.3 2007-01-17 18:00:06 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller.actions;
 
@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * This action class serves up XML data for catalog.
+ * @author Greg Murray
+ * @author Mark Basler
  * @author Inderjeet Singh
  */
 public class CatalogXmlAction implements ControllerAction {
@@ -122,6 +124,13 @@ public class CatalogXmlAction implements ControllerAction {
             PrintWriter out = response.getWriter();
             out.println(str);
             out.close();
+        } else if("disable".equals(command)) {
+            String targetId=request.getParameter("id");
+            Item i=cf.getItem(targetId);
+            // disable and persist item
+            i.setDisabled(1);
+            cf.updateItem(i);
+            handleItem(targetId);
         }
     }
         private String handleItems(List<Item> items, String baseURL) {

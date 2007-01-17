@@ -3,7 +3,8 @@
         // can't use the error page, because unless and exception in the internal servlet container
         // nullpointer exceptions will be thrown
         //window.location="./systemerror.jsp?message=" + errObj.message;
-        alert("An Exception has been encountered on the server side during an Ajax request.  Please see the server logs for more information");
+        
+        alert("An Exception has been encountered on the server side during an Ajax request.  Please see the server logs for more information " + errObj.message);
     }
 
 

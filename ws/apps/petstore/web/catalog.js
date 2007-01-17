@@ -1,9 +1,10 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: catalog.js,v 1.19 2007-01-13 23:27:09 basler Exp $ */
+$Id: catalog.js,v 1.20 2007-01-17 18:00:08 basler Exp $ */
 
 var ac;
 var is;
 var controller;
+//var debug=true;
 
 function getApplicationContextRoot() {
     var urlArray=window.location.toString().split("/", 4);
@@ -81,7 +82,7 @@ function CatalogController() {
   
   function showItemDetails(id) {
       var i = is.getItems().get(id);
-      setNodeText(infoName, i.name);
+      setNodeText(infoName, i.name + "<br/><a href='javascript:controller.disableItem(&quot;" + id + "&quot;,&quot;" + i.name + "&quot;)'><font size='-1' color='white'><i>Deem inappropriate</i></font></a>");
       setNodeText(infoPrice, i.price);
       setNodeText(infoShortDescription, i.shortDescription);
       setNodeText(infoDescription, i.description);
@@ -129,7 +130,6 @@ function CatalogController() {
   
 
   function loadAccordion () {
-       
         // go out and get the categories
         // this should be made more geric
         var bindArgs = {
@@ -169,14 +169,13 @@ function CatalogController() {
                 var t = ps[i].split('=');
                 params[t[0]] = t[1];
             }
-                   // first check for the item in product        
-      		if (typeof params.itemId != 'undefined' &&
-        	    typeof params.pid != 'undefined') {
-         	   ac.loadCategoryItem(params.pid, params.itemId);
+            // first check for the item in product        
+            if (typeof params.itemId != 'undefined' && typeof params.pid != 'undefined') {
+                ac.loadCategoryItem(params.pid, params.itemId);
         	// next if there is a catid definition then do it
-        	} else if (typeof params.catid != 'undefined') {
-            	ac.showCategory(params.catid);
-        	}
+            } else if (typeof params.catid != 'undefined') {
+                ac.showCategory(params.catid);
+            }
         } else {
             // nothing is selected
             ac.showFirstCategory();
@@ -303,4 +302,26 @@ function CatalogController() {
             return map.contents();
         }
     }
+
+
+  this.disableItem=function(itemId, itemName) {
+        // go out and get the categories
+        // this should be made more geric
+        var bindArgs = {
+            url:  applicationContextRoot + "/catalog?command=disable&id=" + itemId,
+            mimetype: "text/xml",
+            load: function(type,json) {
+                alert("The item named '" + itemName + "' has been disabled!");
+                pList = new ProductList();
+                is.reset();
+                populateItems(is.getGroupId(), 0, 0, true);
+             },
+             error: ajaxBindError
+        };
+        dojo.io.bind(bindArgs);
+    }
+
+
 }
+
+

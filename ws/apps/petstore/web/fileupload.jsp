@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: fileupload.jsp,v 1.55 2007-01-11 17:45:26 basler Exp $ --%>
+$Id: fileupload.jsp,v 1.56 2007-01-17 18:00:08 basler Exp $ --%>
 
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
@@ -27,6 +27,8 @@ $Id: fileupload.jsp,v 1.55 2007-01-11 17:45:26 basler Exp $ --%>
                     alert("Authorization failed : please enter the correct captcha string");
                 } else if(message == "Validation Error") {
                     alert("Validation failed on the Server :\n" + resultx.getElementsByTagName("detail")[0].childNodes[0].nodeValue);     
+                } else if(message == "Upload Size Error") {
+                    alert("The size of the uploaded image must not be more than 100 KB");     
                 } else {
                     // fileupload complete
                     var thumbpath=resultx.getElementsByTagName("thumbnail")[0].childNodes[0].nodeValue;

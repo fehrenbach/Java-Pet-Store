@@ -25,9 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
 
 /**
- *
- * @author  basler
- * @version
+ * Main security filter
  */
 
 public class EntryFilter implements Filter {
