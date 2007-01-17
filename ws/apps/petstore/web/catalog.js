@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: catalog.js,v 1.20 2007-01-17 18:00:08 basler Exp $ */
+$Id: catalog.js,v 1.21 2007-01-17 22:16:44 basler Exp $ */
 
 var ac;
 var is;
@@ -82,7 +82,7 @@ function CatalogController() {
   
   function showItemDetails(id) {
       var i = is.getItems().get(id);
-      setNodeText(infoName, i.name + "<br/><a href='javascript:controller.disableItem(&quot;" + id + "&quot;,&quot;" + i.name + "&quot;)'><font size='-1' color='white'><i>Deem inappropriate</i></font></a>");
+      setNodeText(infoName, i.name + "<br/><a href='javascript:controller.disableItem(&quot;" + id + "&quot;,&quot;" + i.name + "&quot;)'><font size='-1' color='white'><i>Flag as inappropriate</i></font></a>");
       setNodeText(infoPrice, i.price);
       setNodeText(infoShortDescription, i.shortDescription);
       setNodeText(infoDescription, i.description);
@@ -307,18 +307,20 @@ function CatalogController() {
   this.disableItem=function(itemId, itemName) {
         // go out and get the categories
         // this should be made more geric
-        var bindArgs = {
-            url:  applicationContextRoot + "/catalog?command=disable&id=" + itemId,
-            mimetype: "text/xml",
-            load: function(type,json) {
-                alert("The item named '" + itemName + "' has been disabled!");
-                pList = new ProductList();
-                is.reset();
-                populateItems(is.getGroupId(), 0, 0, true);
-             },
-             error: ajaxBindError
-        };
-        dojo.io.bind(bindArgs);
+        if (confirm("Are you sure you want to effectively remove this item from Petstore?")) {
+            var bindArgs = {
+                url:  applicationContextRoot + "/catalog?command=disable&id=" + itemId,
+                mimetype: "text/xml",
+                load: function(type,json) {
+                    //alert("The item named '" + itemName + "' has been disabled!");
+                    pList = new ProductList();
+                    is.reset();
+                    populateItems(is.getGroupId(), 0, 0, true);
+                 },
+                 error: ajaxBindError
+            };
+            dojo.io.bind(bindArgs);
+        }
     }
 
 
