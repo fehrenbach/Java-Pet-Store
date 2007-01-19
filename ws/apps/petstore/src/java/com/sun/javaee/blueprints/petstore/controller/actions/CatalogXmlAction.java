@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CatalogXmlAction.java,v 1.3 2007-01-17 18:00:06 basler Exp $ */
+$Id: CatalogXmlAction.java,v 1.4 2007-01-19 21:47:30 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller.actions;
 
@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -145,7 +146,7 @@ public class CatalogXmlAction implements ControllerAction {
             sb.append(" <rating>" + i.checkAverageRating() + "</rating>\n");
             sb.append(" <name>" + i.getName() + "</name>\n");
             sb.append(" <description><![CDATA[" + i.getDescription() + "]]></description>\n");
-            sb.append(" <price>" + NumberFormat.getCurrencyInstance().format(i.getPrice()) + "</price>\n");
+            sb.append(" <price>" + NumberFormat.getCurrencyInstance(Locale.US).format(i.getPrice()) + "</price>\n");
             sb.append(" <image-url>" + baseURL + i.getImageURL() + "</image-url>\n");
             sb.append(" <image-tb-url>" + baseURL + i.getImageThumbURL() + "</image-tb-url>\n");
             sb.append("</item>\n");
@@ -167,7 +168,7 @@ public class CatalogXmlAction implements ControllerAction {
             sb.append(" <prod-id>" + i.getProductID() + "</prod-id>\n");
             sb.append(" <cat-id>" + categoryId + "</cat-id>\n");
             sb.append(" <name>" + i.getName() + "</name>\n");
-            sb.append(" <price>" + NumberFormat.getCurrencyInstance().format(i.getPrice()) + "</price>\n");
+            sb.append(" <price>" + NumberFormat.getCurrencyInstance(Locale.US).format(i.getPrice()) + "</price>\n");
             sb.append(" <description><![CDATA[" + i.getDescription() + "]]></description>\n");
             sb.append(" <image-url>" + i.getImageURL() + "</image-url>\n");
             sb.append("</item>\n");
@@ -186,7 +187,7 @@ public class CatalogXmlAction implements ControllerAction {
         sb.append(" <name>" + i.getName() + "</name>\n");
         sb.append(" <description><![CDATA[" + i.getDescription() + "]]></description>\n");
         sb.append(" <image-url>" + i.getImageURL() + "</image-url>\n");
-        sb.append(" <price>" + NumberFormat.getCurrencyInstance().format(i.getPrice())  + "</price>\n");
+        sb.append(" <price>" + NumberFormat.getCurrencyInstance(Locale.US).format(i.getPrice())  + "</price>\n");
         sb.append("</item>\n");
         return sb.toString();
     }
