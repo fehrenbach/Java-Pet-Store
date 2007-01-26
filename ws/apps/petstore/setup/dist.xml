@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- Copyright 2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: dist.xml,v 1.16 2006-12-21 20:35:12 inder Exp $ -->
+ $Id: dist.xml,v 1.17 2007-01-26 00:07:05 basler Exp $ -->
 
 <project name="petstore-dist" default="dist" basedir="..">
     
@@ -14,6 +14,7 @@
         <antcall target="sdk-dist"/>
         <delete dir="${tmpdist}/ant-task"/>
         <delete dir="${tmpdist}/lib/poormans-installer"/>
+        <delete dir="${tmpdist}/docs"/>
         <!-- now these jars are built/copied from the bpcatalog that also resides in the sdk bundle -->
         <delete file="${tmpdist}/lib/bp-ui-5.jar"/>
         <delete file="${tmpdist}/lib/commons-logging-1.1.jar"/>
@@ -31,6 +32,7 @@
         <antcall target="sdk-dist"/>
         <delete dir="${tmpdist}/ant-task"/>
         <delete dir="${tmpdist}/lib/poormans-installer"/>
+        <delete dir="${tmpdist}/docs"/>
         <!-- now these jars are built/copied from the bpcatalog that also resides in the sdk bundle -->
         <delete file="${tmpdist}/lib/bp-ui-5.jar"/>
         <delete file="${tmpdist}/lib/commons-logging-1.1.jar"/>
@@ -61,6 +63,7 @@
         <fixcrlf srcdir="${tmpdist}" tab="remove" tablength="2" eol="unix" includes="**/*.properties,**/*.jsp,**/*.html,**/*.sh,**/*.java,**/*.xml" excludes="**/ja/**" />
         <delete dir="${tmpdist}/ant-task"/>
         <delete dir="${tmpdist}/lib/poormans-installer"/>
+        <delete dir="${tmpdist}/docs"/>
         <delete>
             <fileset dir="${tmpdist}/setup" includes="**/sdk-*"/>
         </delete>
