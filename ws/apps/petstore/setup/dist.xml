@@ -1,49 +1,35 @@
 <?xml version="1.0"?>
 <!-- Copyright 2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: dist.xml,v 1.17 2007-01-26 00:07:05 basler Exp $ -->
+ $Id: dist.xml,v 1.18 2007-01-29 21:37:37 inder Exp $ -->
 
 <project name="petstore-dist" default="dist" basedir="..">
     
     <!-- The directory from where to get the libraries that the installer needs -->
     <property name="poormans-installer.home" value="./lib/poormans-installer"/>
+
+    <target name="sdk-common">
+        <property file="setup/sdk-dist.properties"/>
+        <property name="tmpdist" value="dist/${release.dirname}"/>
+        <antcall target="sdk-dist"/>
+        <delete dir="${tmpdist}/ant-task"/>
+        <delete dir="${tmpdist}/lib/poormans-installer"/>
+        <delete dir="${tmpdist}/docs"/>
+        <delete file="${tmpdist}/index.html"/>
+        <!-- now these jars are built/copied from the bpcatalog that also resides in the sdk bundle -->
+        <delete file="${tmpdist}/lib/bp-ui-5.jar"/>
+        <delete file="${tmpdist}/lib/commons-logging-1.1.jar"/>
+        <delete file="${tmpdist}/lib/commons-fileupload-1.1.1.jar"/>
+        <delete file="${tmpdist}/lib/commons-io-1.2.jar"/>
+        <delete file="${tmpdist}/lib/rome-0.8.jar"/>
+        <delete file="${tmpdist}/lib/jdom.jar"/>
+        <delete file="${tmpdist}/lib/rome-fetcher-0.7.jar"/>
+        <delete file="${tmpdist}/lib/shale-remoting.jar"/>
+        <antcall target="create-zip"/>        
+    </target>
+    <target name="sdk" depends="sdk-common"/>
+    <target name="sdk-download" depends="sdk-common"/>
     
-    <target name="sdk">
-        <property file="setup/sdk-dist.properties"/>
-        <property name="tmpdist" value="dist/${release.dirname}"/>
-        <antcall target="sdk-dist"/>
-        <delete dir="${tmpdist}/ant-task"/>
-        <delete dir="${tmpdist}/lib/poormans-installer"/>
-        <delete dir="${tmpdist}/docs"/>
-        <!-- now these jars are built/copied from the bpcatalog that also resides in the sdk bundle -->
-        <delete file="${tmpdist}/lib/bp-ui-5.jar"/>
-        <delete file="${tmpdist}/lib/commons-logging-1.1.jar"/>
-        <delete file="${tmpdist}/lib/commons-fileupload-1.1.1.jar"/>
-        <delete file="${tmpdist}/lib/commons-io-1.2.jar"/>
-        <delete file="${tmpdist}/lib/rome-0.8.jar"/>
-        <delete file="${tmpdist}/lib/jdom.jar"/>
-        <delete file="${tmpdist}/lib/rome-fetcher-0.7.jar"/>
-        <delete file="${tmpdist}/lib/shale-remoting.jar"/>
-        <antcall target="create-zip"/>
-    </target>
-    <target name="sdk-download">
-        <property file="setup/sdk-dist.properties"/>
-        <property name="tmpdist" value="dist/${release.dirname}"/>
-        <antcall target="sdk-dist"/>
-        <delete dir="${tmpdist}/ant-task"/>
-        <delete dir="${tmpdist}/lib/poormans-installer"/>
-        <delete dir="${tmpdist}/docs"/>
-        <!-- now these jars are built/copied from the bpcatalog that also resides in the sdk bundle -->
-        <delete file="${tmpdist}/lib/bp-ui-5.jar"/>
-        <delete file="${tmpdist}/lib/commons-logging-1.1.jar"/>
-        <delete file="${tmpdist}/lib/commons-fileupload-1.1.1.jar"/>
-        <delete file="${tmpdist}/lib/commons-io-1.2.jar"/>
-        <delete file="${tmpdist}/lib/rome-0.8.jar"/>
-        <delete file="${tmpdist}/lib/jdom.jar"/>
-        <delete file="${tmpdist}/lib/rome-fetcher-0.7.jar"/>
-        <delete file="${tmpdist}/lib/shale-remoting.jar"/>
-        <antcall target="create-zip"/>
-    </target>
     <target name="sdk-dist">
         <property file="setup/sdk-dist.properties"/>
         <property name="tmpdist" value="dist/${release.dirname}"/>
@@ -52,8 +38,7 @@
         <delete file="dist/petstore/bp-project.xml"/>
         <copy tofile="dist/petstore/bp-project.xml" file="setup/sdk-bp-project.xml"/>
         <delete dir="dist/petstore/bp-project"/>
-    </target>
-    
+    </target>    
     
     <target name="dist">
         <property file="setup/dist.properties"/>
