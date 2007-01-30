@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- Copyright 2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: dist.xml,v 1.18 2007-01-29 21:37:37 inder Exp $ -->
+ $Id: dist.xml,v 1.19 2007-01-30 01:42:17 inder Exp $ -->
 
 <project name="petstore-dist" default="dist" basedir="..">
     
@@ -80,7 +80,8 @@
                 <exclude name="**/nbproject/genfiles.properties"/>
                 <exclude name="developers/**"/>
                 <exclude name="setup/dist*"/>
-                <exclude name="setup/installer.*"/>
+                <exclude name="setup/installer.xml"/>
+                <exclude name="setup/sdk*"/>
             </fileset>
         </copy>
         <copy todir="${tmpdist}">
