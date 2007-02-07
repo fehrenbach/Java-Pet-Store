@@ -7,17 +7,23 @@
 <body>
 <h2>Petstore 2.0 Architecture</h2>
 <br>
-This document will outline som eof the key choices made for the
-petstore application, including exporation of various subsystems.<br>
+This document will outline some of the key choices made for the
+petstore application, including exploration of various subsystems.<br>
 <br>
 <h3>Web application </h3>
-Chose to make it a pure web application<br>
+We chose to make it a pure web application. This means that we did not use the 
+EJB technology to create reusable components. The Web components directly 
+accessed the objection relational layer built with Java Persistence.
 <br>
 <h3>Patterns to structure application</h3>
-Used MVC to structure the application<br>
+The petstore uses the Model-View-Controller (MVC) architectural pattern for 
+overall structure. The controller is split in two: Web Controller and Ajax 
+Controller.
 <br>
+The Web Controller keeps a mapping of client-requested URLs to action classes. 
+It uses this mapping to invoke
 <h3>Ajax UI</h3>
-Usd an Ajax UI so used Dojo and custom JS. Plus decided to create a set of JSF components.<br>
+Used an Ajax UI so used Dojo and custom JS. Plus decided to create a set of JSF components.<br>
 <br>
 <h3>Page is the Application Architecture</h3>
 How many pages, really just one?<br>
@@ -28,8 +34,14 @@ with JS security model, masup with other services, user uploaded content<br>
 <br>
 <h3>Mashups</h3>
 Three styles of mashup were used in PS. Proxy, service delegation, and client library<br>
+<h4>Proxy</h4>
+This mashup
+<h4>Service Delegation</h4>
+This mashup
+<h4>Client Library</h4>
+This mashup
 <br>
 <h3>Model Tier</h3>
-Used Java Persistence APIs to build the model. Used JTA. Used Facade patterm to encapsulate.
+Used Java Persistence APIs to build the model. Used JTA. Used Facade pattern to encapsulate.
 </body>
 </html>
