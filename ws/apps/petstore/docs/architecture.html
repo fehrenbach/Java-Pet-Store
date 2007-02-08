@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
+<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
   <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
   <title>architecture</title>
@@ -7,13 +7,42 @@
 <body>
 <h2>Petstore 2.0 Architecture</h2>
 <br>
-This document will outline some of the key choices made for the
-petstore application, including exploration of various subsystems.<br>
+In this chapter, we illustrate how the design and implementation of the pet 
+store application. We explain the motivational factors and issues that need to 
+be considered, and make these issues concrete by showing how we came to the 
+decisions we eventually made as we architected the pet store application. 
+Through this examination, we hope to make it easier for you to determine how 
+best to architect and design your own Web service applications.<br>
 <br>
-<h3>Web application </h3>
+<h3>Overview of PetStore and UseCases</h3>
+<br>
+PetStore provides the users the ability to upload their pets to the site, and to 
+navigate it in a Web 2.0 fashion. The following diagram presents all the 
+use-cases that are covered in the petstore.
+<br>
+&nbsp;<br>
+<img alt="Use Case Diagram" longdesc="Use Cases for Pet Store" src="UseCaseDiagram1.png" width="878" height="743"><br>
+<h2>High Level Architecture</h2>
+<p>A number of factors were considered when designing the petstore application. 
+Some of the key design considerations will now be outlined briefly: </p>
+<ul>
+	<li>Choice of tiers</li>
+	<li>Using AJAX UI</li>
+	<li>Data Access and Transactional Needs</li>
+	<li>Page Application Architecture</li>
+	<li>Security</li>
+</ul>
+<h3>Choice of Tiers</h3>
 We chose to make it a pure web application. This means that we did not use the 
-EJB technology to create reusable components. The Web components directly 
-accessed the objection relational layer built with Java Persistence.
+EJB technology to create reusable components.<br>
+<h3>Using Ajax UI</h3>
+Used an Ajax UI so used Dojo and custom JS. Plus decided to create a set of JSF 
+components.<br>
+<h3>Data Access and Transactional Needs</h3>
+
+We used Java Persistence APIs to create an object relational mapping. We also 
+created a facade that provides convenient access to access these OR POJOs and 
+enforces transactional boundaries. .
 <br>
 <h3>Patterns to structure application</h3>
 The petstore uses the Model-View-Controller (MVC) architectural pattern for 
@@ -22,16 +51,40 @@ Controller.
 <br>
 The Web Controller keeps a mapping of client-requested URLs to action classes. 
 It uses this mapping to invoke
-<h3>Ajax UI</h3>
-Used an Ajax UI so used Dojo and custom JS. Plus decided to create a set of JSF components.<br>
 <br>
-<h3>Page is the Application Architecture</h3>
-How many pages, really just one?<br>
+<h3>Page Application Architecture</h3>
+We grouped the functionality logically into pieces that belong on the same page. 
+For example, all of the catalog browsing is done through a single page. Search 
+is another page. User file upload is done through another page.
 <br>
 <h3>Security</h3>
 security considerations were like any classic web app, plus had to deal
-with JS security model, masup with other services, user uploaded content<br>
+with JS security model, masup with other services, user uploaded content. Our 
+goal was to create a permissive system with security on need basis. The petstore 
+application does not require a user to maintain an account or login to access 
+functionality. However, we do use CAPTCHA to prevent automated systems from 
+spamming the site. We also built a user-policing feature where users can mark 
+some content as inappropriate, and it gets removed.&nbsp; <br>
 <br>
+<h3>Split Controller Architecture</h3>
+We use two controllers: 
+<br>
+<ul>
+<li>Client controller </li>
+<li>Web controller</li>
+</ul>
+
+<p>The client controller is written in JavaScript and runs inside the browser of 
+the user. The Web controller is written as a servlet. </p>
+<p>The client-controller manages the UI presented to the user, and sends 
+requests to the Web controller for getting data. </p>
+<p>The Web controller uses action classes mapped to various request URLs to 
+handle requests sent by the client controller. </p>
+
+<h3>Communication between Browser and Server</h3>
+<p>This communication is done in JSON. </p>
+
+
 <h3>Mashups</h3>
 Three styles of mashup were used in PS. Proxy, service delegation, and client library<br>
 <h4>Proxy</h4>
@@ -41,6 +94,14 @@ This mashup
 <h4>Client Library</h4>
 This mashup
 <br>
+<h3>Tagging</h3>
+<p>Tagging is implemented using the Lucene search engine.</p>
+<h3>Search</h3>
+<h4>Location based Search</h4>
+<p>This is implemented by using Google Maps API. Present implementation details.</p>
+<h4>Keyword Search</h4>
+<p>This is implemented by using Apache Lucene search engine. Present 
+implementation details. </p>
 <h3>Model Tier</h3>
 Used Java Persistence APIs to build the model. Used JTA. Used Facade pattern to encapsulate.
 </body>
