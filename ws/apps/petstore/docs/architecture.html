@@ -57,6 +57,9 @@ We grouped the functionality logically into pieces that belong on the same page.
 For example, all of the catalog browsing is done through a single page. Search 
 is another page. User file upload is done through another page.
 <br>
+<h3>Using a JSF Component Library</h3>
+<p>We chose to wrap most of the functionality in reusable JSF components. The 
+JSF component library is written with JSF 1.2 version. </p>
 <h3>Security</h3>
 security considerations were like any classic web app, plus had to deal
 with JS security model, masup with other services, user uploaded content. Our 
@@ -102,7 +105,28 @@ This mashup
 <h4>Keyword Search</h4>
 <p>This is implemented by using Apache Lucene search engine. Present 
 implementation details. </p>
-<h3>Model Tier</h3>
+<br>
+<br>
+<h3>Design of the Captcha</h3>
+
+<h3>Design of the Map Viewer</h3>
+<p>&nbsp;</p>
+
+<h3>Design of the Client Controller</h3>
+<p>The client controller is implemented with JavaScript and uses the Dojo 
+toolkit library. It uses dojo.io.bind for making all the Ajax calls. </p>
+<h3>Design of the Web Controller</h3>
+
+<p>The controller is implemented as a set of action classes each of which 
+implements the ControllerAction interface. </p>
+<p>
+<img alt="ControllerAction interface and Action classes" src="controller-action.jpg" width="1038" height="242"></p>
+
+<p>The ControllerServlet creates a mapping of these action classes with 
+different request URIs, and then invokes actions based on the incoming request 
+URI. </p>
+<h3>Design of the Model Tier</h3>
 Used Java Persistence APIs to build the model. Used JTA. Used Facade pattern to encapsulate.
+
 </body>
 </html>
