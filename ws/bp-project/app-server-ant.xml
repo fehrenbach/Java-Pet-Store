@@ -2,7 +2,7 @@
 
 <!-- Copyright 2005-2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: app-server-ant.xml,v 1.16 2006-12-11 19:32:33 inder Exp $ -->
+ $Id: app-server-ant.xml,v 1.17 2007-02-12 23:48:43 inder Exp $ -->
 
 <!-- This file defines various Java EE SDK specific tasks. 
      This file is not meant to be included in a project directly. 
@@ -79,7 +79,7 @@
   <target name="start-domain" depends="tools"
     description="starts application server default domain">
     <echo message="Starting default domain for ${javaee.home}"/>
-    <exec executable="${asadmin}" failonerror="true">
+    <exec executable="${asadmin}" spawn="true">
         <arg line=" start-domain"/>
    </exec>
    <waitfor>
@@ -142,8 +142,8 @@ AS_ADMIN_PASSWORD=${AS_ADMIN_PASSWORD}</echo>
    </exec>
   </target>
 
-  <target name="start-db" depends="tools" description="starts the databse server." >
-    <exec executable="${asadmin}" failonerror="${failonerror}" dir="${javaee.home}">
+  <target name="start-db" depends="tools" description="starts the database server." >
+    <exec executable="${asadmin}" spawn="true" dir="${javaee.home}">
         <arg line=" start-database"/>
         <arg line=" --dbhost=${javaee.server.name} --dbport=${db.port} --dbhome=${db.home}"/>
     </exec>

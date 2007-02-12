@@ -26,6 +26,7 @@ javaee.adminserver.port=4848
 javaee.server.username=admin
 
 
+# File that contains the password for the App-Server admin account. 
 # Edit this property to point to a file that 
 # contains the admin password for your app-server. 
 # The file should contain the password in the following line: 
@@ -37,7 +38,7 @@ javaee.server.username=admin
 # For your purpose, use the password that you chose while installing 
 # the SDK
 
-javaee.server.passwordfile=c:/Sun/SDK/samples/bp-project/passwordfile
+javaee.server.passwordfile=${javaee.home}/samples/bp-project/passwordfile
 
 
 # default server instance name
