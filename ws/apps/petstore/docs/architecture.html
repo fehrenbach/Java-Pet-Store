@@ -119,6 +119,13 @@ implementation details. </p>
 <h3>Design of the Client Controller</h3>
 <p>The client controller is implemented with JavaScript and uses the Dojo 
 toolkit library. It uses dojo.io.bind for making all the Ajax calls. </p>
+<p>The client controller generates action events that are then handled by 
+handlers. </p>
+<p>The client controller also provides hooks (action handlers) to apply business 
+logic, or GUI logic</p>
+<p>The model data is cached on the client-side</p>
+<p>We use View List Handler pattern to iterate over a large list of model data. </p>
+<p>&nbsp;</p>
 <h3>Design of the Web Controller</h3>
 
 <p>The controller is implemented as a set of action classes each of which 
@@ -128,9 +135,26 @@ implements the ControllerAction interface. </p>
 
 <p>The ControllerServlet creates a mapping of these action classes with 
 different request URIs, and then invokes actions based on the incoming request 
-URI. </p>
+URI.</p>
+<p>&nbsp;Controller Action classes are used to apply business logic for the incoming 
+requests.&nbsp; </p>
 <h3>Design of the Model Tier</h3>
-Used Java Persistence APIs to build the model. Used JTA. Used Facade pattern to encapsulate.
+Used Java Persistence APIs to build the model. 
+<p>Object relational layer using Java Persistence API</p>
+
+<br>
+Used JTA. <br>
+<h4>Model Facade</h4>
+Used Facade pattern to:
+<ul>
+<li>Encapsulate underlying model data</li>
+<li>Provide simple persistence operations</li>
+<li>Hides the implementation details of using an object relational layer. </li>
+<li>Provides transactional access</li>
+</ul>
+<br>
+One model class per table. <br>
+Model classes validate data before it is saved in the database.
 
 </body>
 </html>
