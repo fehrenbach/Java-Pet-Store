@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: FileUploadBean.java,v 1.51 2007-01-16 22:48:28 inder Exp $ */
+$Id: FileUploadBean.java,v 1.52 2007-02-24 19:41:08 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller;
 
@@ -38,7 +38,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 public class FileUploadBean {
-    private boolean bDebug=false;
+    private boolean bDebug=true;
     private static final String comma=", ";
     private List<SelectItem> categories = null;
     private List<SelectItem> products = null;
@@ -143,13 +143,15 @@ public class FileUploadBean {
                     thumbPath = null;
                     if (spath != null) {
                         // recreate "images/FILENAME"
-                        int idx = spath.lastIndexOf(System.getProperty("file.separator"));
+                        int idx = spath.lastIndexOf("/");
                         thumbPath = "images/"+spath.substring(idx+1, spath.length());
                     }
                 } else{
                     fileName = "images/dragon-iron-med.jpg";
                     thumbPath = "images/dragon-iron-thumb.jpg ";
                 }
+                if(bDebug) System.out.println("*** Final file names - separator: " + fileName + " - " + thumbPath + " - '" + 
+                        System.getProperty("file.separator") + "'");
                 
                 String compName=getStringValue(htUpload, FileUploadUtil.COMPONENT_NAME);
                 prodId=getStringValue(htUpload, compName+":product");
@@ -195,7 +197,7 @@ public class FileUploadBean {
                 
                 // get latitude & longitude
                 GeoCoder geoCoder=new GeoCoder();
-                if(proxyHost != null && proxyPort != null) {
+                if(proxyHost != null && !proxyHost.equals("") && proxyPort != null && proxyPort.equals("")) {
                     // set proxy host and port if it exists
                     // NOTE: This may require write permissions for java.util.PropertyPermission to be granted
                     PetstoreUtil.getLogger().log(Level.INFO, "Setting proxy to " + proxyHost + ":" + proxyPort + ".  Make sure server.policy is updated to allow setting System Properties");
@@ -355,16 +357,13 @@ public class FileUploadBean {
     
     private String constructThumbnail(String path) {
         String thumbPath = null;
-        File file = new File(path);
-        String aPath = file.getAbsolutePath();
+        String aPath=path;
         
-        // first, construct the file name for thumbnail
-        if (file.exists()) {
-            int idx = aPath.lastIndexOf(".");
-            if (idx > 0) {
-                thumbPath = aPath.substring(0, idx)+"_thumb"+aPath.substring(idx, aPath.length());
-            }
+        int idx = aPath.lastIndexOf(".");
+        if (idx > 0) {
+            thumbPath = aPath.substring(0, idx)+"_thumb"+aPath.substring(idx, aPath.length());
         }
+        
         try {
             ImageScaler imgScaler = new ImageScaler(aPath);
             imgScaler.keepAspectWithWidth();
