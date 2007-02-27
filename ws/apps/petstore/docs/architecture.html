@@ -42,6 +42,15 @@ EJB technology to create reusable components.<br>
 <h3>Using Ajax UI</h3>
 Used an Ajax UI so used Dojo and custom JS. Plus decided to create a set of JSF 
 components.<br>
+
+<p>Ajax UI features: </p>
+
+<p>When you mouse-over a link to each pet in the master list of query
+results, you get a pop-up box that has the details information. This
+pop-up uses an Ajax request to retrieve the data from the server.
+This pop-up functionality is implemented as a JSF component and is
+delivered as a part of the BluePrints Solutions catalog.</p>
+
 <h3>Data Access and Transactional Needs</h3>
 
 We used Java Persistence APIs to create an object relational mapping. We also 
@@ -71,7 +80,9 @@ goal was to create a permissive system with security on need basis. The petstore
 application does not require a user to maintain an account or login to access 
 functionality. However, we do use CAPTCHA to prevent automated systems from 
 spamming the site. We also built a user-policing feature where users can mark 
-some content as inappropriate, and it gets removed.&nbsp; <br>
+some content as inappropriate, and it gets removed.<br>
+
+
 <br>
 <h3>Split Controller Architecture</h3>
 We use two controllers: 
@@ -103,18 +114,65 @@ This mashup
 <br>
 <h3>Tagging</h3>
 <p>Tagging is implemented using the Lucene search engine.</p>
+
+<p>The "Add Tags" functionality uses a hidden form to capture the tag
+data.  When the "Add Tags" button is clicked the form is made visable
+for the user to enter their tags.  Once the "Save" button is clicked,
+an Ajax request is sent to the server with the added tag string.  The
+response to the request will update the tag data field that is
+currently displayed to the user.  If other users added a tag to the
+same item, the other users tags would also be displayed.  This
+methodology of re-synchronizing the data helps prevent situations
+where the client data becomes out of sync with the server data when
+the same item is edited by different users.</p>
+
+<p>The tag page shows the top tags based on the number of items that
+reference the tag.  CSS styles are used to change the font and color
+of the tag also based on the number of references.  When a tag is
+clicked, an Ajax call in executed to retrieve the items that are
+reference by the tag and then displayed.  This page also has the popup
+feature and a hyper-link in the name of the item that will forward the
+user to the specific item on the catalog page, showing its detail.</p>
+
 <h3>Search</h3>
 <h4>Location based Search</h4>
 <p>This is implemented by using Google Maps API. Present implementation details.</p>
 <h4>Keyword Search</h4>
 <p>This is implemented by using Apache Lucene search engine. Present 
 implementation details. </p>
-<br>
-<br>
+
+<p>In the petstore we used the Apache Lucence search engine to store
+our indexes.  The name, description and tags are stored in the index
+and can be searched on.  If the user only wants to search on the name
+and the description and not the tags, then the "Also Search Tags"
+checkbox can be unclicked.  All the information that is contained in
+the indexes are also stored in the database, so if a corruption
+occurs, the indexes can be regenerated.  Using the Lucene search
+engine gives the Petstore a faster response to queries and also
+supports advance search engine syntax which we would have to have
+coded if we only use a database search methodology. </p>
+
 <h3>Design of the Captcha</h3>
 
+<p>The Captchas validation was implemented utilizing a servlet filter.
+The CaptchaValidateFilter checks the uploaded Captchas value that is
+sent in a cookie (so the multi-part mime stream of the upload doesn't
+have to be touched) and validates it against a corresponding string
+that is set in the session when the Seller upload page is rendered.
+If the case insensitive values matches, then the upload proceeds.  If
+not, then a status object is set with the error so it can be read by
+the client and shown to the user, then the upload is discontinued.</p> 
+
 <h3>Design of the Map Viewer</h3>
-<p>&nbsp;</p>
+
+<p>The Main Map page is another front-end map page that utilizes the
+database through the Java Persistence APIs to retrieve catalog items
+by category.  This page leads into the Google Maps client-side mashup
+page and displays the catalog items on the map for the selected
+category.  By entering an optional center-point address with a search
+area (in miles), the user can further restrict the category to show
+only the items in the specific area around the center point. 
+</p>
 
 <h3>Design of the Client Controller</h3>
 <p>The client controller is implemented with JavaScript and uses the Dojo 
