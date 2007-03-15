@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: index.jsp,v 1.16 2006-12-13 19:50:46 basler Exp $ --%>
+$Id: index.jsp,v 1.17 2007-03-15 23:19:46 basler Exp $ --%>
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
 <%@page import="java.util.*, com.sun.javaee.blueprints.petstore.model.CatalogFacade, com.sun.javaee.blueprints.petstore.model.Tag"%>
@@ -109,8 +109,8 @@ try {
                         </div>
                     </td>
                     <td style="vertical-align:top;">
-                        <div style="border-style: double;;">
-                            <table>
+                        <div style="border-style: double; width:100%;">
+                            <table border="0">
                                 <tr>
                                     <th colspan="2" style="text-align:center">Most Popular Tags</th>
                                 </tr>
@@ -139,7 +139,10 @@ try {
                                 </tr>
                             </table>
                         </div>
-                            
+                        <br/>
+                        <div id="downloadAds">
+                            <jsp:include page="download.jsp" />
+                        </div>
                     </td>
                 </tr>
             </table>
