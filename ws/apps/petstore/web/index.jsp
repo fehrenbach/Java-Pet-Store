@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: index.jsp,v 1.18 2007-03-16 15:29:15 basler Exp $ --%>
+$Id: index.jsp,v 1.19 2007-03-16 16:25:57 basler Exp $ --%>
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
 <%@page import="java.util.*, com.sun.javaee.blueprints.petstore.model.CatalogFacade, com.sun.javaee.blueprints.petstore.model.Tag"%>
@@ -36,7 +36,9 @@ try {
             function alterDownloadAd() {
                 if(typeof checkAdPage != "undefined") { 
                     var textx=checkAdPage();
-                    document.getElementById("downloadAds").innerHTML=textx;
+                    if(typeof textx != "undefined") { 
+                        document.getElementById("downloadAds").innerHTML=textx;
+                    }
                 }
             }
             

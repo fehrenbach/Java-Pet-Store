@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: MapBean.java,v 1.24 2007-01-10 23:32:30 basler Exp $ */
+$Id: MapBean.java,v 1.25 2007-03-16 16:25:57 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.mapviewer;
 
@@ -320,14 +320,6 @@ public class MapBean {
                 }
             }
         }
-        
-        //Haversine formula: for distance
-        //R = earth’s radius (mean radius = 6,371km)
-        //?lat = lat2 ? lat1
-        //?long = long2 ? long1
-        //a = sin²(?lat/2) + cos(lat1).cos(lat2).sin²(?long/2)
-        //c = 2.atan2(?a, ?(1?a))
-        //d = R.c
         
         return "map";
     }

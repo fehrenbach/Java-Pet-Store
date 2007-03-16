@@ -1,7 +1,7 @@
 <div id="downloadAds" style="text-align:center; border-style:double; width:100%;">
     <table style="width:100%">
         <tr>
-            <th style="text-align:center; border-bottom:thin solid black;">DOWNLOADS</th>
+            <th style="text-align:center;">Downloads</th>
         </tr>
         <tr>
             <td style="text-align:center;">
