@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: catalog.jsp,v 1.21 2007-03-16 20:18:58 basler Exp $ --%>
+$Id: catalog.jsp,v 1.22 2007-03-16 21:42:03 basler Exp $ --%>
 <script type="text/javascript" src="common.js"></script>
 <script type="text/javascript" src="scroller.js"></script>
 <link rel="stylesheet" type="text/css" href="scroller.css"></link>
@@ -29,7 +29,7 @@ $Id: catalog.jsp,v 1.21 2007-03-16 20:18:58 basler Exp $ --%>
             </td>
             <td>
                 <div id="CatalogBrowser">
-                <table border="0" class="slider" >
+                <table border="0" class="slider" width="500px" >
                     <tr height="415" valign="top">
                         <td id="bodySpace" border="0" align="center"></td>
                     </tr>
