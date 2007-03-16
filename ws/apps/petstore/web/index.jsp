@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: index.jsp,v 1.19 2007-03-16 16:25:57 basler Exp $ --%>
+$Id: index.jsp,v 1.20 2007-03-16 20:18:59 basler Exp $ --%>
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
 <%@page import="java.util.*, com.sun.javaee.blueprints.petstore.model.CatalogFacade, com.sun.javaee.blueprints.petstore.model.Tag"%>
@@ -22,9 +22,8 @@ try {
         <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
         <title>Java Pet Store Reference Application</title>
         <link type="text/css" rel="stylesheet" href="./tag.css"/>
-        <script type="text/javascript" src="https://blueprints.dev.java.net/petstore/downloadAd.js"></script>
     </head>
-    <body onload="alterDownloadAd()">
+    <body>
         
         <jsp:include page="banner.jsp" />
         <script>
@@ -32,17 +31,6 @@ try {
             function browse(category) {
                 window.location.href="${pageContext.request.contextPath}/faces/catalog.jsp?catid=" + category;
             }
-            
-            function alterDownloadAd() {
-                if(typeof checkAdPage != "undefined") { 
-                    var textx=checkAdPage();
-                    if(typeof textx != "undefined") { 
-                        document.getElementById("downloadAds").innerHTML=textx;
-                    }
-                }
-            }
-            
-            
         </script>
             <table bgcolor="white">
                 <tr>
@@ -151,7 +139,8 @@ try {
                                 </tr>
                             </table>
                         </div>
-                        <br/>
+                    </td>
+                    <td style="vertical-align:top; width:300px; text-align:right;">
                         <div id="downloadAds">
                             <jsp:include page="download.jsp" />
                         </div>
