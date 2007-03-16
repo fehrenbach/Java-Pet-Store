@@ -1,5 +1,5 @@
 <%-- Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: index.jsp,v 1.17 2007-03-15 23:19:46 basler Exp $ --%>
+$Id: index.jsp,v 1.18 2007-03-16 15:29:15 basler Exp $ --%>
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
 <%@page import="java.util.*, com.sun.javaee.blueprints.petstore.model.CatalogFacade, com.sun.javaee.blueprints.petstore.model.Tag"%>
@@ -22,8 +22,9 @@ try {
         <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
         <title>Java Pet Store Reference Application</title>
         <link type="text/css" rel="stylesheet" href="./tag.css"/>
+        <script type="text/javascript" src="https://blueprints.dev.java.net/petstore/downloadAd.js"></script>
     </head>
-    <body>
+    <body onload="alterDownloadAd()">
         
         <jsp:include page="banner.jsp" />
         <script>
@@ -31,6 +32,15 @@ try {
             function browse(category) {
                 window.location.href="${pageContext.request.contextPath}/faces/catalog.jsp?catid=" + category;
             }
+            
+            function alterDownloadAd() {
+                if(typeof checkAdPage != "undefined") { 
+                    var textx=checkAdPage();
+                    document.getElementById("downloadAds").innerHTML=textx;
+                }
+            }
+            
+            
         </script>
             <table bgcolor="white">
                 <tr>
