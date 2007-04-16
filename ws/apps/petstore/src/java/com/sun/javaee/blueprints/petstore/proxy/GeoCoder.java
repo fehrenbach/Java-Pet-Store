@@ -5,7 +5,7 @@
  *
  *   http://developer.sun.com/berkeley_license.html
  *
- * $Id: GeoCoder.java,v 1.3 2007-01-11 23:04:53 inder Exp $
+ * $Id: GeoCoder.java,v 1.4 2007-04-16 23:43:14 sean_brydon Exp $
  */
 
 package com.sun.javaee.blueprints.petstore.proxy;
@@ -187,7 +187,7 @@ public class GeoCoder {
         // Perform the actual service call and parse the response XML document,
         // then format and return the results
         Document document = null;
-        StringBuffer sb = new StringBuffer(SERVICE_URL);
+        StringBuilder sb = new StringBuilder(SERVICE_URL);
         sb.append("?appid=");
         sb.append(applicationId);
         sb.append("&location=");
