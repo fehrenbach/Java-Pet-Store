@@ -1,331 +1,94 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-
-
-
-
-
-
-
-
-  
-  
-  
-  
-  
-  
-  
-  
-  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
-
-
-
-
-
-
-
-
-  
-  
-  
-  
-  
-  
-  
-  
+  <meta content="text/html; charset=ISO-8859-1"
+ http-equiv="content-type">
   <title>Developer Readme for builds</title>
 </head>
-
-
 <body>
-
-
-
-
-
-
-
-
 <h2>README For Developers of petstore Project</h2>
-
-
-
-
-
-
-
-
 This doc will explain how to build the various builds of the bpcatalog
 project, including the<br>
-
-
-
-
-
-
-
-
 <ul>
-
-
-
-
-
-
-
-
   <li><a href="#project_apps">Building the petstore
 application</a><br>
-
-
-
-
-
-
-
-
   </li>
-
-
-
-
-
-
-
-
   <li><a href="#building-viewer-distribution">Building the
 distribution bundle</a>, which is
 made available for
 download on Java.net</li>
-
-
-
-
   <li><a href="#sdk">Building SDK bundle</a></li>
-
-
-
-
-
-
-
-
-  
-
+  <li><a href="#phobos">Building Petstore JPA jar for Phobos tutorial</a><br>
+  </li>
 </ul>
-
-
-
-
-
-
-
-
+<br>
 These instructions are useful for the developers on this project or
 anyone else that would like to check out the cvs and build the project
 and play around. This is just another way to use this project, in
 addition to downloading the zip file, some folks may want to
 build their own dist from the latest versions for things. <br>
-
-
-
-
-
-
-
-
 This is also useful for new developers on the team.<br>
-
-
-
-
-
-
-
-
 <h3><a name="project_apps"></a>Building and running the project</h3>
-
-
-
-
-
 See <a href="../apps/petstore/index.html">index.html</a> for this
 information. Note the petstore home will be different, most
 instructions should be executed in petstore/ws/apps/petstore as the
 petstore home directory in the instructions.<br>
-
-
-
-
-
 <ol>
-
-
-
-
-
 </ol>
-
-
-
-
-
-
-
-
 <h3><a name="building-viewer-distribution"></a>Building
 the Petstore
 Distribution zip bundle for Java.net download</h3>
-
-
-
-
-
-
-
-
 Here are the steps to build the jar-based installer bundle that is made
-available for distribution as a download on the blueprints project site.
+available for distribution as a download on the blueprints project
+site.
 <ol>
-
-
-
-
-
-
   <li>cd <code>petstore/ws/apps/petstore</code></li>
-
-
-
-
-
-
   <li><code>ant -f setup/dist.xml</code></li>
-
-
-
-
-
-
-  
-
-
-
-  <li>The jar-based installer distribution will get created in the dist/ directory</li>
-
+  <li>The jar-based installer distribution will get created in the
+dist/ directory</li>
   <li>Make sure you updated version number of petstore by editing the
 file petstore\ws\apps\petstore\setup\dist.properties and updating the
 property "release.version=2.0-ea4.5" .</li>
-
   <li>Make sure to tagged the workspace</li>
-
-
-
-
-
-
 </ol>
-
-
-
-
-
-
-
-
 <ol>
-
-
-
-
-
-
-
-
 </ol>
-
-
-
-
-
-
 <h3><a name="sdk"></a>Building
 the SDK Distribution of Petstore&nbsp;</h3>
-
-
-
 Here are the steps to build the zip bundle that is put into the Java EE
 5 SDK, although really the whole blueprints.zip includes the bpcatalog
 and the petstore so you need to see instructions in bpcatalog to build
 it also and then zip it all together.
-
 <ol>
-
-
-
-
   <li>cd <code>petstore/ws/apps/petstore</code></li>
-
-
-
-
-  <li><code>ant -f setup/dist.xml sdk-download ----DONT forget the "SDK" argument!</code></li>
-
-
-
-
+  <li><code>ant -f setup/dist.xml sdk-download ----DONT forget the
+"SDK" argument!</code></li>
   <li>The petstore.zip bundle will get created in
 the&nbsp;petstore/ws/apps/petstore/dist/ directory and be called
 something like "javapetstore-2.0-ea4.5-installer"</li>
-
-
-
-
 </ol>
-
-
-
-
+<h3><br>
+</h3>
+<h3><a name="phobos"></a>Building Petstore JPA jar for Phobos tutorial<br>
+</h3>
+A task was added to setup/dist.xml to build a jar that is used in a
+Phobos tutorial that Pramod wrote.&nbsp; To build the jar that uses the
+poormans-installer, from .../petstore/ws/apps/petstore, you run <br>
+<br>
+ant -f setup\dist.xml create-phobos-dist<br>
+<br>
+The resultant poormans-installer jar is located in the "dist" directory
+under the name "PetstoreJPA-phobos.jar"<br>
+<br>
 <h3>Other Resources</h3>
-
-
-
-
-
-
-
-
-Also see the <a href="file:///C:/workspace/petstore/ws/developers/docs/DeveloperPolicy.html">developer
+Also see the <a
+ href="file:///C:/workspace/petstore/ws/developers/docs/DeveloperPolicy.html">developer
 policy</a>
 document in this workspace<br>
-
-
-
-
-
-
-
-
-Also see the <a href="file:///C:/workspace/petstore/ws/developers/IssueTracker.html">Issue
+Also see the <a
+ href="file:///C:/workspace/petstore/ws/developers/IssueTracker.html">Issue
 Tracker</a> policy doc
 in this workspace.<br>
-
-
-
-
-
-
-
-
 <br>
-
-
-
-
-
-
-
-
 </body>
 </html>

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- Copyright 2006 Sun Microsystems, Inc.  All rights reserved.  You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: 
  http://developer.sun.com/berkeley_license.html
- $Id: dist.xml,v 1.19 2007-01-30 01:42:17 inder Exp $ -->
+ $Id: dist.xml,v 1.20 2007-04-24 16:01:00 basler Exp $ -->
 
 <project name="petstore-dist" default="dist" basedir="..">
     
@@ -125,5 +125,37 @@
             classFile="dist/classes/petstore.class"/>
         <jar jarfile="dist/${release.fullname}-installer.jar" basedir="dist/classes" manifest="setup/manifest.mf"/>
         <delete dir="dist/classes"/>
+    </target>
+    
+    <target name="create-phobos-dist">
+        <antcall target="clean"/>
+        
+        <ant antfile="build.xml" target="default"/>
+        <delete file="dist/petstore.war"/>
+        <mkdir dir="dist/classes"/>
+        <copy file="build/web/WEB-INF/classes/com/sun/javaee/blueprints/petstore/model/Address.class" todir="dist/classes/com/sun/javaee/blueprints/petstore/model"/>
+        <copy file="build/web/WEB-INF/classes/com/sun/javaee/blueprints/petstore/model/Category.class" todir="dist/classes/com/sun/javaee/blueprints/petstore/model"/>
+        <copy file="build/web/WEB-INF/classes/com/sun/javaee/blueprints/petstore/model/Item.class" todir="dist/classes/com/sun/javaee/blueprints/petstore/model"/>
+        <copy file="build/web/WEB-INF/classes/com/sun/javaee/blueprints/petstore/model/Product.class" todir="dist/classes/com/sun/javaee/blueprints/petstore/model"/>
+        <copy file="build/web/WEB-INF/classes/com/sun/javaee/blueprints/petstore/model/SellerContactInfo.class" todir="dist/classes/com/sun/javaee/blueprints/petstore/model"/>
+        <copy file="build/web/WEB-INF/classes/com/sun/javaee/blueprints/petstore/model/Tag.class" todir="dist/classes/com/sun/javaee/blueprints/petstore/model"/>
+        <copy file="build/web/WEB-INF/classes/com/sun/javaee/blueprints/petstore/model/ZipLocation.class" todir="dist/classes/com/sun/javaee/blueprints/petstore/model"/>
+
+        <mkdir dir="dist/classes/meta-inf"/>
+        <copy file="src/conf/persistence.xml" todir="dist/classes/meta-inf"/>
+        
+        <mkdir dir="dist/jardir/PetstoreJPA"/>
+        <jar jarfile="dist/jardir/PetstoreJPA/PetstoreJPA.jar" basedir="dist/classes"/>
+
+        <copy file="setup/sql/javadb/petstore.sql" todir="dist/jardir/PetstoreJPA"/>
+        
+        <zip zipfile="dist/PetstoreJPA.zip" basedir="dist/jardir" update="true" />
+        
+        <echo message="Creating an installer for phobos tutorial ..."/>
+        <installerBuilder
+            licenseFile="../../../www/LICENSE.txt"
+            zipFile="dist/PetstoreJPA.zip"
+            classFile="dist/classx/petstore.class"/>
+        <jar jarfile="dist/PetstoreJPA-phobos.jar" basedir="dist/classx" manifest="setup/manifest.mf"/>
     </target>
 </project>
