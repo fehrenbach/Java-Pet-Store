@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: PetstoreUtil.java,v 1.7 2007-01-11 22:33:21 basler Exp $ */
+$Id: PetstoreUtil.java,v 1.8 2007-04-30 21:04:29 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.util;
 
@@ -86,5 +86,10 @@ public class PetstoreUtil {
         }
     }
     
+    public static String encodeJSONString(String json) {
+        json=json.replaceAll("'", "\\\\'");
+        json=json.replaceAll("\"", "\\\\\\\\\"");    
+        return json;
+    }
     
 }

@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CatalogXmlAction.java,v 1.4 2007-01-19 21:47:30 basler Exp $ */
+$Id: CatalogXmlAction.java,v 1.5 2007-04-30 21:04:29 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller.actions;
 
@@ -8,8 +8,8 @@ import com.sun.javaee.blueprints.petstore.model.CatalogFacade;
 import com.sun.javaee.blueprints.petstore.model.Category;
 import com.sun.javaee.blueprints.petstore.model.Item;
 import com.sun.javaee.blueprints.petstore.model.Product;
+import com.sun.javaee.blueprints.petstore.util.PetstoreUtil;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
@@ -26,21 +26,27 @@ import javax.servlet.http.HttpServletResponse;
 public class CatalogXmlAction implements ControllerAction {
     
     private final CatalogFacade cf;
+    private static final boolean bDebug=false;
+    private static final String COMMA =", ";
+    private static final String DOUBLE_QUOTE = "\"";
+
     public CatalogXmlAction(CatalogFacade cf) {
         this.cf = cf;
     }
     public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException  {
         request.setCharacterEncoding("UTF-8");
         String command = request.getParameter("command");
+        String format = request.getParameter("format");
+        String callback = request.getParameter("callback");
+
         if ("category".equals(command)) {
             String catid = request.getParameter("catid");
-            // if(bDebug) System.out.println("Request for category with id: " + catid);
+            if(bDebug) System.out.println("Request for category with id: " + catid);
             // set content-type header before accessing the Writer
             response.setContentType("text/xml;charset=UTF-8");
-            PrintWriter out = response.getWriter();
             String str = handleCategory(catid);
-            out.println(str);
-            out.close();
+            response.getWriter().println(str);
+
         } else if ("items".equals(command)) {
             String pid = request.getParameter("pid");
             String startString = request.getParameter("start");
@@ -61,18 +67,12 @@ public class CatalogXmlAction implements ControllerAction {
                     // defaults length to 10
                 }
             }
-            // set content-type header before accessing the Writer
-            response.setContentType("text/xml;charset=UTF-8");
-            // leave these headers here for development - remove for deploy
-            response.setHeader("Cache-Control", "no-cache");
-            response.setHeader("Pragma", "no-cache");
-            PrintWriter out = response.getWriter();
             String baseURL = "http://" + request.getServerName() + ":" + request.getServerPort() + "/" + request.getContextPath() + "/ImageServlet/";
             List<Item> items = cf.getItemsVLH(pid, start, length);
             //get response data
-            String str = handleItems(items, baseURL);
-            out.println(str);
-            out.close();
+            String str = handleItems(response, items, baseURL, format, callback);
+            response.getWriter().println(str);
+
         } else if ("itemInChunk".equals(command)) {
             String pid = request.getParameter("pid");
             String itemId = request.getParameter("itemId");
@@ -91,40 +91,28 @@ public class CatalogXmlAction implements ControllerAction {
             // leave these headers here for development - remove for deploy
             response.setHeader("Cache-Control", "no-cache");
             response.setHeader("Pragma", "no-cache");
-            PrintWriter out = response.getWriter();
             String baseURL = "http://" + request.getServerName() + ":" + request.getServerPort() + "/" + request.getContextPath() + "/ImageServlet/";
             List<Item> items = cf.getItemInChunkVLH(pid, itemId, length);
             //get response data
             if (items != null) {
-                String str = handleItems(items, baseURL);
-                out.println(str);
+                String str = handleItems(response, items, baseURL, format, callback);
+                response.getWriter().println(str);
             } else {
-                out.println("<items></items>");
+                response.getWriter().println("<items></items>");
             }
-            out.close();
+
         } else if ("categories".equals(command)) {
-            //if(bDebug) System.out.println("Request for categories.");
-            String format = request.getParameter("format");
-            
-            //get response data in proper format
-            String str = handleCategories(format);
-            
-            if ((format != null) && format.toLowerCase().equals("json")) {
-                response.setContentType("text/javascript;charset=UTF-8");
-            } else {
-                response.setContentType("text/xml;charset=UTF-8");
-            }
-            PrintWriter out = response.getWriter();
-            out.println(str);
-            out.close();
+            if(bDebug) System.out.println("Request for categories.");
+            // get response data in proper format
+            response.getWriter().println(handleCategories(response, format, callback));
+
         } else if ("item".equals(command)) {
             String targetId = request.getParameter("id");
-            //if(bDebug) System.out.println("CatalogServlet: Request for item with id: " + targetId);
+            if(bDebug) System.out.println("CatalogServlet: Request for item with id: " + targetId);
             String str = handleItem(targetId);
             response.setContentType("text/xml;charset=UTF-8");
-            PrintWriter out = response.getWriter();
-            out.println(str);
-            out.close();
+            response.getWriter().println(str);
+
         } else if("disable".equals(command)) {
             String targetId=request.getParameter("id");
             Item i=cf.getItem(targetId);
@@ -134,24 +122,100 @@ public class CatalogXmlAction implements ControllerAction {
             handleItem(targetId);
         }
     }
-        private String handleItems(List<Item> items, String baseURL) {
+
+
+    private String handleItems(HttpServletResponse response, List<Item> items, String baseURL, String format, String callback) {
         StringBuffer sb = new StringBuffer();
+
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+
         // then write the data of the response
-        sb.append("<items>\n");
-        //if(bDebug) System.out.println("**** Items length=" + items.size());
-        for (Item i : items) {
-            sb.append("<item>\n");
-            sb.append(" <id>" + i.getItemID() + "</id>\n");
-            sb.append(" <product-id>" + i.getProductID() + "</product-id>\n");
-            sb.append(" <rating>" + i.checkAverageRating() + "</rating>\n");
-            sb.append(" <name>" + i.getName() + "</name>\n");
-            sb.append(" <description><![CDATA[" + i.getDescription() + "]]></description>\n");
-            sb.append(" <price>" + NumberFormat.getCurrencyInstance(Locale.US).format(i.getPrice()) + "</price>\n");
-            sb.append(" <image-url>" + baseURL + i.getImageURL() + "</image-url>\n");
-            sb.append(" <image-tb-url>" + baseURL + i.getImageThumbURL() + "</image-tb-url>\n");
-            sb.append("</item>\n");
+        if(format != null && (format.toLowerCase().equals("json") || format.toLowerCase().equals("jsonp"))) {
+            // set content-type header before accessing the Writer
+            response.setContentType("text/javascript;charset=UTF-8");
+            // if jsonp, set call back
+            if(format.toLowerCase().equals("jsonp")) {
+                String functionName="bpui.petstoreList.populateData";
+                if(callback != null && callback.length() > 0) {
+                    functionName=callback;
+                }
+                sb.append(functionName + "(eval('");
+            }
+
+            sb.append("[");
+            for (Item i : items) {
+                sb.append("{");
+                sb.append("\"productID\":\"");
+                sb.append(PetstoreUtil.encodeJSONString(i.getProductID()));
+                sb.append(DOUBLE_QUOTE);
+                sb.append(COMMA);
+
+                sb.append("\"itemID\":\"");
+                sb.append(PetstoreUtil.encodeJSONString(i.getItemID()));
+                sb.append(DOUBLE_QUOTE);
+                sb.append(COMMA);
+
+                sb.append("\"name\":\"");
+                sb.append(PetstoreUtil.encodeJSONString(i.getName()));
+                sb.append(DOUBLE_QUOTE);
+                sb.append(COMMA);
+
+                sb.append("\"description\":\"");
+                sb.append(PetstoreUtil.encodeJSONString(i.getDescription()));
+                sb.append(DOUBLE_QUOTE);
+                sb.append(COMMA);
+
+                sb.append("\"price\":\"");
+                sb.append(PetstoreUtil.encodeJSONString(String.valueOf(i.getPrice())));
+                sb.append(DOUBLE_QUOTE);
+                sb.append(COMMA);
+
+                sb.append("\"imageThumbURL\":\"");
+                sb.append(PetstoreUtil.encodeJSONString(i.getImageThumbURL()));
+                sb.append(DOUBLE_QUOTE);
+                sb.append(COMMA);
+
+
+                sb.append("\"imageURL\":\"");
+                sb.append(PetstoreUtil.encodeJSONString(i.getImageURL()));
+                sb.append(DOUBLE_QUOTE);
+                sb.append("}");
+                sb.append(COMMA);
+            }
+
+            if(items.size() > 0) {
+                sb.deleteCharAt(sb.length()-1);//remove last space
+                sb.deleteCharAt(sb.length()-1);//remove last comma
+            }
+
+            sb.append("]");
+
+            // if jsonp, set call back
+            if(format.toLowerCase().equals("jsonp")) {
+                sb.append("'))");
+            }
+
+        } else {
+            // set content-type header before accessing the Writer
+            response.setContentType("text/xml;charset=UTF-8");
+
+            sb.append("<items>\n");
+            if(bDebug) System.out.println("**** Items length=" + items.size());
+            for (Item i : items) {
+                sb.append("<item>\n");
+                sb.append(" <id>" + i.getItemID() + "</id>\n");
+                sb.append(" <product-id>" + i.getProductID() + "</product-id>\n");
+                sb.append(" <rating>" + i.checkAverageRating() + "</rating>\n");
+                sb.append(" <name>" + i.getName() + "</name>\n");
+                sb.append(" <description><![CDATA[" + i.getDescription() + "]]></description>\n");
+                sb.append(" <price>" + NumberFormat.getCurrencyInstance(Locale.US).format(i.getPrice()) + "</price>\n");
+                sb.append(" <image-url>" + baseURL + i.getImageURL() + "</image-url>\n");
+                sb.append(" <image-tb-url>" + baseURL + i.getImageThumbURL() + "</image-tb-url>\n");
+                sb.append("</item>\n");
+            }
+            sb.append("</items>");
         }
-        sb.append("</items>");
         return sb.toString();
     }
     
@@ -192,24 +256,39 @@ public class CatalogXmlAction implements ControllerAction {
         return sb.toString();
     }
     
-    private String handleCategories(String format){
-        StringBuffer sb = new StringBuffer();
-        if ((format != null) && format.toLowerCase().equals("json")) {
-            sb.append("[\n");
+    private String handleCategories(HttpServletResponse response, String format, String callback){
+        StringBuilder sb = new StringBuilder();
+
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+
+        if (format != null && (format.toLowerCase().equals("json") ||  format.toLowerCase().equals("jsonp"))) {
+            response.setContentType("text/javascript;charset=UTF-8");
+
+            // if jsonp, set call back
+            if(format.toLowerCase().equals("jsonp")) {
+                String functionName="bpui.petstoreList.populateCategory";
+                if(callback != null && callback.length() > 0) {
+                    functionName=callback;
+                }
+                sb.append(functionName + "(eval('");
+            }
+
+            sb.append("[");
             boolean first = true;
             for (Category c : cf.getCategories()) {
                 if (first) {
                     first = false;
                 } else {
-                    sb.append(",\n");
+                    sb.append(",");
                 }
                 String catid = c.getCategoryID() + "";
                 sb.append("{");
-                sb.append("\"id\":\"" + c.getCategoryID() + "\",");
-                sb.append("\"catid\":\"" + catid + "\",");
-                sb.append("\"name\":\"" + c.getName() + "\",");
-                sb.append("\"description\":\"" + c.getDescription() + "\",");
-                sb.append("\"imageURL\":\"" + c.getImageURL() + "\",");
+                sb.append("\"id\":\"" + PetstoreUtil.encodeJSONString(c.getCategoryID()) + "\",");
+                sb.append("\"catid\":\"" + PetstoreUtil.encodeJSONString(catid) + "\",");
+                sb.append("\"name\":\"" + PetstoreUtil.encodeJSONString(c.getName()) + "\",");
+                sb.append("\"description\":\"" + PetstoreUtil.encodeJSONString(c.getDescription()) + "\",");
+                sb.append("\"imageURL\":\"" + PetstoreUtil.encodeJSONString(c.getImageURL()) + "\",");
                 sb.append("\"products\": [");
                 // get the products in that category
                 boolean first1 = true;
@@ -220,18 +299,25 @@ public class CatalogXmlAction implements ControllerAction {
                         sb.append(",");
                     }
                     sb.append("{");
-                    sb.append("\"id\":\"" + p.getProductID() + "\",");
-                    sb.append("\"catid\":\"" + catid + "\",");
-                    sb.append("\"name\":\"" + p.getName()+ "\",");
-                    sb.append("\"description\":\"" + p.getDescription() + "\",");
-                    sb.append("\"imageURL\":\"" + p.getImageURL() + "\"");
+                    sb.append("\"id\":\"" + PetstoreUtil.encodeJSONString(p.getProductID()) + "\",");
+                    sb.append("\"catid\":\"" + PetstoreUtil.encodeJSONString(catid) + "\",");
+                    sb.append("\"name\":\"" + PetstoreUtil.encodeJSONString(p.getName()) + "\",");
+                    sb.append("\"description\":\"" + (p.getDescription()) + "\",");
+                    sb.append("\"imageURL\":\"" + PetstoreUtil.encodeJSONString(p.getImageURL()) + "\"");
                     sb.append("}");
                 }
                 sb.append("]");
                 sb.append("}");
             }
-            sb.append("\n]");
+            sb.append("]");
+
+            // if jsonp, set call back
+            if(format.toLowerCase().equals("jsonp")) {
+                sb.append("'))");
+            }
         } else {
+            response.setContentType("text/xml;charset=UTF-8");
+
             sb.append("<categories>\n");
             for (Category c : cf.getCategories()) {
                 sb.append("<category>\n");
