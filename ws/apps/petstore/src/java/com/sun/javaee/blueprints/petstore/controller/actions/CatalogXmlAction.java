@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CatalogXmlAction.java,v 1.5 2007-04-30 21:04:29 basler Exp $ */
+$Id: CatalogXmlAction.java,v 1.6 2007-05-03 02:28:57 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller.actions;
 
@@ -162,6 +162,7 @@ public class CatalogXmlAction implements ControllerAction {
                 sb.append(COMMA);
 
                 sb.append("\"description\":\"");
+                //sb.append("\"description\":\"<script>alert(\\'test\\');</script>");
                 sb.append(PetstoreUtil.encodeJSONString(i.getDescription()));
                 sb.append(DOUBLE_QUOTE);
                 sb.append(COMMA);
@@ -194,6 +195,7 @@ public class CatalogXmlAction implements ControllerAction {
             // if jsonp, set call back
             if(format.toLowerCase().equals("jsonp")) {
                 sb.append("'))");
+                //sb.append("')); bpui.petstoreList.hackerExample();");
             }
 
         } else {

