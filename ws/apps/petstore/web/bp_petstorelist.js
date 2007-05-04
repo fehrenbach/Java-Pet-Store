@@ -48,7 +48,6 @@ bpui.petstoreList.populateData=function(datax) {
     clearTimeout(bpui.petstoreList.timer);
     
     if(typeof datax != "undefined") {
-        
         // check to see if at last page and no data is returned
         if(datax.length < 1) {
             alert("At last page for category!");
@@ -56,11 +55,8 @@ bpui.petstoreList.populateData=function(datax) {
             bpui.petstoreList.currentCount -= bpui.petstoreList.numberPerPage;
         } else {
             // add data to cache if it doesn't already exist
-            // also add data if the set pulled from the cache wasn't a full set to address
-            // the problem of products being added while the user is browsing
-            //
-            // or check to see if new items have been added on service, if a full set doesn't exist
-            // this is optional, you have to weigh the performance hit with the consiquences of not doing an update
+            // if a full set isn't returned don't cache it, so the data will be retrieved again from the server.
+            // This is optional, you have to weigh the performance hit with the consiquences of not doing an update
             key=bpui.petstoreList.category + "|" + bpui.petstoreList.currentCount; 
             cachedSet=bpui.petstoreList.cachedData[key];
             if(typeof cachedSet == "undefined" && datax.length >= bpui.petstoreList.numberPerPage) {
@@ -168,6 +164,11 @@ bpui.petstoreList.updateProducts=function() {
     } else {
         // load data from service
         if(bpui.petstoreList.debug) bpui.petstoreList.debugMessage("Retrieving data from service for : " + bpui.petstoreList.category + " starting at item " +  bpui.petstoreList.currentCount);
+        
+        // set degradation timeout
+        bpui.petstoreList.timer=setTimeout('bpui.petstoreList.requestTimedOut()', 20000);
+        
+        // create dynamic script
         bodyTag=document.getElementsByTagName("body")[0];
         scriptx=document.createElement("script");
         scriptx.setAttribute("type", "text/javascript");
@@ -189,11 +190,10 @@ bpui.petstoreList.createPetstoreList=function(divName, numberPerPage) {
     // setup static elements
     bpui.petstoreList.initialSetup();
     
-    
     // set timer to make sure service look up returns. Eventhough the Javascript library was able to be fetched, the database could be down or the
     // service could be responding very slowly and the request timeout.  Wait for 30 seconds and then set data div to service may not be responding message.
     // Since both calls hit the database, if one returns propertly the other should also.
-    bpui.petstoreList.timer=setTimeout('bpui.petstoreList.requestTimedOut()', 30000);
+    bpui.petstoreList.timer=setTimeout('bpui.petstoreList.requestTimedOut()', 20000);
     
     // load categories from service
     bodyTag=document.getElementsByTagName("body")[0];
@@ -226,20 +226,22 @@ bpui.petstoreList.debugMessage=function(messx) {
 bpui.petstoreList.populateCategory=function(datax) {
     // clear response timer
     clearTimeout(bpui.petstoreList.timer);
-    
-    catx=document.getElementById("bpui.petstoreList.categoryList");
-    countx=0;
-    // loop through top level categories
-    for(ii=0; ii < datax.length; ii++) {
-        // loop through individual categories
-        for(yy=0; yy < datax[ii].products.length; yy++) {
-            // set default value for select list
-            bCurrentSelect=false
-            if(datax[ii].products[yy].id == bpui.petstoreList.category) {
-                bCurrentSelect=true;
+
+    if(typeof datax != "undefined") {
+        catx=document.getElementById("bpui.petstoreList.categoryList");
+        countx=0;
+        // loop through top level categories
+        for(ii=0; ii < datax.length; ii++) {
+            // loop through individual categories
+            for(yy=0; yy < datax[ii].products.length; yy++) {
+                // set default value for select list
+                bCurrentSelect=false
+                if(datax[ii].products[yy].id == bpui.petstoreList.category) {
+                    bCurrentSelect=true;
+                }
+                catx.options[countx]=new Option(datax[ii].products[yy].name, datax[ii].products[yy].id, false, bCurrentSelect);
+                countx++;
             }
-            catx.options[countx]=new Option(datax[ii].products[yy].name, datax[ii].products[yy].id, false, bCurrentSelect);
-            countx++;
         }
     }
 }

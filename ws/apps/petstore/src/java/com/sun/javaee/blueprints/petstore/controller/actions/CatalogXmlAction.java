@@ -1,5 +1,5 @@
 /* Copyright 2006 Sun Microsystems, Inc. All rights reserved. You may not modify, use, reproduce, or distribute this software except in compliance with the terms of the License at: http://developer.sun.com/berkeley_license.html
-$Id: CatalogXmlAction.java,v 1.6 2007-05-03 02:28:57 basler Exp $ */
+$Id: CatalogXmlAction.java,v 1.7 2007-05-04 03:38:14 basler Exp $ */
 
 package com.sun.javaee.blueprints.petstore.controller.actions;
 
@@ -140,7 +140,8 @@ public class CatalogXmlAction implements ControllerAction {
                 if(callback != null && callback.length() > 0) {
                     functionName=callback;
                 }
-                sb.append(functionName + "(eval('");
+                //sb.append(functionName + "(eval('");
+                sb.append(functionName + "(");
             }
 
             sb.append("[");
@@ -163,6 +164,7 @@ public class CatalogXmlAction implements ControllerAction {
 
                 sb.append("\"description\":\"");
                 //sb.append("\"description\":\"<script>alert(\\'test\\');</script>");
+                //sb.append("\"description\":\"<span onmouseover=\\'alert(document.cookie);\\'>" + PetstoreUtil.encodeJSONString(i.getDescription()) + " </span>");
                 sb.append(PetstoreUtil.encodeJSONString(i.getDescription()));
                 sb.append(DOUBLE_QUOTE);
                 sb.append(COMMA);
@@ -194,7 +196,8 @@ public class CatalogXmlAction implements ControllerAction {
 
             // if jsonp, set call back
             if(format.toLowerCase().equals("jsonp")) {
-                sb.append("'))");
+                sb.append(")");
+                //sb.append("'))");
                 //sb.append("')); bpui.petstoreList.hackerExample();");
             }
 
@@ -273,7 +276,8 @@ public class CatalogXmlAction implements ControllerAction {
                 if(callback != null && callback.length() > 0) {
                     functionName=callback;
                 }
-                sb.append(functionName + "(eval('");
+                //sb.append(functionName + "(eval('");
+                sb.append(functionName + "(");
             }
 
             sb.append("[");
@@ -315,7 +319,8 @@ public class CatalogXmlAction implements ControllerAction {
 
             // if jsonp, set call back
             if(format.toLowerCase().equals("jsonp")) {
-                sb.append("'))");
+                //sb.append("'))");
+                sb.append(")");
             }
         } else {
             response.setContentType("text/xml;charset=UTF-8");
